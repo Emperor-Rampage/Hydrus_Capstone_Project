@@ -283,21 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15e1f540988cdb74b8c0d79a34fe236d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellScale: 2
-  levelToLoad: 1
-  levels:
-  - sceneIndex: 0
-    name: Hub
-    levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
-    exitList: 
-  - sceneIndex: 0
-    name: Level 1
-    levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
-    exitList: 
-  - sceneIndex: 0
-    name: Level 2
-    levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
-    exitList: 
+  manager: {fileID: 2078068042}
+  levelToLoad: 0
 --- !u!4 &1691095255
 Transform:
   m_ObjectHideFlags: 0
@@ -419,14 +406,20 @@ MonoBehaviour:
       name: Hub
       levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
       exitList: 0100000002000000
+      spawnList:
+      - x: 1
+        z: 3
+        enemy: {fileID: 11400000, guid: 9dbf95691c83e454da9ba5b54f469d0d, type: 2}
     - sceneIndex: 1
       name: Level 1
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
       exitList: 00000000
+      spawnList: []
     - sceneIndex: 1
       name: Level 2
       levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
       exitList: 00000000
+      spawnList: []
   movespeed: 0.4
   turnspeed: 0.25
 --- !u!4 &2078068043

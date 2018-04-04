@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Pixelplacement;
 using UnityEngine;
+using EntityClasses;
 
 namespace MapClasses
 {
@@ -37,6 +38,7 @@ namespace MapClasses
         [SerializeField] public Texture2D levelMap;
         // A list of indexes for the levels to be loaded from each exit.
         [SerializeField] public List<int> exitList;
+        [SerializeField] public List<EnemySpawn> spawnList;
 
         // A list of all cells in the level, because we might need it. But probably not.
         public List<Cell> cells;

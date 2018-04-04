@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using MapClasses;
 using UnityEngine;
+using EntityClasses;
+
 
 namespace MapClasses
 {

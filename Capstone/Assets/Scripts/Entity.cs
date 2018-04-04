@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MapClasses;
 
-namespace MapClasses
+namespace EntityClasses
 {
     // This is all horrible code. Terrible.SAd.
 
@@ -21,17 +22,28 @@ namespace MapClasses
         Cell Cell { get; set; }
     }
 
+    [System.Serializable]
     public class Entity : IEntity
     {
-        public GameObject Instance { get; set; }
-        public string Name { get; set; }
-        public Cell Cell { get; set; }
-        public Direction Facing { get; set; }
-        public EntityState State { get; set; }
-        public int Cores { get; set; }
+        [SerializeField] GameObject instance;
+        public GameObject Instance { get { return instance; } set { instance = value; } }
 
-        public int MaxHealth { get; set; }
+        [SerializeField] string name;
+        public string Name { get { return name; } set { name = value; } }
+
+        [SerializeField] int cores;
+        public int Cores { get { return cores; } set { cores = value; } }
+
+        [SerializeField] int maxHealth;
+        public int MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
+
         public int CurrentHealth { get; set; }
+
+        public Cell Cell { get; set; }
+
+        public Direction Facing { get; set; }
+
+        public EntityState State { get; set; }
 
         public void TurnLeft()
         {

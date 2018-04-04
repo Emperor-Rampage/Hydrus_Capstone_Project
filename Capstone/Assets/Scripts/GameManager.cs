@@ -4,6 +4,7 @@ using UnityEngine;
 using Pixelplacement;
 
 using MapClasses;
+using EntityClasses;
 using UnityEngine.SceneManagement;
 
 
