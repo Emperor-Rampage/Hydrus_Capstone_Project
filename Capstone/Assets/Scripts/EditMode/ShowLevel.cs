@@ -32,7 +32,7 @@ public class ShowLevel : MonoBehaviour
 
         Level level = levels[levelToLoad];
         DrawCells(level);
-//        DrawEntitySpawns(level);
+        DrawEntitySpawns(level);
     }
 
     void DrawCells(Level level)
@@ -61,30 +61,11 @@ public class ShowLevel : MonoBehaviour
     // FIXME: Resolve null spawn.Enemy exception on line 86.
     void DrawEntitySpawns(Level level)
     {
-//        Vector3 size = new Vector3(1f, 1f, 1f);
-        if (map == null)
-        {
-            Debug.Log("MAP IS NULL.");
-        }
-        if (level == null)
-        {
-            Debug.Log("LEVEL IS NULL");
-        }
-        Debug.Log(level.spawnList.ToString());
         foreach (EnemySpawn spawn in level.spawnList)
         {
-            if (spawn == null)
-            {
-                Debug.Log("SPAWN IS NULL");
-            }
-            if (spawn.Enemy == null)
-            {
-                Debug.Log("SPAWN ENEMY IS NULL");
-            }
-            Gizmos.color = Color.white;
-            Vector3 center = new Vector3(spawn.X * map.CellScale, 0.5f, spawn.Z * map.CellScale);
-            Debug.Log("Drawing " + spawn.Enemy.name + " at " + spawn.X + ", " + spawn.Z);
-            Gizmos.DrawSphere(center, 0.5f);
+            Gizmos.color = new Color(1, 0, 0, 0.1f);
+            Vector3 center = new Vector3(spawn.X * map.CellScale, 1f, spawn.Z * map.CellScale);
+            Gizmos.DrawWireMesh(spawn.Enemy.Entity.Instance.GetComponent<MeshFilter>().sharedMesh, center);
         }
     }
 }

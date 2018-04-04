@@ -406,10 +406,7 @@ MonoBehaviour:
       name: Hub
       levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
       exitList: 0100000002000000
-      spawnList:
-      - x: 1
-        z: 3
-        enemy: {fileID: 11400000, guid: 9dbf95691c83e454da9ba5b54f469d0d, type: 2}
+      spawnList: []
     - sceneIndex: 1
       name: Level 1
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}

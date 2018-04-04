@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Pixelplacement;
 using UnityEngine;
 using EntityClasses;
+using UnityEngine.SceneManagement;
 
 namespace MapClasses
 {
@@ -32,6 +33,7 @@ namespace MapClasses
     {
         // The index for the scene to be loaded for this level.
         [SerializeField] public int sceneIndex;
+        
         // The name of the level.
         [SerializeField] public string name;
         // The bitmap for the level.

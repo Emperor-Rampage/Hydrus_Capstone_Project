@@ -149,7 +149,7 @@ public class GameManager : Singleton<GameManager>
             level.InitializeLevel();
             UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
             // Creates debug instances for the cells and connections.
-            BuildLevel_Debug(level);
+//            BuildLevel_Debug(level);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
             player = new Player() { Instance = GameObject.Instantiate(playerPrefab), Facing = Direction.Up, State = EntityState.Idle };
