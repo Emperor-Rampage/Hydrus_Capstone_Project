@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace MapClasses
 {
+    // This is all horrible code. Terrible.SAd.
+
     public enum EntityState
     {
         Null = -1,
