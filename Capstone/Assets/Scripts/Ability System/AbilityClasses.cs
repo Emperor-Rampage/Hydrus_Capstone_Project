@@ -32,7 +32,6 @@ namespace AbilityClasses
     {
         public AbilityStatusEff effect;
         public float duration;
-        [Range(0f, 1f)]
         public float value;
     }
 
@@ -53,6 +52,7 @@ namespace AbilityClasses
         public Texture2D rangeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.
         public float baseCooldown = 0.0f;                                                                           //The base Cooldown timer (in seconds) of the ability.
         public float baseCastTime = 0.0f;                                                                           //The base Cast Timer (in seconds) it takes for the ability to activate.
+        public int initalDamage = 0;                                                                                //Initial damage value of the ability.
         public bool upgradable;                                                                                     //Boolean that denotes if the ability can be upgraded or not.
 
         //Upgrade System Info.
