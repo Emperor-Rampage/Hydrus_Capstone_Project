@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MapClasses;
+using AbilityClasses;
 
 namespace EntityClasses
 {
@@ -45,6 +46,10 @@ namespace EntityClasses
 
         public EntityState State { get; set; }
 
+        // Ability Variables
+        // TODO: Create custom data structure for current effects.
+        //       Should contain a dictionary of lists of effects (to support stacking effects), should use local "cooldown scale" (for example) variable, then multiply the value by the "value" field of each effect. For multiplicative stacking.
+        public List<AbilityEffect> CurrentEffects { get; private set; } = new List<AbilityEffect>();
 
         public Entity() { }
         public Entity (Entity entity)
