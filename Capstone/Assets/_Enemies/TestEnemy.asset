@@ -16,5 +16,4 @@ MonoBehaviour:
     name: Trilobite
     cores: 10
     maxHealth: 150
-  abilities:
-  - {fileID: 0}
+  abilities: []
