@@ -36,31 +36,42 @@ namespace MapClasses
         
         // The name of the level.
         [SerializeField] public string name;
+
         // The bitmap for the level.
         [SerializeField] public Texture2D levelMap;
+
         // A list of indexes for the levels to be loaded from each exit.
         [SerializeField] public List<int> exitList;
         [SerializeField] public List<EnemySpawn> spawnList;
+        // A reference to the player entity, because we'll be using it a lot.
+        public Player Player { get; private set; }
+        public List<Entity> EnemyList { get; private set; }
 
         // A list of all cells in the level, because we might need it. But probably not.
         public List<Cell> cells;
         // The player's spawn location.
         public Cell PlayerSpawnCell { get; set; }
+
         // All cells of with cell.Type == CellType.Exit. These correspond to the exitList of integers.
         //          ExitCell[0] goes to exitList[0], which contains an index pointing to the next level.
         public List<Cell> ExitCells { get; set; }
+
         // Indicates whether the level object has been initialized yet.
         public bool Initialized { get; private set; }
+
         // Inidicates whether the player can execute the exit action.
         // This is true if the player is standing on an exit cell. Checks are made whenever an entity has moved.
         public bool CanExit { get; private set; }
+
         // A 2d matrix that indicates whether or not there is a connection between a given cell and a given direction.
         // connectionMatrix size is [number of cells, number of directions], so number of cells * 4 (four directions).
         // If connectionMatrix[cell.Index, (int)direction] == true,
         //      then there is a connection between the cell and the neighbor in that direction.
         public bool[,] connectionMatrix;
+
         // The number of indices.
         int numIndexes;
+
         // A list of connection cells. These cells indicate a connection between a procedurally generated area and a static area.
         List<Cell> connectionCells;
 
@@ -86,6 +97,7 @@ namespace MapClasses
             Initialized = true;
             InitializeConnections();
             InitializeProcedural();
+            InitializeEntities();
 
             Debug.Log("Level initialization finished.");
         }
@@ -310,6 +322,27 @@ namespace MapClasses
                 }
             }
         }
+
+        void InitializeEntities()
+        {
+            // First initialize the player entity.
+            // Then iterate through all enemy spawns and initialize each of them
+
+            EnemyList = new List<Entity>();
+
+            // Create the player.
+            Player = new Player { Facing = Direction.Up, State = EntityState.Idle };
+            // Set the player's location to the player spawn.
+            SetEntityLocation(Player, PlayerSpawnCell);
+
+            foreach (var spawn in spawnList)
+            {
+                Entity enemy = new Entity(spawn.Enemy.Entity);
+                SetEntityLocation(enemy, spawn.X, spawn.Z);
+                EnemyList.Add(enemy);
+            }
+        }
+
 
         // Returns the destination cell for an entity that intends to move in Direction direction.
         // Performs a lot of validation, making sure everything is !null, !Locked, and the destination does not have an entity already.

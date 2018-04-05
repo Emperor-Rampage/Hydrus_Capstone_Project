@@ -45,6 +45,19 @@ namespace EntityClasses
 
         public EntityState State { get; set; }
 
+
+        public Entity() { }
+        public Entity (Entity entity)
+        {
+            Instance = entity.Instance;
+            Name = entity.Name;
+            Cores = entity.Cores;
+            MaxHealth = entity.MaxHealth;
+            CurrentHealth = MaxHealth;
+            Facing = Direction.Up;
+            State = EntityState.Idle;
+        }
+
         public void TurnLeft()
         {
             int facing = (int)Facing - 1;
@@ -87,6 +100,8 @@ namespace EntityClasses
 
     public class Player : Entity
     {
+        public Player() : base() { }
+        public Player(Entity entity) : base(entity) { }
     }
 
     public class Item : IEntity

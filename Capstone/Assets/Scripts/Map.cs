@@ -37,7 +37,7 @@ namespace MapClasses
         // The index for the current level.
         // TODO: Probably just cleaner to keep a reference to the actual level object,
         //       since I doubt we'll be using the index for anything.
-        public int CurrentLevel { get; private set; }
+        public Level CurrentLevel { get; private set; }
 
         // This is a list of all levels. Hub area, biodome area, biodome boss, mechanical bay, mechanical bay boss, final boss.
         [SerializeField] public List<Level> levels;
@@ -49,27 +49,18 @@ namespace MapClasses
         // Would work just as well anywhere else.
         public Map()
         {
-            CurrentLevel = -1;
-        }
-
-        // Returns the current level. Prevents an invalid CurrentLevel index.
-        public Level GetCurrentLevel()
-        {
-            if (CurrentLevel < 0 || CurrentLevel >= levels.Count)
-                return null;
-
-            return levels[CurrentLevel];
+            CurrentLevel = null;
         }
 
         // Sets the current level index, as long as it's valid, and returns the level.
         public Level SetCurrentLevel(int index)
         {
-            CurrentLevel = index;
-
             if (index < 0 || index >= levels.Count)
                 return null;
 
-            return levels[index];
+            CurrentLevel = levels[index];
+
+            return CurrentLevel;
         }
 
         // Poorly named.
@@ -77,18 +68,17 @@ namespace MapClasses
         // Then gets the index of the Exit cell from the level's list of exits (if it's in the list),
         // Then gets the corresponding next level's index from the level's list of exit destination indices.
         // Then sets the current level and returns the level.
-        public Level GetNextLevel(Cell exit)
+        public Level NextLevel(Cell exit)
         {
-            Level cLevel = GetCurrentLevel();
-            if (cLevel == null || !cLevel.Initialized)
+            if (CurrentLevel == null || !CurrentLevel.Initialized)
                 return null;
 
-            int exitIndex = cLevel.ExitCells.IndexOf(exit);
+            int exitIndex = CurrentLevel.ExitCells.IndexOf(exit);
 
-            if (exitIndex < 0 || exitIndex >= cLevel.ExitCells.Count)
+            if (exitIndex < 0 || exitIndex >= CurrentLevel.ExitCells.Count)
                 return null;
 
-            int nextIndex = cLevel.exitList[exitIndex];
+            int nextIndex = CurrentLevel.exitList[exitIndex];
 
             if (nextIndex < 0 || nextIndex >= levels.Count)
                 return null;

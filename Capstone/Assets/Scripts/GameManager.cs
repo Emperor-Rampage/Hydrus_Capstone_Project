@@ -43,8 +43,6 @@ public class GameManager : Singleton<GameManager>
     Map map;
     // A reference to the current level, because caching is more efficient.
     Level level;
-    // A reference to the player entity, because we'll be used it a lot.
-    Player player;
     // A reference to the UIManager instance, which is created at runtime, and handles all user interface actions.
     UIManager uiManager;
 
@@ -127,7 +125,7 @@ public class GameManager : Singleton<GameManager>
     IEnumerator LoadLevel_Coroutine(float delay)
     {
         yield return new WaitForSeconds(delay);
-        int sceneIndex = Map.GetCurrentLevel().sceneIndex;
+        int sceneIndex = Map.CurrentLevel.sceneIndex;
         Debug.Log("Loading level " + sceneIndex);
         SceneManager.LoadScene(sceneIndex);
     }
@@ -139,7 +137,7 @@ public class GameManager : Singleton<GameManager>
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
         // Check to see if we're loading a level.
-        level = Map.GetCurrentLevel();
+        level = Map.CurrentLevel;
 
         // If there is a level to load, load it in.
         // Otherwise, we're loading the title screen.
@@ -149,14 +147,20 @@ public class GameManager : Singleton<GameManager>
             level.InitializeLevel();
             UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
             // Creates debug instances for the cells and connections.
-//            BuildLevel_Debug(level);
+            //            BuildLevel_Debug(level);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
-            player = new Player() { Instance = GameObject.Instantiate(playerPrefab), Facing = Direction.Up, State = EntityState.Idle };
-            // Set the player's location to the player spawn.
-            level.SetEntityLocation(player, level.PlayerSpawnCell);
+            level.Player.Instance = GameObject.Instantiate(playerPrefab);
             // Manually set the position.
-            SetEntityLocation(player);
+            SetEntityInstanceLocation(level.Player);
+            // Loop through all of the enemies and spawn their instances.
+            foreach (var enemy in level.EnemyList)
+            {
+                // Instantiate the prefab to an instance.
+                enemy.Instance = GameObject.Instantiate(enemy.Instance);
+                // Set the enemy instance's position.
+                SetEntityInstanceLocation(enemy);
+            }
 
             // Initialize the UI for the level.
             uiManager.Initialize_Level();
@@ -271,7 +275,7 @@ public class GameManager : Singleton<GameManager>
     // Otherwise, returns false.
     bool ItemCheck()
     {
-        Cell cell = player.Cell;
+        Cell cell = level.Player.Cell;
         if (cell != null && cell.Item != null)
         {
             return true;
@@ -294,7 +298,7 @@ public class GameManager : Singleton<GameManager>
     //              E - Turns the player right.
     void HandlePlayerInput()
     {
-        if (player.State == EntityState.Idle)
+        if (level.Player.State == EntityState.Idle)
         {
             Direction inputDir = GetInputDirection();
             if (Input.GetKeyDown(KeyCode.Space) && level.CanExit)
@@ -303,16 +307,16 @@ public class GameManager : Singleton<GameManager>
             }
             else if (inputDir != Direction.Null)
             {
-                MoveEntityLocation(player, inputDir);
+                MoveEntityLocation(level.Player, inputDir);
                 //                MoveEntityInstance(player, inputDir);
             }
             else if (Input.GetKey(KeyCode.Q))
             {
-                TurnEntityInstanceLeft(player);
+                TurnEntityInstanceLeft(level.Player);
             }
             else if (Input.GetKey(KeyCode.E))
             {
-                TurnEntityInstanceRight(player);
+                TurnEntityInstanceRight(level.Player);
             }
         }
     }
@@ -321,9 +325,9 @@ public class GameManager : Singleton<GameManager>
     // Loads the new level with a 0.5 second fade time.
     void ExitLevel()
     {
-        player.State = EntityState.Null;
+        level.Player.State = EntityState.Null;
         // If the entity has moved to an exit cell and the entity is the player.
-        Map.GetNextLevel(player.Cell);
+        Map.NextLevel(level.Player.Cell);
         LoadLevel(0.5f);
     }
 
@@ -344,16 +348,16 @@ public class GameManager : Singleton<GameManager>
         if (magH > magV)
         {
             if (h > 0)
-                return player.ToAbsoluteDirection(Direction.Right);
+                return level.Player.ToAbsoluteDirection(Direction.Right);
             else if (h < 0)
-                return player.ToAbsoluteDirection(Direction.Left);
+                return level.Player.ToAbsoluteDirection(Direction.Left);
         }
         else if (magH < magV)
         {
             if (v > 0)
-                return player.ToAbsoluteDirection(Direction.Up);
+                return level.Player.ToAbsoluteDirection(Direction.Up);
             else if (v < 0)
-                return player.ToAbsoluteDirection(Direction.Down);
+                return level.Player.ToAbsoluteDirection(Direction.Down);
         }
 
         return Direction.Null;
@@ -438,7 +442,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     // Sets the entity's instance GameObject position and rotation. Used only during the initial setup of the level.
-    void SetEntityLocation(Entity entity)
+    void SetEntityInstanceLocation(Entity entity)
     {
         var eTransform = entity.Instance.transform;
         eTransform.position = Map.GetEntityPosition(entity);
