@@ -58,9 +58,13 @@ public class ShowLevel : MonoBehaviour
         }
     }
 
-    // FIXME: Resolve null spawn.Enemy exception on line 86.
+    // FIXME: Resolve null spawn.Enemy exception on line 68.
     void DrawEntitySpawns(Level level)
     {
+        if (level.spawnList.Count > 0 && level.spawnList[0] == null)
+        {
+            Debug.LogWarning("WARNING: level has no spawns.");
+        }
         foreach (EnemySpawn spawn in level.spawnList)
         {
             Gizmos.color = new Color(1, 0, 0, 0.1f);

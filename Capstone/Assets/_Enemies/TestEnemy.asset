@@ -17,5 +17,4 @@ MonoBehaviour:
     cores: 10
     maxHealth: 150
   abilities:
-  - abilityName: 
-    abilIcon: {fileID: 0}
+  - {fileID: 0}
