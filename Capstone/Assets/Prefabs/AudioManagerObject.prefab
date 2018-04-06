@@ -51,4 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01c59c5a704cf5e4a90376369a1ef118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSounds: 0
+  soundEffectPrefab: {fileID: 82202162509312074, guid: e5d7cae53221e5549998dd5b76339ecc,
+    type: 2}
+  maxPoolSize: 10

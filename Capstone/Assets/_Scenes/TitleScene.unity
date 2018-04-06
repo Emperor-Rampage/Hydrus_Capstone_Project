@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -113,115 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &342456621
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 342456623}
-  - component: {fileID: 342456622}
-  m_Layer: 0
-  m_Name: Audio Source
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!82 &342456622
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 342456621}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
---- !u!4 &342456623
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 342456621}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &720947053
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +192,7 @@ GameObject:
   m_Layer: 0
   m_Name: MainMenuCamera
   m_TagString: MainCamera
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -6488666005112524639, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -485,7 +376,7 @@ GameObject:
   m_Layer: 0
   m_Name: GameManagerObject
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -505,6 +396,11 @@ MonoBehaviour:
     type: 2}
   entityPrefab: {fileID: 1479540953470482, guid: 6e040a1ca78e3bf4c8011813915f214f,
     type: 2}
+  testSound:
+    audioClip: {fileID: 8300000, guid: 2f705938a48d6f64791bd6dc4ccdda56, type: 3}
+    volume: 1
+    pitch: 1
+    position: {x: 0, y: 0, z: 0}
   playerPrefab: {fileID: 1617837010083710, guid: 5094fabf170bdca4288f6c88c62e3aa0,
     type: 2}
   DoNotDestroyList:
@@ -518,6 +414,10 @@ MonoBehaviour:
     - sceneIndex: 1
       name: Hub
       levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
+      music:
+        audioClip: {fileID: 8300000, guid: 48a620ff73150ce41a3d9e05ff11bc9a, type: 3}
+        volume: 1
+        pitch: 1
       exitList: 0100000002000000
       spawnList:
       - x: 4
@@ -526,17 +426,29 @@ MonoBehaviour:
       - x: 6
         z: 4
         enemy: {fileID: 11400000, guid: 9dbf95691c83e454da9ba5b54f469d0d, type: 2}
-    - sceneIndex: 1
+    - sceneIndex: 2
       name: Level 1
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
+      music:
+        audioClip: {fileID: 8300000, guid: 48a620ff73150ce41a3d9e05ff11bc9a, type: 3}
+        volume: 1
+        pitch: 1
       exitList: 00000000
       spawnList: []
-    - sceneIndex: 1
+    - sceneIndex: 3
       name: Level 2
       levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
+      music:
+        audioClip: {fileID: 8300000, guid: 48a620ff73150ce41a3d9e05ff11bc9a, type: 3}
+        volume: 1
+        pitch: 1
       exitList: 00000000
       spawnList: []
-  movespeed: 0.4
+  titleMusic:
+    audioClip: {fileID: 8300000, guid: 48a620ff73150ce41a3d9e05ff11bc9a, type: 3}
+    volume: 1
+    pitch: 1
+  movespeed: 0.5
   turnspeed: 0.25
 --- !u!4 &2078068043
 Transform:

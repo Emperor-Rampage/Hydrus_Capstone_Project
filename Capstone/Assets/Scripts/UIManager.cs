@@ -154,27 +154,27 @@ public class UIManager : MonoBehaviour
     {
     }
 
-    public void FadeOut(float speed = defaultFadeTime, string text = "")
+    public void FadeOut(string text = "", float speed = defaultFadeTime)
     {
         Tween.CanvasGroupAlpha(fadePanel, 1f, speed, 0f, defaultFadeCurve);
         fadeText.text = text;
     }
 
-    public void FadeOut(string text = "")
+    public void FadeOut(float speed = defaultFadeTime)
     {
-        Tween.CanvasGroupAlpha(fadePanel, 1f, defaultFadeTime, 0f, defaultFadeCurve);
-        fadeText.text = text;
+        Tween.CanvasGroupAlpha(fadePanel, 1f, speed, 0f, defaultFadeCurve);
+        fadeText.text = "";
     }
 
-    public void FadeIn(float speed = defaultFadeTime, string text = "")
+    public void FadeIn(string text = "", float speed = defaultFadeTime)
     {
         Tween.CanvasGroupAlpha(fadePanel, 0f, speed, 0f, defaultFadeCurve);
         fadeText.text = text;
     }
-    public void FadeIn(string text = "")
+    public void FadeIn(float speed = defaultFadeTime)
     {
-        Tween.CanvasGroupAlpha(fadePanel, 0f, defaultFadeTime, 0f, defaultFadeCurve);
-        fadeText.text = text;
+        Tween.CanvasGroupAlpha(fadePanel, 0f, speed, 0f, defaultFadeCurve);
+        fadeText.text = "";
     }
 
     public void DisplayText(string text)

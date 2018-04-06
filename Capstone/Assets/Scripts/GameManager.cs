@@ -5,6 +5,7 @@ using Pixelplacement;
 
 using MapClasses;
 using EntityClasses;
+using AudioClasses;
 using UnityEngine.SceneManagement;
 
 
@@ -25,6 +26,8 @@ public class GameManager : Singleton<GameManager>
     GameObject blockPrefab;
     // The prefab used for generic entities during debug build.
     [SerializeField] GameObject entityPrefab;
+    // For testing the AudioManager.
+    [SerializeField] SoundEffect testSound;
 
     [Space(10)]
     [Header("Setup")]
@@ -45,6 +48,9 @@ public class GameManager : Singleton<GameManager>
     Level level;
     // A reference to the UIManager instance, which is created at runtime, and handles all user interface actions.
     UIManager uiManager;
+    // A reference to the AudioManager instance, which is created at runtime, and handles all audio.
+    AudioManager audioManager;
+    [SerializeField] BackgroundMusic titleMusic;
 
     // How long it takes an entity to move from one square to another.
     [SerializeField] float movespeed;
@@ -80,6 +86,10 @@ public class GameManager : Singleton<GameManager>
                 if (gmInstance.GetComponent<UIManager>() != null && uiManager == null)
                 {
                     uiManager = gmInstance.GetComponent<UIManager>();
+                }
+                else if (gmInstance.GetComponent<AudioManager>() != null && audioManager == null)
+                {
+                    audioManager = gmInstance.GetComponent<AudioManager>();
                 }
             }
         }
@@ -117,7 +127,8 @@ public class GameManager : Singleton<GameManager>
     // Loads a level and scene with a delay in seconds.
     public void LoadLevel(float delay = 0f)
     {
-        uiManager.FadeOut(delay, "Loading..");
+        uiManager.FadeOut("Loading..", delay);
+        audioManager.FadeOutMusic(delay);
         StartCoroutine(LoadLevel_Coroutine(delay));
     }
 
@@ -167,7 +178,10 @@ public class GameManager : Singleton<GameManager>
             // Display the area text.
             uiManager.DisplayAreaText(level.name);
             // Fade in with the area name.
-            uiManager.FadeIn(2f, level.name);
+            uiManager.FadeIn(level.name, 2f);
+
+            audioManager.FadeInMusic(level.music, 1f);
+
             inGame = true;
         }
         else
@@ -176,6 +190,7 @@ public class GameManager : Singleton<GameManager>
             inGame = false;
             uiManager.Initialize_Main();
             uiManager.FadeIn("Hydrus");
+            audioManager.FadeInMusic(titleMusic, 1f);
         }
     }
 
@@ -318,6 +333,11 @@ public class GameManager : Singleton<GameManager>
             {
                 TurnEntityInstanceRight(level.Player);
             }
+            else if (Input.GetKeyDown(KeyCode.M)) // Plays the test sound.
+            {
+                testSound.position = Vector3.zero; //level.Player.Instance.transform.position;
+                audioManager.PlaySoundEffect(testSound);
+            }
         }
     }
 
@@ -326,6 +346,7 @@ public class GameManager : Singleton<GameManager>
     void ExitLevel()
     {
         level.Player.State = EntityState.Null;
+        audioManager.FadeOutMusic(1f);
         // If the entity has moved to an exit cell and the entity is the player.
         Map.NextLevel(level.Player.Cell);
         LoadLevel(0.5f);

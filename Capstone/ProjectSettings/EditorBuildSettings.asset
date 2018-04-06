@@ -11,3 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/HubScene.unity
     guid: fa0f2c2aae1ed014c852eba3bf15818a
+  - enabled: 1
+    path: Assets/_Scenes/BiodomeScene.unity
+    guid: 7331ff274c736234caa5cc4137097479
+  - enabled: 1
+    path: Assets/_Scenes/MechanicalBayScene.unity
+    guid: a985c251846585348867a802d3fc3e00

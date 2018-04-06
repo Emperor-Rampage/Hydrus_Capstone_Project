@@ -5,6 +5,8 @@ using UnityEngine;
 using EntityClasses;
 using UnityEngine.SceneManagement;
 
+using AudioClasses;
+
 namespace MapClasses
 {
     // Enum that indicates a direction.
@@ -33,12 +35,13 @@ namespace MapClasses
     {
         // The index for the scene to be loaded for this level.
         [SerializeField] public int sceneIndex;
-        
+
         // The name of the level.
         [SerializeField] public string name;
 
         // The bitmap for the level.
         [SerializeField] public Texture2D levelMap;
+        [SerializeField] public BackgroundMusic music;
 
         // A list of indexes for the levels to be loaded from each exit.
         [SerializeField] public List<int> exitList;
