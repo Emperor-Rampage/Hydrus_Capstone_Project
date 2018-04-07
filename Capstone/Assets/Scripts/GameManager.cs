@@ -23,6 +23,9 @@ public class GameManager : Singleton<GameManager>
     [Header("Debug")]
     // The prefab used to fill in the cells during debug build.
     [SerializeField]
+    GameObject cellPrefabDebug;
+
+    [SerializeField]
     GameObject blockPrefab;
     // The prefab used for generic entities during debug build.
     [SerializeField] GameObject entityPrefab;
@@ -158,6 +161,37 @@ public class GameManager : Singleton<GameManager>
             level.InitializeLevel();
             UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
             // Creates debug instances for the cells and connections.
+            // TODO: Create procedural area generation.
+            //          Possibly use prefab "templates" or cell chunks, remove walls where there are connections between adjacent cells.
+            //          For corner pieces, iterate through each cell, from left to right, bottom to top,
+            //          checking connections with adjacent cells,
+            //
+            //          Create local list of corners to create, 0 = up right, 1 = down right, 2 = down left, 3 = up left
+            //
+            //          IF creating all corners, then fill completely,
+            //          ELSE IF creating outer edges, then only fill with corners in which there is no connection.
+            //
+            //          Check all connections, if procedural, if that cell has been visited,
+            //            don't instantiate any corners in that direction by removing the corresponding corners from the list.
+            //
+            //              IF connection with up,
+            //                  IF has been visited, don't create up left or up right corners - remove 3 and 0.
+            //                  IF has not been visited, create both both up left and up right corners - do nothing.
+            //              IF connection with right,
+            //                  IF has been visited, don't create up right or down right corners - remove 3 and 1.
+            //                  IF has not been visited, create both both up right and down right corners - do nothing.
+            //              IF connection with down,
+            //                  IF has been visited, don't create down left or down right corners - remove 2 and 1.
+            //                  IF has not been visited, create both both down left and down right corners - do nothing.
+            //              IF connection with left,
+            //                  IF has been visited, don't create up left or down left corners - remove 3 and 2.
+            //                  IF has not been visited, create both both up left and down left corners - do nothing.
+            //
+            //              Iterate through all remaining corners to create and instantiate them.
+            //
+            //
+            BuildLevel_Procedural();
+
             //            BuildLevel_Debug(level);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
@@ -190,7 +224,47 @@ public class GameManager : Singleton<GameManager>
             inGame = false;
             uiManager.Initialize_Main();
             uiManager.FadeIn("Hydrus");
-            audioManager.FadeInMusic(titleMusic, 1f);
+            audioManager.FadeInMusic(titleMusic, 0f);
+        }
+    }
+
+    void BuildLevel_Procedural()
+    {
+        float cellScale = Map.CellScale;
+        foreach (Cell cell in level.cells)
+        {
+            // TODO: Switch to cell.Type == CellType.Procedural, instead of != CellType.Empty.
+            // Currently generates for all cells, but we may want to only generate for the procedural sections,
+            // and manually place the static areas.
+            if (cell.Type != CellType.Empty && level.HasConnections(cell))
+            {
+                Vector3 center = Map.GetCellPosition(cell);
+                GameObject cellInstance = GameObject.Instantiate(cellPrefabDebug, center, Quaternion.identity);
+                cellInstance.transform.localScale = Vector3.one * cellScale;
+
+                for (int d = 0; d < 4; d++)
+                {
+                    Direction direction = (Direction)d;
+                    if (level.HasConnection(cell, direction))
+                    {
+                        RemoveParts(cellInstance, direction);
+                    }
+                }
+            }
+        }
+    }
+
+    // Destroys pieces of a cell instance in a given direction.
+    // Used for procedural, to remove walls and connecting pieces between cells that are connected.
+    // Iterates through each child of the instance, and if the piece contains the direction in its name, it will be removed.
+    void RemoveParts(GameObject cellInstance, Direction direction)
+    {
+        foreach (Transform piece in cellInstance.transform)
+        {
+            if (piece.name.Contains(direction.ToString()))
+            {
+                Destroy(piece.gameObject);
+            }
         }
     }
 
