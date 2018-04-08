@@ -48,6 +48,8 @@ public class UIManager : MonoBehaviour
     [HideInInspector] public Resolution[] resolutions;
 
 
+    // TODO: Set up UI to run animations during pause (timeScale = 0)
+    //       using https://docs.unity3d.com/ScriptReference/AnimatorUpdateMode.UnscaledTime.html
     void Start()
     {
         manager = GameManager.Instance;

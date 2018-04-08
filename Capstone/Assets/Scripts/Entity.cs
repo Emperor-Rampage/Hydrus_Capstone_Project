@@ -46,13 +46,16 @@ namespace EntityClasses
 
         public EntityState State { get; set; }
 
+        [SerializeField] List<AbilityObject> abilities;
+        public List<AbilityObject> Abilities { get { return abilities; } private set { abilities = value; } }
+
         // Ability Variables
         // TODO: Create custom data structure for current effects.
         //       Should contain a dictionary of lists of effects (to support stacking effects), should use local "cooldown scale" (for example) variable, then multiply the value by the "value" field of each effect. For multiplicative stacking.
         public List<AbilityEffect> CurrentEffects { get; private set; } = new List<AbilityEffect>();
 
         public Entity() { }
-        public Entity (Entity entity)
+        public Entity(Entity entity)
         {
             Instance = entity.Instance;
             Name = entity.Name;
@@ -100,6 +103,33 @@ namespace EntityClasses
                 absoluteDirection -= 4;
 
             return (Direction)absoluteDirection;
+        }
+
+        public Direction GetBackward()
+        {
+            int newDir = (int)Facing - 2;
+            if (newDir < 0)
+                newDir += 4;
+
+            return (Direction)newDir;
+        }
+
+        public Direction GetLeft()
+        {
+            int newDir = (int)Facing - 1;
+            if (newDir < 0)
+                newDir += 4;
+
+            return (Direction)newDir;
+        }
+
+        public Direction GetRight()
+        {
+            int newDir = (int)Facing + 1;
+            if (newDir > 3)
+                newDir -= 4;
+
+            return (Direction)newDir;
         }
     }
 

@@ -6,10 +6,10 @@ namespace AbilityClasses
 {
     [CreateAssetMenu(menuName = "Abilities/Melee")]
 
-    public class MeleeAbility : AbilityObjBase
+    public class MeleeAbility : AbilityObject
     {
-        //Plan: create various template classes that handle each type of abilites. This will allow us to quickly create lots of abilities.
-        //ToDo: Everything.
+        // Plan: create various template classes that handle each type of abilites. This will allow us to quickly create lots of abilities.
+        // TODO: Everything.
     }
 }
 

@@ -6,6 +6,7 @@ using Pixelplacement;
 using MapClasses;
 using EntityClasses;
 using AudioClasses;
+using AIClasses;
 using UnityEngine.SceneManagement;
 
 
@@ -53,6 +54,8 @@ public class GameManager : Singleton<GameManager>
     UIManager uiManager;
     // A reference to the AudioManager instance, which is created at runtime, and handles all audio.
     AudioManager audioManager;
+    AIManager aiManager;
+
     [SerializeField] BackgroundMusic titleMusic;
 
     // How long it takes an entity to move from one square to another.
@@ -94,6 +97,10 @@ public class GameManager : Singleton<GameManager>
                 {
                     audioManager = gmInstance.GetComponent<AudioManager>();
                 }
+                else if (gmInstance.GetComponent<AIManager>() != null && aiManager == null)
+                {
+                    aiManager = gmInstance.GetComponent<AIManager>();
+                }
             }
         }
     }
@@ -113,6 +120,34 @@ public class GameManager : Singleton<GameManager>
 
         UpdateHUD();
         HandlePlayerInput();
+
+        foreach (Enemy enemy in level.EnemyList)
+        {
+            if (enemy.State == EntityState.Idle)
+            {
+                var action = aiManager.ExecuteAIOnEnemy(enemy);
+
+                if (action.Movement != Movement.Null)
+                {
+                    if (action.Movement == Movement.Nothing)
+                    {
+                        // Do nothing.
+                    }
+                    else if (action.Movement == Movement.Forward)
+                    {
+                        MoveEntityLocation(enemy, enemy.Facing);
+                    }
+                    else if (action.Movement == Movement.TurnLeft)
+                    {
+                        TurnEntityInstanceLeft(enemy);
+                    }
+                    else if (action.Movement == Movement.TurnRight)
+                    {
+                        TurnEntityInstanceRight(enemy);
+                    }
+                }
+            }
+        }
     }
 
     // Add OnLevelLoaded
@@ -477,7 +512,7 @@ public class GameManager : Singleton<GameManager>
 
         entity.State = EntityState.Moving;
 
-        Tween.Position(entity.Instance.transform, Map.GetEntityPosition(neighbor), Movespeed, 0f, Tween.EaseOut, completeCallback: () => FinishMoving(entity));
+        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), Movespeed, 0f, Tween.EaseOut, completeCallback: () => FinishMoving(entity));
         StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, Movespeed * 0.75f));
     }
 
@@ -540,7 +575,7 @@ public class GameManager : Singleton<GameManager>
     void SetEntityInstanceLocation(Entity entity)
     {
         var eTransform = entity.Instance.transform;
-        eTransform.position = Map.GetEntityPosition(entity);
+        eTransform.position = Map.GetCellPosition(entity.Cell);
         eTransform.rotation = Quaternion.Euler(0f, 90f * (int)entity.Facing, 0f);
     }
 }

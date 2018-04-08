@@ -8,12 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a485ea176a5f2041844258bc4582f1a, type: 3}
+  m_Script: {fileID: 0}
   m_Name: TestEnemy
-  m_EditorClassIdentifier: 
-  entity:
-    instance: {fileID: 1479540953470482, guid: 6e040a1ca78e3bf4c8011813915f214f, type: 2}
-    name: Trilobite
+  m_EditorClassIdentifier: Assembly-CSharp:EntityClasses:EnemyObject
+  enemy:
+    instance: {fileID: 1645256019301844, guid: 2b2c5a5af839a63438734487ab3bba95, type: 2}
+    name: Test
     cores: 10
-    maxHealth: 150
-  abilities: []
+    maxHealth: 100
+    abilities:
+    - {fileID: 11400000, guid: 22bbc36f0296f894795793c6b3f40370, type: 2}

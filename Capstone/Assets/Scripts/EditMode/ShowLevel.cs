@@ -69,7 +69,7 @@ public class ShowLevel : MonoBehaviour
         {
             Gizmos.color = new Color(1, 0, 0, 0.1f);
             Vector3 center = new Vector3(spawn.X * map.CellScale, 1f, spawn.Z * map.CellScale);
-            Gizmos.DrawWireMesh(spawn.Enemy.Entity.Instance.GetComponent<MeshFilter>().sharedMesh, center);
+            Gizmos.DrawWireMesh(spawn.EnemyObject.Enemy.Instance.GetComponent<MeshFilter>().sharedMesh, center);
         }
     }
 }

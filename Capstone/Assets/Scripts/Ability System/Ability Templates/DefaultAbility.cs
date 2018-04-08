@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace AbilityClasses
-{   
+{
     [CreateAssetMenu(menuName = "Abilities/Default")]
-    public class DefaultAbility : AbilityObjBase
+    public class DefaultAbility : AbilityObject
     {
 
-        
+
     }
 }

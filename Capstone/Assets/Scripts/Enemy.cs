@@ -1,4 +1,5 @@
 ﻿using AbilityClasses;
+using MapClasses;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,11 +7,17 @@ using UnityEngine;
 namespace EntityClasses
 {
     [CreateAssetMenu(fileName = "New Entity Spawn", menuName = "Entity/EntitySpawn")]
-    public class Enemy : ScriptableObject
+    public class EnemyObject : ScriptableObject
     {
-        [SerializeField] Entity entity;
-        public Entity Entity { get { return entity; } private set { entity = value; } }
-        [SerializeField] List<AbilityObjBase> abilities;
-        public List<AbilityObjBase> Abilities { get { return abilities; } private set { abilities = value; } }
+        [SerializeField] Entity enemy;
+        public Entity Enemy { get { return enemy; } private set { enemy = value; } }
+    }
+
+    public class Enemy : Entity
+    {
+        public bool InCombat { get; set; }
+        public Direction Target { get; set; }
+        public Enemy() : base() { }
+        public Enemy(Entity entity) : base(entity) { }
     }
 }

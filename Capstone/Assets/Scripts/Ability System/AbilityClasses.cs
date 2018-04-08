@@ -36,9 +36,9 @@ namespace AbilityClasses
     }
 
     [System.Serializable]
-    public abstract class AbilityObjBase : ScriptableObject
+    public abstract class AbilityObject : ScriptableObject
     {
-        //To-Do: Continue researching the scriptable objects ability system, and how to make it work for us.
+        //TODO: Continue researching the scriptable objects ability system, and how to make it work for us.
         //This is the basic template for all abilites in the game. This container holds all the info we need to make the abilites actually activate.
 
         //Basic Ability Information
@@ -57,9 +57,9 @@ namespace AbilityClasses
 
         //Upgrade System Info.
         public int abilityTier;                                                                                    //Integer used to denote the level of the ability in the upgrade tree.
-        public AbilityObjBase previousTier;                                                                        //Reference the the previous ability level of the tree, if any. Used for validation.
-        public List<AbilityObjBase> nextTier;                                                                      //Reference to the next ability level of the tree, if any. Used for validation.
+        public AbilityObject previousTier;                                                                        //Reference the the previous ability level of the tree, if any. Used for validation.
+        public List<AbilityObject> nextTier;                                                                      //Reference to the next ability level of the tree, if any. Used for validation.
         public float upgradeCost;                                                                                   //The Core cost to upgrade the ability, if any.
-     
+
     }
 }

@@ -48,7 +48,7 @@ namespace MapClasses
         [SerializeField] public List<EnemySpawn> spawnList;
         // A reference to the player entity, because we'll be using it a lot.
         public Player Player { get; private set; }
-        public List<Entity> EnemyList { get; private set; }
+        public List<Enemy> EnemyList { get; private set; }
 
         // A list of all cells in the level, because we might need it. But probably not.
         public List<Cell> cells;
@@ -331,7 +331,7 @@ namespace MapClasses
             // First initialize the player entity.
             // Then iterate through all enemy spawns and initialize each of them
 
-            EnemyList = new List<Entity>();
+            EnemyList = new List<Enemy>();
 
             // Create the player.
             Player = new Player { Facing = Direction.Up, State = EntityState.Idle };
@@ -340,7 +340,9 @@ namespace MapClasses
 
             foreach (var spawn in spawnList)
             {
-                Entity enemy = new Entity(spawn.Enemy.Entity);
+                Enemy enemy = new Enemy(spawn.EnemyObject.Enemy);
+                enemy.Target = Direction.Null;
+                enemy.InCombat = false;
                 SetEntityLocation(enemy, spawn.X, spawn.Z);
                 EnemyList.Add(enemy);
             }
@@ -417,6 +419,12 @@ namespace MapClasses
                 else if (entity.GetType() == typeof(Player) && !IsExit(cell))
                 {
                     CanExit = false;
+                }
+
+                if (entity.GetType() == typeof(Enemy))
+                {
+                    //                    Debug.Log("Entity is an enemy, setting target to null.");
+                    ((Enemy)entity).Target = Direction.Null;
                 }
 
                 entity.Cell = cell;
@@ -554,6 +562,29 @@ namespace MapClasses
 
             int index = cell.Index;
             return HasConnections(index);
+        }
+
+        public List<Cell> GetNeighbors(Cell cell)
+        {
+            if (!Initialized)
+                return null;
+
+            if (cell == null)
+                return null;
+
+            if (!HasConnections(cell))
+                return null;
+
+            List<Cell> neighbors = new List<Cell>();
+            int[] neighborIndexes = cell.GetNeighborIndexes();
+
+            for (int n = 0; n < neighborIndexes.Length; n++)
+            {
+                if (IsValidCell(neighborIndexes[n]))
+                    neighbors.Add(cells[neighborIndexes[n]]);
+            }
+
+            return neighbors;
         }
 
         // Gets the neighboring cell of Cell cell in Direction direction.
