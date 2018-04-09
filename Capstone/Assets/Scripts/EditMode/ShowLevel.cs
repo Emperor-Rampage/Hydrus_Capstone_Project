@@ -68,8 +68,12 @@ public class ShowLevel : MonoBehaviour
         foreach (EnemySpawn spawn in level.spawnList)
         {
             Gizmos.color = new Color(1, 0, 0, 0.1f);
-            Vector3 center = new Vector3(spawn.X * map.CellScale, 1f, spawn.Z * map.CellScale);
-            Gizmos.DrawWireMesh(spawn.EnemyObject.Enemy.Instance.GetComponent<MeshFilter>().sharedMesh, center);
+            Vector3 center = new Vector3(spawn.X * map.CellScale, 0.5f, spawn.Z * map.CellScale);
+            foreach (MeshFilter filter in spawn.EnemyObject.Enemy.Instance.GetComponentsInChildren<MeshFilter>())
+            {
+                Transform pieceTransform = filter.transform;
+                Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.position, pieceTransform.localRotation, transform.lossyScale);
+            }
         }
     }
 }

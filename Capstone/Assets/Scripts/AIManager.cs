@@ -60,7 +60,6 @@ namespace AIClasses
             Actions possible:
                 Do nothing
                 Move forward
-                Move backward
                 Turn left
                 Turn right
                 Cast an ability

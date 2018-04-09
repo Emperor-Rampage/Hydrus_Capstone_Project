@@ -6,6 +6,7 @@ using EntityClasses;
 using UnityEngine.SceneManagement;
 
 using AudioClasses;
+using AbilityClasses;
 
 namespace MapClasses
 {
@@ -346,6 +347,43 @@ namespace MapClasses
                 SetEntityLocation(enemy, spawn.X, spawn.Z);
                 EnemyList.Add(enemy);
             }
+        }
+
+        void RemoveEntity(Entity entity)
+        {
+
+        }
+
+        public List<Cell> GetAffectedCells(Entity entity, AbilityObject ability)
+        {
+            List<Cell> affected = new List<Cell>();
+
+            if (ability.type == AbilityType.None)
+            {
+                // Do nothing.
+            } else if (ability.type == AbilityType.Melee)
+            {
+                // Return the cell in front of the entity.
+                affected.Add(GetNeighbor(entity.Cell, entity.Facing));
+            } else if (ability.type == AbilityType.Ranged)
+            {
+                // Return all cells in a line in the direction the entity is facing, starting with the cell in front of the entity.
+                Cell current = entity.Cell;
+                for (int r = 0; r < ability.range; r++)
+                {
+                    Cell next = GetNeighbor(current, entity.Facing);
+                    affected.Add(next);
+                    current = next;
+                }
+            } else if (ability.type == AbilityType.AreaOfEffect)
+            {
+                // Get all pixels, return relative cells.
+            } else if (ability.type == AbilityType.Self)
+            {
+                // Return the entity's cell.
+            }
+
+            return affected;
         }
 
 

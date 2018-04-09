@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MapClasses;
 using AbilityClasses;
+using Pixelplacement;
 
 namespace EntityClasses
 {
@@ -39,6 +40,8 @@ namespace EntityClasses
         public int MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
 
         public int CurrentHealth { get; set; }
+        
+        public float CastProgress { get; set; }
 
         public Cell Cell { get; set; }
 
@@ -54,6 +57,8 @@ namespace EntityClasses
         //       Should contain a dictionary of lists of effects (to support stacking effects), should use local "cooldown scale" (for example) variable, then multiply the value by the "value" field of each effect. For multiplicative stacking.
         public List<AbilityEffect> CurrentEffects { get; private set; } = new List<AbilityEffect>();
 
+        List<Coroutine> coroutines;
+
         public Entity() { }
         public Entity(Entity entity)
         {
@@ -64,6 +69,25 @@ namespace EntityClasses
             CurrentHealth = MaxHealth;
             Facing = Direction.Up;
             State = EntityState.Idle;
+        }
+
+        public AbilityObject CastAbility(int index)
+        {
+            if (index < 0 || index >= Abilities.Count)
+                return null;
+            AbilityObject ability = Abilities[index];
+            coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
+            return ability;
+        }
+
+        IEnumerator CastAbility_Coroutine(AbilityObject ability)
+        {
+            // Wait the cast time, update cast time progress.
+            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), ability.baseCastTime, 0f);
+            yield return new WaitForSeconds(ability.baseCastTime);
+            // Call method in GameManager instance to perform the ability actions.
+
+//            GameManager.Instance.PerformAbility(ability);
         }
 
         public void TurnLeft()
@@ -130,6 +154,13 @@ namespace EntityClasses
                 newDir -= 4;
 
             return (Direction)newDir;
+        }
+
+        public void Kill()
+        {
+            GameObject.Destroy(Instance);
+            // Stop current coroutines.
+            coroutines.ForEach((coroutine) => GameManager.Instance.StopCoroutine(coroutine));
         }
     }
 

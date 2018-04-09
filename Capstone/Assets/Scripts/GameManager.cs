@@ -7,6 +7,7 @@ using MapClasses;
 using EntityClasses;
 using AudioClasses;
 using AIClasses;
+using AbilityClasses;
 using UnityEngine.SceneManagement;
 
 
@@ -577,5 +578,18 @@ public class GameManager : Singleton<GameManager>
         var eTransform = entity.Instance.transform;
         eTransform.position = Map.GetCellPosition(entity.Cell);
         eTransform.rotation = Quaternion.Euler(0f, 90f * (int)entity.Facing, 0f);
+    }
+
+    void CastAbility(Entity entity, int index)
+    {
+        AbilityObject ability = entity.CastAbility(index);
+
+        // Get the affect cells and display them.
+        List<Cell> affected = level.GetAffectedCells(entity, ability);
+    }
+
+    void PerformAbility(AbilityObject ability)
+    {
+
     }
 }
