@@ -2578,7 +2578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1491446274
 Transform:
   m_ObjectHideFlags: 0
@@ -4307,6 +4307,7 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     position: {x: 0, y: 0, z: 0}
+  testAbility: {fileID: 11400000, guid: 22bbc36f0296f894795793c6b3f40370, type: 2}
   playerPrefab: {fileID: 1999573432089804, guid: db41e22396b53c942bfd0968dbf1215c,
     type: 2}
   DoNotDestroyList:

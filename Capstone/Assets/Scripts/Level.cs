@@ -357,6 +357,9 @@ namespace MapClasses
         public List<Cell> GetAffectedCells(Entity entity, AbilityObject ability)
         {
             List<Cell> affected = new List<Cell>();
+            Cell cell = entity.Cell;
+            if (cell == null)
+                return affected;
 
             if (ability.type == AbilityType.None)
             {
@@ -368,7 +371,7 @@ namespace MapClasses
             } else if (ability.type == AbilityType.Ranged)
             {
                 // Return all cells in a line in the direction the entity is facing, starting with the cell in front of the entity.
-                Cell current = entity.Cell;
+                Cell current = cell;
                 for (int r = 0; r < ability.range; r++)
                 {
                     Cell next = GetNeighbor(current, entity.Facing);
@@ -378,6 +381,40 @@ namespace MapClasses
             } else if (ability.type == AbilityType.AreaOfEffect)
             {
                 // Get all pixels, return relative cells.
+                Texture2D sprite = ability.aoeSprite;
+                if (sprite == null)
+                    return affected;
+
+                int width = sprite.width;
+                int height = sprite.height;
+                int entityX = 0;
+                int entityY = 0;
+                Color[] aoePixels = sprite.GetPixels();
+                for (int i = 0; i < aoePixels.Length; i++)
+                {
+                    if (aoePixels[i] == Color.white)
+                    {
+                        entityX = GetSpriteX(i, width);
+                        entityY = GetSpriteY(i, width);
+                    }
+                }
+
+                Debug.Log("Casting AOE ability with player at " + cell.X + ", " + cell.Z);
+                for (int p = 0; p < aoePixels.Length; p++)
+                {
+                    if (aoePixels[p] == Color.black)
+                    {
+                        int pixelX = GetSpriteX(p, width);
+                        int pixelY = GetSpriteY(p, width);
+
+                        int offsetX = (pixelX - entityX);
+                        int offsetZ = (pixelX - entityY);
+
+                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
+
+                        affected.Add(cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)]);
+                    }
+                }
             } else if (ability.type == AbilityType.Self)
             {
                 // Return the entity's cell.
@@ -714,6 +751,16 @@ namespace MapClasses
                 return false;
 
             return true;
+        }
+
+        int GetSpriteX(int index, int width)
+        {
+            return index % width;
+        }
+
+        int GetSpriteY(int index, int width)
+        {
+            return (int)(index / width);
         }
     }
 }
