@@ -58,8 +58,8 @@ namespace AbilityClasses
         {
             if (CheckForKey(AbilEffect.effect))
             {
-                EffectLibrary
-                }
+//                EffectLibrary
+            }
             else
             {
 
