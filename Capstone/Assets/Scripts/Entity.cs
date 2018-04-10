@@ -40,7 +40,7 @@ namespace EntityClasses
         public int MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
 
         public int CurrentHealth { get; set; }
-        
+
         public float CastProgress { get; set; }
 
         public Cell Cell { get; set; }
@@ -55,7 +55,43 @@ namespace EntityClasses
         // Ability Variables
         // TODO: Create custom data structure for current effects.
         //       Should contain a dictionary of lists of effects (to support stacking effects), should use local "cooldown scale" (for example) variable, then multiply the value by the "value" field of each effect. For multiplicative stacking.
+
         public List<AbilityEffect> CurrentEffects { get; private set; } = new List<AbilityEffect>();
+        //public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectDictionary { get; private set; } = new Dictionary<AbilityStatusEff, List<AbilityEffect>>();
+
+        [System.Serializable]
+        public class EffectDictionary
+        {
+            public float cooldownScale = 1.0f;
+            public float movementScale = 1.0f;
+            public float castTimeScale = 1.0f;
+            public float damageScale = 1.0f;
+            public float healRate = 0.0f;
+            public bool stunned = false;
+            public bool rooted = false;
+            public bool silenced = false;
+
+            public Dictionary <AbilityStatusEff, List<AbilityEffect>> EffectLibrary; 
+
+            public void AddEffect(AbilityEffect AbilEffect)
+            {
+                if (CheckForKey(AbilEffect.effect))
+                {
+
+                }
+            }
+            public bool CheckForKey(AbilityStatusEff effectCode)
+            {
+                if (EffectLibrary.ContainsKey(effectCode))
+                    return true;
+                else
+                    return false;
+            }
+            public void ApplyEffects()
+            {
+
+            }
+        }
 
         List<Coroutine> coroutines;
 

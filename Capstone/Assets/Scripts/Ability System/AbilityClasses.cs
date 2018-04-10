@@ -28,24 +28,26 @@ namespace AbilityClasses
     }
 
     [System.Serializable]
-    public class AbilityEffect
+    public class AbilityEffect                                                                                      //Structure for containing ability effects
     {
         public AbilityStatusEff effect;
         public float duration;
-        public float value;
+        public float value;   
     }
 
-    [System.Serializable]
+
+[System.Serializable]
     public abstract class AbilityObject : ScriptableObject
     {
         //TODO: Continue researching the scriptable objects ability system, and how to make it work for us.
         //This is the basic template for all abilites in the game. This container holds all the info we need to make the abilites actually activate.
 
         //Basic Ability Information
-        public static string abilityName = "Default Ability Name";                                                  //Ability Name
+        public string abilityName = "Default Ability Name";                                                         //Ability Name
         public Sprite abilIcon;                                                                                     //Sprite Icon denoting the Ability
         [TextArea]
-        public string toolTip = abilityName + ": This is the Default Ability tooltip. Please change me.";           //Tooltip that explaines what the ability does.
+        public string toolTip = ": This is the Default Ability tooltip. Please change me.";                         //Tooltip that explaines what the ability does.
+        public ParticleSystem abilityParticleSys;                                                                   //Container for the Particle Effect System of the Ability.
         public AudioClip soundEff;                                                                                  //Sound Effect to play on activation.
         public List<AbilityEffect> statusEffects;                                                                   //List of status effects, if any. Denoted by an Enumerable ID value that informs the ability what to affect the target entity with.
         public AbilityType type;                                                                                    //Denotes what kind of ability is being used, and who it affects. Uses an Enumerable ID value to inform the ability script.
