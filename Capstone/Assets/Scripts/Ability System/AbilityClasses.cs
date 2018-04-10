@@ -99,7 +99,7 @@ namespace AbilityClasses
         public AudioClip soundEff;                                                                                  //Sound Effect to play on activation.
         public List<AbilityEffect> statusEffects;                                                                   //List of status effects, if any. Denoted by an Enumerable ID value that informs the ability what to affect the target entity with.
         public AbilityType type;                                                                                    //Denotes what kind of ability is being used, and who it affects. Uses an Enumerable ID value to inform the ability script.
-        public Texture2D rangeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.
+        public Texture2D aoeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.
         public float range;                                                                                         //For ranged abilities. Indicates the range of the ability.
         public float baseCooldown = 0.0f;                                                                           //The base Cooldown timer (in seconds) of the ability.
         public float baseCastTime = 0.0f;                                                                           //The base Cast Timer (in seconds) it takes for the ability to activate.

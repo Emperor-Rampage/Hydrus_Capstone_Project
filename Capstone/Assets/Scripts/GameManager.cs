@@ -33,6 +33,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject entityPrefab;
     // For testing the AudioManager.
     [SerializeField] SoundEffect testSound;
+    // For testing ability casting.
+    [SerializeField] AbilityObject testAbility;
 
     [Space(10)]
     [Header("Setup")]
@@ -127,6 +129,7 @@ public class GameManager : Singleton<GameManager>
             if (enemy.State == EntityState.Idle)
             {
                 var action = aiManager.ExecuteAIOnEnemy(enemy);
+                action = new EnemyAction();
 
                 if (action.Movement != Movement.Null)
                 {
@@ -195,6 +198,7 @@ public class GameManager : Singleton<GameManager>
         {
             // Sets up cells, connections, player spawn, and generates procedural areas.
             level.InitializeLevel();
+            level.Player.Abilities.Add(testAbility);
             UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
             // Creates debug instances for the cells and connections.
             // TODO: Create procedural area generation.
@@ -447,6 +451,9 @@ public class GameManager : Singleton<GameManager>
             {
                 testSound.position = Vector3.zero; //level.Player.Instance.transform.position;
                 audioManager.PlaySoundEffect(testSound);
+            } else if (Input.GetKeyDown(KeyCode.N)) // Casts the test ability.
+            {
+                CastAbility(level.Player, 0);
             }
         }
     }
@@ -583,13 +590,26 @@ public class GameManager : Singleton<GameManager>
     void CastAbility(Entity entity, int index)
     {
         AbilityObject ability = entity.CastAbility(index);
+        if (ability == null)
+            return;
 
         // Get the affect cells and display them.
         List<Cell> affected = level.GetAffectedCells(entity, ability);
     }
 
-    void PerformAbility(AbilityObject ability)
+    public void PerformAbility(Entity entity, AbilityObject ability)
     {
+        List<Cell> affected = level.GetAffectedCells(entity, ability);
 
+        foreach (Cell cell in affected)
+        {
+            Debug.Log("Performing " + ability.abilityName + " at " + cell.X + ", " + cell.Z);
+            Entity target = cell.Occupant;
+
+            if (target != null)
+            {
+                Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.initalDamage + " damage.");
+            }
+        }
     }
 }

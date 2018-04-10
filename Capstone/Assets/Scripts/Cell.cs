@@ -34,7 +34,7 @@ namespace MapClasses
         public int Z { get; private set; }
         public CellType Type { get; set; }
         public bool Locked { get; set; }
-        public IEntity Occupant { get; set; }
+        public Entity Occupant { get; set; }
 
         public Item Item { get; set; }
 

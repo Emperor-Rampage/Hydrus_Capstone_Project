@@ -59,9 +59,8 @@ namespace EntityClasses
         public List<AbilityEffect> CurrentEffects { get; private set; } = new List<AbilityEffect>();
         //public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectDictionary { get; private set; } = new Dictionary<AbilityStatusEff, List<AbilityEffect>>();
 
-        List<Coroutine> coroutines;
-
-        public Entity() { }
+        List<Coroutine> coroutines = new List<Coroutine>();
+        public Entity() { Abilities = new List<AbilityObject>(); }
         public Entity(Entity entity)
         {
             Instance = entity.Instance;
@@ -71,6 +70,7 @@ namespace EntityClasses
             CurrentHealth = MaxHealth;
             Facing = Direction.Up;
             State = EntityState.Idle;
+            Abilities = new List<AbilityObject>();
         }
 
         public AbilityObject CastAbility(int index)
@@ -78,7 +78,16 @@ namespace EntityClasses
             if (index < 0 || index >= Abilities.Count)
                 return null;
             AbilityObject ability = Abilities[index];
+            if (ability == null)
+            {
+                Debug.LogError("ERROR: Attempting to cast null ability.");
+                return null;
+            }
+
+            Debug.Log("Casting abilty " + ability.abilityName + " with cast time of " + ability.baseCastTime);
+
             coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
+            State = EntityState.Casting;
             return ability;
         }
 
@@ -89,7 +98,8 @@ namespace EntityClasses
             yield return new WaitForSeconds(ability.baseCastTime);
             // Call method in GameManager instance to perform the ability actions.
 
-//            GameManager.Instance.PerformAbility(ability);
+            GameManager.Instance.PerformAbility(this, ability);
+            State = EntityState.Idle;
         }
 
         public void TurnLeft()
