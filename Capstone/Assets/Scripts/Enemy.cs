@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace EntityClasses
 {
-    [CreateAssetMenu(fileName = "New Entity Spawn", menuName = "Entity/EntitySpawn")]
+    [CreateAssetMenu(fileName = "New Entity Spawn", menuName = "Entity/EnemySpawn")]
     public class EnemyObject : ScriptableObject
     {
         [SerializeField] Entity enemy;
