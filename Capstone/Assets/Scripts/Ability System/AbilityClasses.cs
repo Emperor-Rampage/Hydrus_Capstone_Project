@@ -35,8 +35,56 @@ namespace AbilityClasses
         public float value;   
     }
 
+    [System.Serializable]
+    public class EffectDictionary
+    {
+        public float cooldownScale = 1.0f;
+        public float movementScale = 1.0f;
+        public float castTimeScale = 1.0f;
+        public float damageScale = 1.0f;
+        public float healRate = 0.0f;
+        public bool stunned = false;
+        public bool rooted = false;
+        public bool silenced = false;
 
-[System.Serializable]
+        public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
+
+        public EffectDictionary()
+        {
+
+        }
+
+        public void AddEffect(AbilityEffect AbilEffect)
+        {
+            if (CheckForKey(AbilEffect.effect))
+            {
+                EffectLibrary
+                }
+            else
+            {
+
+            }
+        }
+
+        public bool CheckForKey(AbilityStatusEff effectCode)
+        {
+            if (EffectLibrary.ContainsKey(effectCode))
+                return true;
+            else
+                return false;
+        }
+
+        public void ApplyEffects()
+        {
+
+        }
+
+        public void RemoveEffect()
+        {
+
+        }
+    }
+    [System.Serializable]
     public abstract class AbilityObject : ScriptableObject
     {
         //TODO: Continue researching the scriptable objects ability system, and how to make it work for us.
