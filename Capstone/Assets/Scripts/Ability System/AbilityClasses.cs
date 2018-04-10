@@ -47,43 +47,36 @@ namespace AbilityClasses
         public bool rooted = false;
         public bool silenced = false;
 
-        public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
+        public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary; 
+        public List<AbilityEffect> CurrentEffects; //Empty list for instantiation purposes
 
-        public EffectDictionary()
-        {
-
-        }
+        public EffectDictionary() { }
 
         public void AddEffect(AbilityEffect AbilEffect)
         {
-            if (CheckForKey(AbilEffect.effect))
+            if (EffectLibrary.ContainsKey(AbilEffect.effect))
             {
-//                EffectLibrary
+                List<AbilityEffect> effects = EffectLibrary[AbilEffect.effect]; //Indexer
+                effects.Add(AbilEffect);
             }
             else
             {
-
+                EffectLibrary.Add(AbilEffect.effect, CurrentEffects);
+                EffectLibrary[AbilEffect.effect][0] = AbilEffect;
             }
         }
 
-        public bool CheckForKey(AbilityStatusEff effectCode)
-        {
-            if (EffectLibrary.ContainsKey(effectCode))
-                return true;
-            else
-                return false;
-        }
-
-        public void ApplyEffects()
+        public void ApplyEffects() //Method to apply all effect modifiers to the local values.
         {
 
         }
 
-        public void RemoveEffect()
+        public void RemoveEffect() //Method to remove an effect from the EffectLibrary
         {
 
         }
     }
+
     [System.Serializable]
     public abstract class AbilityObject : ScriptableObject
     {
@@ -99,7 +92,7 @@ namespace AbilityClasses
         public AudioClip soundEff;                                                                                  //Sound Effect to play on activation.
         public List<AbilityEffect> statusEffects;                                                                   //List of status effects, if any. Denoted by an Enumerable ID value that informs the ability what to affect the target entity with.
         public AbilityType type;                                                                                    //Denotes what kind of ability is being used, and who it affects. Uses an Enumerable ID value to inform the ability script.
-        public Texture2D rangeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.
+        public Texture2D aoeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.
         public float range;                                                                                         //For ranged abilities. Indicates the range of the ability.
         public float baseCooldown = 0.0f;                                                                           //The base Cooldown timer (in seconds) of the ability.
         public float baseCastTime = 0.0f;                                                                           //The base Cast Timer (in seconds) it takes for the ability to activate.
