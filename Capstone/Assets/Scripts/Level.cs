@@ -335,13 +335,15 @@ namespace MapClasses
             EnemyList = new List<Enemy>();
 
             // Create the player.
-            Player = new Player { Name = "Player", Facing = Direction.Up, State = EntityState.Idle };
+            Player = new Player { Index = -1, Name = "Player", Facing = Direction.Up, State = EntityState.Idle };
             // Set the player's location to the player spawn.
             SetEntityLocation(Player, PlayerSpawnCell);
 
+            int enemyIndex = 0;
             foreach (var spawn in spawnList)
             {
                 Enemy enemy = new Enemy(spawn.EnemyObject.Enemy);
+                enemy.Index = enemyIndex++;
                 enemy.Target = Direction.Null;
                 enemy.InCombat = false;
                 SetEntityLocation(enemy, spawn.X, spawn.Z);
@@ -360,6 +362,95 @@ namespace MapClasses
             }
         }
 
+        public List<Cell> GetAffectedCells_Highlight(Entity entity, AbilityObject ability)
+        {
+            List<Cell> highlight = new List<Cell>();
+            Cell cell = entity.Cell;
+            if (cell == null)
+                return highlight;
+
+            if (ability.Type == AbilityType.None)
+            {
+                // Do nothing.
+            }
+            else if (ability.Type == AbilityType.Melee)
+            {
+                // Return the cell in front of the entity.
+                Cell neighborCell = GetNeighbor(entity.Cell, entity.Facing);
+                if (neighborCell != null)
+                {
+                    highlight.Add(GetNeighbor(entity.Cell, entity.Facing));
+                }
+            }
+            else if (ability.Type == AbilityType.Ranged)
+            {
+                // Return all cells in a line in the direction the entity is facing, starting with the cell in front of the entity.
+                Cell current = cell;
+                for (int r = 0; r < ability.Range; r++)
+                {
+                    Cell next = GetNeighbor(current, entity.Facing);
+                    if (next != null && next.Occupant != null)
+                    {
+                        highlight.Add(next);
+                    }
+                    current = next;
+                }
+            }
+            else if (ability.Type == AbilityType.AreaOfEffect)
+            {
+                // Get all pixels, return relative cells.
+                Texture2D sprite = ability.AOESprite;
+                if (sprite == null)
+                    return highlight;
+
+                int width = sprite.width;
+                int height = sprite.height;
+                int entityX = 0;
+                int entityY = 0;
+                Color[] aoePixels = sprite.GetPixels();
+                for (int i = 0; i < aoePixels.Length; i++)
+                {
+                    if (aoePixels[i] == Color.white)
+                    {
+                        entityX = GetSpriteX(i, width);
+                        entityY = GetSpriteY(i, width);
+                    }
+                }
+
+                //                Debug.Log("Casting AOE ability with Entity at " + cell.X + ", " + cell.Z);
+                //                Debug.Log("-- Entity pixel is " + entityX + ", " + entityY);
+                for (int p = 0; p < aoePixels.Length; p++)
+                {
+                    if (aoePixels[p] == Color.black)
+                    {
+                        int pixelX = GetSpriteX(p, width);
+                        int pixelY = GetSpriteY(p, width);
+
+                        int offsetX = (pixelX - entityX);
+                        int offsetZ = (pixelY - entityY);
+
+                        //                        Debug.Log("-- Pixel - Entity: " + "X: " + pixelX + " - " + entityX);
+                        //                        Debug.Log("-- --------------  " + "Y: " + pixelY + " - " + entityY);
+
+                        //                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
+                        Cell target = cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)];
+                        if (target != null)
+                        {
+                            highlight.Add(target);
+                        }
+
+                    }
+                }
+            }
+            else if (ability.Type == AbilityType.Self)
+            {
+                // Return the entity's cell.
+                highlight.Add(entity.Cell);
+            }
+
+            return highlight;
+        }
+
         public List<Cell> GetAffectedCells(Entity entity, AbilityObject ability)
         {
             List<Cell> affected = new List<Cell>();
@@ -375,7 +466,7 @@ namespace MapClasses
             {
                 // Return the cell in front of the entity.
                 Cell neighborCell = GetNeighbor(entity.Cell, entity.Facing);
-                if (neighborCell.Occupant != null)
+                if (neighborCell != null)
                 {
                     affected.Add(GetNeighbor(entity.Cell, entity.Facing));
                 }
@@ -387,9 +478,10 @@ namespace MapClasses
                 for (int r = 0; r < ability.Range; r++)
                 {
                     Cell next = GetNeighbor(current, entity.Facing);
-                    if (next.Occupant != null)
+                    if (next != null && next.Occupant != null)
                     {
                         affected.Add(next);
+                        break;
                     }
                     current = next;
                 }
@@ -432,7 +524,7 @@ namespace MapClasses
 
                         //                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
                         Cell target = cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)];
-                        if(target.Occupant != null)
+                        if (target != null)
                         {
                             affected.Add(target);
                         }
@@ -443,6 +535,7 @@ namespace MapClasses
             else if (ability.Type == AbilityType.Self)
             {
                 // Return the entity's cell.
+                affected.Add(entity.Cell);
             }
 
             return affected;

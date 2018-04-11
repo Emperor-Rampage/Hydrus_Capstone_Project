@@ -594,8 +594,8 @@ public class GameManager : Singleton<GameManager>
         if (ability == null)
             return;
 
-        // Get the affect cells and display them.
-        List<Cell> affected = level.GetAffectedCells(entity, ability);
+        // Get the cells to highlight and display them.
+        List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
     }
 
     public void PerformAbility(Entity entity, AbilityObject ability)

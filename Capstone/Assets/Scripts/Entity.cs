@@ -27,6 +27,8 @@ namespace EntityClasses
     [System.Serializable]
     public class Entity : IEntity
     {
+        public int Index { get; set; }
+
         [SerializeField] GameObject instance;
         public GameObject Instance { get { return instance; } set { instance = value; } }
 

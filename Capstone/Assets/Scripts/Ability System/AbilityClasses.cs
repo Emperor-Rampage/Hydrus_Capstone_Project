@@ -35,7 +35,10 @@ namespace AbilityClasses
 
     public class AbilityEffect                                                                                    //Structure for containing ability effects
     {
-        public Entity Owner { get; private set; }
+        // public Entity Owner { get; private set; }
+        // Entity owner;
+        public int OwnerIndex { get; set; }
+        
         [SerializeField]
         AbilityStatusEff effect;
         public AbilityStatusEff Effect { get { return effect; } private set { effect = value; } }
@@ -46,8 +49,9 @@ namespace AbilityClasses
         float value;
         public float Value { get { return value; } private set { this.value = value; } }
 
-        public AbilityEffect(AbilityStatusEff eff, float dur, float val)
+        public AbilityEffect(int ownerIndex, AbilityStatusEff eff, float dur, float val)
         {
+            OwnerIndex = ownerIndex;
             Effect = eff;
             Duration = dur;
             Value = val;            
