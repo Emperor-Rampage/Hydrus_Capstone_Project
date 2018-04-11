@@ -29,11 +29,68 @@ namespace AbilityClasses
     }
 
     [System.Serializable]
-    public class AbilityEffect                                                                                      //Structure for containing ability effects
+    public class AbilityEffect : MonoBehaviour                                                                                     //Structure for containing ability effects
     {
         public AbilityStatusEff effect;
         public float duration;
         public float value;
+        public EffectDictionary target;
+
+        public void ApplyStatusEffect()
+        {
+                StartCoroutine("ApplyAbilityEffect");
+        }
+
+        IEnumerator ApplyAbilityEffect()
+        {
+            switch(effect)
+            {
+                case AbilityStatusEff.NoEffect:
+                    StopCoroutine("ApplyAbilityEffect");
+                    break;
+
+                case AbilityStatusEff.CastTimeSlow:
+                    break;
+
+                case AbilityStatusEff.CooldownSlow:
+                    break;
+
+                case AbilityStatusEff.Stun:
+                    break;
+
+                case AbilityStatusEff.MoveSlow:
+                    break;
+
+                case AbilityStatusEff.Root:
+                    break;
+
+                case AbilityStatusEff.Silence:
+                    break;
+
+                case AbilityStatusEff.Heal:
+                    target.healRate += value;
+                    yield return new WaitForSeconds(duration);
+                    break;
+
+                case AbilityStatusEff.Haste:
+                    break;
+
+                case AbilityStatusEff.DamReduct:
+                    break;
+
+                case AbilityStatusEff.DoT:
+                    target.healRate += value;
+                    yield return new WaitForSeconds(duration);
+                    break;
+
+                default:
+
+                    yield return new WaitForSeconds(duration);
+                    break;
+            }
+            yield return new WaitForSeconds(duration);
+
+        }
     }
 
     [System.Serializable]
@@ -47,7 +104,7 @@ namespace AbilityClasses
         public bool stunned = false;
         public bool rooted = false;
         public bool silenced = false;
-
+        /*
         public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
         public List<AbilityEffect> CurrentEffects; //Empty list for instantiation purposes
 
@@ -59,6 +116,10 @@ namespace AbilityClasses
             {
                 List<AbilityEffect> effects = EffectLibrary[AbilEffect.effect]; //Indexer
                 effects.Add(AbilEffect);
+            }
+            else if((int)AbilEffect.effect == -1) //Error handling for no value
+            {
+                return;
             }
             else
             {
@@ -72,10 +133,33 @@ namespace AbilityClasses
 
         }
 
-        public void RemoveEffect() //Method to remove an effect from the EffectLibrary
+        //Idea, create subroutines for each effect so we can track the time spent for each.
+        IEnumerator MovementSlow(AbilityEffect abil)
+        {
+            yield return new WaitForSeconds(abil.duration);
+        }
+
+        public void ApplyMovementSlow() //Individual function to change movement slow scale
+        {
+            if(EffectLibrary.ContainsKey(AbilityStatusEff.MoveSlow))
+            {
+                List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.MoveSlow];
+                for(int i = 0; i <= index.Count;)
+                {
+                    index[i].value *= movementScale;
+                }
+            }
+            else
+            {
+                movementScale = 1.0f;
+            }
+        }
+
+        public void RemoveEffect() //Method to remove an effect from the EffectLibrary when the timer is done on it.
         {
 
         }
+        */
     }
 
     [System.Serializable]
