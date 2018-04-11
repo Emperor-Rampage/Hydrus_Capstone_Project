@@ -11,17 +11,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
   m_Name: TestPreviousMeleeAbility
   m_EditorClassIdentifier: 
-  abilIcon: {fileID: 0}
+  abilityName: Default Ability Name
+  icon: {fileID: 0}
   toolTip: 'Default Ability Name: This is the Default Ability tooltip. Please change
     me.'
-  soundEff: {fileID: 0}
+  particleSystem: {fileID: 0}
+  soundEffect:
+    audioClip: {fileID: 0}
+    volume: 0
+    pitch: 0
   statusEffects: []
   type: 1
-  rangeSprite: {fileID: 0}
-  baseCooldown: 0
-  baseCastTime: 0
-  upgradable: 0
-  abilityTier: 0
+  aoeSprite: {fileID: 0}
+  range: 0
+  cooldown: 0
+  castTime: 0
+  damage: 0
+  upgradeable: 0
+  tier: 0
   previousTier: {fileID: 0}
   nextTier: []
-  upgradeCost: 0
+  cost: 0
