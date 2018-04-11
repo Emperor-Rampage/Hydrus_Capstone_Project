@@ -87,7 +87,7 @@ namespace EntityClasses
                 return null;
             }
 
-            Debug.Log("Casting abilty " + ability.abilityName + " with cast time of " + ability.baseCastTime + " at " + Cell.X + ", " + Cell.Z);
+            Debug.Log("Casting abilty " + ability.Name + " with cast time of " + ability.CastTime + " at " + Cell.X + ", " + Cell.Z);
 
             coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
             State = EntityState.Casting;
@@ -97,8 +97,8 @@ namespace EntityClasses
         IEnumerator CastAbility_Coroutine(AbilityObject ability)
         {
             // Wait the cast time, update cast time progress.
-            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), ability.baseCastTime, 0f);
-            yield return new WaitForSeconds(ability.baseCastTime);
+            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), ability.CastTime, 0f);
+            yield return new WaitForSeconds(ability.CastTime);
             // Call method in GameManager instance to perform the ability actions.
 
             GameManager.Instance.PerformAbility(this, ability);
