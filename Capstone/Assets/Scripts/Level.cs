@@ -335,7 +335,7 @@ namespace MapClasses
             EnemyList = new List<Enemy>();
 
             // Create the player.
-            Player = new Player { Facing = Direction.Up, State = EntityState.Idle };
+            Player = new Player { Name = "Player", Facing = Direction.Up, State = EntityState.Idle };
             // Set the player's location to the player spawn.
             SetEntityLocation(Player, PlayerSpawnCell);
 
@@ -351,7 +351,13 @@ namespace MapClasses
 
         void RemoveEntity(Entity entity)
         {
+            if (entity == null)
+                return;
 
+            if (entity.Cell != null)
+            {
+                entity.Cell.Occupant = null;
+            }
         }
 
         public List<Cell> GetAffectedCells(Entity entity, AbilityObject ability)
@@ -364,11 +370,13 @@ namespace MapClasses
             if (ability.type == AbilityType.None)
             {
                 // Do nothing.
-            } else if (ability.type == AbilityType.Melee)
+            }
+            else if (ability.type == AbilityType.Melee)
             {
                 // Return the cell in front of the entity.
                 affected.Add(GetNeighbor(entity.Cell, entity.Facing));
-            } else if (ability.type == AbilityType.Ranged)
+            }
+            else if (ability.type == AbilityType.Ranged)
             {
                 // Return all cells in a line in the direction the entity is facing, starting with the cell in front of the entity.
                 Cell current = cell;
@@ -378,7 +386,8 @@ namespace MapClasses
                     affected.Add(next);
                     current = next;
                 }
-            } else if (ability.type == AbilityType.AreaOfEffect)
+            }
+            else if (ability.type == AbilityType.AreaOfEffect)
             {
                 // Get all pixels, return relative cells.
                 Texture2D sprite = ability.aoeSprite;
@@ -399,7 +408,8 @@ namespace MapClasses
                     }
                 }
 
-                Debug.Log("Casting AOE ability with player at " + cell.X + ", " + cell.Z);
+                //                Debug.Log("Casting AOE ability with Entity at " + cell.X + ", " + cell.Z);
+                //                Debug.Log("-- Entity pixel is " + entityX + ", " + entityY);
                 for (int p = 0; p < aoePixels.Length; p++)
                 {
                     if (aoePixels[p] == Color.black)
@@ -408,14 +418,18 @@ namespace MapClasses
                         int pixelY = GetSpriteY(p, width);
 
                         int offsetX = (pixelX - entityX);
-                        int offsetZ = (pixelX - entityY);
+                        int offsetZ = (pixelY - entityY);
 
-                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
+                        //                        Debug.Log("-- Pixel - Entity: " + "X: " + pixelX + " - " + entityX);
+                        //                        Debug.Log("-- --------------  " + "Y: " + pixelY + " - " + entityY);
+
+                        //                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
 
                         affected.Add(cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)]);
                     }
                 }
-            } else if (ability.type == AbilityType.Self)
+            }
+            else if (ability.type == AbilityType.Self)
             {
                 // Return the entity's cell.
             }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using AudioClasses;
 using UnityEngine;
 
 namespace AbilityClasses
@@ -32,7 +33,7 @@ namespace AbilityClasses
     {
         public AbilityStatusEff effect;
         public float duration;
-        public float value;   
+        public float value;
     }
 
     [System.Serializable]
@@ -47,7 +48,7 @@ namespace AbilityClasses
         public bool rooted = false;
         public bool silenced = false;
 
-        public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary; 
+        public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
         public List<AbilityEffect> CurrentEffects; //Empty list for instantiation purposes
 
         public EffectDictionary() { }
@@ -89,7 +90,7 @@ namespace AbilityClasses
         [TextArea]
         public string toolTip = ": This is the Default Ability tooltip. Please change me.";                         //Tooltip that explaines what the ability does.
         public ParticleSystem abilityParticleSys;                                                                   //Container for the Particle Effect System of the Ability.
-        public AudioClip soundEff;                                                                                  //Sound Effect to play on activation.
+        public SoundEffect soundEff;                                                                                  //Sound Effect to play on activation.
         public List<AbilityEffect> statusEffects;                                                                   //List of status effects, if any. Denoted by an Enumerable ID value that informs the ability what to affect the target entity with.
         public AbilityType type;                                                                                    //Denotes what kind of ability is being used, and who it affects. Uses an Enumerable ID value to inform the ability script.
         public Texture2D aoeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.

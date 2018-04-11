@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1273174, g: 0.13414761, b: 0.12107885, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -4306,7 +4306,6 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 2f705938a48d6f64791bd6dc4ccdda56, type: 3}
     volume: 1
     pitch: 1
-    position: {x: 0, y: 0, z: 0}
   testAbility: {fileID: 11400000, guid: 22bbc36f0296f894795793c6b3f40370, type: 2}
   playerPrefab: {fileID: 1999573432089804, guid: db41e22396b53c942bfd0968dbf1215c,
     type: 2}

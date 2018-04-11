@@ -8,29 +8,55 @@ namespace AudioClasses
     public class SoundEffect
     {
         [SerializeField]
-        public AudioClip audioClip;
+        private AudioClip audioClip;
+        public AudioClip Clip { get { return audioClip; } private set { audioClip = value; } }
 
         [SerializeField]
         [Range(0f, 1f)]
-        public float volume = 1f;
+        private float volume = 1f;
+        public float Volume { get { return volume; } private set { volume = value; } }
+
 
         [SerializeField]
         [Range(-3f, 3f)]
-        public float pitch = 1f;
+        private float pitch = 1f;
+        public float Pitch { get { return pitch; } private set { pitch = value; } }
 
-        public Vector3 position;
+        private Vector3 position = Vector3.zero;
+        public Vector3 Position { get { return position; } private set { position = value; } }
+
+        public SoundEffect(SoundEffect copy)
+        {
+            Clip = copy.Clip;
+            Volume = copy.Volume;
+            Pitch = copy.Pitch;
+            Position = copy.Position;
+        }
+
+        public SoundEffect(SoundEffect copy, Vector3 position)
+        {
+            Clip = copy.Clip;
+            Volume = copy.Volume;
+            Pitch = copy.Pitch;
+            Position = position;
+        }
     }
 
     [System.Serializable]
     public class BackgroundMusic
     {
         [SerializeField]
-        public AudioClip audioClip;
+        AudioClip audioClip;
+        public AudioClip Clip { get { return audioClip; } }
+
         [SerializeField]
         [Range(0f, 1f)]
-        public float volume = 1f;
+        float volume = 1f;
+        public float Volume { get { return volume; } }
+
         [SerializeField]
         [Range(-3f, 3f)]
-        public float pitch = 1f;
+        float pitch = 1f;
+        public float Pitch { get { return pitch; } }
     }
 }

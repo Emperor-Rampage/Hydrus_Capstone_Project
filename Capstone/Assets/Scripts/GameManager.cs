@@ -449,9 +449,10 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.M)) // Plays the test sound.
             {
-                testSound.position = Vector3.zero; //level.Player.Instance.transform.position;
+                //                testSound.Position = Vector3.zero; //level.Player.Instance.transform.position;
                 audioManager.PlaySoundEffect(testSound);
-            } else if (Input.GetKeyDown(KeyCode.N)) // Casts the test ability.
+            }
+            else if (Input.GetKeyDown(KeyCode.N)) // Casts the test ability.
             {
                 CastAbility(level.Player, 0);
             }
@@ -599,11 +600,20 @@ public class GameManager : Singleton<GameManager>
 
     public void PerformAbility(Entity entity, AbilityObject ability)
     {
+        // Play sounds and animations.
+        // Deal damage to entities in the cells.
+
+        if (ability.soundEff != null)
+        {
+            audioManager.PlaySoundEffect(new SoundEffect(ability.soundEff, entity.Instance.transform.position));
+        }
+
         List<Cell> affected = level.GetAffectedCells(entity, ability);
+        Debug.Log(entity.Name + " casting " + ability.abilityName);
 
         foreach (Cell cell in affected)
         {
-            Debug.Log("Performing " + ability.abilityName + " at " + cell.X + ", " + cell.Z);
+            //            Debug.Log("Performing " + ability.abilityName + " at " + cell.X + ", " + cell.Z);
             Entity target = cell.Occupant;
 
             if (target != null)

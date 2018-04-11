@@ -22,7 +22,7 @@ namespace AudioClasses
 
         public void FadeInMusic(BackgroundMusic bgMusic, float fadeTime = defaultFadeTime)
         {
-            if (bgMusic.audioClip == null)
+            if (bgMusic.Clip == null)
             {
                 Debug.LogWarning("WARNING: BackgroundMusic AudioClip is null.");
                 return;
@@ -37,12 +37,12 @@ namespace AudioClasses
             GameObject sourceObject = Instantiate(soundEffectPrefab.gameObject);
             AudioSource source = sourceObject.GetComponent<AudioSource>();
             source.spatialBlend = 0f;
-            source.clip = bgMusic.audioClip;
-            source.pitch = bgMusic.pitch;
+            source.clip = bgMusic.Clip;
+            source.pitch = bgMusic.Pitch;
             source.loop = true;
 
             source.Play();
-            Tween.Volume(source, 0f, bgMusic.volume, fadeTime, 0f, completeCallback: () => musicPlaying = source);
+            Tween.Volume(source, 0f, bgMusic.Volume, fadeTime, 0f, completeCallback: () => musicPlaying = source);
         }
 
         public void FadeOutMusic(float fadeTime = defaultFadeTime)
@@ -58,7 +58,7 @@ namespace AudioClasses
 
         public void PlaySoundEffect(SoundEffect soundEffect)
         {
-            if (soundEffect.audioClip == null)
+            if (soundEffect.Clip == null)
             {
                 Debug.LogWarning("WARNING: SoundEffect AudioClip is null.");
                 return;
@@ -74,21 +74,21 @@ namespace AudioClasses
             {
                 Debug.Log("Source found, pulling from pool. Pool now contains " + soundEffectPool.Count);
                 sourceObject = soundEffectPool.Pop();
-                sourceObject.transform.position = soundEffect.position;
+                sourceObject.transform.position = soundEffect.Position;
                 source = sourceObject.GetComponent<AudioSource>();
-                source.clip = soundEffect.audioClip;
-                source.volume = soundEffect.volume;
-                source.pitch = soundEffect.pitch;
+                source.clip = soundEffect.Clip;
+                source.volume = soundEffect.Volume;
+                source.pitch = soundEffect.Pitch;
                 sourceObject.SetActive(true);
             }
             else
             {
                 Debug.Log("Pool is empty, creating new source.");
-                sourceObject = Instantiate(soundEffectPrefab.gameObject, soundEffect.position, Quaternion.identity);
+                sourceObject = Instantiate(soundEffectPrefab.gameObject, soundEffect.Position, Quaternion.identity);
                 source = sourceObject.GetComponent<AudioSource>();
-                source.clip = soundEffect.audioClip;
-                source.volume = soundEffect.volume;
-                source.pitch = soundEffect.pitch;
+                source.clip = soundEffect.Clip;
+                source.volume = soundEffect.Volume;
+                source.pitch = soundEffect.Pitch;
             }
 
             source.Play();

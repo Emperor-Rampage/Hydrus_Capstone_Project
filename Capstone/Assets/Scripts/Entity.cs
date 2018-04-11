@@ -75,6 +75,9 @@ namespace EntityClasses
 
         public AbilityObject CastAbility(int index)
         {
+            if (State != EntityState.Idle)
+                return null;
+
             if (index < 0 || index >= Abilities.Count)
                 return null;
             AbilityObject ability = Abilities[index];
@@ -84,7 +87,7 @@ namespace EntityClasses
                 return null;
             }
 
-            Debug.Log("Casting abilty " + ability.abilityName + " with cast time of " + ability.baseCastTime);
+            Debug.Log("Casting abilty " + ability.abilityName + " with cast time of " + ability.baseCastTime + " at " + Cell.X + ", " + Cell.Z);
 
             coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
             State = EntityState.Casting;
