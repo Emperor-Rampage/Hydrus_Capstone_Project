@@ -129,7 +129,7 @@ public class GameManager : Singleton<GameManager>
             if (enemy.State == EntityState.Idle)
             {
                 var action = aiManager.ExecuteAIOnEnemy(enemy);
-                action = new EnemyAction();
+                //                action = new EnemyAction();
 
                 if (action.Movement != Movement.Null)
                 {
@@ -603,13 +603,13 @@ public class GameManager : Singleton<GameManager>
         // Play sounds and animations.
         // Deal damage to entities in the cells.
 
-        if (ability.soundEff != null)
+        if (ability.SoundEffect != null)
         {
-            audioManager.PlaySoundEffect(new SoundEffect(ability.soundEff, entity.Instance.transform.position));
+            audioManager.PlaySoundEffect(new SoundEffect(ability.SoundEffect, entity.Instance.transform.position));
         }
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
-        Debug.Log(entity.Name + " casting " + ability.abilityName);
+        Debug.Log(entity.Name + " casting " + ability.SoundEffect);
 
         foreach (Cell cell in affected)
         {
@@ -618,7 +618,7 @@ public class GameManager : Singleton<GameManager>
 
             if (target != null)
             {
-                Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.initalDamage + " damage.");
+                Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using AudioClasses;
+using EntityClasses;
 using UnityEngine;
 
 namespace AbilityClasses
@@ -28,13 +29,21 @@ namespace AbilityClasses
         DoT = 9
     }
 
+   
     [System.Serializable]
+
     public class AbilityEffect : MonoBehaviour                                                                                     //Structure for containing ability effects
     {
-        public AbilityStatusEff effect;
-        public float duration;
-        public float value;
-        public EffectDictionary target;
+        public Entity Owner { get; private set; }
+        [SerializeField]
+        AbilityStatusEff effect;
+        public AbilityStatusEff Effect { get { return effect; } private set { effect = value; } }
+        [SerializeField]
+        float duration;
+        public float Duration { get { return duration; } private set { duration = value; } }
+        [SerializeField]
+        float value;
+        public float Value { get { return value; } private set { this.value = value; } }
 
         public void ApplyStatusEffect()
         {
@@ -68,7 +77,7 @@ namespace AbilityClasses
                     break;
 
                 case AbilityStatusEff.Heal:
-                    target.healRate += value;
+                    target.healRate += Value;
                     yield return new WaitForSeconds(duration);
                     break;
 
@@ -112,10 +121,12 @@ namespace AbilityClasses
 
         public void AddEffect(AbilityEffect AbilEffect)
         {
-            if (EffectLibrary.ContainsKey(AbilEffect.effect))
+            if (EffectLibrary.ContainsKey(AbilEffect.Effect))
             {
-                List<AbilityEffect> effects = EffectLibrary[AbilEffect.effect]; //Indexer
-                effects.Add(AbilEffect);
+                // NOTE: I moved this to one line because we already have too many darn lines.
+                EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
+                // List<AbilityEffect> effects = EffectLibrary[AbilEffect.Effect]; //Indexer
+                // effects.Add(AbilEffect);
             }
             else if((int)AbilEffect.effect == -1) //Error handling for no value
             {
@@ -123,9 +134,25 @@ namespace AbilityClasses
             }
             else
             {
-                EffectLibrary.Add(AbilEffect.effect, CurrentEffects);
-                EffectLibrary[AbilEffect.effect][0] = AbilEffect;
+                // CurrentEffects is never instantiated, and if it was it'd just keep referring to the same list.
+                // Should just create a new one.
+                EffectLibrary.Add(AbilEffect.Effect, new List<AbilityEffect>());
+                EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
+                // EffectLibrary.Add(AbilEffect.Effect, CurrentEffects);
+                // EffectLibrary[AbilEffect.Effect][0] = AbilEffect;
             }
+        }
+
+        public List<AbilityEffect> GetEffectList(AbilityStatusEff targetType)
+        {
+            List<AbilityEffect> result = null;
+
+            if (EffectLibrary.TryGetValue(targetType, out result))
+            {
+                Debug.Log("Found key, returning list.");
+            }
+
+            return result;
         }
 
         public void ApplyEffects() //Method to apply all effect modifiers to the local values.
@@ -169,26 +196,59 @@ namespace AbilityClasses
         //This is the basic template for all abilites in the game. This container holds all the info we need to make the abilites actually activate.
 
         //Basic Ability Information
-        public string abilityName = "Default Ability Name";                                                         //Ability Name
-        public Sprite abilIcon;                                                                                     //Sprite Icon denoting the Ability
+        [SerializeField] string abilityName = "Default Ability Name";                                                         //Ability Name
+        public string Name { get { return abilityName; } }
+
+        [SerializeField] Sprite icon;                                                                                     //Sprite Icon denoting the Ability
+        public Sprite Icon { get { return icon; } }
+
         [TextArea]
-        public string toolTip = ": This is the Default Ability tooltip. Please change me.";                         //Tooltip that explaines what the ability does.
-        public ParticleSystem abilityParticleSys;                                                                   //Container for the Particle Effect System of the Ability.
-        public SoundEffect soundEff;                                                                                  //Sound Effect to play on activation.
-        public List<AbilityEffect> statusEffects;                                                                   //List of status effects, if any. Denoted by an Enumerable ID value that informs the ability what to affect the target entity with.
-        public AbilityType type;                                                                                    //Denotes what kind of ability is being used, and who it affects. Uses an Enumerable ID value to inform the ability script.
-        public Texture2D aoeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.
-        public float range;                                                                                         //For ranged abilities. Indicates the range of the ability.
-        public float baseCooldown = 0.0f;                                                                           //The base Cooldown timer (in seconds) of the ability.
-        public float baseCastTime = 0.0f;                                                                           //The base Cast Timer (in seconds) it takes for the ability to activate.
-        public int initalDamage = 0;                                                                                //Initial damage value of the ability.
-        public bool upgradable;                                                                                     //Boolean that denotes if the ability can be upgraded or not.
+        [SerializeField]
+        string toolTip = ": This is the Default Ability tooltip. Please change me.";                         //Tooltip that explaines what the ability does.
+        public string ToolTip { get { return toolTip; } }
+
+        [SerializeField] ParticleSystem particleSystem;                                                                   //Container for the Particle Effect System of the Ability.
+        public ParticleSystem ParticleSystem { get { return particleSystem; } }
+
+        [SerializeField] SoundEffect soundEffect;                                                                                  //Sound Effect to play on activation.
+        public SoundEffect SoundEffect { get { return soundEffect; } }
+
+        [SerializeField] List<AbilityEffect> statusEffects;                                                                   //List of status effects, if any. Denoted by an Enumerable ID value that informs the ability what to affect the target entity with.
+        public List<AbilityEffect> StatusEffects { get { return statusEffects; } }
+
+        [SerializeField] AbilityType type;                                                                                    //Denotes what kind of ability is being used, and who it affects. Uses an Enumerable ID value to inform the ability script.
+        public AbilityType Type { get { return type; } }
+
+        [SerializeField] Texture2D aoeSprite;                                                                               //Tilemap that denotes the effective range of the ability. Not used in Melee, or Self abilites.
+        public Texture2D AOESprite { get { return aoeSprite; } }
+
+        [SerializeField] float range;                                                                                         //For ranged abilities. Indicates the range of the ability.
+        public float Range { get { return range; } }
+
+        [SerializeField] float cooldown = 0.0f;                                                                           //The base Cooldown timer (in seconds) of the ability.
+        public float Cooldown { get { return cooldown; } }
+
+        [SerializeField] float castTime = 0.0f;                                                                           //The base Cast Timer (in seconds) it takes for the ability to activate.
+        public float CastTime { get { return castTime; } }
+
+        [SerializeField] int damage = 0;                                                                                //Initial damage value of the ability.
+        public int Damage { get { return damage; } }
+
+        [SerializeField] bool upgradeable;                                                                                     //Boolean that denotes if the ability can be upgraded or not.
+        public bool Upgradeable { get { return upgradeable; } }
+
 
         //Upgrade System Info.
-        public int abilityTier;                                                                                    //Integer used to denote the level of the ability in the upgrade tree.
-        public AbilityObject previousTier;                                                                        //Reference the the previous ability level of the tree, if any. Used for validation.
-        public List<AbilityObject> nextTier;                                                                      //Reference to the next ability level of the tree, if any. Used for validation.
-        public float upgradeCost;                                                                                   //The Core cost to upgrade the ability, if any.
+        [SerializeField] int tier;                                                                                    //Integer used to denote the level of the ability in the upgrade tree.
+        public int Tier { get { return tier; } }
 
+        [SerializeField] AbilityObject previousTier;                                                                        //Reference the the previous ability level of the tree, if any. Used for validation.
+        public AbilityObject PreviousTier { get { return previousTier; } }
+
+        [SerializeField] List<AbilityObject> nextTier;                                                                      //Reference to the next ability level of the tree, if any. Used for validation.
+        public List<AbilityObject> NextTier { get { return nextTier; } }
+
+        [SerializeField] float cost;                                                                                   //The Core cost to upgrade the ability, if any.
+        public float Cost { get { return cost; } }
     }
 }

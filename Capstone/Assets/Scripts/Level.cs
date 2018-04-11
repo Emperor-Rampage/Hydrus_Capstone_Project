@@ -367,30 +367,30 @@ namespace MapClasses
             if (cell == null)
                 return affected;
 
-            if (ability.type == AbilityType.None)
+            if (ability.Type == AbilityType.None)
             {
                 // Do nothing.
             }
-            else if (ability.type == AbilityType.Melee)
+            else if (ability.Type == AbilityType.Melee)
             {
                 // Return the cell in front of the entity.
                 affected.Add(GetNeighbor(entity.Cell, entity.Facing));
             }
-            else if (ability.type == AbilityType.Ranged)
+            else if (ability.Type == AbilityType.Ranged)
             {
                 // Return all cells in a line in the direction the entity is facing, starting with the cell in front of the entity.
                 Cell current = cell;
-                for (int r = 0; r < ability.range; r++)
+                for (int r = 0; r < ability.Range; r++)
                 {
                     Cell next = GetNeighbor(current, entity.Facing);
                     affected.Add(next);
                     current = next;
                 }
             }
-            else if (ability.type == AbilityType.AreaOfEffect)
+            else if (ability.Type == AbilityType.AreaOfEffect)
             {
                 // Get all pixels, return relative cells.
-                Texture2D sprite = ability.aoeSprite;
+                Texture2D sprite = ability.AOESprite;
                 if (sprite == null)
                     return affected;
 
@@ -429,7 +429,7 @@ namespace MapClasses
                     }
                 }
             }
-            else if (ability.type == AbilityType.Self)
+            else if (ability.Type == AbilityType.Self)
             {
                 // Return the entity's cell.
             }
