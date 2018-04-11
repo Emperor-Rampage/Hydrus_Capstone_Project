@@ -374,7 +374,11 @@ namespace MapClasses
             else if (ability.Type == AbilityType.Melee)
             {
                 // Return the cell in front of the entity.
-                affected.Add(GetNeighbor(entity.Cell, entity.Facing));
+                Cell neighborCell = GetNeighbor(entity.Cell, entity.Facing);
+                if (neighborCell.Occupant != null)
+                {
+                    affected.Add(GetNeighbor(entity.Cell, entity.Facing));
+                }
             }
             else if (ability.Type == AbilityType.Ranged)
             {
@@ -383,7 +387,10 @@ namespace MapClasses
                 for (int r = 0; r < ability.Range; r++)
                 {
                     Cell next = GetNeighbor(current, entity.Facing);
-                    affected.Add(next);
+                    if (next.Occupant != null)
+                    {
+                        affected.Add(next);
+                    }
                     current = next;
                 }
             }
@@ -424,8 +431,12 @@ namespace MapClasses
                         //                        Debug.Log("-- --------------  " + "Y: " + pixelY + " - " + entityY);
 
                         //                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
-
-                        affected.Add(cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)]);
+                        Cell target = cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)];
+                        if(target.Occupant != null)
+                        {
+                            affected.Add(target);
+                        }
+                       
                     }
                 }
             }

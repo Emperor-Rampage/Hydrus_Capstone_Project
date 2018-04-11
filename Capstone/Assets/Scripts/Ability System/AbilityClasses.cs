@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AudioClasses;
 using EntityClasses;
 using UnityEngine;
+using Pixelplacement;
 
 namespace AbilityClasses
 {
@@ -32,7 +33,7 @@ namespace AbilityClasses
    
     [System.Serializable]
 
-    public class AbilityEffect : MonoBehaviour                                                                                     //Structure for containing ability effects
+    public class AbilityEffect                                                                                    //Structure for containing ability effects
     {
         public Entity Owner { get; private set; }
         [SerializeField]
@@ -45,60 +46,11 @@ namespace AbilityClasses
         float value;
         public float Value { get { return value; } private set { this.value = value; } }
 
-        public void ApplyStatusEffect()
+        public AbilityEffect(AbilityStatusEff eff, float dur, float val)
         {
-                StartCoroutine("ApplyAbilityEffect");
-        }
-
-        IEnumerator ApplyAbilityEffect()
-        {
-            switch(effect)
-            {
-                case AbilityStatusEff.NoEffect:
-                    StopCoroutine("ApplyAbilityEffect");
-                    break;
-
-                case AbilityStatusEff.CastTimeSlow:
-                    break;
-
-                case AbilityStatusEff.CooldownSlow:
-                    break;
-
-                case AbilityStatusEff.Stun:
-                    break;
-
-                case AbilityStatusEff.MoveSlow:
-                    break;
-
-                case AbilityStatusEff.Root:
-                    break;
-
-                case AbilityStatusEff.Silence:
-                    break;
-
-                case AbilityStatusEff.Heal:
-                    target.healRate += Value;
-                    yield return new WaitForSeconds(duration);
-                    break;
-
-                case AbilityStatusEff.Haste:
-                    break;
-
-                case AbilityStatusEff.DamReduct:
-                    break;
-
-                case AbilityStatusEff.DoT:
-                    target.healRate += value;
-                    yield return new WaitForSeconds(duration);
-                    break;
-
-                default:
-
-                    yield return new WaitForSeconds(duration);
-                    break;
-            }
-            yield return new WaitForSeconds(duration);
-
+            Effect = eff;
+            Duration = dur;
+            Value = val;            
         }
     }
 
@@ -113,7 +65,7 @@ namespace AbilityClasses
         public bool stunned = false;
         public bool rooted = false;
         public bool silenced = false;
-        /*
+        
         public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
         public List<AbilityEffect> CurrentEffects; //Empty list for instantiation purposes
 
@@ -128,7 +80,7 @@ namespace AbilityClasses
                 // List<AbilityEffect> effects = EffectLibrary[AbilEffect.Effect]; //Indexer
                 // effects.Add(AbilEffect);
             }
-            else if((int)AbilEffect.effect == -1) //Error handling for no value
+            else if(AbilEffect.Effect == AbilityStatusEff.NoEffect) //Error handling for no value
             {
                 return;
             }
@@ -163,7 +115,7 @@ namespace AbilityClasses
         //Idea, create subroutines for each effect so we can track the time spent for each.
         IEnumerator MovementSlow(AbilityEffect abil)
         {
-            yield return new WaitForSeconds(abil.duration);
+            yield return new WaitForSeconds(abil.Duration);
         }
 
         public void ApplyMovementSlow() //Individual function to change movement slow scale
@@ -173,7 +125,7 @@ namespace AbilityClasses
                 List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.MoveSlow];
                 for(int i = 0; i <= index.Count;)
                 {
-                    index[i].value *= movementScale;
+                    movementScale *= index[i].Value;
                 }
             }
             else
@@ -186,7 +138,7 @@ namespace AbilityClasses
         {
 
         }
-        */
+        
     }
 
     [System.Serializable]
