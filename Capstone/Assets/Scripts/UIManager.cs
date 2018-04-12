@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using AbilityClasses;
+
 [RequireComponent(typeof(Canvas))]
 public class UIManager : MonoBehaviour
 {
@@ -30,6 +32,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject[] hudList;
     [SerializeField] TMP_Text areaText;
     [SerializeField] TMP_Text promptText;
+
+    [SerializeField] TMP_Text coresText;
+    [SerializeField] TMP_Text effectTextPrefab;
+    [SerializeField] VerticalLayoutGroup effectGroup;
+
     [SerializeField] Image playerHealthBar;
     [SerializeField] Image playerHealthMissing;
     [SerializeField] Image playerCastBar;
@@ -49,7 +56,7 @@ public class UIManager : MonoBehaviour
 
     // Private fields.
     [HideInInspector] public Resolution[] resolutions;
-    //    Tween currentMissingHealthTween;
+    List<TMP_Text> effectTextList;
 
 
     // TODO: Set up UI to run animations during pause (timeScale = 0)
@@ -79,6 +86,7 @@ public class UIManager : MonoBehaviour
 
     public void Initialize_Level()
     {
+        effectTextList = new List<TMP_Text>();
         ShowHUD(0);
     }
 
@@ -161,6 +169,64 @@ public class UIManager : MonoBehaviour
 
     public void TogglePause()
     {
+    }
+
+    public void UpdateEffectList(List<AbilityEffect> abilityEffects)
+    {
+        // Iterate through all passed in AbilityEffects. Update the corresponding texts and create new texts if there aren't enough.
+        int i = 0;
+        for (; i < abilityEffects.Count; i++)
+        {
+            AbilityEffect effect = abilityEffects[i];
+            // If there is a corresponding effect text, set the text.
+            // Otherwise, create a new one, add it to the effectTextList, and set the text.
+            if (i < effectTextList.Count)
+            {
+                TMP_Text effectText = effectTextList[i];
+                if (effect.Effect == AbilityStatusEff.DoT)
+                {
+                    DisplayEffect(effectText, effect);
+                }
+                else
+                {
+                    DisplayEffect(effectText, effect);
+                }
+            } else
+            {
+                TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectGroup.transform, false);
+                effectTextList.Add(effectText);
+                DisplayEffect(effectText, effect);
+            }
+        }
+
+        // Iterate through all excess ability texts, removing them.
+        for (; i < effectTextList.Count; i++)
+        {
+            TMP_Text effectText = effectTextList[i];
+            effectTextList.Remove(effectText);
+            Destroy(effectText);
+        }
+    }
+
+    void DisplayEffect(TMP_Text effectText, AbilityEffect effect)
+    {
+        if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
+        {
+            effectText.text = effect.Effect + " - " + effect.Duration;
+        }
+        else if (effect.Effect == AbilityStatusEff.DoT)
+        {
+            effectText.text = effect.Effect + " " + effect.Value.ToString("0.0") + "/sec - " + effect.Duration;
+        }
+        else
+        {
+            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Duration;
+        }
+    }
+
+    public void UpdatePlayerCores(int newCores)
+    {
+        coresText.text = "Cores: " + newCores;
     }
 
     public void UpdatePlayerHealth(float newPercentage)
