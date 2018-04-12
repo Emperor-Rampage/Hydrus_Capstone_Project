@@ -454,7 +454,22 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.N)) // Casts the test ability.
             {
-                CastAbility(level.Player, 0);
+                CastPlayerAbility(level.Player, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.O))
+            {
+                bool alive = level.Player.Damage(25);
+                if (!alive)
+                {
+                    Debug.Log("Entity is dead!");
+                    StartCoroutine(level.RemoveEntity(level.Player));
+                }
+                uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
+            }
+            else if (Input.GetKeyDown(KeyCode.P))
+            {
+                bool full = level.Player.Heal(25);
+                uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
             }
         }
     }
@@ -521,7 +536,7 @@ public class GameManager : Singleton<GameManager>
 
         entity.State = EntityState.Moving;
 
-        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), Movespeed, 0f, Tween.EaseOut, completeCallback: () => FinishMoving(entity));
+        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), Movespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
         StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, Movespeed * 0.75f));
     }
 
@@ -537,6 +552,7 @@ public class GameManager : Singleton<GameManager>
         cell.Locked = false;
     }
 
+    // NOTE: NOT USING.
     // Callback method for entity instance GameObject position tween.
     // Just sets the passed-in entity's state to Idle to indicate the completion of their movement.
     void FinishMoving(Entity entity)
@@ -588,7 +604,18 @@ public class GameManager : Singleton<GameManager>
         eTransform.rotation = Quaternion.Euler(0f, 90f * (int)entity.Facing, 0f);
     }
 
-    void CastAbility(Entity entity, int index)
+    void CastPlayerAbility(Entity entity, int index)
+    {
+        AbilityObject ability = entity.CastAbility(index);
+        if (ability == null)
+            return;
+
+        uiManager.UpdatePlayerCast(ability.CastTime);
+        // Get the cells to highlight and display them.
+        List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
+    }
+
+    void CastEnemyAbility(Entity entity, int index)
     {
         AbilityObject ability = entity.CastAbility(index);
         if (ability == null)
@@ -618,6 +645,14 @@ public class GameManager : Singleton<GameManager>
 
             if (target != null)
             {
+                bool alive = target.Damage(ability.Damage);
+
+                if (!alive)
+                {
+                    Debug.Log("Entity is dead!");
+                    StartCoroutine(level.RemoveEntity(target));
+                }
+
                 Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
             }
         }

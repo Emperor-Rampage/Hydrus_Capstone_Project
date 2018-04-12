@@ -20,6 +20,10 @@ namespace AudioClasses
 
         AudioSource musicPlaying;
 
+        // FIXME: Odd bug. Sometimes if the player moves immediately after the cast of an ability is complete,
+        //        the sound effect will glitch and only play for a single frame.
+        //        Attempts to replicate this bug seemed to indicate that it is random.
+
         public void FadeInMusic(BackgroundMusic bgMusic, float fadeTime = defaultFadeTime)
         {
             if (bgMusic.Clip == null)
@@ -84,7 +88,7 @@ namespace AudioClasses
             else
             {
                 Debug.Log("Pool is empty, creating new source.");
-                sourceObject = Instantiate(soundEffectPrefab.gameObject, soundEffect.Position, Quaternion.identity);
+                sourceObject = Instantiate(soundEffectPrefab.gameObject, soundEffect.Position, Quaternion.identity, this.transform);
                 source = sourceObject.GetComponent<AudioSource>();
                 source.clip = soundEffect.Clip;
                 source.volume = soundEffect.Volume;

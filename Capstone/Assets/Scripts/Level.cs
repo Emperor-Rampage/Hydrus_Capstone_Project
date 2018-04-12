@@ -335,7 +335,7 @@ namespace MapClasses
             EnemyList = new List<Enemy>();
 
             // Create the player.
-            Player = new Player { Index = -1, Name = "Player", Facing = Direction.Up, State = EntityState.Idle };
+            Player = new Player { Index = -1, Name = "Player", Facing = Direction.Up, State = EntityState.Idle, MaxHealth = 100, CurrentHealth = 100 };
             // Set the player's location to the player spawn.
             SetEntityLocation(Player, PlayerSpawnCell);
 
@@ -351,14 +351,30 @@ namespace MapClasses
             }
         }
 
-        void RemoveEntity(Entity entity)
+        public IEnumerator RemoveEntity(Entity entity)
         {
-            if (entity == null)
-                return;
-
-            if (entity.Cell != null)
+            Debug.Log("Removing entity..");
+            if (entity != null)
             {
-                entity.Cell.Occupant = null;
+                Debug.Log("-- Entity is not null.");
+                while (entity.State != EntityState.Idle)
+                {
+                    Debug.Log("-- Entity is not idle, waiting a frame. Instead is " + entity.State);
+                    yield return null;
+                }
+
+                Debug.Log("-- Entity is idle. Destroying everything.");
+                // If the entity is present in the enemy list, it will be removed.
+                GameObject.Destroy(entity.Instance);
+                if (entity.GetType() == typeof(Enemy))
+                {
+                    EnemyList.Remove((Enemy)entity);
+                }
+
+                if (entity.Cell != null)
+                {
+                    entity.Cell.Occupant = null;
+                }
             }
         }
 
@@ -528,7 +544,7 @@ namespace MapClasses
                         {
                             affected.Add(target);
                         }
-                       
+
                     }
                 }
             }

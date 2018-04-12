@@ -173,11 +173,39 @@ namespace EntityClasses
             return (Direction)newDir;
         }
 
+        // Returns true if full health, false if not.
+        public bool Heal(int heal)
+        {
+            CurrentHealth += heal;
+            if (CurrentHealth >= MaxHealth)
+            {
+                CurrentHealth = MaxHealth;
+                return true;
+            }
+
+            return false;
+        }
+
+        // Returns true if alive, false if dead.
+        public bool Damage(int damage)
+        {
+            if (CurrentHealth > damage)
+            {
+                CurrentHealth -= damage;
+                return true;
+            }
+
+            CurrentHealth = 0;
+            Kill();
+            return false;
+        }
+
         public void Kill()
         {
-            GameObject.Destroy(Instance);
             // Stop current coroutines.
             coroutines.ForEach((coroutine) => GameManager.Instance.StopCoroutine(coroutine));
+            if (State == EntityState.Casting)
+                State = EntityState.Idle;
         }
     }
 

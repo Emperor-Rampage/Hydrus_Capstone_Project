@@ -30,6 +30,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject[] hudList;
     [SerializeField] TMP_Text areaText;
     [SerializeField] TMP_Text promptText;
+    [SerializeField] Image playerHealthBar;
+    [SerializeField] Image playerHealthMissing;
+    [SerializeField] Image playerCastBar;
 
     // Private fields.
     int currentMenu;
@@ -46,10 +49,14 @@ public class UIManager : MonoBehaviour
 
     // Private fields.
     [HideInInspector] public Resolution[] resolutions;
+    //    Tween currentMissingHealthTween;
 
 
     // TODO: Set up UI to run animations during pause (timeScale = 0)
     //       using https://docs.unity3d.com/ScriptReference/AnimatorUpdateMode.UnscaledTime.html
+
+    // FIXME: During transitions, the user can still continue clicking UI elements, such as in the main menu.
+    //        Should be locked out of taking other actions.
     void Start()
     {
         manager = GameManager.Instance;
@@ -154,6 +161,19 @@ public class UIManager : MonoBehaviour
 
     public void TogglePause()
     {
+    }
+
+    public void UpdatePlayerHealth(float newPercentage)
+    {
+        Tween.Stop(playerHealthMissing.GetInstanceID());
+        Tween.Value(playerHealthBar.fillAmount, newPercentage, (value) => playerHealthMissing.fillAmount = value, 0.25f, 0.25f, Tween.EaseInOut);
+        playerHealthBar.fillAmount = newPercentage;
+    }
+
+    public void UpdatePlayerCast(float castTime)
+    {
+        Tween.Stop(playerCastBar.GetInstanceID());
+        Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)
