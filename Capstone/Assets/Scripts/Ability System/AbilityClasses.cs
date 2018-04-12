@@ -15,6 +15,7 @@ namespace AbilityClasses
         Ranged = 2,
         AreaOfEffect = 3
     }
+
     public enum AbilityStatusEff
     {
         NoEffect = -1,
@@ -54,7 +55,7 @@ namespace AbilityClasses
             OwnerIndex = ownerIndex;
             Effect = eff;
             Duration = dur;
-            Value = val;            
+            Value = val;
         }
     }
 

@@ -373,6 +373,8 @@ public class GameManager : Singleton<GameManager>
     {
         // If standing at an exit, give option to go through exit.
         ExitPrompt(level.CanExit);
+        uiManager.UpdatePlayerCores(level.Player.Cores);
+        uiManager.UpdateEffectList(level.Player.CurrentEffects);
         // If standing on an item, give option to collect item.
         /*        if (level.CanExit)
                 {
@@ -459,17 +461,21 @@ public class GameManager : Singleton<GameManager>
             else if (Input.GetKeyDown(KeyCode.O))
             {
                 bool alive = level.Player.Damage(25);
-                if (!alive)
-                {
-                    Debug.Log("Entity is dead!");
-                    StartCoroutine(level.RemoveEntity(level.Player));
-                }
+                PerformEntityDeathCheck(level.Player, alive);
+
                 uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
             }
             else if (Input.GetKeyDown(KeyCode.P))
             {
                 bool full = level.Player.Heal(25);
                 uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
+            } else if (Input.GetKeyDown(KeyCode.L))
+            {
+                AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
+                level.Player.CurrentEffects.Add(effect);
+            } else if (Input.GetKeyDown(KeyCode.K))
+            {
+                level.Player.CurrentEffects.RemoveAt(level.Player.CurrentEffects.Count - 1);
             }
         }
     }
@@ -646,15 +652,22 @@ public class GameManager : Singleton<GameManager>
             if (target != null)
             {
                 bool alive = target.Damage(ability.Damage);
-
-                if (!alive)
-                {
-                    Debug.Log("Entity is dead!");
-                    StartCoroutine(level.RemoveEntity(target));
-                }
-
+                PerformEntityDeathCheck(target, alive);
                 Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
             }
+        }
+    }
+
+    public void PerformEntityDeathCheck(Entity entity, bool alive)
+    {
+        if (!alive && entity.GetType() == typeof(Player))
+        {
+
+        } else
+        {
+            Debug.Log("Entity is dead!");
+            level.Player.Cores += entity.Cores;
+            StartCoroutine(level.RemoveEntity(entity));
         }
     }
 }
