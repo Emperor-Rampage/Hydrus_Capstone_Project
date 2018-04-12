@@ -42,9 +42,11 @@ namespace AbilityClasses
         [SerializeField]
         AbilityStatusEff effect;
         public AbilityStatusEff Effect { get { return effect; } private set { effect = value; } }
+
         [SerializeField]
         float duration;
         public float Duration { get { return duration; } private set { duration = value; } }
+
         [SerializeField]
         float value;
         public float Value { get { return value; } private set { this.value = value; } }
@@ -56,20 +58,28 @@ namespace AbilityClasses
             Duration = dur;
             Value = val;            
         }
+
+        public void StartTween()
+        {
+
+        }
     }
 
     [System.Serializable]
     public class EffectDictionary
     {
-        public float cooldownScale = 1.0f;
-        public float movementScale = 1.0f;
-        public float castTimeScale = 1.0f;
-        public float damageScale = 1.0f;
-        public float healRate = 0.0f;
-        public bool stunned = false;
-        public bool rooted = false;
-        public bool silenced = false;
-        
+
+        //To Do: RemoveEffect method, Tween/timer method
+        private float cooldownScale = 1.0f;
+        private float movementScale = 1.0f;
+        private float castTimeScale = 1.0f;
+        private float damageScale = 1.0f;
+        private float healRate = 0.0f;
+        private float damageRate = 0.0f;
+        private bool stunned = false;
+        private bool rooted = false;
+        private bool silenced = false;
+
         public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
         public List<AbilityEffect> CurrentEffects; //Empty list for instantiation purposes
 
@@ -81,8 +91,8 @@ namespace AbilityClasses
             {
                 // NOTE: I moved this to one line because we already have too many darn lines.
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
-                // List<AbilityEffect> effects = EffectLibrary[AbilEffect.Effect]; //Indexer
-                // effects.Add(AbilEffect);
+                CalcEffects(AbilEffect.Effect);
+
             }
             else if(AbilEffect.Effect == AbilityStatusEff.NoEffect) //Error handling for no value
             {
@@ -94,9 +104,17 @@ namespace AbilityClasses
                 // Should just create a new one.
                 EffectLibrary.Add(AbilEffect.Effect, new List<AbilityEffect>());
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
-                // EffectLibrary.Add(AbilEffect.Effect, CurrentEffects);
-                // EffectLibrary[AbilEffect.Effect][0] = AbilEffect;
+                CalcEffects(AbilEffect.Effect);
             }
+        }
+
+
+        //At the end of the ability effect Tween, remove the AbilityEffect from the list of current effects.
+        //If the list is empty, remove the key entirely.
+        //Also recalculate the current effects list on every remove.
+        public void RemoveEffect()
+        {
+
         }
 
         public List<AbilityEffect> GetEffectList(AbilityStatusEff targetType)
@@ -111,38 +129,286 @@ namespace AbilityClasses
             return result;
         }
 
-        public void ApplyEffects() //Method to apply all effect modifiers to the local values.
+        public void CalcEffects(AbilityStatusEff type)
         {
-
-        }
-
-        //Idea, create subroutines for each effect so we can track the time spent for each.
-        IEnumerator MovementSlow(AbilityEffect abil)
-        {
-            yield return new WaitForSeconds(abil.Duration);
-        }
-
-        public void ApplyMovementSlow() //Individual function to change movement slow scale
-        {
-            if(EffectLibrary.ContainsKey(AbilityStatusEff.MoveSlow))
+            if(type != AbilityStatusEff.NoEffect)
             {
-                List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.MoveSlow];
-                for(int i = 0; i <= index.Count;)
+                switch(type)
                 {
-                    movementScale *= index[i].Value;
+                    case AbilityStatusEff.CastTimeSlow:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.CastTimeSlow];
+
+                            if (index != null && index.Count != 0) //validation check.
+                            {
+                                for (int i = 0; i <= index.Count;)
+                                {
+                                    castTimeScale *= index[i].Value;
+                                }
+                            }
+                            else if (index != null && index.Count == 0)
+                            {
+                                castTimeScale = 1.0f;
+                            }
+                            else if (index == null)
+                            {
+                                castTimeScale = 1.0f;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.CooldownSlow:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.CooldownSlow];
+
+                            if (index != null && index.Count != 0) //validation check.
+                            {
+                                for (int i = 0; i <= index.Count;)
+                                {
+                                    cooldownScale *= index[i].Value;
+                                }
+                            }
+                            else if (index != null && index.Count == 0)
+                            {
+                                cooldownScale = 1.0f;
+                            }
+                            else if (index == null)
+                            {
+                                cooldownScale = 1.0f;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.Stun:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Stun];
+                            if (index != null && index.Count != 0)
+                            {
+                                stunned = true;
+                            }
+                            else
+                            {
+                                stunned = false;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.MoveSlow:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.MoveSlow];
+
+                            if ( index != null && index.Count != 0) //validation check.
+                            {
+                                for (int i = 0; i <= index.Count;)
+                                {
+                                    movementScale *= index[i].Value;
+                                }
+                            }
+                            else if(index != null && index.Count == 0)
+                            {
+                                movementScale = 1.0f;
+                            }
+                            else if (index == null)
+                            {
+                                movementScale = 1.0f;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.Root:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Root];
+                            if (index != null && index.Count != 0)
+                            {
+                                rooted = true;
+                            }
+                            else
+                            {
+                                rooted = false;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.Silence:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Silence];
+                            if (index != null && index.Count != 0)
+                            {
+                                silenced = true;
+                            }
+                            else
+                            {
+                                silenced = false;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.Heal:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Heal];
+
+                            if (index != null && index.Count != 0) //validation check.
+                            {
+                                for (int i = 0; i <= index.Count;)
+                                {
+                                    healRate += index[i].Value;
+                                }
+                            }
+                            else if (index != null && index.Count == 0)
+                            {
+                                healRate = 0.0f;
+                            }
+                            else if (index == null)
+                            {
+                                healRate = 0.0f;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.Haste:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Haste];
+
+                            if (index != null && index.Count != 0) //validation check.
+                            {
+                                for (int i = 0; i <= index.Count;)
+                                {
+                                    castTimeScale *= index[i].Value;
+                                }
+                            }
+                            else if (index != null && index.Count == 0)
+                            {
+                                movementScale = 1.0f;
+                            }
+                            else if (index == null)
+                            {
+                                movementScale = 1.0f;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.DamReduct:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.DamReduct];
+
+                            if (index != null && index.Count != 0) //validation check.
+                            {
+                                for (int i = 0; i <= index.Count;)
+                                {
+                                    damageRate *= index[i].Value;
+                                }
+                            }
+                            else if (index != null && index.Count == 0)
+                            {
+                               damageRate = 1.0f;
+                            }
+                            else if (index == null)
+                            {
+                                damageRate = 1.0f;
+                            }
+                            break;
+                        }
+
+                    case AbilityStatusEff.DoT:
+                        {
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.DoT];
+
+                            if (index != null && index.Count != 0) //validation check.
+                            {
+                                for (int i = 0; i <= index.Count;)
+                                {
+                                    damageRate += index[i].Value;
+                                }
+                            }
+                            else if (index != null && index.Count == 0)
+                            {
+                                damageRate = 0.0f;
+                            }
+                            else if (index == null)
+                            {
+                                damageRate = 0.0f;
+                            }
+                            break;
+                        }
                 }
             }
-            else
-            {
-                movementScale = 1.0f;
-            }
         }
 
-        public void RemoveEffect() //Method to remove an effect from the EffectLibrary when the timer is done on it.
+        public float GetEffectValue_float(AbilityStatusEff type)
         {
+            if (EffectLibrary.ContainsKey(type) && type != AbilityStatusEff.NoEffect)
+            {
+                switch (type)
+                {
+                    case AbilityStatusEff.CastTimeSlow:
+                        {
+                            return castTimeScale;
+                        }
 
+                    case AbilityStatusEff.CooldownSlow:
+                        {
+                            return cooldownScale;
+                        }
+
+                    case AbilityStatusEff.MoveSlow:
+                        {
+                            return movementScale;
+                        }
+
+                    case AbilityStatusEff.Heal:
+                        {
+                            return healRate;
+                        }
+
+                    case AbilityStatusEff.Haste:
+                        {
+                            return castTimeScale;
+                        }
+
+                    case AbilityStatusEff.DamReduct:
+                        {
+                            return damageScale;
+                        }
+
+                    case AbilityStatusEff.DoT:
+                        {
+                            return damageRate;
+                        }
+                }
+            }
+            return 1.0f;
         }
-        
+
+        public bool GetEffectValue(AbilityStatusEff type)
+        {
+            if (EffectLibrary.ContainsKey(type) && type != AbilityStatusEff.NoEffect)
+            {
+                switch (type)
+                {
+
+                    case AbilityStatusEff.Stun:
+                        {
+                            return stunned;
+                        }
+
+                    case AbilityStatusEff.Root:
+                        {
+                            return rooted;
+                        }
+
+                    case AbilityStatusEff.Silence:
+                        {
+                            return silenced;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            }
+            return false;
+        }
+
     }
 
     [System.Serializable]
