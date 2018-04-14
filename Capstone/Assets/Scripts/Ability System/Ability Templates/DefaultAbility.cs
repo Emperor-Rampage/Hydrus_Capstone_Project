@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AbilityClasses
 {
-    [CreateAssetMenu(menuName = "Abilities/Default")]
+    [CreateAssetMenu(fileName = "New Ability", menuName = "Game/Ability/Default")]
     public class DefaultAbility : AbilityObject
     {
 

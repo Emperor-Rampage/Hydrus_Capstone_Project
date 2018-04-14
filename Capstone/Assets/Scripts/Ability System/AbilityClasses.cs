@@ -31,7 +31,7 @@ namespace AbilityClasses
         DoT = 9
     }
 
-   
+
     [System.Serializable]
 
     public class AbilityEffect                                                                                    //Structure for containing ability effects
@@ -39,7 +39,7 @@ namespace AbilityClasses
         // public Entity Owner { get; private set; }
         // Entity owner;
         public int OwnerIndex { get; set; }
-        
+
         [SerializeField]
         AbilityStatusEff effect;
         public AbilityStatusEff Effect { get { return effect; } private set { effect = value; } }
@@ -95,7 +95,7 @@ namespace AbilityClasses
                 CalcEffects(AbilEffect.Effect);
 
             }
-            else if(AbilEffect.Effect == AbilityStatusEff.NoEffect) //Error handling for no value
+            else if (AbilEffect.Effect == AbilityStatusEff.NoEffect) //Error handling for no value
             {
                 return;
             }
@@ -132,9 +132,9 @@ namespace AbilityClasses
 
         public void CalcEffects(AbilityStatusEff type)
         {
-            if(type != AbilityStatusEff.NoEffect)
+            if (type != AbilityStatusEff.NoEffect)
             {
-                switch(type)
+                switch (type)
                 {
                     case AbilityStatusEff.CastTimeSlow:
                         {
@@ -198,14 +198,14 @@ namespace AbilityClasses
                         {
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.MoveSlow];
 
-                            if ( index != null && index.Count != 0) //validation check.
+                            if (index != null && index.Count != 0) //validation check.
                             {
                                 for (int i = 0; i <= index.Count;)
                                 {
                                     movementScale *= index[i].Value;
                                 }
                             }
-                            else if(index != null && index.Count == 0)
+                            else if (index != null && index.Count == 0)
                             {
                                 movementScale = 1.0f;
                             }
@@ -301,7 +301,7 @@ namespace AbilityClasses
                             }
                             else if (index != null && index.Count == 0)
                             {
-                               damageRate = 1.0f;
+                                damageRate = 1.0f;
                             }
                             else if (index == null)
                             {

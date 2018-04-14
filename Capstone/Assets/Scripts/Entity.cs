@@ -44,6 +44,7 @@ namespace EntityClasses
         public int CurrentHealth { get; set; }
 
         public float CastProgress { get; set; }
+        public float CurrentCastTime { get; set; }
 
         public Cell Cell { get; set; }
 
@@ -99,7 +100,8 @@ namespace EntityClasses
         IEnumerator CastAbility_Coroutine(AbilityObject ability)
         {
             // Wait the cast time, update cast time progress.
-            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), ability.CastTime, 0f);
+            CurrentCastTime = ability.CastTime;
+            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), ability.CastTime, 0f, completeCallback: () => CastProgress = 0f);
             yield return new WaitForSeconds(ability.CastTime);
             // Call method in GameManager instance to perform the ability actions.
 
@@ -189,6 +191,7 @@ namespace EntityClasses
         // Returns true if alive, false if dead.
         public bool Damage(int damage)
         {
+            Debug.Log(Name + " currently has " + CurrentHealth + " health. Taking " + damage + " damage.");
             if (CurrentHealth > damage)
             {
                 CurrentHealth -= damage;
@@ -211,6 +214,8 @@ namespace EntityClasses
 
     public class Player : Entity
     {
+        PlayerClass playerClass;
+
         public Player() : base() { }
         public Player(Entity entity) : base(entity) { }
     }

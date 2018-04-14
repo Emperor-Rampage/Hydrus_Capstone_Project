@@ -41,6 +41,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image playerHealthMissing;
     [SerializeField] Image playerCastBar;
 
+
+    [SerializeField] GameObject enemyInfoPanel;
+    [SerializeField] TMP_Text enemyNameText;
+    [SerializeField] Image enemyHealthBar;
+    [SerializeField] Image enemyCastBar;
+    [SerializeField] TMP_Text enemyCastText;
+
     // Private fields.
     int currentMenu;
     int currentHUD;
@@ -183,20 +190,15 @@ public class UIManager : MonoBehaviour
             if (i < effectTextList.Count)
             {
                 TMP_Text effectText = effectTextList[i];
-                if (effect.Effect == AbilityStatusEff.DoT)
-                {
-                    DisplayEffect(effectText, effect);
-                }
-                else
-                {
-                    DisplayEffect(effectText, effect);
-                }
-            } else
+                DisplayEffectInList(effectText, effect);
+            }
+            else
             {
                 TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectGroup.transform, false);
                 effectTextList.Add(effectText);
-                DisplayEffect(effectText, effect);
+                DisplayEffectInList(effectText, effect);
             }
+
         }
 
         // Iterate through all excess ability texts, removing them.
@@ -208,7 +210,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void DisplayEffect(TMP_Text effectText, AbilityEffect effect)
+    void DisplayEffectInList(TMP_Text effectText, AbilityEffect effect)
     {
         if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
         {
@@ -229,17 +231,47 @@ public class UIManager : MonoBehaviour
         coresText.text = "Cores: " + newCores;
     }
 
-    public void UpdatePlayerHealth(float newPercentage)
+    public void UpdatePlayerHealth(float healthPercentage)
     {
         Tween.Stop(playerHealthMissing.GetInstanceID());
-        Tween.Value(playerHealthBar.fillAmount, newPercentage, (value) => playerHealthMissing.fillAmount = value, 0.25f, 0.25f, Tween.EaseInOut);
-        playerHealthBar.fillAmount = newPercentage;
+        Tween.Value(playerHealthBar.fillAmount, healthPercentage, (value) => playerHealthMissing.fillAmount = value, 0.25f, 0.25f, Tween.EaseInOut);
+        playerHealthBar.fillAmount = healthPercentage;
     }
 
     public void UpdatePlayerCast(float castTime)
     {
-        Tween.Stop(playerCastBar.GetInstanceID());
+        Tween.Finish(playerCastBar.GetInstanceID());
         Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
+    }
+
+    public void UpdateEnemyInfo(bool adjacentEnemy = false, string name = "", float healthPercentage = 0f, float castProgress = 0f, float castTime = 0f)
+    {
+        if (adjacentEnemy)
+        {
+            enemyInfoPanel.SetActive(true);
+            enemyNameText.text = name;
+            UpdateEnemyHealth(healthPercentage);
+            UpdateEnemyCast(castProgress, castTime);
+        }
+        else
+        {
+            enemyInfoPanel.SetActive(false);
+        }
+    }
+
+    public void UpdateEnemyHealth(float healthPercentage)
+    {
+        //        Tween.Stop(enemyHealthMissing.GetInstanceID());
+        //        Tween.Value(enemyHealthBar.fillAmount, healthPercentage, (value) => enemyHealthMissing.fillAmount = value, 0.25f, 0.25f, Tween.EaseInOut);
+        enemyHealthBar.fillAmount = healthPercentage;
+    }
+
+    public void UpdateEnemyCast(float castProgress, float castTime)
+    {
+        enemyCastBar.fillAmount = castProgress;
+        enemyCastText.text = (castTime * (1 - castProgress)).ToString("0.0");
+        //        Tween.Stop(enemyCastBar.GetInstanceID());
+        //        Tween.Value(0f, 1f, (value) => enemyCastBar.fillAmount = value, castTime, 0f, completeCallback: () => enemyCastBar.fillAmount = 0f);
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)

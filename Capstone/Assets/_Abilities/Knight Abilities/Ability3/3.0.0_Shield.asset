@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
+  m_Name: 3.0.0_Shield
+  m_EditorClassIdentifier: 
+  abilityName: Shield
+  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
+  toolTip: ': This is the Default Ability tooltip. Please change me.'
+  particleSystem: {fileID: 0}
+  soundEffect:
+    audioClip: {fileID: 0}
+    volume: 0
+    pitch: 0
+  statusEffects:
+  - effect: 8
+    duration: 3
+    value: 0.2
+  type: 0
+  aoeSprite: {fileID: 0}
+  range: 0
+  cooldown: 6
+  castTime: 2
+  damage: 0
+  upgradeable: 1
+  tier: 1
+  previousTier: {fileID: 0}
+  nextTier:
+  - {fileID: 11400000, guid: 6cd4bdd14d282fd40a600c67a81f1032, type: 2}
+  - {fileID: 11400000, guid: 0bf7d91ae7a2a0f459cca1979aaf09d6, type: 2}
+  cost: 0

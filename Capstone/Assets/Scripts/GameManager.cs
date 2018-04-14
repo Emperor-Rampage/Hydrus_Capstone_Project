@@ -48,6 +48,9 @@ public class GameManager : Singleton<GameManager>
     [Space(10)]
     [Header("Game")]
 
+    [SerializeField]
+    List<PlayerClass> classes;
+
     // A reference to the Map object, which handles the general level management.
     [SerializeField]
     Map map;
@@ -375,6 +378,22 @@ public class GameManager : Singleton<GameManager>
         ExitPrompt(level.CanExit);
         uiManager.UpdatePlayerCores(level.Player.Cores);
         uiManager.UpdateEffectList(level.Player.CurrentEffects);
+
+        //        Direction playerDirection = level.Player.ToAbsoluteDirection(Direction.Up);
+        bool forwardConnection = level.HasConnection(level.Player.Cell, level.Player.Facing);
+        Cell forwardCell = level.GetNeighbor(level.Player.Cell, level.Player.Facing);
+        if (forwardConnection && forwardCell != null)
+        {
+            Enemy enemy = (Enemy)forwardCell.Occupant;
+            if (enemy != null)
+            {
+                uiManager.UpdateEnemyInfo(true, enemy.Name, enemy.CurrentHealth / (float)enemy.MaxHealth, enemy.CastProgress, enemy.CurrentCastTime);
+            }
+            else
+            {
+                uiManager.UpdateEnemyInfo(false);
+            }
+        }
         // If standing on an item, give option to collect item.
         /*        if (level.CanExit)
                 {
@@ -469,11 +488,13 @@ public class GameManager : Singleton<GameManager>
             {
                 bool full = level.Player.Heal(25);
                 uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
-            } else if (Input.GetKeyDown(KeyCode.L))
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
             {
                 AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
                 level.Player.CurrentEffects.Add(effect);
-            } else if (Input.GetKeyDown(KeyCode.K))
+            }
+            else if (Input.GetKeyDown(KeyCode.K))
             {
                 level.Player.CurrentEffects.RemoveAt(level.Player.CurrentEffects.Count - 1);
             }
@@ -651,9 +672,9 @@ public class GameManager : Singleton<GameManager>
 
             if (target != null)
             {
+                Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
                 bool alive = target.Damage(ability.Damage);
                 PerformEntityDeathCheck(target, alive);
-                Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
             }
         }
     }
@@ -662,10 +683,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (!alive && entity.GetType() == typeof(Player))
         {
-
-        } else
+            // Do player death stuff.
+        }
+        else if (!alive && entity.GetType() == typeof(Enemy))
         {
-            Debug.Log("Entity is dead!");
+            Debug.Log("Enemy is dead!");
             level.Player.Cores += entity.Cores;
             StartCoroutine(level.RemoveEntity(entity));
         }

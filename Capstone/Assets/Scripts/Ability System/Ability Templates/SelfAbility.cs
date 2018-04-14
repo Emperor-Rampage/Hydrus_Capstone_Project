@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelfAbility : MonoBehaviour {
+namespace AbilityClasses
+{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    [CreateAssetMenu(fileName = "New Self Ability", menuName = "Game/Ability/Self")]
+    public class SelfAbility : AbilityObject
+    {
+
+    }
 }

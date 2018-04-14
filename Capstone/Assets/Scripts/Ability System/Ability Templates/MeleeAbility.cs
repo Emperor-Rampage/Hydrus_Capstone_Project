@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AbilityClasses
 {
-    [CreateAssetMenu(menuName = "Abilities/Melee")]
+    [CreateAssetMenu(fileName = "New Melee Ability", menuName = "Game/Ability/Melee")]
 
     public class MeleeAbility : AbilityObject
     {
