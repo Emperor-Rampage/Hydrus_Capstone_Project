@@ -214,10 +214,25 @@ namespace EntityClasses
 
     public class Player : Entity
     {
-        PlayerClass playerClass;
+        //        PlayerClass playerClass;
+        //        public PlayerClass Class { get { return playerClass; } set { playerClass = value; } }
+        public PlayerClass Class { get; set; }
 
         public Player() : base() { }
         public Player(Entity entity) : base(entity) { }
+
+        public void SetupBaseAbilities()
+        {
+            Abilities.Clear();
+            if (Class.BaseAbilities == null)
+            {
+                Debug.Log("Class object has no base abilities.");
+            }
+            foreach (AbilityObject ability in Class.BaseAbilities)
+            {
+                Abilities.Add(ability);
+            }
+        }
     }
 
     public class Item : IEntity

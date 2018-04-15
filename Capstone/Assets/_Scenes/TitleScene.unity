@@ -4307,6 +4307,7 @@ MonoBehaviour:
     volume: 1
     pitch: 1
   testAbility: {fileID: 11400000, guid: 22bbc36f0296f894795793c6b3f40370, type: 2}
+  testClass: {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   playerPrefab: {fileID: 1999573432089804, guid: db41e22396b53c942bfd0968dbf1215c,
     type: 2}
   DoNotDestroyList:

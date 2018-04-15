@@ -35,6 +35,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] SoundEffect testSound;
     // For testing ability casting.
     [SerializeField] AbilityObject testAbility;
+    [SerializeField] PlayerClass testClass;
 
     [Space(10)]
     [Header("Setup")]
@@ -201,7 +202,9 @@ public class GameManager : Singleton<GameManager>
         {
             // Sets up cells, connections, player spawn, and generates procedural areas.
             level.InitializeLevel();
-            level.Player.Abilities.Add(testAbility);
+            level.Player.Class = testClass;
+            level.Player.SetupBaseAbilities();
+            //            level.Player.Abilities.Add(testAbility);
             UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
             // Creates debug instances for the cells and connections.
             // TODO: Create procedural area generation.
@@ -467,6 +470,22 @@ public class GameManager : Singleton<GameManager>
             else if (Input.GetKey(KeyCode.E))
             {
                 TurnEntityInstanceRight(level.Player);
+            }
+            else if (Input.GetKey(KeyCode.Alpha1))
+            {
+                CastPlayerAbility(level.Player, 0);
+            }
+            else if (Input.GetKey(KeyCode.Alpha2))
+            {
+                CastPlayerAbility(level.Player, 1);
+            }
+            else if (Input.GetKey(KeyCode.Alpha3))
+            {
+                CastPlayerAbility(level.Player, 2);
+            }
+            else if (Input.GetKey(KeyCode.Alpha4))
+            {
+                CastPlayerAbility(level.Player, 3);
             }
             else if (Input.GetKeyDown(KeyCode.M)) // Plays the test sound.
             {
