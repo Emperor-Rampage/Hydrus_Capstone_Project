@@ -55,6 +55,8 @@ namespace EntityClasses
         [SerializeField] List<AbilityObject> abilities;
         public List<AbilityObject> Abilities { get { return abilities; } private set { abilities = value; } }
 
+        public List<Indicator> Indicators { get; set; } = new List<Indicator>();
+
         // Ability Variables
         // TODO: Create custom data structure for current effects.
         //       Should contain a dictionary of lists of effects (to support stacking effects), should use local "cooldown scale" (for example) variable, then multiply the value by the "value" field of each effect. For multiplicative stacking.
@@ -105,6 +107,7 @@ namespace EntityClasses
             // Call method in GameManager instance to perform the ability actions.
 
             GameManager.Instance.PerformAbility(this, ability);
+            RemoveIndicators();
             State = EntityState.Idle;
         }
 
@@ -127,6 +130,29 @@ namespace EntityClasses
             }
 
             Facing = (Direction)facing;
+        }
+
+        public float GetDirectionDegrees()
+        {
+            float degrees = 0f;
+
+            if (Facing == Direction.Up)
+            {
+                degrees = 0f;
+            } else if (Facing == Direction.Right)
+            {
+                degrees = 90f;
+            }
+            else if (Facing == Direction.Down)
+            {
+                degrees = 180f;
+            }
+            else if (Facing == Direction.Left)
+            {
+                degrees = 270f;
+            }
+
+            return degrees;
         }
         public Direction ToAbsoluteDirection(Direction direction)
         {
@@ -206,8 +232,16 @@ namespace EntityClasses
         {
             // Stop current coroutines.
             coroutines.ForEach((coroutine) => GameManager.Instance.StopCoroutine(coroutine));
+            RemoveIndicators();
             if (State == EntityState.Casting)
                 State = EntityState.Idle;
+        }
+        public void RemoveIndicators()
+        {
+            while (Indicators.Count > 0)
+            {
+                Indicators[0].RemoveIndicator();
+            }
         }
     }
 
