@@ -46,7 +46,7 @@ namespace AbilityClasses
 
         [SerializeField]
         float duration;
-        public float Duration { get { return duration; } private set { duration = value; } }
+        public float Duration { get { return duration; } set { duration = value; } }
 
         [SerializeField]
         float value;
@@ -112,9 +112,8 @@ namespace AbilityClasses
         public void StartTween(AbilityEffect eff)
         {
             //Debug.Log("Tween started on " + eff.Effect + ". For " + eff.Duration + " second(s).");
-            Tween.Value(0.0f, eff.Duration, null, eff.Duration, 0.0f,
-                startCallback: () => Debug.Log("Starting Tween on " + eff.Effect + " for " + eff.Duration + "."), 
-                completeCallback: () => Debug.Log("Completed Tween on " + eff.Effect + " for " + eff.Duration + "."));
+            Tween.Value(eff.Duration, 0f, (value) => eff.Duration = value, eff.Duration, 0.0f,
+                completeCallback: () => RemoveEffect(eff));
         }
 
         //At the end of the ability effect Tween, remove the AbilityEffect from the list of current effects.
@@ -127,12 +126,6 @@ namespace AbilityClasses
             if(EffectLibrary.ContainsKey(AbilEffect.Effect) && EffectLibrary[AbilEffect.Effect].Count > 0)
             { 
                 EffectLibrary[AbilEffect.Effect].Remove(AbilEffect);
-                Debug.Log("Removing at ability effect: " + AbilEffect.Effect + " for " + AbilEffect.Duration + "seconds.");
-                if (EffectLibrary[AbilEffect.Effect].Count == 0)
-                {
-                    EffectLibrary.Remove(AbilEffect.Effect);
-                    Debug.Log("Removing the key for: " + AbilEffect.Effect + ". Because the key is now empty.");
-                }
 
                 CalcEffects(AbilEffect.Effect);
             }

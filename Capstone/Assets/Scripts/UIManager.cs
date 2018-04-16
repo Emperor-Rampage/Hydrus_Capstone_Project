@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using AbilityClasses;
+using System;
 
 [RequireComponent(typeof(Canvas))]
 public class UIManager : MonoBehaviour
@@ -186,8 +187,16 @@ public class UIManager : MonoBehaviour
     {
     }
 
-    public void UpdateEffectList(List<AbilityEffect> abilityEffects)
+    public void UpdateEffectList(EffectDictionary effectDictionary)
     {
+        List<AbilityEffect> abilityEffects = new List<AbilityEffect>();
+        foreach (AbilityStatusEff type in Enum.GetValues(typeof(AbilityStatusEff)))
+        {
+            List<AbilityEffect> typeList = effectDictionary.GetEffectList(type);
+            if (typeList != null)
+                abilityEffects.AddRange(typeList);
+        }
+
         // Iterate through all passed in AbilityEffects. Update the corresponding texts and create new texts if there aren't enough.
         int i = 0;
         for (; i < abilityEffects.Count; i++)
@@ -226,11 +235,11 @@ public class UIManager : MonoBehaviour
         }
         else if (effect.Effect == AbilityStatusEff.DoT)
         {
-            effectText.text = effect.Effect + " " + effect.Value.ToString("0.0") + "/sec - " + effect.Duration;
+            effectText.text = effect.Effect + " " + effect.Value.ToString("0.0") + "/sec - " + effect.Duration.ToString("0.0");
         }
         else
         {
-            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Duration;
+            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Duration.ToString("0.0");
         }
     }
 

@@ -380,7 +380,7 @@ public class GameManager : Singleton<GameManager>
         // If standing at an exit, give option to go through exit.
         ExitPrompt(level.CanExit);
         uiManager.UpdatePlayerCores(level.Player.Cores);
-        uiManager.UpdateEffectList(level.Player.CurrentEffects);
+        uiManager.UpdateEffectList(level.Player.StatusEffects);
 
         //        Direction playerDirection = level.Player.ToAbsoluteDirection(Direction.Up);
         bool forwardConnection = level.HasConnection(level.Player.Cell, level.Player.Facing);
@@ -515,7 +515,7 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.K))
             {
-                Tween.Value(0.0f, 1.0f, null, 1.0f, 0.0f,startCallback: () => Debug.Log("K was pressed"), completeCallback: () => Debug.Log("Completed Tween"));
+                Tween.Value(0.0f, 1.0f, (val) => Debug.Log("Running tween."), 1.0f, 0.0f,startCallback: () => Debug.Log("K was pressed"), completeCallback: () => Debug.Log("Completed Tween"));
             }
         }
     }
@@ -703,7 +703,7 @@ public class GameManager : Singleton<GameManager>
         foreach (AbilityEffect effect in ability.StatusEffects)
         {
             AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, effect.Duration, effect.Value);
-            target.CurrentEffects.Add(effectInstance);
+            target.StatusEffects.AddEffect(effectInstance);
         }
 
         bool alive = target.Damage(ability.Damage);
