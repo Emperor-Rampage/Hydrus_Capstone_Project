@@ -59,6 +59,7 @@ namespace EntityClasses
         // TODO: Create custom data structure for current effects.
         //       Should contain a dictionary of lists of effects (to support stacking effects), should use local "cooldown scale" (for example) variable, then multiply the value by the "value" field of each effect. For multiplicative stacking.
 
+        public EffectDictionary StatusEffects = new EffectDictionary();
         public List<AbilityEffect> CurrentEffects { get; private set; } = new List<AbilityEffect>();
         //public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectDictionary { get; private set; } = new Dictionary<AbilityStatusEff, List<AbilityEffect>>();
 

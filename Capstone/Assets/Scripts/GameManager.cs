@@ -510,12 +510,12 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
-                AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
-                level.Player.CurrentEffects.Add(effect);
+                AbilityEffect effect = new AbilityEffect(-1,(AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
+                level.Player.StatusEffects.AddEffect(effect);
             }
             else if (Input.GetKeyDown(KeyCode.K))
             {
-                level.Player.CurrentEffects.RemoveAt(level.Player.CurrentEffects.Count - 1);
+                Tween.Value(0.0f, 1.0f, null, 1.0f, 0.0f,startCallback: () => Debug.Log("K was pressed"), completeCallback: () => Debug.Log("Completed Tween"));
             }
         }
     }
