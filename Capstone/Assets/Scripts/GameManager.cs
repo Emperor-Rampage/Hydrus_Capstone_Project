@@ -515,7 +515,6 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.K))
             {
-                Tween.Value(0.0f, 1.0f, (val) => Debug.Log("Running tween."), 1.0f, 0.0f,startCallback: () => Debug.Log("K was pressed"), completeCallback: () => Debug.Log("Completed Tween"));
             }
         }
     }
