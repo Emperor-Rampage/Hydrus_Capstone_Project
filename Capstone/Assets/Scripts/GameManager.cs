@@ -511,7 +511,7 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
-                AbilityEffect effect = new AbilityEffect(-1,(AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
+                AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
                 level.Player.StatusEffects.AddEffect(effect);
             }
             else if (Input.GetKeyDown(KeyCode.K))

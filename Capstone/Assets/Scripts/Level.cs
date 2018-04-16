@@ -433,8 +433,6 @@ namespace MapClasses
                     }
                 }
 
-                //                Debug.Log("Casting AOE ability with Entity at " + cell.X + ", " + cell.Z);
-                //                Debug.Log("-- Entity pixel is " + entityX + ", " + entityY);
                 for (int p = 0; p < aoePixels.Length; p++)
                 {
                     if (aoePixels[p] == Color.black)
@@ -445,14 +443,10 @@ namespace MapClasses
                         int offsetX = (pixelX - entityX);
                         int offsetZ = (pixelY - entityY);
 
-                        Vector2Int relativeOffset = new Vector2Int(offsetX, offsetZ).Rotate(entity.GetDirectionDegrees());
-                        
+                        Vector2 relativeOffset = new Vector2(offsetX, offsetZ).Rotate(entity.GetDirectionDegrees());
+                        Vector2Int relativeIntOffset = new Vector2Int(Mathf.RoundToInt(relativeOffset.x), Mathf.RoundToInt(relativeOffset.y));
 
-                        //                        Debug.Log("-- Pixel - Entity: " + "X: " + pixelX + " - " + entityX);
-                        //                        Debug.Log("-- --------------  " + "Y: " + pixelY + " - " + entityY);
-
-                        //                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
-                        Cell target = cells[Cell.GetIndex(cell.X + (int)relativeOffset.x, cell.Z + (int)relativeOffset.y)];
+                        Cell target = cells[Cell.GetIndex(cell.X + (int)relativeIntOffset.x, cell.Z + (int)relativeIntOffset.y)];
                         if (target != null)
                         {
                             highlight.Add(target);
@@ -526,8 +520,6 @@ namespace MapClasses
                     }
                 }
 
-                //                Debug.Log("Casting AOE ability with Entity at " + cell.X + ", " + cell.Z);
-                //                Debug.Log("-- Entity pixel is " + entityX + ", " + entityY);
                 for (int p = 0; p < aoePixels.Length; p++)
                 {
                     if (aoePixels[p] == Color.black)
@@ -538,11 +530,10 @@ namespace MapClasses
                         int offsetX = (pixelX - entityX);
                         int offsetZ = (pixelY - entityY);
 
-                        //                        Debug.Log("-- Pixel - Entity: " + "X: " + pixelX + " - " + entityX);
-                        //                        Debug.Log("-- --------------  " + "Y: " + pixelY + " - " + entityY);
+                        Vector2 relativeOffset = new Vector2(offsetX, offsetZ).Rotate(entity.GetDirectionDegrees());
+                        Vector2Int relativeIntOffset = new Vector2Int(Mathf.RoundToInt(relativeOffset.x), Mathf.RoundToInt(relativeOffset.y));
 
-                        //                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
-                        Cell target = cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)];
+                        Cell target = cells[Cell.GetIndex(cell.X + (int)relativeIntOffset.x, cell.Z + (int)relativeIntOffset.y)];
                         if (target != null)
                         {
                             affected.Add(target);

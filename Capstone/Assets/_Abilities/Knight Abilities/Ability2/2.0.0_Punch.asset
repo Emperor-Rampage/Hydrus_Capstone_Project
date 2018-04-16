@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
-  m_Name: 3.2.0_BlastShield
+  m_Name: 2.0.0_Punch
   m_EditorClassIdentifier: 
-  abilityName: Blast Shield
+  abilityName: Punch
   icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
   particleSystem: {fileID: 0}
@@ -20,16 +20,16 @@ MonoBehaviour:
     volume: 0
     pitch: 0
   statusEffects: []
-  type: 3
-  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  type: 1
+  aoeSprite: {fileID: 0}
   range: 0
-  cooldown: 8
-  castTime: 3
-  damage: 30
+  cooldown: 3
+  castTime: 0.5
+  damage: 10
   upgradeable: 1
-  tier: 2
+  tier: 1
   previousTier: {fileID: 0}
   nextTier:
-  - {fileID: 11400000, guid: d807c1b8df870f6488af71b432018419, type: 2}
-  - {fileID: 11400000, guid: b49c05bf2fc882f498d0a4580ae9ac3a, type: 2}
-  cost: 50
+  - {fileID: 11400000, guid: e31cd218b101c074ab20cfea6ea279d3, type: 2}
+  - {fileID: 11400000, guid: 9003cffda0702284a9419b6fcebae9a0, type: 2}
+  cost: 0
