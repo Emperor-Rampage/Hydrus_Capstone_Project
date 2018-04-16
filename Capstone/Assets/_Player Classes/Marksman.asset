@@ -9,13 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb9837bab38bbcd40bf696524aac530d, type: 3}
-  m_Name: Knight
+  m_Name: Marksman
   m_EditorClassIdentifier: 
-  className: Knight
-  description: The Knight class excels at getting up close and personal with targets,
-    and being able to soak damage as well.
+  className: Marksman
+  description: The Marksman class utilizes ranged abiities with light crowd control
+    to keep one step ahead of enemies.
   baseAbilities:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 9c4a6f6d3fd63f944aa9ffd9a8a14526, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
