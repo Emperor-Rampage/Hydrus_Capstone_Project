@@ -14,7 +14,7 @@ MonoBehaviour:
   className: Knight
   description: Just a knight dude.
   baseAbilities:
-  - {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}
-  - {fileID: 11400000, guid: a2a5285717737ff4f9f86059527a83da, type: 2}
-  - {fileID: 11400000, guid: d568e20e39d58d447b983a4d8ddbd580, type: 2}
-  - {fileID: 11400000, guid: cf76a02ac1bef074f8b752ec6550be6e, type: 2}
+  - {fileID: 11400000, guid: 22bbc36f0296f894795793c6b3f40370, type: 2}
+  - {fileID: 11400000, guid: f3e0d75f9c52b85479ecd9dcafb1cf9d, type: 2}
+  - {fileID: 11400000, guid: 0b6bfff6e487f3a47b7b71d697f70543, type: 2}
+  - {fileID: 0}

@@ -4,6 +4,7 @@ using AudioClasses;
 using EntityClasses;
 using UnityEngine;
 using Pixelplacement;
+using MapClasses;
 
 namespace AbilityClasses
 {
@@ -437,5 +438,25 @@ namespace AbilityClasses
 
         [SerializeField] float cost;                                                                         //The Core cost to upgrade the ability, if any.
         public float Cost { get { return cost; } }
+    }
+
+    public class Indicator
+    {
+        public GameObject Instance { get; set; }
+        public Entity Entity { get; set; }
+        public Cell Cell { get; set; }
+
+        public void AddIndicator()
+        {
+            Entity.Indicators.Add(this);
+            Cell.Indicators.Add(this);
+        }
+
+        public void RemoveIndicator()
+        {
+            GameObject.Destroy(Instance);
+            Entity.Indicators.Remove(this);
+            Cell.Indicators.Remove(this);
+        }
     }
 }

@@ -405,7 +405,7 @@ namespace MapClasses
                 for (int r = 0; r < ability.Range; r++)
                 {
                     Cell next = GetNeighbor(current, entity.Facing);
-                    if (next != null && next.Occupant != null)
+                    if (next != null)
                     {
                         highlight.Add(next);
                     }
@@ -445,11 +445,14 @@ namespace MapClasses
                         int offsetX = (pixelX - entityX);
                         int offsetZ = (pixelY - entityY);
 
+                        Vector2Int relativeOffset = new Vector2Int(offsetX, offsetZ).Rotate(entity.GetDirectionDegrees());
+                        
+
                         //                        Debug.Log("-- Pixel - Entity: " + "X: " + pixelX + " - " + entityX);
                         //                        Debug.Log("-- --------------  " + "Y: " + pixelY + " - " + entityY);
 
                         //                        Debug.Log("Offset for " + pixelX + ", " + pixelY + " is " + offsetX + ", " + offsetZ);
-                        Cell target = cells[Cell.GetIndex(cell.X + offsetX, cell.Z + offsetZ)];
+                        Cell target = cells[Cell.GetIndex(cell.X + (int)relativeOffset.x, cell.Z + (int)relativeOffset.y)];
                         if (target != null)
                         {
                             highlight.Add(target);

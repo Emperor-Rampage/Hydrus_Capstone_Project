@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
     // For testing ability casting.
     [SerializeField] AbilityObject testAbility;
     [SerializeField] PlayerClass testClass;
+    [SerializeField] GameObject testIndicator;
 
     [Space(10)]
     [Header("Setup")]
@@ -657,7 +658,11 @@ public class GameManager : Singleton<GameManager>
 
         uiManager.UpdatePlayerCast(ability.CastTime);
         // Get the cells to highlight and display them.
-        // List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
+        List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
+        foreach (Cell cell in affected)
+        {
+            AddIndicator(testIndicator, cell, entity);
+        }
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -667,7 +672,11 @@ public class GameManager : Singleton<GameManager>
             return;
 
         // Get the cells to highlight and display them.
-        // List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
+        List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
+        foreach (Cell cell in affected)
+        {
+            AddIndicator(testIndicator, cell, entity);
+        }
     }
 
     public void PerformAbility(Entity entity, AbilityObject ability)
@@ -722,5 +731,13 @@ public class GameManager : Singleton<GameManager>
             level.Player.Cores += entity.Cores;
             StartCoroutine(level.RemoveEntity(entity));
         }
+    }
+
+    public void AddIndicator(GameObject indicatorPrefab, Cell cell, Entity entity)
+    {
+        GameObject indicatorInstance = GameObject.Instantiate(indicatorPrefab, Map.GetCellPosition(cell), indicatorPrefab.transform.rotation);
+        indicatorInstance.transform.localScale *= Map.CellScale;
+        Indicator indicator = new Indicator { Instance = indicatorInstance, Cell = cell, Entity = entity };
+        indicator.AddIndicator();
     }
 }
