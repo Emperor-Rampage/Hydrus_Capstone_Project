@@ -60,9 +60,9 @@ namespace AbilityClasses
             Value = val;
         }
 
-        public void StartTween()
+        public void StartTween(EffectDictionary efDic)
         {
-
+            //Tween.Value(0.0f, duration, ((param)
         }
     }
 
@@ -113,9 +113,14 @@ namespace AbilityClasses
         //At the end of the ability effect Tween, remove the AbilityEffect from the list of current effects.
         //If the list is empty, remove the key entirely.
         //Also recalculate the current effects list on every remove.
-        public void RemoveEffect()
+        public void RemoveEffect(AbilityEffect AbilEffect)
         {
-
+            EffectLibrary[AbilEffect.Effect].Remove(AbilEffect);
+            if(EffectLibrary[AbilEffect.Effect].Count == 0)
+            {
+                EffectLibrary.Remove(AbilEffect.Effect);
+            }
+            CalcEffects(AbilEffect.Effect);
         }
 
         public List<AbilityEffect> GetEffectList(AbilityStatusEff targetType)
