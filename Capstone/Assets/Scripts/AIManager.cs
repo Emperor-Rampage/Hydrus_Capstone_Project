@@ -87,11 +87,11 @@ namespace AIClasses
 				4 = Turn right
         */
 
-        GameManager manager;
+        //        GameManager manager;
 
         void Start()
         {
-            manager = GameManager.Instance;
+            //            manager = GameManager.Instance;
         }
 
         public EnemyAction ExecuteAIOnEnemy(Enemy enemy)

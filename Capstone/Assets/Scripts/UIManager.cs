@@ -149,14 +149,15 @@ public class UIManager : MonoBehaviour
     {
         Debug.Log("Showing HUD " + index + " and hiding HUD " + currentHUD);
 
+        // If invalid index, return.
         if (index < 0 || index >= hudList.Length)
             return;
 
         GameObject hud = hudList[index];
-
+        // If the hud element is null, return.
         if (hud == null)
             return;
-
+        // If currently showing a hud element, stop showing it.
         if (currentHUD >= 0 && currentHUD < hudList.Length)
         {
             GameObject current = hudList[currentHUD];
@@ -164,6 +165,13 @@ public class UIManager : MonoBehaviour
             {
                 current.SetActive(false);
             }
+        }
+
+        // Just for now, since the UI is buggy in the editor.
+        // TODO: Remove this when the bug is fixed that jumbles up the UI when applying to the prefab.
+        foreach (Transform child in hud.transform)
+        {
+            child.gameObject.SetActive(true);
         }
 
         // If was previous showing menu.

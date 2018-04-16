@@ -74,6 +74,7 @@ namespace AbilityClasses
         private float cooldownScale = 1.0f;
         private float movementScale = 1.0f;
         private float castTimeScale = 1.0f;
+        private float hasteScale = 1.0f;
         private float damageScale = 1.0f;
         private float healRate = 0.0f;
         private float damageRate = 0.0f;
@@ -130,16 +131,28 @@ namespace AbilityClasses
             return result;
         }
 
+        // NOTE: Refactored just to make it more compact. Isn't really more efficient at all, just fewer lines.
+
         public void CalcEffects(AbilityStatusEff type)
         {
             if (type != AbilityStatusEff.NoEffect)
             {
+                List<AbilityEffect> typeList = GetEffectList(type);
                 switch (type)
                 {
                     case AbilityStatusEff.CastTimeSlow:
                         {
-                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.CastTimeSlow];
+                            castTimeScale = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    castTimeScale *= effect.Value;
+                                }
+                            }
 
+                            /*
+                            List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.CastTimeSlow];
                             if (index != null && index.Count != 0) //validation check.
                             {
                                 for (int i = 0; i <= index.Count;)
@@ -155,11 +168,22 @@ namespace AbilityClasses
                             {
                                 castTimeScale = 1.0f;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.CooldownSlow:
                         {
+                            cooldownScale = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    cooldownScale *= effect.Value;
+                                }
+                            }
+
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.CooldownSlow];
 
                             if (index != null && index.Count != 0) //validation check.
@@ -177,11 +201,18 @@ namespace AbilityClasses
                             {
                                 cooldownScale = 1.0f;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.Stun:
                         {
+                            stunned = false;
+                            if (typeList != null && typeList.Count != 0)
+                            {
+                                stunned = true;
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Stun];
                             if (index != null && index.Count != 0)
                             {
@@ -191,13 +222,22 @@ namespace AbilityClasses
                             {
                                 stunned = false;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.MoveSlow:
                         {
+                            movementScale = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    movementScale *= effect.Value;
+                                }
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.MoveSlow];
-
                             if (index != null && index.Count != 0) //validation check.
                             {
                                 for (int i = 0; i <= index.Count;)
@@ -213,11 +253,18 @@ namespace AbilityClasses
                             {
                                 movementScale = 1.0f;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.Root:
                         {
+                            rooted = false;
+                            if (typeList != null && typeList.Count != 0)
+                            {
+                                rooted = true;
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Root];
                             if (index != null && index.Count != 0)
                             {
@@ -227,11 +274,18 @@ namespace AbilityClasses
                             {
                                 rooted = false;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.Silence:
                         {
+                            silenced = false;
+                            if (typeList != null && typeList.Count != 0)
+                            {
+                                silenced = true;
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Silence];
                             if (index != null && index.Count != 0)
                             {
@@ -241,11 +295,21 @@ namespace AbilityClasses
                             {
                                 silenced = false;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.Heal:
                         {
+                            healRate = 0f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    healRate += effect.Value;
+                                }
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Heal];
 
                             if (index != null && index.Count != 0) //validation check.
@@ -263,11 +327,21 @@ namespace AbilityClasses
                             {
                                 healRate = 0.0f;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.Haste:
                         {
+                            hasteScale = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    hasteScale *= effect.Value;
+                                }
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.Haste];
 
                             if (index != null && index.Count != 0) //validation check.
@@ -285,11 +359,21 @@ namespace AbilityClasses
                             {
                                 movementScale = 1.0f;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.DamReduct:
                         {
+                            damageScale = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    damageScale *= effect.Value;
+                                }
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.DamReduct];
 
                             if (index != null && index.Count != 0) //validation check.
@@ -307,11 +391,21 @@ namespace AbilityClasses
                             {
                                 damageRate = 1.0f;
                             }
+                            */
                             break;
                         }
 
                     case AbilityStatusEff.DoT:
                         {
+                            damageRate = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    damageRate *= effect.Value;
+                                }
+                            }
+                            /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.DoT];
 
                             if (index != null && index.Count != 0) //validation check.
@@ -329,13 +423,14 @@ namespace AbilityClasses
                             {
                                 damageRate = 0.0f;
                             }
+                            */
                             break;
                         }
                 }
             }
         }
 
-        public float GetEffectValue_float(AbilityStatusEff type)
+        public float GetEffectValue_Float(AbilityStatusEff type)
         {
             if (EffectLibrary.ContainsKey(type) && type != AbilityStatusEff.NoEffect)
             {
@@ -380,7 +475,7 @@ namespace AbilityClasses
             return 1.0f;
         }
 
-        public bool GetEffectValue(AbilityStatusEff type)
+        public bool GetEffectValue_Bool(AbilityStatusEff type)
         {
             if (EffectLibrary.ContainsKey(type) && type != AbilityStatusEff.NoEffect)
             {

@@ -58,7 +58,6 @@ public class ShowLevel : MonoBehaviour
         }
     }
 
-    // FIXME: Resolve null spawn.Enemy exception on line 68.
     void DrawEntitySpawns(Level level)
     {
         if (level.spawnList.Count > 0 && level.spawnList[0] == null)

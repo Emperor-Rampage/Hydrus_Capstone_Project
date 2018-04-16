@@ -505,7 +505,7 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.P))
             {
-                bool full = level.Player.Heal(25);
+                level.Player.Heal(25);
                 uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
             }
             else if (Input.GetKeyDown(KeyCode.L))
@@ -658,7 +658,7 @@ public class GameManager : Singleton<GameManager>
 
         uiManager.UpdatePlayerCast(ability.CastTime);
         // Get the cells to highlight and display them.
-        List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
+        // List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -668,7 +668,7 @@ public class GameManager : Singleton<GameManager>
             return;
 
         // Get the cells to highlight and display them.
-        List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
+        // List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
     }
 
     public void PerformAbility(Entity entity, AbilityObject ability)
@@ -691,11 +691,24 @@ public class GameManager : Singleton<GameManager>
 
             if (target != null)
             {
-                Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
-                bool alive = target.Damage(ability.Damage);
-                PerformEntityDeathCheck(target, alive);
+                ApplyAbility(target, ability, entity);
             }
         }
+    }
+
+    void ApplyAbility(Entity target, AbilityObject ability, Entity caster)
+    {
+        Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
+
+        foreach (AbilityEffect effect in ability.StatusEffects)
+        {
+            AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, effect.Duration, effect.Value);
+            target.CurrentEffects.Add(effectInstance);
+        }
+
+        bool alive = target.Damage(ability.Damage);
+
+        PerformEntityDeathCheck(target, alive);
     }
 
     public void PerformEntityDeathCheck(Entity entity, bool alive)
