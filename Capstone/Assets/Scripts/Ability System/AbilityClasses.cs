@@ -62,7 +62,7 @@ namespace AbilityClasses
 
         public void StartTween(EffectDictionary efDic)
         {
-            //Tween.Value(0.0f, duration, ((param)
+            Tween.Value(0.0f, 1.0f, null, duration, 0.0f, completeCallback: () => efDic.RemoveEffect(this));
         }
     }
 
@@ -83,7 +83,7 @@ namespace AbilityClasses
         private bool silenced = false;
 
         public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
-        public List<AbilityEffect> CurrentEffects; //Empty list for instantiation purposes
+        public List<AbilityEffect> CurrentEffects; 
 
         public EffectDictionary() { }
 
@@ -92,6 +92,7 @@ namespace AbilityClasses
             if (EffectLibrary.ContainsKey(AbilEffect.Effect))
             {
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
+                AbilEffect.StartTween(this);
                 CalcEffects(AbilEffect.Effect);
             }
             else if (AbilEffect.Effect == AbilityStatusEff.NoEffect) //Error handling for no value
@@ -102,6 +103,7 @@ namespace AbilityClasses
             {
                 EffectLibrary.Add(AbilEffect.Effect, new List<AbilityEffect>());
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
+                AbilEffect.StartTween(this);
                 CalcEffects(AbilEffect.Effect);
             }
         }
@@ -112,12 +114,22 @@ namespace AbilityClasses
         //Also recalculate the current effects list on every remove.
         public void RemoveEffect(AbilityEffect AbilEffect)
         {
-            EffectLibrary[AbilEffect.Effect].Remove(AbilEffect);
-            if(EffectLibrary[AbilEffect.Effect].Count == 0)
-            {
-                EffectLibrary.Remove(AbilEffect.Effect);
+            //Validating that the list exists and it isn't empty
+            if(EffectLibrary.ContainsKey(AbilEffect.Effect) && EffectLibrary[AbilEffect.Effect].Count > 0)
+            { 
+                EffectLibrary[AbilEffect.Effect].Remove(AbilEffect);
+
+                if(EffectLibrary[AbilEffect.Effect].Count == 0)
+                {
+                    EffectLibrary.Remove(AbilEffect.Effect);
+                }
+
+                CalcEffects(AbilEffect.Effect);
             }
-            CalcEffects(AbilEffect.Effect);
+            else
+            {
+                throw new KeyNotFoundException(AbilEffect.Effect + " is not in the Dictionary of effects.");
+            }
         }
 
         public List<AbilityEffect> GetEffectList(AbilityStatusEff targetType)
@@ -133,7 +145,7 @@ namespace AbilityClasses
         }
 
         // NOTE: Refactored just to make it more compact. Isn't really more efficient at all, just fewer lines.
-        // NOTE: Remove the commented code, save for one, just in case I need to refer back to it! -Conner
+        // NOTE: Remove the commented code, save for one, just in case I need to refer back to it! -Conner P.S. Pretty sure we won't.
 
         public void CalcEffects(AbilityStatusEff type)
         {
