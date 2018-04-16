@@ -73,7 +73,7 @@ namespace MapClasses
             if (X == cell2.X)
             {
                 // If cell2 is directly above or below cell1.
-                if (MapClassesExtensions.IntegerDifference(Z, cell2.Z) == 1)
+                if (Extensions.IntegerDifference(Z, cell2.Z) == 1)
                     return true;
                 else
                     return false;
@@ -83,7 +83,7 @@ namespace MapClasses
             if (Z == cell2.Z)
             {
                 // If cell2 is directly to the right or left of cell1.
-                if (MapClassesExtensions.IntegerDifference(X, cell2.X) == 1)
+                if (Extensions.IntegerDifference(X, cell2.X) == 1)
                     return true;
                 else
                     return false;
@@ -240,7 +240,7 @@ namespace MapClasses
             if (x1 == x2)
             {
                 // If cell2 is directly above or below cell1.
-                if (MapClassesExtensions.IntegerDifference(z1, z2) == 1)
+                if (Extensions.IntegerDifference(z1, z2) == 1)
                     return true;
                 else
                     return false;
@@ -250,7 +250,7 @@ namespace MapClasses
             if (z1 == z2)
             {
                 // If cell2 is directly to the right or left of cell1.
-                if (MapClassesExtensions.IntegerDifference(x1, x2) == 1)
+                if (Extensions.IntegerDifference(x1, x2) == 1)
                     return true;
                 else
                     return false;
