@@ -133,7 +133,7 @@ namespace AbilityClasses
 
             if (EffectLibrary.TryGetValue(targetType, out result))
             {
-                Debug.Log("Found key, returning list.");
+                //Debug.Log("Found key, returning list.");
             }
 
             return result;
@@ -386,8 +386,8 @@ namespace AbilityClasses
         [SerializeField] string abilityName = "Default Ability Name";                                        //Ability Name
         public string Name { get { return abilityName; } }
 
-        [SerializeField] Sprite icon;                                                                        //Sprite Icon denoting the Ability
-        public Sprite Icon { get { return icon; } }
+        [SerializeField] Texture2D icon;                                                                        //Sprite Icon denoting the Ability
+        public Texture2D Icon { get { return icon; } }
 
         [TextArea]
         [SerializeField]
