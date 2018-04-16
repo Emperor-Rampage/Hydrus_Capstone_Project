@@ -46,7 +46,7 @@ namespace AbilityClasses
 
         [SerializeField]
         float duration;
-        public float Duration { get { return duration; } private set { duration = value; } }
+        public float Duration { get { return duration; } set { duration = value; } }
 
         [SerializeField]
         float value;
@@ -83,7 +83,6 @@ namespace AbilityClasses
         public EffectDictionary()
         {
             EffectLibrary = new Dictionary<AbilityStatusEff, List<AbilityEffect>>();
-            Debug.Log("Dictionary Created");
         }
 
         public void AddEffect(AbilityEffect AbilEffect)
@@ -93,7 +92,6 @@ namespace AbilityClasses
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
                 StartTween(AbilEffect);
                 CalcEffects(AbilEffect.Effect);
-                Debug.Log("Adding effect: " + AbilEffect.Effect + " for " + AbilEffect.Duration + "seconds.");
             }
             else if (AbilEffect.Effect == AbilityStatusEff.NoEffect) //Error handling for no value
             {
@@ -105,35 +103,22 @@ namespace AbilityClasses
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
                 StartTween(AbilEffect);
                 CalcEffects(AbilEffect.Effect);
-                Debug.Log("Adding effect: " + AbilEffect.Effect + " for " + AbilEffect.Duration + "seconds.");
             }
         }
 
         public void StartTween(AbilityEffect eff)
         {
-            //Debug.Log("Tween started on " + eff.Effect + ". For " + eff.Duration + " second(s).");
-            Tween.Value(0.0f, eff.Duration, null, eff.Duration, 0.0f,
-                startCallback: () => Debug.Log("Starting Tween on " + eff.Effect + " for " + eff.Duration + "."), 
-                completeCallback: () => Debug.Log("Completed Tween on " + eff.Effect + " for " + eff.Duration + "."));
+            Tween.Value(eff.Duration, 0f, (value) => eff.Duration = value, eff.Duration, 0.0f, completeCallback: () => RemoveEffect(eff));
         }
 
         //At the end of the ability effect Tween, remove the AbilityEffect from the list of current effects.
-        //If the list is empty, remove the key entirely.
         //Also recalculate the current effects list on every remove.
         public void RemoveEffect(AbilityEffect AbilEffect)
         {
-            Debug.Log("Started removal of " + AbilEffect.Effect + " that was active for " + AbilEffect.Effect + ".");
             //Validating that the list exists and it isn't empty. Because finding an item via Value is slow as heck.
-            if(EffectLibrary.ContainsKey(AbilEffect.Effect) && EffectLibrary[AbilEffect.Effect].Count > 0)
-            { 
+            if(GetEffectList(AbilEffect.Effect) != null)
+            {
                 EffectLibrary[AbilEffect.Effect].Remove(AbilEffect);
-                Debug.Log("Removing at ability effect: " + AbilEffect.Effect + " for " + AbilEffect.Duration + "seconds.");
-                if (EffectLibrary[AbilEffect.Effect].Count == 0)
-                {
-                    EffectLibrary.Remove(AbilEffect.Effect);
-                    Debug.Log("Removing the key for: " + AbilEffect.Effect + ". Because the key is now empty.");
-                }
-
                 CalcEffects(AbilEffect.Effect);
             }
             else
