@@ -1,0 +1,188 @@
+fileFormatVersion: 2
+guid: d49c152d72d0e470cbf3333c65096600
+timeCreated: 1523994844
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Bicep1
+    100002: Chest_4
+    100004: Chest_5
+    100006: Chest_6
+    100008: Chest_end1
+    100010: //RootNode
+    100012: Forearm1
+    100014: Full_body1
+    100016: Hand1
+    100018: Inner_body1
+    100020: Legs5
+    100022: pCylinder2
+    100024: Seg_10
+    100026: Seg_11
+    100028: Seg_12
+    100030: Seg_13
+    100032: Seg_14
+    100034: Seg_8
+    100036: Seg_9
+    100038: Seg_end1
+    100040: Shell_mid3
+    100042: Shell_mid4
+    100044: Shell_top1
+    100046: Shoulder_1
+    100048: Shoulder_2
+    100050: Shoulder_3
+    100052: transform1
+    100054: transform10
+    100056: transform11
+    100058: transform12
+    100060: transform13
+    100062: transform14
+    100064: transform15
+    100066: transform16
+    100068: transform17
+    100070: transform18
+    100072: transform19
+    100074: transform2
+    100076: transform20
+    100078: transform21
+    100080: transform22
+    100082: transform23
+    100084: transform24
+    100086: transform3
+    100088: transform4
+    100090: transform5
+    100092: transform6
+    100094: transform7
+    100096: transform8
+    100098: transform9
+    100100: Trilobite_beetle
+    400000: Bicep1
+    400002: Chest_4
+    400004: Chest_5
+    400006: Chest_6
+    400008: Chest_end1
+    400010: //RootNode
+    400012: Forearm1
+    400014: Full_body1
+    400016: Hand1
+    400018: Inner_body1
+    400020: Legs5
+    400022: pCylinder2
+    400024: Seg_10
+    400026: Seg_11
+    400028: Seg_12
+    400030: Seg_13
+    400032: Seg_14
+    400034: Seg_8
+    400036: Seg_9
+    400038: Seg_end1
+    400040: Shell_mid3
+    400042: Shell_mid4
+    400044: Shell_top1
+    400046: Shoulder_1
+    400048: Shoulder_2
+    400050: Shoulder_3
+    400052: transform1
+    400054: transform10
+    400056: transform11
+    400058: transform12
+    400060: transform13
+    400062: transform14
+    400064: transform15
+    400066: transform16
+    400068: transform17
+    400070: transform18
+    400072: transform19
+    400074: transform2
+    400076: transform20
+    400078: transform21
+    400080: transform22
+    400082: transform23
+    400084: transform24
+    400086: transform3
+    400088: transform4
+    400090: transform5
+    400092: transform6
+    400094: transform7
+    400096: transform8
+    400098: transform9
+    400100: Trilobite_beetle
+    2300000: Trilobite_beetle
+    3300000: Trilobite_beetle
+    4300000: Trilobite_beetle
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
