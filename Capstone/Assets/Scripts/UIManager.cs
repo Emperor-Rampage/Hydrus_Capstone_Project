@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using AbilityClasses;
+using EntityClasses;
 using System;
 
 [RequireComponent(typeof(Canvas))]
@@ -23,11 +24,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text fadeText;
 
     [Space(2)]
+    [Header("Menu Settings")]
     [SerializeField]
     GameObject menuPanel;
     [SerializeField] GameObject[] menuList;
 
+    [Header("Class Select Menu Settings")]
+    [SerializeField]
+    GameObject classMenu;
+    [SerializeField] GameObject classButtonPrefab;
+    [SerializeField] TMP_Text classNameText;
+    [SerializeField] TMP_Text classDescriptionText;
+    [SerializeField] TMP_Text[] abilityNameTexts;
+    [SerializeField] TMP_Text[] abilityTypeTexts;
+    [SerializeField] Image[] abilityIconImages;
+    [SerializeField] TMP_Text[] abilityDescriptionTexts;
+    [SerializeField] Button confirmButton;
+
     [Space(2)]
+    [Header("HUD Settings")]
     [SerializeField]
     GameObject hudPanel;
     [SerializeField] GameObject[] hudList;
@@ -41,7 +56,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image playerHealthBar;
     [SerializeField] Image playerHealthMissing;
     [SerializeField] Image playerCastBar;
-
 
     [SerializeField] GameObject enemyInfoPanel;
     [SerializeField] TMP_Text enemyNameText;
@@ -98,6 +112,36 @@ public class UIManager : MonoBehaviour
         ShowHUD(0);
     }
 
+    public void SetUpClassButtons(List<PlayerClass> playerClasses)
+    {
+        Debug.Log("Adding " + playerClasses.Count + " class buttons.");
+        foreach (PlayerClass playerClass in playerClasses)
+        {
+            GameObject buttonObject = GameObject.Instantiate(classButtonPrefab, classMenu.transform, false);
+            buttonObject.GetComponentInChildren<TMP_Text>().text = playerClass.Name;
+            buttonObject.GetComponent<Button>().onClick.AddListener(() => GameManager.Instance.SelectClass(playerClass));
+        }
+    }
+
+    public void SelectClass(PlayerClass selected)
+    {
+        classNameText.text = selected.Name;
+        classDescriptionText.text = selected.Description;
+        for (int a = 0; a < 4; a++)
+        {
+            abilityNameTexts[a].text = selected.BaseAbilities[a].Name;
+            abilityTypeTexts[a].text = selected.BaseAbilities[a].Type.ToString();
+            abilityDescriptionTexts[a].text = selected.BaseAbilities[a].ToolTip;
+            abilityIconImages[a].sprite = selected.BaseAbilities[a].Icon;
+        }
+    }
+
+
+    public void SetConfirmButton(bool active)
+    {
+        Debug.Log("Setting confirm button to " + active);
+        confirmButton.enabled = active;
+    }
     public void Play()
     {
         if (manager == null)

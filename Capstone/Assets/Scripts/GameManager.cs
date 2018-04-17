@@ -52,6 +52,7 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField]
     List<PlayerClass> classes;
+    PlayerClass selectedClass;
 
     // A reference to the Map object, which handles the general level management.
     [SerializeField]
@@ -171,6 +172,28 @@ public class GameManager : Singleton<GameManager>
         SceneManager.sceneLoaded -= OnLevelLoaded;
     }
 
+    public void SetUpClassMenu()
+    {
+        uiManager.SetConfirmButton(false);
+        uiManager.SetUpClassButtons(classes);
+        if (classes.Count > 0)
+        {
+            uiManager.SelectClass(classes[0]);
+        }
+    }
+
+    public void SelectClass(PlayerClass playerClass)
+    {
+        Debug.Log("Selecting class " + playerClass.Name);
+        //        if (index < 0 || index >= classes.Count)
+        if (playerClass == null)
+            return;
+
+        selectedClass = playerClass;
+        uiManager.SelectClass(selectedClass);
+        uiManager.SetConfirmButton(true);
+    }
+
     // Loads a level and scene with a delay in seconds.
     public void LoadLevel(float delay = 0f)
     {
@@ -203,7 +226,7 @@ public class GameManager : Singleton<GameManager>
         {
             // Sets up cells, connections, player spawn, and generates procedural areas.
             level.InitializeLevel();
-            level.Player.Class = testClass;
+            level.Player.Class = selectedClass;
             level.Player.SetupBaseAbilities();
             //            level.Player.Abilities.Add(testAbility);
             UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
@@ -270,6 +293,7 @@ public class GameManager : Singleton<GameManager>
             // Do stuff to load main menu.
             inGame = false;
             uiManager.Initialize_Main();
+            SetUpClassMenu();
             uiManager.FadeIn("Hydrus");
             audioManager.FadeInMusic(titleMusic, 0f);
         }

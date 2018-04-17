@@ -16,6 +16,6 @@ MonoBehaviour:
     to keep one step ahead of enemies.
   baseAbilities:
   - {fileID: 11400000, guid: 9c4a6f6d3fd63f944aa9ffd9a8a14526, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}
+  - {fileID: 11400000, guid: 668432af727c32745b9e7382f0cef636, type: 2}
+  - {fileID: 11400000, guid: 8e341a7b1d488d5499734548cfdf700a, type: 2}

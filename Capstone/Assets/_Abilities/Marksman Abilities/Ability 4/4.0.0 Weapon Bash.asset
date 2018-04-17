@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: 4.0.0 Weapon Bash
   m_EditorClassIdentifier: 
   abilityName: Default Ability Name
-  icon: {fileID: 2800000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
+  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
   particleSystem: {fileID: 0}
   soundEffect:

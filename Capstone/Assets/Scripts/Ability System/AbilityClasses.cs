@@ -79,7 +79,7 @@ namespace AbilityClasses
         private bool silenced = false;
 
         public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
-        public List<AbilityEffect> CurrentEffects; 
+        public List<AbilityEffect> CurrentEffects;
 
         public EffectDictionary()
         {
@@ -117,7 +117,7 @@ namespace AbilityClasses
         public void RemoveEffect(AbilityEffect AbilEffect)
         {
             //Validating that the list exists and it isn't empty. Because finding an item via Value is slow as heck.
-            if(GetEffectList(AbilEffect.Effect) != null)
+            if (GetEffectList(AbilEffect.Effect) != null)
             {
                 EffectLibrary[AbilEffect.Effect].Remove(AbilEffect);
                 CalcEffects(AbilEffect.Effect);
@@ -185,7 +185,7 @@ namespace AbilityClasses
                             {
                                 stunned = true;
                             }
- 
+
                             break;
                         }
 
@@ -387,8 +387,8 @@ namespace AbilityClasses
         [SerializeField] string abilityName = "Default Ability Name";                                        //Ability Name
         public string Name { get { return abilityName; } }
 
-        [SerializeField] Texture2D icon;                                                                        //Sprite Icon denoting the Ability
-        public Texture2D Icon { get { return icon; } }
+        [SerializeField] Sprite icon;                                                                        //Sprite Icon denoting the Ability
+        public Sprite Icon { get { return icon; } }
 
         [TextArea]
         [SerializeField]
