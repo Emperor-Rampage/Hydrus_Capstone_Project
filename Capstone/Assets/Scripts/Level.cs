@@ -342,6 +342,7 @@ namespace MapClasses
             }
             Player.Facing = Direction.Up;
             Player.State = EntityState.Idle;
+            //Player.InitializeCooldownsList();
             // Set the player's location to the player spawn.
             SetEntityLocation(Player, PlayerSpawnCell);
 
@@ -349,6 +350,7 @@ namespace MapClasses
             foreach (var spawn in spawnList)
             {
                 Enemy enemy = new Enemy(spawn.EnemyObject.Enemy);
+                //enemy.InitializeCooldownsList();
                 enemy.Index = enemyIndex++;
                 enemy.Target = Direction.Null;
                 enemy.InCombat = false;
@@ -452,12 +454,15 @@ namespace MapClasses
                         Vector2 relativeOffset = new Vector2(offsetX, offsetZ).Rotate(entity.GetDirectionDegrees());
                         Vector2Int relativeIntOffset = new Vector2Int(Mathf.RoundToInt(relativeOffset.x), Mathf.RoundToInt(relativeOffset.y));
 
-                        Cell target = cells[Cell.GetIndex(cell.X + (int)relativeIntOffset.x, cell.Z + (int)relativeIntOffset.y)];
-                        if (target != null)
+                        int index = Cell.GetIndex(cell.X + (int)relativeIntOffset.x, cell.Z + (int)relativeIntOffset.y);
+                        if (IsValidCell(index))
                         {
-                            highlight.Add(target);
+                            Cell target = cells[index];
+                            if (target != null)
+                            {
+                                highlight.Add(target);
+                            }
                         }
-
                     }
                 }
             }
@@ -539,12 +544,15 @@ namespace MapClasses
                         Vector2 relativeOffset = new Vector2(offsetX, offsetZ).Rotate(entity.GetDirectionDegrees());
                         Vector2Int relativeIntOffset = new Vector2Int(Mathf.RoundToInt(relativeOffset.x), Mathf.RoundToInt(relativeOffset.y));
 
-                        Cell target = cells[Cell.GetIndex(cell.X + (int)relativeIntOffset.x, cell.Z + (int)relativeIntOffset.y)];
-                        if (target != null)
+                        int index = Cell.GetIndex(cell.X + (int)relativeIntOffset.x, cell.Z + (int)relativeIntOffset.y);
+                        if (IsValidCell(index))
                         {
-                            affected.Add(target);
+                            Cell target = cells[index];
+                            if (target != null)
+                            {
+                                affected.Add(target);
+                            }
                         }
-
                     }
                 }
             }
