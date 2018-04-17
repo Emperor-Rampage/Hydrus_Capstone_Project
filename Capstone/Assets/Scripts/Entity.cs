@@ -64,6 +64,9 @@ namespace EntityClasses
         public EffectDictionary StatusEffects = new EffectDictionary();
 
         List<Coroutine> coroutines = new List<Coroutine>();
+
+        Dictionary<AbilityObject, float> cooldowns = new Dictionary<AbilityObject, float>();
+
         public Entity() { Abilities = new List<AbilityObject>(); }
         public Entity(Entity entity)
         {
@@ -74,7 +77,7 @@ namespace EntityClasses
             CurrentHealth = MaxHealth;
             Facing = Direction.Up;
             State = EntityState.Idle;
-            Abilities = new List<AbilityObject>();
+            Abilities = new List<AbilityObject>(entity.Abilities);
         }
 
         public AbilityObject CastAbility(int index)
@@ -84,12 +87,16 @@ namespace EntityClasses
 
             if (index < 0 || index >= Abilities.Count)
                 return null;
+
             AbilityObject ability = Abilities[index];
             if (ability == null)
             {
                 Debug.LogError("ERROR: Attempting to cast null ability.");
                 return null;
             }
+
+            if (cooldowns.ContainsKey(ability) && cooldowns[ability] > 0)
+                return null;
 
             Debug.Log("Casting abilty " + ability.Name + " with cast time of " + ability.CastTime + " at " + Cell.X + ", " + Cell.Z);
 
@@ -107,6 +114,8 @@ namespace EntityClasses
             // Call method in GameManager instance to perform the ability actions.
 
             GameManager.Instance.PerformAbility(this, ability);
+            cooldowns[ability] = ability.Cooldown;
+            Tween.Value(ability.Cooldown, 0f, (val) => cooldowns[ability] = val, ability.Cooldown, 0f);
             RemoveIndicators();
             State = EntityState.Idle;
         }
@@ -154,7 +163,7 @@ namespace EntityClasses
 
             return degrees;
         }
-        public Direction ToAbsoluteDirection(Direction direction)
+        public Direction GetDirection(Direction direction)
         {
             // Facing is Left (3).
             // direction is Down (2).

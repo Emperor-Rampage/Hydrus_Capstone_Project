@@ -32,7 +32,6 @@ namespace AbilityClasses
         DoT = 9
     }
 
-
     [System.Serializable]
 
     public class AbilityEffect                                                                                    //Structure for containing ability effects

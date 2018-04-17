@@ -578,16 +578,16 @@ public class GameManager : Singleton<GameManager>
         if (magH > magV)
         {
             if (h > 0)
-                return level.Player.ToAbsoluteDirection(Direction.Right);
+                return level.Player.GetDirection(Direction.Right);
             else if (h < 0)
-                return level.Player.ToAbsoluteDirection(Direction.Left);
+                return level.Player.GetDirection(Direction.Left);
         }
         else if (magH < magV)
         {
             if (v > 0)
-                return level.Player.ToAbsoluteDirection(Direction.Up);
+                return level.Player.GetDirection(Direction.Up);
             else if (v < 0)
-                return level.Player.ToAbsoluteDirection(Direction.Down);
+                return level.Player.GetDirection(Direction.Down);
         }
 
         return Direction.Null;
