@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
 
     // Private fields.
     [HideInInspector] public Resolution[] resolutions;
-    List<TMP_Text> effectTextList;
+    List<TMP_Text> effectTextList = new List<TMP_Text>();
 
 
     // TODO: Set up UI to run animations during pause (timeScale = 0)
@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour
 
     public void Initialize_Level()
     {
-        effectTextList = new List<TMP_Text>();
+        //        effectTextList = new List<TMP_Text>();
         ShowHUD(0);
     }
 

@@ -59,6 +59,7 @@ public class GameManager : Singleton<GameManager>
     Map map;
     // A reference to the current level, because caching is more efficient.
     Level level;
+
     // A reference to the UIManager instance, which is created at runtime, and handles all user interface actions.
     UIManager uiManager;
     // A reference to the AudioManager instance, which is created at runtime, and handles all audio.
@@ -217,6 +218,11 @@ public class GameManager : Singleton<GameManager>
     //  Also calls the intialization for the HUD, displays the level text, and updates the appropriate UI.
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
+        Player player = null;
+        if (level != null)
+        {
+            player = level.Player;
+        }
         // Check to see if we're loading a level.
         level = Map.CurrentLevel;
 
@@ -225,7 +231,7 @@ public class GameManager : Singleton<GameManager>
         if (level != null)
         {
             // Sets up cells, connections, player spawn, and generates procedural areas.
-            level.InitializeLevel();
+            level.InitializeLevel(player);
             level.Player.Class = selectedClass;
             level.Player.SetupBaseAbilities();
             //            level.Player.Abilities.Add(testAbility);

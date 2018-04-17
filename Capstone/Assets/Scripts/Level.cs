@@ -83,7 +83,7 @@ namespace MapClasses
         // Gets the data from the levelMap bitmap, setting up the MaxWidth, MaxDepth, and numIndexes.
         // Instantiates the list of cells, and creates the connection matrix.
         // Then calls each of the initialization methods: Cell creation, static connection creation, and then procedural generation.
-        public void InitializeLevel()
+        public void InitializeLevel(Player player = null)
         {
             if (levelMap == null)
                 return;
@@ -101,7 +101,7 @@ namespace MapClasses
             Initialized = true;
             InitializeConnections();
             InitializeProcedural();
-            InitializeEntities();
+            InitializeEntities(player);
 
             Debug.Log("Level initialization finished.");
         }
@@ -327,15 +327,21 @@ namespace MapClasses
             }
         }
 
-        void InitializeEntities()
+        void InitializeEntities(Player player)
         {
             // First initialize the player entity.
             // Then iterate through all enemy spawns and initialize each of them
 
             EnemyList = new List<Enemy>();
 
+            Player = player;
             // Create the player.
-            Player = new Player { Index = -1, Name = "Player", Facing = Direction.Up, State = EntityState.Idle, MaxHealth = 100, CurrentHealth = 100 };
+            if (player == null)
+            {
+                Player = new Player { Index = -1, Name = "Player", Facing = Direction.Up, State = EntityState.Idle, MaxHealth = 100, CurrentHealth = 100 };
+            }
+            Player.Facing = Direction.Up;
+            Player.State = EntityState.Idle;
             // Set the player's location to the player spawn.
             SetEntityLocation(Player, PlayerSpawnCell);
 
