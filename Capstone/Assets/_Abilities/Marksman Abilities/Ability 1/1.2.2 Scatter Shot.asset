@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Scatter Shot
   icon: {fileID: 21300000, guid: b7571fcfaf69fe740bf91cd296dde195, type: 3}
-  toolTip: Tier 3 Basic Ability
+  toolTip: 'Tier 3 Ability: Marksman Ability 1'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}

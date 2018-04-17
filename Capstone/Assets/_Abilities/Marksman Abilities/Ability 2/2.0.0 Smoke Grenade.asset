@@ -13,7 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Smoke Grenade
   icon: {fileID: 21300000, guid: e653114103b1dd74ca7461bfca794cdd, type: 3}
-  toolTip: 'Tier 1 Ability:'
+  toolTip: 'Tier 1 Ability: Marksman Ability 2
+
+'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
