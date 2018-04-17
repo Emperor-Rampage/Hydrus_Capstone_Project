@@ -71,7 +71,7 @@ public class ShowLevel : MonoBehaviour
             foreach (MeshFilter filter in spawn.EnemyObject.Enemy.Instance.GetComponentsInChildren<MeshFilter>())
             {
                 Transform pieceTransform = filter.transform;
-                Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.position, pieceTransform.localRotation, transform.lossyScale);
+                Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.position, pieceTransform.localRotation, filter.transform.lossyScale);
             }
         }
     }
