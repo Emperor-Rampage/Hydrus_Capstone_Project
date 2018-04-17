@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: 2.0.0 Smoke Grenade
   m_EditorClassIdentifier: 
-  abilityName: Default Ability Name
-  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
-  toolTip: ': This is the Default Ability tooltip. Please change me.'
+  abilityName: Smoke Grenade
+  icon: {fileID: 21300000, guid: e653114103b1dd74ca7461bfca794cdd, type: 3}
+  toolTip: 'Tier 1 Ability:'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
@@ -23,11 +23,13 @@ MonoBehaviour:
   type: 0
   aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
   range: 0
-  cooldown: 0
-  castTime: 0
-  damage: 0
-  upgradeable: 0
-  tier: 0
+  cooldown: 4
+  castTime: 1
+  damage: 5
+  upgradeable: 1
+  tier: 1
   previousTier: {fileID: 0}
-  nextTier: []
+  nextTier:
+  - {fileID: 11400000, guid: 7d63be0cea1fc3f45b1c9771e8d9d140, type: 2}
+  - {fileID: 11400000, guid: 19c2463605e9d7c448fe5da627f83b6a, type: 2}
   cost: 0
