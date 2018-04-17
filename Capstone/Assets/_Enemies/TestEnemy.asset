@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Name: TestEnemy
   m_EditorClassIdentifier: Assembly-CSharp:EntityClasses:EnemyObject
   enemy:
-    instance: {fileID: 1645256019301844, guid: 2b2c5a5af839a63438734487ab3bba95, type: 2}
+    instance: {fileID: 100000, guid: df51248f91ab24885bc9cdeb389787ea, type: 3}
     name: Test
     cores: 10
     maxHealth: 100
     abilities:
-    - {fileID: 11400000, guid: 22bbc36f0296f894795793c6b3f40370, type: 2}
+    - {fileID: 11400000, guid: 88553ee344cff9948aab44e6c79173ca, type: 2}
+    - {fileID: 11400000, guid: db6c27b91e6743d48a71fc76069a3d59, type: 2}
+    StatusEffects:
+      CurrentEffects: []
