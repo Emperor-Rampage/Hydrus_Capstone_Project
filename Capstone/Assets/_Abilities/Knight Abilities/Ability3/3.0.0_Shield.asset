@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: 3.0.0_Shield
   m_EditorClassIdentifier: 
   abilityName: Shield
-  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
-  toolTip: ': This is the Default Ability tooltip. Please change me.'
+  icon: {fileID: 21300000, guid: f286f85212d1ae94fb8013abc36bd6a7, type: 3}
+  toolTip: 'Tier 1 Ability: Knight Ability 3'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
