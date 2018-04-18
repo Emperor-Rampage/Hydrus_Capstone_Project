@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
   m_Name: 4.1.1_AdrenalinePack
   m_EditorClassIdentifier: 
-  abilityName: Stimpack
-  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
-  toolTip: ': This is the Default Ability tooltip. Please change me.'
+  abilityName: Adrenaline Pack
+  icon: {fileID: 21300000, guid: 3adb9bee317f13e46a12c4dd9b7f412d, type: 3}
+  toolTip: 'Tier 3 Ability: Knight Ability 4'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
