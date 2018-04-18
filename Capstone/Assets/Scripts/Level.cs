@@ -750,6 +750,20 @@ namespace MapClasses
             return false;
         }
 
+        public bool HasConnection(Cell cell1, Cell cell2) {
+            if (!Initialized)
+                return false;
+            
+            Direction neighborDirection = Cell.GetNeighborDirection(cell1, cell2);
+            if (neighborDirection == Direction.Null)
+                return false;
+            
+            if (connectionMatrix[cell1.Index, (int)neighborDirection])
+                return true;
+            
+            return false;
+        }
+
         // Returns true if the cell with the given index has any connections.
         public bool HasConnections(int index)
         {

@@ -288,6 +288,34 @@ namespace MapClasses
 
             return Direction.Null;
         }
+        public static Direction GetNeighborDirection(Cell cell1, Cell cell2)
+        {
+            int x1 = cell1.X;
+            int z1 = cell1.Z;
+            int x2 = cell2.X;
+            int z2 = cell2.Z;
+
+            if (x1 == x2)
+            {
+                // If it's up.
+                // Or if it's down.
+                if (z2 - z1 == 1)
+                    return Direction.Up;
+                else if (z2 - z1 == -1)
+                    return Direction.Down;
+            }
+            else if (z1 == z2)
+            {
+                // If it's right.
+                // Or if it's left.
+                if (x2 - x1 == 1)
+                    return Direction.Right;
+                else if (x2 - x1 == -1)
+                    return Direction.Left;
+            }
+
+            return Direction.Null;
+        }
         public static CellType DetermineCellType(Color pixelColor)
         {
             if (pixelColor == SpawnColor)

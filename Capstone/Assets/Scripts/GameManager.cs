@@ -337,7 +337,7 @@ public class GameManager : Singleton<GameManager>
         // Iterate through each corner. Of cell up left, up right, down left, down right,
         //      IF, none are connected and at least one has connections, create CORNER
         //      OR, two are connected, create WALL CONNECTION
-        //      OR, three are connected, create CORNER, OR
+        //      OR, three are connected, create CORNER
         //      OR, are all connected, do not create CORNER
 
         // Iterating through corners. Corner would be +0.5,+0.5. Actually iterating through down-left cell indices.
@@ -359,7 +359,35 @@ public class GameManager : Singleton<GameManager>
                 }
                 
                 // Next, check their connections to each other.
+                int numConnections = 0;
+                bool connections = false;
+                foreach (Cell cell1 in cornerCells) {
+                    if (level.HasConnections(cell1))
+                        connections = true;
+                    
+                    foreach (Cell cell2 in cornerCells) {
+                        if (cell1 != cell2) {
+                            if (level.HasConnection(cell1, cell1)) {
+                                numConnections += 1;
+                            }
+                        }
+                    }
+                }
+
                 // Do stuff based on how many connections.
+                if (numConnections == 0) {
+                    if (connections) {
+                        // Create corner.
+                    }
+                } else if (numConnections == 1) {
+                    // Can't get here.
+                } else if (numConnections == 2) {
+                    // Create wall connection piece.
+                } else if (numConnections == 3) {
+                    // Create corner
+                } else if (numConnections == 4) {
+                    // Do not create a corner.
+                }
             }
         }
     }
