@@ -32,7 +32,7 @@ MonoBehaviour:
   cooldown: 2
   castTime: 0.5
   damage: 30
-  upgradeable: 1
+  upgradeable: 0
   tier: 3
   previousTier: {fileID: 0}
   nextTier: []
