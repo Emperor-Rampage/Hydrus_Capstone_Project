@@ -420,7 +420,7 @@ namespace MapClasses
                     current = next;
                 }
             }
-            else if (ability.Type == AbilityType.AreaOfEffect)
+            else if (ability.Type == AbilityType.AreaOfEffect || ability.Type == AbilityType.Zone)
             {
                 // Get all pixels, return relative cells.
                 Texture2D sprite = ability.AOESprite;
@@ -510,7 +510,7 @@ namespace MapClasses
                     current = next;
                 }
             }
-            else if (ability.Type == AbilityType.AreaOfEffect)
+            else if (ability.Type == AbilityType.AreaOfEffect || ability.Type == AbilityType.Zone)
             {
                 // Get all pixels, return relative cells.
                 Texture2D sprite = ability.AOESprite;

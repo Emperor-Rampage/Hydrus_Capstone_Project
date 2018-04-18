@@ -324,17 +324,17 @@ public class GameManager : Singleton<GameManager>
                     Direction direction = (Direction)d;
                     if (level.HasConnection(cell, direction))
                     {
-                        RemoveParts(cellInstance, direction);
+                        RemoveWall(cellInstance, direction);
                     }
                 }
             }
         }
     }
 
-    // Destroys pieces of a cell instance in a given direction.
-    // Used for procedural, to remove walls and connecting pieces between cells that are connected.
+    // Destroys wall pieces of a cell instance in a given direction.
+    // Used for procedural, to remove walls pieces between cells that are connected.
     // Iterates through each child of the instance, and if the piece contains the direction in its name, it will be removed.
-    void RemoveParts(GameObject cellInstance, Direction direction)
+    void RemoveWall(GameObject cellInstance, Direction direction)
     {
         foreach (Transform piece in cellInstance.transform)
         {
@@ -725,11 +725,15 @@ public class GameManager : Singleton<GameManager>
         foreach (Cell cell in affected)
         {
             //            Debug.Log("Performing " + ability.abilityName + " at " + cell.X + ", " + cell.Z);
-            Entity target = cell.Occupant;
+            if (ability.Type != AbilityType.Zone) {
+                Entity target = cell.Occupant;
 
-            if (target != null)
-            {
-                ApplyAbility(target, ability, entity);
+                if (target != null)
+                {
+                    ApplyAbility(target, ability, entity);
+                }
+            } else {
+                StartCoroutine(ApplyZoneAbility(cell, ability, entity));
             }
         }
     }
@@ -747,6 +751,23 @@ public class GameManager : Singleton<GameManager>
         bool alive = target.Damage(ability.Damage);
 
         PerformEntityDeathCheck(target, alive);
+    }
+
+    IEnumerator ApplyZoneAbility(Cell cell, AbilityObject ability, Entity caster) {
+        float timer = 0f;
+
+        WaitForSeconds tick = new WaitForSeconds(0.25f);
+
+        while (timer < ability.ZoneDuration) {
+            Entity target = cell.Occupant;
+
+            if (target != null && target != caster) {
+                ApplyAbility(target, ability, caster);
+            }
+
+            timer += Time.deltaTime;
+            yield return tick;
+        }
     }
 
     public void PerformEntityDeathCheck(Entity entity, bool alive)
