@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: 2.2.1_StunningBlow
   m_EditorClassIdentifier: 
   abilityName: Stunning Blow
-  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
-  toolTip: ': This is the Default Ability tooltip. Please change me.'
+  icon: {fileID: 21300000, guid: df051ebc40093414ab3cd5fc66d3908c, type: 3}
+  toolTip: 'Tier 3 Ability: Knight Ability 2'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}

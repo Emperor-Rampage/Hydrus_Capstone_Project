@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: 4.0.0_Stimpack
   m_EditorClassIdentifier: 
   abilityName: Stimpack
-  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
-  toolTip: ': This is the Default Ability tooltip. Please change me.'
+  icon: {fileID: 21300000, guid: a6f402fba81df70488bba9ba0611f790, type: 3}
+  toolTip: 'Tier 1 Ability: Knight Ability 4'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}

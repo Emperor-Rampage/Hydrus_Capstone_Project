@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: 1.2.1_Bleed
   m_EditorClassIdentifier: 
   abilityName: Bleed
-  icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
-  toolTip: ': This is the Default Ability tooltip. Please change me.'
+  icon: {fileID: 21300000, guid: 89a4f96cb5668b0459cb4d4112a340e6, type: 3}
+  toolTip: 'Tier 3 Ability: Knight Ability 1'
   particleSystem: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
