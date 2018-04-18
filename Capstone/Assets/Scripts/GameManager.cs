@@ -72,6 +72,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] float movespeed;
     // How long it takes an entity to turn 90 degrees.
     [SerializeField] float turnspeed;
+    [SerializeField] float tickRate;
 
     // Whether or not we're in-game.
     bool inGame;
@@ -733,7 +734,7 @@ public class GameManager : Singleton<GameManager>
                     ApplyAbility(target, ability, entity);
                 }
             } else {
-                StartCoroutine(ApplyZoneAbility(cell, ability, entity));
+                StartCoroutine(ApplyZoneAbility_Coroutine(cell, ability, entity));
             }
         }
     }
@@ -753,20 +754,34 @@ public class GameManager : Singleton<GameManager>
         PerformEntityDeathCheck(target, alive);
     }
 
-    IEnumerator ApplyZoneAbility(Cell cell, AbilityObject ability, Entity caster) {
-        float timer = 0f;
+    void ApplyZoneAbility(Entity target, AbilityObject ability, Entity caster) {
+        foreach (AbilityEffect effect in ability.StatusEffects)
+        {
+            AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, tickRate, effect.Value);
+            target.StatusEffects.AddEffect(effectInstance);
+        }
 
-        WaitForSeconds tick = new WaitForSeconds(0.25f);
+        bool alive = target.Damage(1);
 
-        while (timer < ability.ZoneDuration) {
-            Entity target = cell.Occupant;
+        PerformEntityDeathCheck(target, alive);
+    }
 
-            if (target != null && target != caster) {
-                ApplyAbility(target, ability, caster);
+    IEnumerator ApplyZoneAbility_Coroutine(Cell cell, AbilityObject ability, Entity caster) {
+        if (ability.StatusEffects.Count > 0) {
+            float timer = 0f;
+            WaitForSeconds tick = new WaitForSeconds(tickRate);
+            float duration = ability.StatusEffects[0].Duration;
+
+            while (timer < duration) {
+                Entity target = cell.Occupant;
+
+                if (target != null && target != caster) {
+                    ApplyZoneAbility(target, ability, caster);
+                }
+
+                timer += tickRate;
+                yield return tick;
             }
-
-            timer += Time.deltaTime;
-            yield return tick;
         }
     }
 

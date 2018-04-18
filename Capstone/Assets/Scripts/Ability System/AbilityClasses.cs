@@ -412,9 +412,6 @@ namespace AbilityClasses
 
         [SerializeField] float range;                                                                        //For ranged abilities. Indicates the range of the ability.
         public float Range { get { return range; } }
-        [SerializeField] float zoneDuration;
-        public float ZoneDuration { get { return zoneDuration; } }
-
         [SerializeField] float cooldown = 0.0f;                                                              //The base Cooldown timer (in seconds) of the ability.
         public float Cooldown { get { return cooldown; } }
 
