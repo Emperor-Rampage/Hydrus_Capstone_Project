@@ -332,6 +332,38 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    void BuildLevel_Procedural_Corners() {
+        float cellScale = Map.CellScale;
+        // Iterate through each corner. Of cell up left, up right, down left, down right,
+        //      IF, none are connected and at least one has connections, create CORNER
+        //      OR, two are connected, create WALL CONNECTION
+        //      OR, three are connected, create CORNER, OR
+        //      OR, are all connected, do not create CORNER
+
+        // Iterating through corners. Corner would be +0.5,+0.5. Actually iterating through down-left cell indices.
+        for (int x = 0; x < Map.MaxWidth; x++) {
+            for (int z = 0; z < Map.MaxDepth; z++) {
+                // Get the indexes for surrounding cells.
+                List<int> cornerIndexes = new List<int>();
+                cornerIndexes.Add(Cell.GetIndex(x, z));
+                cornerIndexes.Add(Cell.GetIndex(x + 1, z));
+                cornerIndexes.Add(Cell.GetIndex(x, z + 1));
+                cornerIndexes.Add(Cell.GetIndex(x + 1, z + 1));
+                
+                // Iterate through and gather the valid cells.
+                List<Cell> cornerCells = new List<Cell>();
+                foreach (int cornerIndex in cornerIndexes) {
+                    if (level.IsValidCell(cornerIndex)) {
+                        cornerCells.Add(level.cells[cornerIndex]);
+                    }
+                }
+                
+                // Next, check their connections to each other.
+                // Do stuff based on how many connections.
+            }
+        }
+    }
+
     // Destroys wall pieces of a cell instance in a given direction.
     // Used for procedural, to remove walls pieces between cells that are connected.
     // Iterates through each child of the instance, and if the piece contains the direction in its name, it will be removed.
