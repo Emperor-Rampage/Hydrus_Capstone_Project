@@ -909,6 +909,14 @@ namespace MapClasses
             return true;
         }
 
+        public Direction GetInverseDirection(Direction direction) {
+            int newDir = (int)direction - 2;
+            if (newDir < 0)
+                newDir += 4;
+
+            return (Direction)newDir;
+        }
+
         int GetSpriteX(int index, int width)
         {
             return index % width;

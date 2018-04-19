@@ -369,6 +369,7 @@ public class GameManager : Singleton<GameManager>
                 // Next, check their connections to each other.
                 int numConnections = 0;
                 bool connections = false;
+                List<Direction> connectionDirections = new List<Direction>();
 
                 for (int i = 0; i < cornerCells.Count; i++)
                 {
@@ -382,6 +383,7 @@ public class GameManager : Singleton<GameManager>
                         {
                             if (level.HasConnection(cell1, cell2))
                             {
+                                connectionDirections.Add(Cell.GetNeighborDirection(cell1, cell2));
                                 numConnections += 1;
                             }
                         }
@@ -423,10 +425,21 @@ public class GameManager : Singleton<GameManager>
                 }
                 else if (numConnections == 2)
                 {
-                    // Create corner
-                    Vector3 center = Map.GetCellPosition(x, z) + offset;
-                    GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
-                    cornerInstance.transform.localScale = Vector3.one * cellScale;
+                    bool parallelWalls = false;
+                    Direction direction1 = connectionDirections[0];
+                    Direction direction2 = connectionDirections[1];
+                    Direction inverseDirection1 = level.GetInverseDirection(direction1);
+                    if (direction1 == direction2 || inverseDirection1 == direction2)
+                        parallelWalls = true;
+
+                    if (parallelWalls) {
+                        // Create wall connection piece.
+                    } else {
+                        // Create corner
+                        Vector3 center = Map.GetCellPosition(x, z) + offset;
+                        GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
+                        cornerInstance.transform.localScale = Vector3.one * cellScale;
+                    }
                 }
                 else if (numConnections == 3)
                 {
