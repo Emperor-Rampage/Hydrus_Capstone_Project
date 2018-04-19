@@ -4450,10 +4450,18 @@ MonoBehaviour:
     type: 2}
   playerPrefab: {fileID: 1999573432089804, guid: db41e22396b53c942bfd0968dbf1215c,
     type: 2}
-  DoNotDestroyList:
-  - {fileID: 1963380610684026, guid: 206348a240dc0ac439c0f4fc2acb56cc, type: 2}
-  - {fileID: 1513351062052238, guid: da426b2a6aa6d944ea5a289adead8e1b, type: 2}
+  doNotDestroyList:
   - {fileID: 1229392500424972, guid: bd136b4367473ab41bdd52b87dd33473, type: 2}
+  - {fileID: 1513351062052238, guid: da426b2a6aa6d944ea5a289adead8e1b, type: 2}
+  - {fileID: 1963380610684026, guid: 206348a240dc0ac439c0f4fc2acb56cc, type: 2}
+  wallPrefabs:
+  - {fileID: 1402043580323070, guid: fc6a04267be25bc41a675a961723ef23, type: 2}
+  floorPrefabs:
+  - {fileID: 1773285987742790, guid: bcc3508c6093cc44c8b3a5a0be2acad6, type: 2}
+  ceilingPrefabs:
+  - {fileID: 1020256479579238, guid: 150439194cee1284a88382c52cb35518, type: 2}
+  cornerPrefabs:
+  - {fileID: 0}
   classes:
   - {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   - {fileID: 11400000, guid: 75f2eed1de18ea4459f00fb4ce7fade6, type: 2}

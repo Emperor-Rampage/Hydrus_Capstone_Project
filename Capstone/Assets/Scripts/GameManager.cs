@@ -44,8 +44,13 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     GameObject playerPrefab;
     // A list of GameObjects that need to be instantiated and defined as DontDestroyOnLoad.
-    [SerializeField]
-    List<GameObject> DoNotDestroyList;
+    [SerializeField] List<GameObject> doNotDestroyList;
+
+    [Header("Level Pieces")]
+    [SerializeField] List<GameObject> wallPrefabs;
+    [SerializeField] List<GameObject> floorPrefabs;
+    [SerializeField] List<GameObject> ceilingPrefabs;
+    [SerializeField] List<GameObject> cornerPrefabs;
 
     [Space(10)]
     [Header("Game")]
@@ -93,7 +98,7 @@ public class GameManager : Singleton<GameManager>
     void Awake()
     {
         Debug.Log("GameManager Awake function executing..");
-        foreach (var gm in DoNotDestroyList)
+        foreach (var gm in doNotDestroyList)
         {
             if (gm != null)
             {
@@ -307,6 +312,24 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    GameObject GetRandomPrefab(List<GameObject> prefabList) {
+        if (prefabList == null || prefabList.Count == 0)
+            return null;
+
+        int index;
+        GameObject prefab = null;
+        while (true) {
+            index = Random.Range(0, prefabList.Count);
+            prefab = prefabList[index];
+
+            if (prefab == null)
+                continue;
+            
+            break;
+        }
+        return prefab;
+    }
+
     void BuildLevel_Procedural()
     {
         float cellScale = Map.CellScale;
@@ -318,8 +341,23 @@ public class GameManager : Singleton<GameManager>
             if (cell.Type != CellType.Empty && level.HasConnections(cell))
             {
                 Vector3 center = Map.GetCellPosition(cell);
-                GameObject cellInstance = GameObject.Instantiate(cellPrefabDebug, center, Quaternion.identity);
+                GameObject cellInstance = new GameObject("Cell_" + cell.Index);
+                cellInstance.transform.position = center;
+                GameObject floorInstance = GameObject.Instantiate(GetRandomPrefab(floorPrefabs), cellInstance.transform);
+                GameObject ceilingInstance = GameObject.Instantiate(GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
+                List<GameObject> wallInstances = new List<GameObject>();
+                for (int w = 0; w < 4; w++) {
+                    GameObject wallInstance = GameObject.Instantiate(GetRandomPrefab(wallPrefabs), cellInstance.transform);
+                    wallInstance.name = "Wall_" + ((Direction)w).ToString();
+                    wallInstance.transform.rotation = Quaternion.Euler(0f, 90f * w, 0f);
+                    wallInstances.Add(wallInstance);
+                }
+
                 cellInstance.transform.localScale = Vector3.one * cellScale;
+
+
+//                GameObject cellInstance = GameObject.Instantiate(cellPrefabDebug, center, Quaternion.identity);
+//                cellInstance.transform.localScale = Vector3.one * cellScale;
 
                 for (int d = 0; d < 4; d++)
                 {
