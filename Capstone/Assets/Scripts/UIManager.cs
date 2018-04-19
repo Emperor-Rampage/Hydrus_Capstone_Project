@@ -214,10 +214,10 @@ public class UIManager : MonoBehaviour
 
         // Just for now, since the UI is buggy in the editor.
         // TODO: Remove this when the bug is fixed that jumbles up the UI when applying to the prefab.
-        foreach (Transform child in hud.transform)
-        {
-            child.gameObject.SetActive(true);
-        }
+        // foreach (Transform child in hud.transform)
+        // {
+        //     child.gameObject.SetActive(true);
+        // }
 
         // If was previous showing menu.
         hudPanel.SetActive(true);
