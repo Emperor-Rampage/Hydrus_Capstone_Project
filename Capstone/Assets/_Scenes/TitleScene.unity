@@ -4434,6 +4434,8 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   cellPrefabDebug: {fileID: 1009165148110218, guid: c3c534361d9b8814682832b90f741fa7,
     type: 2}
+  cornerPrefabDebug: {fileID: 1562644708002774, guid: ad4a907a6b54e514abde1d37eb4a452f,
+    type: 2}
   blockPrefab: {fileID: 1497696410360046, guid: d9b63a8626adb0d4fa36c032e9ec5b12,
     type: 2}
   entityPrefab: {fileID: 1645256019301844, guid: 2b2c5a5af839a63438734487ab3bba95,

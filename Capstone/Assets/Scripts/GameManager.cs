@@ -26,9 +26,9 @@ public class GameManager : Singleton<GameManager>
     // The prefab used to fill in the cells during debug build.
     [SerializeField]
     GameObject cellPrefabDebug;
+    [SerializeField] GameObject cornerPrefabDebug;
 
-    [SerializeField]
-    GameObject blockPrefab;
+    [SerializeField] GameObject blockPrefab;
     // The prefab used for generic entities during debug build.
     [SerializeField] GameObject entityPrefab;
     // For testing the AudioManager.
@@ -268,6 +268,7 @@ public class GameManager : Singleton<GameManager>
             //
             //
             BuildLevel_Procedural();
+            BuildLevel_Procedural_Corners();
 
             //            BuildLevel_Debug(level);
 
@@ -332,60 +333,110 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    void BuildLevel_Procedural_Corners() {
+    void BuildLevel_Procedural_Corners()
+    {
         float cellScale = Map.CellScale;
+        Vector3 offset = new Vector3(0.5f * cellScale, 0f, 0.5f * cellScale);
         // Iterate through each corner. Of cell up left, up right, down left, down right,
         //      IF, none are connected and at least one has connections, create CORNER
-        //      OR, two are connected, create WALL CONNECTION
-        //      OR, three are connected, create CORNER
-        //      OR, are all connected, do not create CORNER
+        //      OR, two are connected (one connection), create WALL CONNECTION
+        //      OR, three are connected (two connections), create CORNER
+        //      OR, four are connected (three connections), create CORNER
+        //      OR, are all connected (four connections), do not create CORNER
 
         // Iterating through corners. Corner would be +0.5,+0.5. Actually iterating through down-left cell indices.
-        for (int x = 0; x < Map.MaxWidth; x++) {
-            for (int z = 0; z < Map.MaxDepth; z++) {
+        for (int x = -1; x < Map.MaxWidth; x++)
+        {
+            for (int z = -1; z < Map.MaxDepth; z++)
+            {
                 // Get the indexes for surrounding cells.
                 List<int> cornerIndexes = new List<int>();
                 cornerIndexes.Add(Cell.GetIndex(x, z));
                 cornerIndexes.Add(Cell.GetIndex(x + 1, z));
                 cornerIndexes.Add(Cell.GetIndex(x, z + 1));
                 cornerIndexes.Add(Cell.GetIndex(x + 1, z + 1));
-                
+
                 // Iterate through and gather the valid cells.
                 List<Cell> cornerCells = new List<Cell>();
-                foreach (int cornerIndex in cornerIndexes) {
-                    if (level.IsValidCell(cornerIndex)) {
+                foreach (int cornerIndex in cornerIndexes)
+                {
+                    if (level.IsValidCell(cornerIndex))
+                    {
                         cornerCells.Add(level.cells[cornerIndex]);
                     }
                 }
-                
+
                 // Next, check their connections to each other.
                 int numConnections = 0;
                 bool connections = false;
-                foreach (Cell cell1 in cornerCells) {
+
+                for (int i = 0; i < cornerCells.Count; i++)
+                {
+                    Cell cell1 = cornerCells[i];
                     if (level.HasConnections(cell1))
                         connections = true;
-                    
-                    foreach (Cell cell2 in cornerCells) {
-                        if (cell1 != cell2) {
-                            if (level.HasConnection(cell1, cell1)) {
+                    for (int j = i; j < cornerCells.Count; j++)
+                    {
+                        Cell cell2 = cornerCells[j];
+                        if (cell1 != cell2)
+                        {
+                            if (level.HasConnection(cell1, cell2))
+                            {
                                 numConnections += 1;
                             }
                         }
                     }
                 }
 
+                // foreach (Cell cell1 in cornerCells)
+                // {
+                //     if (level.HasConnections(cell1))
+                //         connections = true;
+
+                //     foreach (Cell cell2 in cornerCells)
+                //     {
+                //         if (cell1 != cell2)
+                //         {
+                //             if (level.HasConnection(cell1, cell2))
+                //             {
+                //                 numConnections += 1;
+                //             }
+                //         }
+                //     }
+                // }
+
+                Debug.Log("Number of connections is " + numConnections + " with " + cornerCells.Count + " cells.");
                 // Do stuff based on how many connections.
-                if (numConnections == 0) {
-                    if (connections) {
+                if (numConnections == 0)
+                {
+                    if (connections)
+                    {
                         // Create corner.
+                        Vector3 center = Map.GetCellPosition(x, z) + offset;
+                        GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
+                        cornerInstance.transform.localScale = Vector3.one * cellScale;
                     }
-                } else if (numConnections == 1) {
-                    // Can't get here.
-                } else if (numConnections == 2) {
+                }
+                else if (numConnections == 1)
+                {
                     // Create wall connection piece.
-                } else if (numConnections == 3) {
+                }
+                else if (numConnections == 2)
+                {
                     // Create corner
-                } else if (numConnections == 4) {
+                    Vector3 center = Map.GetCellPosition(x, z) + offset;
+                    GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
+                    cornerInstance.transform.localScale = Vector3.one * cellScale;
+                }
+                else if (numConnections == 3)
+                {
+                    // Create corner
+                    Vector3 center = Map.GetCellPosition(x, z) + offset;
+                    GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
+                    cornerInstance.transform.localScale = Vector3.one * cellScale;
+                }
+                else if (numConnections == 4)
+                {
                     // Do not create a corner.
                 }
             }
@@ -786,14 +837,17 @@ public class GameManager : Singleton<GameManager>
         foreach (Cell cell in affected)
         {
             //            Debug.Log("Performing " + ability.abilityName + " at " + cell.X + ", " + cell.Z);
-            if (ability.Type != AbilityType.Zone) {
+            if (ability.Type != AbilityType.Zone)
+            {
                 Entity target = cell.Occupant;
 
                 if (target != null)
                 {
                     ApplyAbility(target, ability, entity);
                 }
-            } else {
+            }
+            else
+            {
                 StartCoroutine(ApplyZoneAbility_Coroutine(cell, ability, entity));
             }
         }
@@ -814,7 +868,8 @@ public class GameManager : Singleton<GameManager>
         PerformEntityDeathCheck(target, alive);
     }
 
-    void ApplyZoneAbility(Entity target, AbilityObject ability, Entity caster) {
+    void ApplyZoneAbility(Entity target, AbilityObject ability, Entity caster)
+    {
         foreach (AbilityEffect effect in ability.StatusEffects)
         {
             AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, tickRate, effect.Value);
@@ -826,16 +881,20 @@ public class GameManager : Singleton<GameManager>
         PerformEntityDeathCheck(target, alive);
     }
 
-    IEnumerator ApplyZoneAbility_Coroutine(Cell cell, AbilityObject ability, Entity caster) {
-        if (ability.StatusEffects.Count > 0) {
+    IEnumerator ApplyZoneAbility_Coroutine(Cell cell, AbilityObject ability, Entity caster)
+    {
+        if (ability.StatusEffects.Count > 0)
+        {
             float timer = 0f;
             WaitForSeconds tick = new WaitForSeconds(tickRate);
             float duration = ability.StatusEffects[0].Duration;
 
-            while (timer < duration) {
+            while (timer < duration)
+            {
                 Entity target = cell.Occupant;
 
-                if (target != null && target != caster) {
+                if (target != null && target != caster)
+                {
                     ApplyZoneAbility(target, ability, caster);
                 }
 

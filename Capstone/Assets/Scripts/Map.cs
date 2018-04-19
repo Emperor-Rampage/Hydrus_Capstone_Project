@@ -99,6 +99,12 @@ namespace MapClasses
             return new Vector3(cell.X * cellScale, 0, cell.Z * cellScale);
         }
 
+        public Vector3 GetCellPosition(int x, int z)
+        {
+            float cellScale = CellScale;
+            return new Vector3(x * cellScale, 0f, z * cellScale);
+        }
+
         // Returns the Vector3 position for the entity, using the entity's cell's X and Z values and multiplying them by the CellScale.
         // Returns Vector3.zero if the entity or cell are null.
         // TODO: Remove both GetEntityPosition methods and just use GetCellPosition,
