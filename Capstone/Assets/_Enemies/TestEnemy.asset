@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: TestEnemy
   m_EditorClassIdentifier: Assembly-CSharp:EntityClasses:EnemyObject
   enemy:
-    instance: {fileID: 100000, guid: df51248f91ab24885bc9cdeb389787ea, type: 3}
+    instance: {fileID: 1762791434266384, guid: cdfbf7badbab0c140bddb2880d14e8a6, type: 2}
     name: Test
     cores: 10
     maxHealth: 100

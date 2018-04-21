@@ -172,12 +172,22 @@ namespace MapClasses
         */
         #region Static Methods
 
-        public static int GetIndex(int x, int z, int maxWidth)
+        public static int GetIndex(int x, int z, int maxWidth, int maxDepth)
         {
+            if (x >= maxWidth || z >= maxDepth)
+            {
+                return -1;
+            }
             return ((z * maxWidth) + x);
         }
+
         public static int GetIndex(int x, int z)
         {
+            Map map = GameManager.Instance.Map;
+            if (x >= map.MaxWidth || z >= map.MaxDepth)
+            {
+                return -1;
+            }
             return ((z * GameManager.Instance.Map.MaxWidth) + x);
         }
         public static int GetX(int index, int maxWidth)

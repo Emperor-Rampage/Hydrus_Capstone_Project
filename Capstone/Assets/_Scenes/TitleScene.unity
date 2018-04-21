@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0032439139, g: 0.0034922487, b: 0.0032326502, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -4455,13 +4455,27 @@ MonoBehaviour:
   - {fileID: 1513351062052238, guid: da426b2a6aa6d944ea5a289adead8e1b, type: 2}
   - {fileID: 1963380610684026, guid: 206348a240dc0ac439c0f4fc2acb56cc, type: 2}
   wallPrefabs:
-  - {fileID: 1402043580323070, guid: fc6a04267be25bc41a675a961723ef23, type: 2}
+  - prefab: {fileID: 1969990256235840, guid: fc6a04267be25bc41a675a961723ef23, type: 2}
+    weight: 1
+  - prefab: {fileID: 1468026032645310, guid: f044207eba2e9f34c92071c854d7ee02, type: 2}
+    weight: 0.1
+  - prefab: {fileID: 1600698400641220, guid: e7737d674d802e546a59fec884375d75, type: 2}
+    weight: 0.09
+  - prefab: {fileID: 1585277213698990, guid: 0a29db3627b7a4848a028dd1ae65b699, type: 2}
+    weight: 0.107
   floorPrefabs:
-  - {fileID: 1773285987742790, guid: bcc3508c6093cc44c8b3a5a0be2acad6, type: 2}
+  - prefab: {fileID: 1773285987742790, guid: bcc3508c6093cc44c8b3a5a0be2acad6, type: 2}
+    weight: 1
   ceilingPrefabs:
-  - {fileID: 1020256479579238, guid: 150439194cee1284a88382c52cb35518, type: 2}
+  - prefab: {fileID: 1020256479579238, guid: 150439194cee1284a88382c52cb35518, type: 2}
+    weight: 1
   cornerPrefabs:
-  - {fileID: 0}
+  - prefab: {fileID: 1990609193198232, guid: c44e5b3dde529b3468b7fc5475dceae0, type: 2}
+    weight: 0.387
+  - prefab: {fileID: 1393431088256448, guid: 6e5f3f2eaa69e864580ba8d91c2e4af0, type: 2}
+    weight: 1
+  - prefab: {fileID: 1762220230523074, guid: 933b44e120f38b048a2be67da6203ea0, type: 2}
+    weight: 0.475
   classes:
   - {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   - {fileID: 11400000, guid: 75f2eed1de18ea4459f00fb4ce7fade6, type: 2}

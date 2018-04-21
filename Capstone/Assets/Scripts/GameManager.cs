@@ -47,10 +47,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] List<GameObject> doNotDestroyList;
 
     [Header("Level Pieces")]
-    [SerializeField] List<GameObject> wallPrefabs;
-    [SerializeField] List<GameObject> floorPrefabs;
-    [SerializeField] List<GameObject> ceilingPrefabs;
-    [SerializeField] List<GameObject> cornerPrefabs;
+    [SerializeField]
+    List<MapPrefab> wallPrefabs;
+    [SerializeField] List<MapPrefab> floorPrefabs;
+    [SerializeField] List<MapPrefab> ceilingPrefabs;
+    [SerializeField] List<MapPrefab> cornerPrefabs;
 
     [Space(10)]
     [Header("Game")]
@@ -312,24 +313,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    GameObject GetRandomPrefab(List<GameObject> prefabList) {
-        if (prefabList == null || prefabList.Count == 0)
-            return null;
-
-        int index;
-        GameObject prefab = null;
-        while (true) {
-            index = Random.Range(0, prefabList.Count);
-            prefab = prefabList[index];
-
-            if (prefab == null)
-                continue;
-            
-            break;
-        }
-        return prefab;
-    }
-
     void BuildLevel_Procedural()
     {
         float cellScale = Map.CellScale;
@@ -343,11 +326,12 @@ public class GameManager : Singleton<GameManager>
                 Vector3 center = Map.GetCellPosition(cell);
                 GameObject cellInstance = new GameObject("Cell_" + cell.Index);
                 cellInstance.transform.position = center;
-                GameObject floorInstance = GameObject.Instantiate(GetRandomPrefab(floorPrefabs), cellInstance.transform);
-                GameObject ceilingInstance = GameObject.Instantiate(GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
+                GameObject floorInstance = GameObject.Instantiate(Map.GetRandomPrefab(floorPrefabs), cellInstance.transform);
+                GameObject ceilingInstance = GameObject.Instantiate(Map.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
                 List<GameObject> wallInstances = new List<GameObject>();
-                for (int w = 0; w < 4; w++) {
-                    GameObject wallInstance = GameObject.Instantiate(GetRandomPrefab(wallPrefabs), cellInstance.transform);
+                for (int w = 0; w < 4; w++)
+                {
+                    GameObject wallInstance = GameObject.Instantiate(Map.GetRandomPrefab(wallPrefabs), cellInstance.transform);
                     wallInstance.name = "Wall_" + ((Direction)w).ToString();
                     wallInstance.transform.rotation = Quaternion.Euler(0f, 90f * w, 0f);
                     wallInstances.Add(wallInstance);
@@ -356,8 +340,8 @@ public class GameManager : Singleton<GameManager>
                 cellInstance.transform.localScale = Vector3.one * cellScale;
 
 
-//                GameObject cellInstance = GameObject.Instantiate(cellPrefabDebug, center, Quaternion.identity);
-//                cellInstance.transform.localScale = Vector3.one * cellScale;
+                //                GameObject cellInstance = GameObject.Instantiate(cellPrefabDebug, center, Quaternion.identity);
+                //                cellInstance.transform.localScale = Vector3.one * cellScale;
 
                 for (int d = 0; d < 4; d++)
                 {
@@ -453,8 +437,9 @@ public class GameManager : Singleton<GameManager>
                     {
                         // Create corner.
                         Vector3 center = Map.GetCellPosition(x, z) + offset;
-                        GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
-                        cornerInstance.transform.localScale = Vector3.one * cellScale;
+                        GameObject cornerInstance = GameObject.Instantiate(Map.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                        // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
+                        cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                     }
                 }
                 else if (numConnections == 1)
@@ -470,21 +455,26 @@ public class GameManager : Singleton<GameManager>
                     if (direction1 == direction2 || inverseDirection1 == direction2)
                         parallelWalls = true;
 
-                    if (parallelWalls) {
+                    if (parallelWalls)
+                    {
                         // Create wall connection piece.
-                    } else {
+                    }
+                    else
+                    {
                         // Create corner
                         Vector3 center = Map.GetCellPosition(x, z) + offset;
-                        GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
-                        cornerInstance.transform.localScale = Vector3.one * cellScale;
+                        GameObject cornerInstance = GameObject.Instantiate(Map.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                        // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
+                        cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                     }
                 }
                 else if (numConnections == 3)
                 {
                     // Create corner
                     Vector3 center = Map.GetCellPosition(x, z) + offset;
-                    GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
-                    cornerInstance.transform.localScale = Vector3.one * cellScale;
+                    GameObject cornerInstance = GameObject.Instantiate(Map.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                    // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
+                    cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                 }
                 else if (numConnections == 4)
                 {

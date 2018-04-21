@@ -31,8 +31,11 @@ public class ShowLevel : MonoBehaviour
         }
 
         Level level = levels[levelToLoad];
-        DrawCells(level);
-        DrawEntitySpawns(level);
+        if (level != null)
+        {
+            DrawCells(level);
+            DrawEntitySpawns(level);
+        }
     }
 
     void DrawCells(Level level)
@@ -66,12 +69,18 @@ public class ShowLevel : MonoBehaviour
         }
         foreach (EnemySpawn spawn in level.spawnList)
         {
-            Gizmos.color = new Color(1, 0, 0, 0.1f);
-            Vector3 center = new Vector3(spawn.X * map.CellScale, 0.5f, spawn.Z * map.CellScale);
-            foreach (MeshFilter filter in spawn.EnemyObject.Enemy.Instance.GetComponentsInChildren<MeshFilter>())
+            if (spawn.EnemyObject != null && spawn.EnemyObject.Enemy != null)
             {
-                Transform pieceTransform = filter.transform;
-                Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.position, pieceTransform.localRotation, filter.transform.lossyScale);
+                Gizmos.color = new Color(1, 0, 0, 0.1f);
+                Vector3 center = new Vector3(spawn.X * map.CellScale, 0f, spawn.Z * map.CellScale);
+                foreach (MeshFilter filter in spawn.EnemyObject.Enemy.Instance.GetComponentsInChildren<MeshFilter>())
+                {
+                    Transform pieceTransform = filter.transform;
+                    if (pieceTransform != null && filter.sharedMesh != null)
+                    {
+                        Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.localPosition, pieceTransform.localRotation, filter.transform.localScale * map.CellScale);
+                    }
+                }
             }
         }
     }

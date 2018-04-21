@@ -5,6 +5,18 @@ using EntityClasses;
 
 namespace MapClasses
 {
+    [System.Serializable]
+    public class MapPrefab
+    {
+        [SerializeField] GameObject prefab;
+        public GameObject Prefab { get { return prefab; } }
+
+        [Range(0f, 1f)]
+        [SerializeField]
+        float weight;
+        public float Weight { get { return weight; } }
+    }
+
     // A map class that mainly serves as a container for the base level fields, properties, and methods.
     // Contains a list of Levels, the current level index, and methods for setting the current level and moving to new levels.
     [System.Serializable]
@@ -139,6 +151,40 @@ namespace MapClasses
             }
             float cellScale = CellScale;
             return new Vector3(cell.X * cellScale, 0.5f, cell.Z * cellScale);
+        }
+
+        public GameObject GetRandomPrefab(List<MapPrefab> prefabList)
+        {
+            if (prefabList == null || prefabList.Count == 0)
+                return null;
+
+            float totalWeight = 0f;
+
+            foreach (MapPrefab pref in prefabList)
+            {
+                totalWeight += pref.Weight;
+            }
+
+            GameObject prefab = null;
+            float choice = Random.Range(0f, totalWeight);
+            float cumulative = 0f;
+            foreach (MapPrefab pref in prefabList)
+            {
+                cumulative += pref.Weight;
+                if (choice <= cumulative)
+                {
+                    prefab = pref.Prefab;
+                    break;
+                }
+            }
+
+            // If couldn't find one with the proper weight, just grab the first prefab.
+            if (prefab == null)
+            {
+                prefab = prefabList[0].Prefab;
+            }
+
+            return prefab;
         }
     }
 }
