@@ -19,7 +19,7 @@ namespace AIClasses
     }
     public class EnemyAction
     {
-        public AbilityObject Ability { get; set; }
+        public int AbilityIndex { get; set; }
         public Movement Movement { get; set; }
     }
 
@@ -94,16 +94,89 @@ namespace AIClasses
             //            manager = GameManager.Instance;
         }
 
-        public EnemyAction ExecuteAIOnEnemy(Enemy enemy)
+        public EnemyAction ExecuteAIOnEnemy(Enemy enemy, Level level)
         {
             //            Debug.Log("Executing AI on " + enemy.Name);
-            EnemyAction bestAction = new EnemyAction { Ability = null, Movement = Movement.Null };
-            Level level = GameManager.Instance.Map.CurrentLevel;
+            EnemyAction bestAction = new EnemyAction { AbilityIndex = -1, Movement = Movement.Null };
             if (enemy.InCombat)
             {
+                // Debug.Log("Enemy is in combat, pursuing the palyer.");
                 // Pursue and attack the player.
                 // For abilities, just calculate based on situation and distance
                 // For movement, get the best target neighbor to move to and calculate each possible movement's value towards getting to that target.
+                if (level.Player != null)
+                {
+                    // First, get a list of possible actions.
+                    List<EnemyAction> actionList = new List<EnemyAction>();
+
+                    // Iterate through abilities.
+
+                    // Get best direction for target.
+                    if (enemy.Target == Direction.Null)
+                    {
+                        int closestDist = 1000;
+                        Direction closest = Direction.Null;
+                        //                    List<Direction> directions = new List<Direction>(); //level.GetNeighbors(enemy.Cell);
+                        foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+                        {
+                            Cell neighbor = level.GetNeighbor(enemy.Cell, direction);
+                            if (neighbor != null && !neighbor.Locked)
+                            {
+                                // Debug.Log("Distance between " + neighbor.X + ", " + neighbor.Z + " and " + level.Player.Cell.X + ", " + level.Player.Cell.Z + " is " + neighbor.GetDistance(level.Player.Cell) + " for direction " + direction);
+                                int dist = neighbor.GetDistance(level.Player.Cell);
+                                // If in combat, either go towards an empty cell or the player.
+                                if (dist < closestDist && (neighbor.Occupant == null || neighbor.Occupant.GetType() == typeof(Player)))
+                                {
+                                    closest = direction;
+                                    closestDist = dist;
+                                }
+                            }
+                            //                            directions.Add(direction);
+                        }
+
+                        if (closest != Direction.Null)
+                            enemy.Target = closest;
+                    }
+                    // Debug.Log("Best movement determined to be " + enemy.Target);
+
+                    // Iterate through movements.
+                    foreach (Movement movement in Enum.GetValues(typeof(Movement)))
+                    {
+                        actionList.Add(new EnemyAction { AbilityIndex = -1, Movement = movement });
+                    }
+
+                    for (int a = 0; a < enemy.Abilities.Count; a++)
+                    {
+                        actionList.Add(new EnemyAction { AbilityIndex = a, Movement = Movement.Null });
+                    }
+
+                    // Next, calculate each action's value.
+
+                    // FIXME: Heap not returning correct value.
+                    //                Heap<ActionValue> actionHeap = new Heap<ActionValue>(actionList.Count);
+                    List<ActionValue> actionHeap = new List<ActionValue>();
+
+                    for (int a = 0; a < actionList.Count; a++)
+                    {
+                        EnemyAction action = actionList[a];
+                        ActionValue actionValue = new ActionValue { ActionIndex = a, Value = CalculateAction(enemy, action, level) };
+
+                        actionHeap.Add(actionValue);
+                    }
+
+                    //                ActionValue best = actionHeap.RemoveFirst();
+                    ActionValue best = actionHeap[0];
+                    foreach (ActionValue v in actionHeap)
+                    {
+                        if (v.Value > best.Value)
+                            best = v;
+                    }
+
+                    //                Debug.Log("Heap returned " + best.ActionIndex + " with value " + best.Value);
+                    //                Debug.Log("Corresponding action is " + actionList[best.ActionIndex].Movement);
+
+                    bestAction = actionList[best.ActionIndex];
+                }
             }
             else
             {
@@ -119,6 +192,7 @@ namespace AIClasses
                 // 		Assess each movement
 
                 //                Debug.Log("-- Enemy is not in combat.");
+                // Get a new target cell if the target cell is null.
                 if (enemy.Target == Direction.Null)
                 {
                     float chance = UnityEngine.Random.Range(0f, 1f);
@@ -146,7 +220,7 @@ namespace AIClasses
 
                 foreach (Movement movement in Enum.GetValues(typeof(Movement)))
                 {
-                    actionList.Add(new EnemyAction { Ability = null, Movement = movement });
+                    actionList.Add(new EnemyAction { AbilityIndex = -1, Movement = movement });
                 }
 
                 // FIXME: Heap not returning correct value.
@@ -156,7 +230,7 @@ namespace AIClasses
                 for (int a = 0; a < actionList.Count; a++)
                 {
                     EnemyAction action = actionList[a];
-                    ActionValue actionValue = new ActionValue { ActionIndex = a, Value = CalculateAction(enemy, action) };
+                    ActionValue actionValue = new ActionValue { ActionIndex = a, Value = CalculateAction(enemy, action, level) };
 
                     actionHeap.Add(actionValue);
                 }
@@ -180,12 +254,44 @@ namespace AIClasses
             return bestAction;
         }
 
-        public float CalculateAction(Enemy enemy, EnemyAction action)
+        public float CalculateAction(Enemy enemy, EnemyAction action, Level level = null)
         {
             float value = 0;
-            if (action.Ability != null)
+            if (action.AbilityIndex != -1)
             {
+                AbilityObject ability = enemy.Abilities[action.AbilityIndex];
                 // Calculate ability value.
+
+                // TODO: Edit to be better. Right now just attacks if it can.
+                //       Takes into account: Damage, player health.
+                //       To be added: Enemy's state, player's state, cast time, cooldown, effects, type.
+
+                // If it's on cooldown, can't use the ability.
+                if (enemy.Cooldowns.ContainsKey(ability) && enemy.Cooldowns[ability] > 0f)
+                    return value;
+
+                if (level != null)
+                {
+                    Player player = level.Player;
+                    var affected = level.GetAffectedCells_Highlight(enemy, ability);
+                    // Debug.Log(affected.Count);
+                    // If the ability would hit the player.
+                    if (affected.Contains(player.Cell))
+                    {
+                        value += 1.5f;
+                    }
+                    // Increase based on damage.
+                    //                    value *= ((ability.Damage / 100f) + 1);
+
+                    // Increase depending on how much health the player has.
+                    //                    value = value / (player.CurrentHealth / (float)player.MaxHealth);
+
+                }
+                else
+                {
+                    Debug.LogWarning("WARNING: Level is null in AIManager.");
+                }
+                Debug.Log("Calculated " + action.AbilityIndex + " as " + value);
             }
             else if (action.Movement != Movement.Null)
             {
@@ -222,6 +328,8 @@ namespace AIClasses
                         value += 1;
                     }
                 }
+                // Debug.Log("Calculated " + action.Movement + " as " + value);
+                //                value = value / (enemy.CurrentHealth / (float)enemy.MaxHealth);
             }
             //            Debug.Log("Calculate " + action.Movement + " as " + value);
             return value;

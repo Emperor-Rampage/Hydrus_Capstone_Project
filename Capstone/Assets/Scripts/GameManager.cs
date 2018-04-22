@@ -79,6 +79,7 @@ public class GameManager : Singleton<GameManager>
     // How long it takes an entity to turn 90 degrees.
     [SerializeField] float turnspeed;
     [SerializeField] float tickRate;
+    [SerializeField] int enemyAggroDistance;
 
     // Whether or not we're in-game.
     bool inGame;
@@ -140,9 +141,10 @@ public class GameManager : Singleton<GameManager>
 
         foreach (Enemy enemy in level.EnemyList)
         {
+            enemy.InCombat = (level.GetDistance(enemy.Cell, level.Player.Cell) <= enemyAggroDistance);
             if (enemy.State == EntityState.Idle)
             {
-                var action = aiManager.ExecuteAIOnEnemy(enemy);
+                var action = aiManager.ExecuteAIOnEnemy(enemy, level);
                 //                action = new EnemyAction();
 
                 if (action.Movement != Movement.Null)
@@ -163,6 +165,10 @@ public class GameManager : Singleton<GameManager>
                     {
                         TurnEntityInstanceRight(enemy);
                     }
+                }
+                else if (action.AbilityIndex != -1)
+                {
+                    CastEnemyAbility(enemy, action.AbilityIndex);
                 }
             }
         }
@@ -241,6 +247,9 @@ public class GameManager : Singleton<GameManager>
             level.InitializeLevel(player);
             level.Player.Class = selectedClass;
             level.Player.SetupBaseAbilities();
+            // TODO: Set up event handler for player taking damage. Should be a callback to the GameManager that calls the correct ui updates.
+            //       Or, don't.
+
             //            level.Player.Abilities.Add(testAbility);
             UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
             // Creates debug instances for the cells and connections.
@@ -905,6 +914,10 @@ public class GameManager : Singleton<GameManager>
         }
 
         bool alive = target.Damage(ability.Damage);
+        if (target.GetType() == typeof(Player))
+        {
+            uiManager.UpdatePlayerHealth(target.CurrentHealth / (float)target.MaxHealth);
+        }
 
         PerformEntityDeathCheck(target, alive);
     }
@@ -917,7 +930,11 @@ public class GameManager : Singleton<GameManager>
             target.StatusEffects.AddEffect(effectInstance);
         }
 
-        bool alive = target.Damage(1);
+        bool alive = target.Damage(0);
+        if (target.GetType() == typeof(Player))
+        {
+            uiManager.UpdatePlayerHealth(target.CurrentHealth / (float)target.MaxHealth);
+        }
 
         PerformEntityDeathCheck(target, alive);
     }

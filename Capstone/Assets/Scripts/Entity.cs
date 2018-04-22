@@ -65,7 +65,8 @@ namespace EntityClasses
 
         List<Coroutine> coroutines = new List<Coroutine>();
 
-        Dictionary<AbilityObject, float> cooldowns = new Dictionary<AbilityObject, float>();
+        //        Dictionary<AbilityObject, float> cooldowns = new Dictionary<AbilityObject, float>();
+        public Dictionary<AbilityObject, float> Cooldowns { get; private set; } = new Dictionary<AbilityObject, float>();
 
         public Entity() { Abilities = new List<AbilityObject>(); }
         public Entity(Entity entity)
@@ -95,7 +96,7 @@ namespace EntityClasses
                 return null;
             }
 
-            if (cooldowns.ContainsKey(ability) && cooldowns[ability] > 0)
+            if (Cooldowns.ContainsKey(ability) && Cooldowns[ability] > 0)
                 return null;
 
             Debug.Log("Casting abilty " + ability.Name + " with cast time of " + ability.CastTime + " at " + Cell.X + ", " + Cell.Z);
@@ -114,8 +115,8 @@ namespace EntityClasses
             // Call method in GameManager instance to perform the ability actions.
 
             GameManager.Instance.PerformAbility(this, ability);
-            cooldowns[ability] = ability.Cooldown;
-            Tween.Value(ability.Cooldown, 0f, (val) => cooldowns[ability] = val, ability.Cooldown, 0f);
+            Cooldowns[ability] = ability.Cooldown;
+            Tween.Value(ability.Cooldown, 0f, (val) => Cooldowns[ability] = val, ability.Cooldown, 0f);
             RemoveIndicators();
             State = EntityState.Idle;
         }
@@ -148,7 +149,8 @@ namespace EntityClasses
             if (Facing == Direction.Up)
             {
                 degrees = 0f;
-            } else if (Facing == Direction.Right)
+            }
+            else if (Facing == Direction.Right)
             {
                 degrees = 90f;
             }
@@ -229,6 +231,7 @@ namespace EntityClasses
             if (CurrentHealth > damage)
             {
                 CurrentHealth -= damage;
+                Debug.Log(Name + " now has " + CurrentHealth);
                 return true;
             }
 

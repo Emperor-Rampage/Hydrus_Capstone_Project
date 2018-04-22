@@ -164,6 +164,16 @@ namespace MapClasses
             return new int[] { up, right, down, left };
         }
 
+        public int GetDistance(int x2, int z2)
+        {
+            return Mathf.Abs(X - x2) + Mathf.Abs(Z - z2);
+        }
+
+        public int GetDistance(Cell cell2)
+        {
+            return Mathf.Abs(X - cell2.X) + Mathf.Abs(Z - cell2.Z);
+        }
+
         #endregion
 
         /*
@@ -326,6 +336,16 @@ namespace MapClasses
 
             return Direction.Null;
         }
+
+        public static int GetDistance(int x1, int z1, int x2, int z2)
+        {
+            return Mathf.Abs(x1 - x2) + Mathf.Abs(z1 - z2);
+        }
+        public static int GetDistance(Cell cell1, Cell cell2)
+        {
+            return Mathf.Abs(cell1.X - cell2.X) + Mathf.Abs(cell1.Z - cell2.Z);
+        }
+
         public static CellType DetermineCellType(Color pixelColor)
         {
             if (pixelColor == SpawnColor)
