@@ -112,39 +112,39 @@ namespace AIClasses
                     // Iterate through abilities.
 
                     // Get best direction for target.
-                    if (enemy.Target == Direction.Null)
+                    // if (enemy.Target == Direction.Null)
+                    // {
+                    int closestDist = 1000;
+                    Direction closest = Direction.Null;
+                    //                    List<Direction> directions = new List<Direction>(); //level.GetNeighbors(enemy.Cell);
+                    foreach (Direction direction in Enum.GetValues(typeof(Direction)))
                     {
-                        int closestDist = 1000;
-                        Direction closest = Direction.Null;
-                        //                    List<Direction> directions = new List<Direction>(); //level.GetNeighbors(enemy.Cell);
-                        foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+                        Cell neighbor = level.GetNeighbor(enemy.Cell, direction);
+                        if (neighbor != null && !neighbor.Locked)
                         {
-                            Cell neighbor = level.GetNeighbor(enemy.Cell, direction);
-                            if (neighbor != null && !neighbor.Locked)
+                            // Debug.Log("Distance between " + neighbor.X + ", " + neighbor.Z + " and " + level.Player.Cell.X + ", " + level.Player.Cell.Z + " is " + neighbor.GetDistance(level.Player.Cell) + " for direction " + direction);
+                            int dist = neighbor.GetDistance(level.Player.Cell);
+                            // If in combat, either go towards an empty cell or the player.
+                            if (dist < closestDist && (neighbor.Occupant == null || neighbor.Occupant.GetType() == typeof(Player)))
                             {
-                                // Debug.Log("Distance between " + neighbor.X + ", " + neighbor.Z + " and " + level.Player.Cell.X + ", " + level.Player.Cell.Z + " is " + neighbor.GetDistance(level.Player.Cell) + " for direction " + direction);
-                                int dist = neighbor.GetDistance(level.Player.Cell);
-                                // If in combat, either go towards an empty cell or the player.
-                                if (dist < closestDist && (neighbor.Occupant == null || neighbor.Occupant.GetType() == typeof(Player)))
-                                {
-                                    closest = direction;
-                                    closestDist = dist;
-                                }
+                                closest = direction;
+                                closestDist = dist;
                             }
-                            //                            directions.Add(direction);
                         }
-
-                        if (closest != Direction.Null)
-                            enemy.Target = closest;
+                        //                            directions.Add(direction);
                     }
+
+                    if (closest != Direction.Null)
+                        enemy.Target = closest;
+                    // }
                     // Debug.Log("Best movement determined to be " + enemy.Target);
 
-                    // Iterate through movements.
+                    // Add all movements.
                     foreach (Movement movement in Enum.GetValues(typeof(Movement)))
                     {
                         actionList.Add(new EnemyAction { AbilityIndex = -1, Movement = movement });
                     }
-
+                    // Add all abilities.
                     for (int a = 0; a < enemy.Abilities.Count; a++)
                     {
                         actionList.Add(new EnemyAction { AbilityIndex = a, Movement = Movement.Null });
@@ -257,14 +257,29 @@ namespace AIClasses
         public float CalculateAction(Enemy enemy, EnemyAction action, Level level = null)
         {
             float value = 0;
+            EffectDictionary enemyEffectDictionary = enemy.StatusEffects;
+            bool stunned = enemyEffectDictionary.GetEffectValue_Bool(AbilityStatusEff.Stun);
+            bool silenced = enemyEffectDictionary.GetEffectValue_Bool(AbilityStatusEff.Silence);
+            bool rooted = enemyEffectDictionary.GetEffectValue_Bool(AbilityStatusEff.Root);
+            float slow = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.MoveSlow);
+            float castSlow = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.CastTimeSlow);
+            float haste = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.Haste);
+
             if (action.AbilityIndex != -1)
             {
+                // Abilities should be impossible if stunned or silenced. Less likely if cast time is slowed. More likely if move slowed.
+                //           More likely when hasted.
+
+                // If stunned, calculate ability value as 0.
+                if (stunned || silenced)
+                    return value;
+
                 AbilityObject ability = enemy.Abilities[action.AbilityIndex];
                 // Calculate ability value.
 
                 // TODO: Edit to be better. Right now just attacks if it can.
-                //       Takes into account: Damage, player health.
-                //       To be added: Enemy's state, player's state, cast time, cooldown, effects, type.
+                //       Takes into account: Damage, player health. Enemy's state and current effects.
+                //       To be added: Player's state, cast time, cooldown, effects, type.
 
                 // If it's on cooldown, can't use the ability.
                 if (enemy.Cooldowns.ContainsKey(ability) && enemy.Cooldowns[ability] > 0f)
@@ -278,13 +293,25 @@ namespace AIClasses
                     // If the ability would hit the player.
                     if (affected.Contains(player.Cell))
                     {
-                        value += 1.5f;
+                        value += 1f;
                     }
+                    float modifier = 1f;
                     // Increase based on damage.
-                    //                    value *= ((ability.Damage / 100f) + 1);
-
+                    modifier += (ability.Damage / 100f);
                     // Increase depending on how much health the player has.
-                    //                    value = value / (player.CurrentHealth / (float)player.MaxHealth);
+                    // modifier += (1 / (player.CurrentHealth / (float)player.MaxHealth));
+                    // Increase depending on amount hasted.
+                    modifier += (haste * 0.25f);
+                    // Decrease depending on amount cast time slowed.
+                    modifier -= (castSlow * 0.25f);
+                    // Increase depending on amount move slowed.
+                    modifier += (slow * 0.15f);
+
+                    // value *= ((ability.Damage / 100f) + 1);
+
+                    value *= modifier;
+
+                    // value = value / (player.CurrentHealth / (float)player.MaxHealth);
 
                 }
                 else
@@ -295,15 +322,28 @@ namespace AIClasses
             }
             else if (action.Movement != Movement.Null)
             {
-                // Calculate movement value.
+                // Movement should be impossible if rooted or stunned. Less likely when movement slowed.
+                //          More likely when cast time slowed. More likely when silenced.
+
+                // Calculate Nothing movement independently.
                 if (action.Movement == Movement.Nothing)
                 {
                     if (enemy.Target == Direction.Null)
                     {
                         value += 1;
                     }
+                    else
+                    {
+                        // Just so that the ai will do nothing if everything is 0.
+                        value = 0.1f;
+                    }
                 }
-                else if (action.Movement == Movement.Forward)
+
+                if (rooted || stunned)
+                    return value;
+
+                // Calculate movement value.
+                if (action.Movement == Movement.Forward)
                 {
                     if (enemy.Facing == enemy.Target)
                     {
@@ -328,8 +368,14 @@ namespace AIClasses
                         value += 1;
                     }
                 }
+
+                float modifier = 1f;
+                modifier -= (slow * 0.25f);
+                modifier += (castSlow * 0.15f);
+
+                value *= modifier;
                 // Debug.Log("Calculated " + action.Movement + " as " + value);
-                //                value = value / (enemy.CurrentHealth / (float)enemy.MaxHealth);
+                // value = value / (enemy.CurrentHealth / (float)enemy.MaxHealth);
             }
             //            Debug.Log("Calculate " + action.Movement + " as " + value);
             return value;
