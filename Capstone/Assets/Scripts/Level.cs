@@ -403,7 +403,7 @@ namespace MapClasses
                 Cell neighborCell = GetNeighbor(entity.Cell, entity.Facing);
                 if (neighborCell != null)
                 {
-                    highlight.Add(GetNeighbor(entity.Cell, entity.Facing));
+                    highlight.Add(neighborCell);
                 }
             }
             else if (ability.Type == AbilityType.Ranged)
@@ -750,17 +750,18 @@ namespace MapClasses
             return false;
         }
 
-        public bool HasConnection(Cell cell1, Cell cell2) {
+        public bool HasConnection(Cell cell1, Cell cell2)
+        {
             if (!Initialized)
                 return false;
-            
+
             Direction neighborDirection = Cell.GetNeighborDirection(cell1, cell2);
             if (neighborDirection == Direction.Null)
                 return false;
-            
+
             if (connectionMatrix[cell1.Index, (int)neighborDirection])
                 return true;
-            
+
             return false;
         }
 
@@ -909,12 +910,23 @@ namespace MapClasses
             return true;
         }
 
-        public Direction GetInverseDirection(Direction direction) {
+        public Direction GetInverseDirection(Direction direction)
+        {
             int newDir = (int)direction - 2;
             if (newDir < 0)
                 newDir += 4;
 
             return (Direction)newDir;
+        }
+
+        public int GetDistance(int x1, int z1, int x2, int z2)
+        {
+            return Mathf.Abs(x1 - x2) + Mathf.Abs(z1 - z2);
+        }
+
+        public int GetDistance(Cell cell1, Cell cell2)
+        {
+            return Mathf.Abs(cell1.X - cell2.X) + Mathf.Abs(cell1.Z - cell2.Z);
         }
 
         int GetSpriteX(int index, int width)

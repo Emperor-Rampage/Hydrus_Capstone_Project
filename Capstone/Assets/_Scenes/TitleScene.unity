@@ -4587,14 +4587,8 @@ MonoBehaviour:
         pitch: 1
       exitList: 0100000002000000
       spawnList:
-      - x: 4
-        z: 2
-        enemy: {fileID: 11400000, guid: d6f9288a6426afb49a3623d813cc68f8, type: 2}
-      - x: 10
-        z: 4
-        enemy: {fileID: 11400000, guid: d6f9288a6426afb49a3623d813cc68f8, type: 2}
       - x: 7
-        z: 7
+        z: 8
         enemy: {fileID: 11400000, guid: d6f9288a6426afb49a3623d813cc68f8, type: 2}
     - sceneIndex: 2
       name: Level 1
@@ -4621,6 +4615,7 @@ MonoBehaviour:
   movespeed: 0.5
   turnspeed: 0.25
   tickRate: 0.25
+  enemyAggroDistance: 5
 --- !u!4 &2078068043
 Transform:
   m_ObjectHideFlags: 0
