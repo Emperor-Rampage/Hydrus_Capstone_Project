@@ -21,16 +21,16 @@ namespace AbilityClasses
     public enum AbilityStatusEff
     {
         NoEffect = -1,
-        CastTimeSlow = 0,
-        CooldownSlow = 1,
-        Stun = 2,
-        MoveSlow = 3,
-        Root = 4,
-        Silence = 5,
-        Heal = 6,
-        Haste = 7,
-        DamReduct = 8,
-        DoT = 9
+        CastTimeSlow = 0,       // IMPLEMENTED.
+        CooldownSlow = 1,       // IMPLEMENTED.
+        Stun = 2,               // IMPLEMENTED.
+        MoveSlow = 3,           // IMPLEMENTED.
+        Root = 4,               // IMPLEMENTED.
+        Silence = 5,            // IMPLEMENTED.
+        Heal = 6,               // IMPLEMENTED.
+        Haste = 7,              // 
+        DamReduct = 8,          // IMPLEMENTED.
+        DoT = 9                 // IMPLEMENTED.
     }
 
     [System.Serializable]
@@ -67,16 +67,26 @@ namespace AbilityClasses
     {
 
         //To Do: RemoveEffect method, Tween/timer method
-        private float cooldownScale = 1.0f;
-        private float movementScale = 1.0f;
-        private float castTimeScale = 1.0f;
-        private float hasteScale = 1.0f;
-        private float damageScale = 1.0f;
-        private float healRate = 0.0f;
-        private float damageRate = 0.0f;
-        private bool stunned = false;
-        private bool rooted = false;
-        private bool silenced = false;
+//        private float cooldownScale = 1.0f;
+        public float CooldownScale { get; private set; } = 1f;
+//        private float movementScale = 1.0f;
+        public float MovementScale { get; private set; } = 1f;
+//        private float castTimeScale = 1.0f;
+        public float CastTimeScale { get; private set; } = 1f;
+//        private float hasteScale = 1.0f;
+        public float HasteScale { get; private set; } = 1f;
+        // private float damageScale = 1.0f;
+        public float DamageScale { get; private set; } = 1f;
+        // private float healRate = 0.0f;
+        public float HealRate { get; private set; } = 0f;
+        // private float damageRate = 0.0f;
+        public float DamageRate { get; private set; } = 0f;
+        // private bool stunned = false;
+        public bool Stunned { get; private set; } = false;
+        // private bool rooted = false;
+        public bool Rooted { get; private set; } = false;
+        // private bool silenced = false;
+        public bool Silenced { get; private set; } = false;
 
         public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
         public List<AbilityEffect> CurrentEffects;
@@ -107,14 +117,14 @@ namespace AbilityClasses
             }
         }
 
-        public void StartTween(AbilityEffect eff)
+        void StartTween(AbilityEffect eff)
         {
             Tween.Value(eff.Duration, 0f, (value) => eff.Duration = value, eff.Duration, 0.0f, completeCallback: () => RemoveEffect(eff));
         }
 
         //At the end of the ability effect Tween, remove the AbilityEffect from the list of current effects.
         //Also recalculate the current effects list on every remove.
-        public void RemoveEffect(AbilityEffect AbilEffect)
+        void RemoveEffect(AbilityEffect AbilEffect)
         {
             //Validating that the list exists and it isn't empty. Because finding an item via Value is slow as heck.
             if (GetEffectList(AbilEffect.Effect) != null)
@@ -143,7 +153,7 @@ namespace AbilityClasses
         // NOTE: Refactored just to make it more compact. Isn't really more efficient at all, just fewer lines.
         // NOTE: Removed the commented code, save for one, just in case I need to refer back to it! -Conner P.S. Pretty sure we won't.
 
-        public void CalcEffects(AbilityStatusEff type)
+        void CalcEffects(AbilityStatusEff type)
         {
             if (type != AbilityStatusEff.NoEffect)
             {
@@ -152,12 +162,12 @@ namespace AbilityClasses
                 {
                     case AbilityStatusEff.CastTimeSlow:
                         {
-                            castTimeScale = 1f;
+                            CastTimeScale = 1f;
                             if (typeList != null)
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    castTimeScale *= effect.Value;
+                                    CastTimeScale *= (1f - effect.Value);
                                 }
                             }
 
@@ -166,12 +176,12 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.CooldownSlow:
                         {
-                            cooldownScale = 1f;
+                            CooldownScale = 1f;
                             if (typeList != null)
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    cooldownScale *= effect.Value;
+                                    CooldownScale *= (1f - effect.Value);
                                 }
                             }
 
@@ -180,10 +190,10 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.Stun:
                         {
-                            stunned = false;
+                            Stunned = false;
                             if (typeList != null && typeList.Count != 0)
                             {
-                                stunned = true;
+                                Stunned = true;
                             }
 
                             break;
@@ -191,12 +201,12 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.MoveSlow:
                         {
-                            movementScale = 1f;
+                            MovementScale = 1f;
                             if (typeList != null)
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    movementScale *= effect.Value;
+                                    MovementScale *= (1f - effect.Value);
                                 }
                             }
 
@@ -205,10 +215,10 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.Root:
                         {
-                            rooted = false;
+                            Rooted = false;
                             if (typeList != null && typeList.Count != 0)
                             {
-                                rooted = true;
+                                Rooted = true;
                             }
 
                             break;
@@ -216,10 +226,10 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.Silence:
                         {
-                            silenced = false;
+                            Silenced = false;
                             if (typeList != null && typeList.Count != 0)
                             {
-                                silenced = true;
+                                Silenced = true;
                             }
 
                             break;
@@ -227,12 +237,12 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.Heal:
                         {
-                            healRate = 0f;
+                            HealRate = 0f;
                             if (typeList != null)
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    healRate += effect.Value;
+                                    HealRate += effect.Value;
                                 }
                             }
 
@@ -241,12 +251,12 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.Haste:
                         {
-                            hasteScale = 1f;
+                            HasteScale = 1f;
                             if (typeList != null)
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    hasteScale *= effect.Value;
+                                    HasteScale *= (1f + effect.Value);
                                 }
                             }
 
@@ -255,12 +265,12 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.DamReduct:
                         {
-                            damageScale = 1f;
+                            DamageScale = 1f;
                             if (typeList != null)
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    damageScale *= effect.Value;
+                                    DamageScale *= (1f - effect.Value);
                                 }
                             }
                             /*
@@ -287,12 +297,12 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.DoT:
                         {
-                            damageRate = 1f;
+                            DamageRate = 0f;
                             if (typeList != null)
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    damageRate *= effect.Value;
+                                    DamageRate += effect.Value;
                                 }
                             }
                             break;
@@ -309,37 +319,37 @@ namespace AbilityClasses
                 {
                     case AbilityStatusEff.CastTimeSlow:
                         {
-                            return castTimeScale;
+                            return CastTimeScale;
                         }
 
                     case AbilityStatusEff.CooldownSlow:
                         {
-                            return cooldownScale;
+                            return CooldownScale;
                         }
 
                     case AbilityStatusEff.MoveSlow:
                         {
-                            return movementScale;
+                            return MovementScale;
                         }
 
                     case AbilityStatusEff.Heal:
                         {
-                            return healRate;
+                            return HealRate;
                         }
 
                     case AbilityStatusEff.Haste:
                         {
-                            return castTimeScale;
+                            return CastTimeScale;
                         }
 
                     case AbilityStatusEff.DamReduct:
                         {
-                            return damageScale;
+                            return DamageScale;
                         }
 
                     case AbilityStatusEff.DoT:
                         {
-                            return damageRate;
+                            return DamageRate;
                         }
                 }
             }
@@ -355,17 +365,17 @@ namespace AbilityClasses
 
                     case AbilityStatusEff.Stun:
                         {
-                            return stunned;
+                            return Stunned;
                         }
 
                     case AbilityStatusEff.Root:
                         {
-                            return rooted;
+                            return Rooted;
                         }
 
                     case AbilityStatusEff.Silence:
                         {
-                            return silenced;
+                            return Silenced;
                         }
                     default:
                         {

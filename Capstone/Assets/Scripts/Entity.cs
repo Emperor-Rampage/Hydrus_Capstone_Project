@@ -38,10 +38,10 @@ namespace EntityClasses
         [SerializeField] int cores;
         public int Cores { get { return cores; } set { cores = value; } }
 
-        [SerializeField] int maxHealth;
-        public int MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
+        [SerializeField] float maxHealth;
+        public float MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
 
-        public int CurrentHealth { get; set; }
+        public float CurrentHealth { get; set; }
 
         public float CastProgress { get; set; }
         public float CurrentCastTime { get; set; }
@@ -99,7 +99,7 @@ namespace EntityClasses
             if (Cooldowns.ContainsKey(ability) && Cooldowns[ability] > 0)
                 return null;
 
-            Debug.Log("Casting abilty " + ability.Name + " with cast time of " + ability.CastTime + " at " + Cell.X + ", " + Cell.Z);
+            Debug.Log("Casting abilty " + ability.Name + " with cast time of " + ability.CastTime * StatusEffects.CastTimeScale + " at " + Cell.X + ", " + Cell.Z);
 
             coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
             State = EntityState.Casting;
@@ -109,14 +109,15 @@ namespace EntityClasses
         IEnumerator CastAbility_Coroutine(AbilityObject ability)
         {
             // Wait the cast time, update cast time progress.
-            CurrentCastTime = ability.CastTime;
-            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), ability.CastTime, 0f, completeCallback: () => CastProgress = 0f);
-            yield return new WaitForSeconds(ability.CastTime);
+            CurrentCastTime = ability.CastTime * (StatusEffects.CastTimeScale * StatusEffects.HasteScale);
+            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), CurrentCastTime, 0f, completeCallback: () => CastProgress = 0f);
+            yield return new WaitForSeconds(CurrentCastTime);
             // Call method in GameManager instance to perform the ability actions.
 
             GameManager.Instance.PerformAbility(this, ability);
-            Cooldowns[ability] = ability.Cooldown;
-            Tween.Value(ability.Cooldown, 0f, (val) => Cooldowns[ability] = val, ability.Cooldown, 0f);
+            float adjustedCooldown = ability.Cooldown * StatusEffects.CooldownScale;
+            Cooldowns[ability] = adjustedCooldown;
+            Tween.Value(adjustedCooldown, 0f, (val) => Cooldowns[ability] = val, adjustedCooldown, 0f);
             RemoveIndicators();
             State = EntityState.Idle;
         }
@@ -228,9 +229,10 @@ namespace EntityClasses
         public bool Damage(int damage)
         {
             Debug.Log(Name + " currently has " + CurrentHealth + " health. Taking " + damage + " damage.");
-            if (CurrentHealth > damage)
+            int adjustedDamage = (int)(damage * StatusEffects.DamageScale);
+            if (CurrentHealth > adjustedDamage)
             {
-                CurrentHealth -= damage;
+                CurrentHealth -= adjustedDamage;
                 Debug.Log(Name + " now has " + CurrentHealth);
                 return true;
             }

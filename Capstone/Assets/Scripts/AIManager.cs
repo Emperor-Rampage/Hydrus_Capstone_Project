@@ -153,7 +153,7 @@ namespace AIClasses
                     // Next, calculate each action's value.
 
                     // FIXME: Heap not returning correct value.
-                    //                Heap<ActionValue> actionHeap = new Heap<ActionValue>(actionList.Count);
+                    // Heap<ActionValue> actionHeap = new Heap<ActionValue>(actionList.Count);
                     List<ActionValue> actionHeap = new List<ActionValue>();
 
                     for (int a = 0; a < actionList.Count; a++)
@@ -164,7 +164,7 @@ namespace AIClasses
                         actionHeap.Add(actionValue);
                     }
 
-                    //                ActionValue best = actionHeap.RemoveFirst();
+                    // ActionValue best = actionHeap.RemoveFirst();
                     ActionValue best = actionHeap[0];
                     foreach (ActionValue v in actionHeap)
                     {
@@ -172,8 +172,8 @@ namespace AIClasses
                             best = v;
                     }
 
-                    //                Debug.Log("Heap returned " + best.ActionIndex + " with value " + best.Value);
-                    //                Debug.Log("Corresponding action is " + actionList[best.ActionIndex].Movement);
+                    // Debug.Log("Heap returned " + best.ActionIndex + " with value " + best.Value);
+                    // Debug.Log("Corresponding action is " + actionList[best.ActionIndex].Movement);
 
                     bestAction = actionList[best.ActionIndex];
                 }
@@ -256,7 +256,7 @@ namespace AIClasses
 
         public float CalculateAction(Enemy enemy, EnemyAction action, Level level = null)
         {
-            float value = 0;
+            float value = 0f;
             EffectDictionary enemyEffectDictionary = enemy.StatusEffects;
             bool stunned = enemyEffectDictionary.GetEffectValue_Bool(AbilityStatusEff.Stun);
             bool silenced = enemyEffectDictionary.GetEffectValue_Bool(AbilityStatusEff.Silence);

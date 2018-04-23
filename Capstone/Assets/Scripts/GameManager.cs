@@ -136,42 +136,16 @@ public class GameManager : Singleton<GameManager>
         if (!inGame)
             return;
 
+        // Update all HUD elements.
         UpdateHUD();
+        // Get player input and do stuff.
         HandlePlayerInput();
+        // Let the enemy's do stuff.
+        HandleEnemyAI();
 
-        foreach (Enemy enemy in level.EnemyList)
-        {
-            enemy.InCombat = (level.GetDistance(enemy.Cell, level.Player.Cell) <= enemyAggroDistance);
-            if (enemy.State == EntityState.Idle)
-            {
-                var action = aiManager.ExecuteAIOnEnemy(enemy, level);
-                //                action = new EnemyAction();
+        // Iterate through all entities and apply heals and damage DoTs to them.
+        ApplyGradualEffects();
 
-                if (action.Movement != Movement.Null)
-                {
-                    if (action.Movement == Movement.Nothing)
-                    {
-                        // Do nothing.
-                    }
-                    else if (action.Movement == Movement.Forward)
-                    {
-                        MoveEntityLocation(enemy, enemy.Facing);
-                    }
-                    else if (action.Movement == Movement.TurnLeft)
-                    {
-                        TurnEntityInstanceLeft(enemy);
-                    }
-                    else if (action.Movement == Movement.TurnRight)
-                    {
-                        TurnEntityInstanceRight(enemy);
-                    }
-                }
-                else if (action.AbilityIndex != -1)
-                {
-                    CastEnemyAbility(enemy, action.AbilityIndex);
-                }
-            }
-        }
     }
 
     // Add OnLevelLoaded
@@ -583,7 +557,7 @@ public class GameManager : Singleton<GameManager>
             Enemy enemy = (Enemy)forwardCell.Occupant;
             if (enemy != null)
             {
-                uiManager.UpdateEnemyInfo(true, enemy.Name, enemy.CurrentHealth / (float)enemy.MaxHealth, enemy.CastProgress, enemy.CurrentCastTime);
+                uiManager.UpdateEnemyInfo(true, enemy.Name, enemy.CurrentHealth / enemy.MaxHealth, enemy.CastProgress, enemy.CurrentCastTime);
             }
             else
             {
@@ -644,7 +618,7 @@ public class GameManager : Singleton<GameManager>
     //              E - Turns the player right.
     void HandlePlayerInput()
     {
-        if (level.Player.State == EntityState.Idle)
+        if (level.Player.State == EntityState.Idle && !level.Player.StatusEffects.Stunned)
         {
             Direction inputDir = GetInputDirection();
             if (Input.GetKeyDown(KeyCode.Space) && level.CanExit)
@@ -694,12 +668,12 @@ public class GameManager : Singleton<GameManager>
                 bool alive = level.Player.Damage(25);
                 PerformEntityDeathCheck(level.Player, alive);
 
-                uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
+                uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
             }
             else if (Input.GetKeyDown(KeyCode.P))
             {
                 level.Player.Heal(25);
-                uiManager.UpdatePlayerHealth((float)level.Player.CurrentHealth / level.Player.MaxHealth);
+                uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
@@ -709,6 +683,66 @@ public class GameManager : Singleton<GameManager>
             else if (Input.GetKeyDown(KeyCode.K))
             {
             }
+        }
+    }
+
+    void HandleEnemyAI()
+    {
+        foreach (Enemy enemy in level.EnemyList)
+        {
+            enemy.InCombat = (level.GetDistance(enemy.Cell, level.Player.Cell) <= enemyAggroDistance);
+            if (enemy.State == EntityState.Idle)
+            {
+                var action = aiManager.ExecuteAIOnEnemy(enemy, level);
+                //                action = new EnemyAction();
+
+                if (action.Movement != Movement.Null)
+                {
+                    if (action.Movement == Movement.Nothing)
+                    {
+                        // Do nothing.
+                    }
+                    else if (action.Movement == Movement.Forward)
+                    {
+                        MoveEntityLocation(enemy, enemy.Facing);
+                    }
+                    else if (action.Movement == Movement.TurnLeft)
+                    {
+                        TurnEntityInstanceLeft(enemy);
+                    }
+                    else if (action.Movement == Movement.TurnRight)
+                    {
+                        TurnEntityInstanceRight(enemy);
+                    }
+                }
+                else if (action.AbilityIndex != -1)
+                {
+                    CastEnemyAbility(enemy, action.AbilityIndex);
+                }
+            }
+        }
+    }
+
+    void ApplyGradualEffects() {
+        Player player = level.Player;
+
+        Debug.Log("Player damage rate is " + player.StatusEffects.DamageRate);
+
+        if (player.StatusEffects.HealRate > 0f) {
+            player.Heal((int)((player.StatusEffects.HealRate * tickRate) * player.MaxHealth));
+            uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+        }
+
+        if (player.StatusEffects.DamageRate > 0f) {
+            player.Damage((int)((player.StatusEffects.DamageRate * tickRate) * player.MaxHealth));
+            uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+        }
+
+        foreach (Enemy enemy in level.EnemyList) {
+            if (enemy.StatusEffects.HealRate > 0f)
+                enemy.Heal((int)(enemy.StatusEffects.HealRate * enemy.MaxHealth));
+            if (enemy.StatusEffects.DamageRate > 0f)
+                enemy.Damage((int)(enemy.StatusEffects.DamageRate * enemy.MaxHealth));
         }
     }
 
@@ -772,10 +806,15 @@ public class GameManager : Singleton<GameManager>
         if (neighbor == null)
             return;
 
+        if (entity.StatusEffects.Stunned || entity.StatusEffects.Rooted)
+            return;
+
         entity.State = EntityState.Moving;
 
-        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), Movespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
-        StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, Movespeed * 0.75f));
+        float adjustedMovespeed = Movespeed * entity.StatusEffects.MovementScale;
+
+        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
+        StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
     }
 
     // Sets the destination cell to a locked state (to prevent any other entities to attempt to move to this cell)
@@ -848,7 +887,7 @@ public class GameManager : Singleton<GameManager>
         if (ability == null)
             return;
 
-        uiManager.UpdatePlayerCast(ability.CastTime);
+        uiManager.UpdatePlayerCast(entity.CurrentCastTime);
         // Get the cells to highlight and display them.
         List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
         foreach (Cell cell in affected)
@@ -861,6 +900,9 @@ public class GameManager : Singleton<GameManager>
     {
         AbilityObject ability = entity.CastAbility(index);
         if (ability == null)
+            return;
+
+        if (entity.StatusEffects.Stunned || entity.StatusEffects.Silenced)
             return;
 
         // Get the cells to highlight and display them.
@@ -916,7 +958,7 @@ public class GameManager : Singleton<GameManager>
         bool alive = target.Damage(ability.Damage);
         if (target.GetType() == typeof(Player))
         {
-            uiManager.UpdatePlayerHealth(target.CurrentHealth / (float)target.MaxHealth);
+            uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
         }
 
         PerformEntityDeathCheck(target, alive);
@@ -933,7 +975,7 @@ public class GameManager : Singleton<GameManager>
         bool alive = target.Damage(0);
         if (target.GetType() == typeof(Player))
         {
-            uiManager.UpdatePlayerHealth(target.CurrentHealth / (float)target.MaxHealth);
+            uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
         }
 
         PerformEntityDeathCheck(target, alive);
