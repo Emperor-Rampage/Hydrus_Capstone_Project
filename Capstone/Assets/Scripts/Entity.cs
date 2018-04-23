@@ -109,7 +109,7 @@ namespace EntityClasses
         IEnumerator CastAbility_Coroutine(AbilityObject ability)
         {
             // Wait the cast time, update cast time progress.
-            CurrentCastTime = ability.CastTime * (StatusEffects.CastTimeScale * StatusEffects.HasteScale);
+            CurrentCastTime = ability.CastTime / (StatusEffects.CastTimeScale * StatusEffects.HasteScale);
             Tween.Value(0f, 1f, ((prog) => CastProgress = prog), CurrentCastTime, 0f, completeCallback: () => CastProgress = 0f);
             yield return new WaitForSeconds(CurrentCastTime);
             // Call method in GameManager instance to perform the ability actions.
@@ -213,7 +213,7 @@ namespace EntityClasses
         }
 
         // Returns true if full health, false if not.
-        public bool Heal(int heal)
+        public bool Heal(float heal)
         {
             CurrentHealth += heal;
             if (CurrentHealth >= MaxHealth)
@@ -226,10 +226,10 @@ namespace EntityClasses
         }
 
         // Returns true if alive, false if dead.
-        public bool Damage(int damage)
+        public bool Damage(float damage)
         {
             Debug.Log(Name + " currently has " + CurrentHealth + " health. Taking " + damage + " damage.");
-            int adjustedDamage = (int)(damage * StatusEffects.DamageScale);
+            float adjustedDamage = damage * StatusEffects.DamageScale;
             if (CurrentHealth > adjustedDamage)
             {
                 CurrentHealth -= adjustedDamage;

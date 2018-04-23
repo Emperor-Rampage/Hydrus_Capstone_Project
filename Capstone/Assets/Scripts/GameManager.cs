@@ -142,10 +142,6 @@ public class GameManager : Singleton<GameManager>
         HandlePlayerInput();
         // Let the enemy's do stuff.
         HandleEnemyAI();
-
-        // Iterate through all entities and apply heals and damage DoTs to them.
-        ApplyGradualEffects();
-
     }
 
     // Add OnLevelLoaded
@@ -284,6 +280,7 @@ public class GameManager : Singleton<GameManager>
             audioManager.FadeInMusic(level.music, 1f);
 
             inGame = true;
+            StartCoroutine(ApplyGradualEffects_Coroutine());
         }
         else
         {
@@ -723,26 +720,34 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    void ApplyGradualEffects() {
+    IEnumerator ApplyGradualEffects_Coroutine()
+    {
+        WaitForSeconds wait = new WaitForSeconds(tickRate);
         Player player = level.Player;
+        while (inGame)
+        {
+            Debug.Log("Player damage rate is " + player.StatusEffects.DamageRate);
 
-        Debug.Log("Player damage rate is " + player.StatusEffects.DamageRate);
+            if (player.StatusEffects.HealRate > 0f)
+            {
+                player.Heal(player.StatusEffects.HealRate * player.MaxHealth * tickRate);
+                uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+            }
 
-        if (player.StatusEffects.HealRate > 0f) {
-            player.Heal((int)((player.StatusEffects.HealRate * tickRate) * player.MaxHealth));
-            uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
-        }
+            if (player.StatusEffects.DamageRate > 0f)
+            {
+                player.Damage(player.StatusEffects.DamageRate * player.MaxHealth * tickRate);
+                uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+            }
 
-        if (player.StatusEffects.DamageRate > 0f) {
-            player.Damage((int)((player.StatusEffects.DamageRate * tickRate) * player.MaxHealth));
-            uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
-        }
-
-        foreach (Enemy enemy in level.EnemyList) {
-            if (enemy.StatusEffects.HealRate > 0f)
-                enemy.Heal((int)(enemy.StatusEffects.HealRate * enemy.MaxHealth));
-            if (enemy.StatusEffects.DamageRate > 0f)
-                enemy.Damage((int)(enemy.StatusEffects.DamageRate * enemy.MaxHealth));
+            foreach (Enemy enemy in level.EnemyList)
+            {
+                if (enemy.StatusEffects.HealRate > 0f)
+                    enemy.Heal(enemy.StatusEffects.HealRate * enemy.MaxHealth * tickRate);
+                if (enemy.StatusEffects.DamageRate > 0f)
+                    enemy.Damage(enemy.StatusEffects.DamageRate * enemy.MaxHealth * tickRate);
+            }
+            yield return wait;
         }
     }
 
@@ -811,7 +816,7 @@ public class GameManager : Singleton<GameManager>
 
         entity.State = EntityState.Moving;
 
-        float adjustedMovespeed = Movespeed * entity.StatusEffects.MovementScale;
+        float adjustedMovespeed = Movespeed / entity.StatusEffects.MovementScale;
 
         Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
         StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
@@ -883,6 +888,9 @@ public class GameManager : Singleton<GameManager>
 
     void CastPlayerAbility(Entity entity, int index)
     {
+        if (entity.StatusEffects.Stunned || entity.StatusEffects.Silenced)
+            return;
+
         AbilityObject ability = entity.CastAbility(index);
         if (ability == null)
             return;
@@ -898,11 +906,11 @@ public class GameManager : Singleton<GameManager>
 
     void CastEnemyAbility(Entity entity, int index)
     {
-        AbilityObject ability = entity.CastAbility(index);
-        if (ability == null)
+        if (entity.StatusEffects.Stunned || entity.StatusEffects.Silenced)
             return;
 
-        if (entity.StatusEffects.Stunned || entity.StatusEffects.Silenced)
+        AbilityObject ability = entity.CastAbility(index);
+        if (ability == null)
             return;
 
         // Get the cells to highlight and display them.

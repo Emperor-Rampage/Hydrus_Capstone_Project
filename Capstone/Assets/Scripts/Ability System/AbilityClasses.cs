@@ -28,7 +28,7 @@ namespace AbilityClasses
         Root = 4,               // IMPLEMENTED.
         Silence = 5,            // IMPLEMENTED.
         Heal = 6,               // IMPLEMENTED.
-        Haste = 7,              // 
+        Haste = 7,              // IMPLEMENTED.
         DamReduct = 8,          // IMPLEMENTED.
         DoT = 9                 // IMPLEMENTED.
     }
@@ -47,7 +47,9 @@ namespace AbilityClasses
 
         [SerializeField]
         float duration;
-        public float Duration { get { return duration; } set { duration = value; } }
+        public float Duration { get { return duration; } private set { duration = value; } }
+
+        public float Remaining { get; set; }
 
         [SerializeField]
         float value;
@@ -67,13 +69,13 @@ namespace AbilityClasses
     {
 
         //To Do: RemoveEffect method, Tween/timer method
-//        private float cooldownScale = 1.0f;
+        //        private float cooldownScale = 1.0f;
         public float CooldownScale { get; private set; } = 1f;
-//        private float movementScale = 1.0f;
+        //        private float movementScale = 1.0f;
         public float MovementScale { get; private set; } = 1f;
-//        private float castTimeScale = 1.0f;
+        //        private float castTimeScale = 1.0f;
         public float CastTimeScale { get; private set; } = 1f;
-//        private float hasteScale = 1.0f;
+        //        private float hasteScale = 1.0f;
         public float HasteScale { get; private set; } = 1f;
         // private float damageScale = 1.0f;
         public float DamageScale { get; private set; } = 1f;
@@ -119,7 +121,8 @@ namespace AbilityClasses
 
         void StartTween(AbilityEffect eff)
         {
-            Tween.Value(eff.Duration, 0f, (value) => eff.Duration = value, eff.Duration, 0.0f, completeCallback: () => RemoveEffect(eff));
+            eff.Remaining = eff.Duration;
+            Tween.Value(eff.Duration, 0f, (value) => eff.Remaining = value, eff.Duration, 0.0f, completeCallback: () => RemoveEffect(eff));
         }
 
         //At the end of the ability effect Tween, remove the AbilityEffect from the list of current effects.
@@ -242,7 +245,7 @@ namespace AbilityClasses
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    HealRate += effect.Value;
+                                    HealRate += (effect.Value / effect.Duration);
                                 }
                             }
 
@@ -302,7 +305,7 @@ namespace AbilityClasses
                             {
                                 foreach (AbilityEffect effect in typeList)
                                 {
-                                    DamageRate += effect.Value;
+                                    DamageRate += (effect.Value / effect.Duration);
                                 }
                             }
                             break;

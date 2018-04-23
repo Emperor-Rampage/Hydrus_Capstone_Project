@@ -7,18 +7,20 @@ using System.Collections;
 using EntityClasses;
 using MapClasses;
 
-public class EntityTests {
+public class EntityTests
+{
 
-	[Test]
-	public void Entity_Constructor_Clone() {
+    [Test]
+    public void Entity_Constructor_Clone()
+    {
         // Use the Assert class to test conditions.
         Entity entity1 = new Entity { Index = 1, Name = "Test entity 1" };
 
         Entity entity2 = new Entity(entity1);
 
         Assert.AreEqual(entity1.Name, entity2.Name);
-	}
-    
+    }
+
     [Test]
     public void Entity_TurnLeft()
     {
@@ -107,23 +109,23 @@ public class EntityTests {
     [Test]
     public void Entity_Heal()
     {
-        int startHealth = 50;
-        int healAmount = 10;
-        int expectedHealth = 60;
+        float startHealth = 50;
+        float healAmount = 10;
+        float expectedHealth = 60;
 
-        Entity entity1 = new Entity { MaxHealth = 100, CurrentHealth = startHealth };
+        Entity entity1 = new Entity { MaxHealth = 100f, CurrentHealth = startHealth };
         entity1.Heal(healAmount);
         Assert.AreEqual(expectedHealth, entity1.CurrentHealth);
     }
-    
+
     [Test]
     public void Entity_Damage()
     {
-        int startHealth = 50;
-        int damageAmount = 10;
-        int expectedHealth = 40;
+        float startHealth = 50f;
+        float damageAmount = 10f;
+        float expectedHealth = 40f;
 
-        Entity entity1 = new Entity { MaxHealth = 100, CurrentHealth = startHealth };
+        Entity entity1 = new Entity { MaxHealth = 100f, CurrentHealth = startHealth };
         entity1.Damage(damageAmount);
         Assert.AreEqual(expectedHealth, entity1.CurrentHealth);
     }

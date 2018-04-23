@@ -275,15 +275,15 @@ public class UIManager : MonoBehaviour
     {
         if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
         {
-            effectText.text = effect.Effect + " - " + effect.Duration;
+            effectText.text = effect.Effect + " - " + effect.Remaining.ToString("0.0");
         }
         else if (effect.Effect == AbilityStatusEff.DoT)
         {
-            effectText.text = effect.Effect + " " + effect.Value.ToString("0.0") + "/sec - " + effect.Duration.ToString("0.0");
+            effectText.text = effect.Effect + " " + (effect.Value * 100f / effect.Duration).ToString("0.0") + "%/sec - " + effect.Remaining.ToString("0.0");
         }
         else
         {
-            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Duration.ToString("0.0");
+            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Remaining.ToString("0.0");
         }
     }
 
