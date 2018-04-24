@@ -279,6 +279,10 @@ public class UIManager : MonoBehaviour
         }
         else if (effect.Effect == AbilityStatusEff.DoT)
         {
+            effectText.text = effect.Effect + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Remaining.ToString("0.0");
+        }
+        else if (effect.Effect == AbilityStatusEff.Heal)
+        {
             effectText.text = effect.Effect + " " + (effect.Value * 100f / effect.Duration).ToString("0.0") + "%/sec - " + effect.Remaining.ToString("0.0");
         }
         else

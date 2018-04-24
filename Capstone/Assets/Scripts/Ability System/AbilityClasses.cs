@@ -173,6 +173,7 @@ namespace AbilityClasses
                                     CastTimeScale *= (1f - effect.Value);
                                 }
                             }
+                            CastTimeScale = Mathf.Clamp(CastTimeScale, 0.01f, 1f);
 
                             break;
                         }
@@ -187,6 +188,7 @@ namespace AbilityClasses
                                     CooldownScale *= (1f - effect.Value);
                                 }
                             }
+                            CooldownScale = Mathf.Clamp(CooldownScale, 0.01f, 1f);
 
                             break;
                         }
@@ -212,6 +214,7 @@ namespace AbilityClasses
                                     MovementScale *= (1f - effect.Value);
                                 }
                             }
+                            MovementScale = Mathf.Clamp(MovementScale, 0.01f, 1f);
 
                             break;
                         }
@@ -248,6 +251,7 @@ namespace AbilityClasses
                                     HealRate += (effect.Value / effect.Duration);
                                 }
                             }
+                            HealRate = Mathf.Clamp(HealRate, 0f, 1f);
 
                             break;
                         }
@@ -262,6 +266,7 @@ namespace AbilityClasses
                                     HasteScale *= (1f + effect.Value);
                                 }
                             }
+                            HasteScale = Mathf.Clamp(HasteScale, 0.01f, 1f);
 
                             break;
                         }
@@ -276,6 +281,7 @@ namespace AbilityClasses
                                     DamageScale *= (1f - effect.Value);
                                 }
                             }
+                            DamageScale = Mathf.Clamp(DamageScale, 0f, 1f);
                             /*
                             List<AbilityEffect> index = EffectLibrary[AbilityStatusEff.DamReduct];
 
@@ -308,6 +314,7 @@ namespace AbilityClasses
                                     DamageRate += (effect.Value / effect.Duration);
                                 }
                             }
+                            CastTimeScale = Mathf.Clamp(CastTimeScale, 0f, 100f);
                             break;
                         }
                 }

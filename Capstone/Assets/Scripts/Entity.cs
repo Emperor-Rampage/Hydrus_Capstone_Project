@@ -115,7 +115,7 @@ namespace EntityClasses
             // Call method in GameManager instance to perform the ability actions.
 
             GameManager.Instance.PerformAbility(this, ability);
-            float adjustedCooldown = ability.Cooldown * StatusEffects.CooldownScale;
+            float adjustedCooldown = ability.Cooldown / StatusEffects.CooldownScale;
             Cooldowns[ability] = adjustedCooldown;
             Tween.Value(adjustedCooldown, 0f, (val) => Cooldowns[ability] = val, adjustedCooldown, 0f);
             RemoveIndicators();

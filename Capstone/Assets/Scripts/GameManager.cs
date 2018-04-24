@@ -736,7 +736,7 @@ public class GameManager : Singleton<GameManager>
 
             if (player.StatusEffects.DamageRate > 0f)
             {
-                player.Damage(player.StatusEffects.DamageRate * player.MaxHealth * tickRate);
+                player.Damage(player.StatusEffects.DamageRate * tickRate);
                 uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
             }
 
@@ -745,7 +745,7 @@ public class GameManager : Singleton<GameManager>
                 if (enemy.StatusEffects.HealRate > 0f)
                     enemy.Heal(enemy.StatusEffects.HealRate * enemy.MaxHealth * tickRate);
                 if (enemy.StatusEffects.DamageRate > 0f)
-                    enemy.Damage(enemy.StatusEffects.DamageRate * enemy.MaxHealth * tickRate);
+                    enemy.Damage(enemy.StatusEffects.DamageRate * tickRate);
             }
             yield return wait;
         }
