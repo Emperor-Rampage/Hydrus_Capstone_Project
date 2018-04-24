@@ -9,6 +9,7 @@ using AudioClasses;
 using AIClasses;
 using AbilityClasses;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 
 // The main game manager. Is a singleton, and contains the general settings as well as references to other systems.
@@ -221,7 +222,7 @@ public class GameManager : Singleton<GameManager>
             //       Or, don't.
 
             //            level.Player.Abilities.Add(testAbility);
-            UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
+            // UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
             // Creates debug instances for the cells and connections.
             // TODO: Create procedural area generation.
             //          Possibly use prefab "templates" or cell chunks, remove walls where there are connections between adjacent cells.
@@ -272,6 +273,7 @@ public class GameManager : Singleton<GameManager>
 
             // Initialize the UI for the level.
             uiManager.Initialize_Level();
+            uiManager.SetUpAbilityIcons(level.Player);
             // Display the area text.
             uiManager.DisplayAreaText(level.name);
             // Fade in with the area name.
@@ -409,7 +411,7 @@ public class GameManager : Singleton<GameManager>
                 //     }
                 // }
 
-                Debug.Log("Number of connections is " + numConnections + " with " + cornerCells.Count + " cells.");
+                // Debug.Log("Number of connections is " + numConnections + " with " + cornerCells.Count + " cells.");
                 // Do stuff based on how many connections.
                 if (numConnections == 0)
                 {
@@ -541,14 +543,16 @@ public class GameManager : Singleton<GameManager>
     // General update HUD method.
     void UpdateHUD()
     {
+        Player player = level.Player;
         // If standing at an exit, give option to go through exit.
         ExitPrompt(level.CanExit);
-        uiManager.UpdatePlayerCores(level.Player.Cores);
-        uiManager.UpdateEffectList(level.Player.StatusEffects);
+        uiManager.UpdatePlayerCores(player.Cores);
+        uiManager.UpdateEffectList(player.StatusEffects);
+        uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
 
         //        Direction playerDirection = level.Player.ToAbsoluteDirection(Direction.Up);
-        bool forwardConnection = level.HasConnection(level.Player.Cell, level.Player.Facing);
-        Cell forwardCell = level.GetNeighbor(level.Player.Cell, level.Player.Facing);
+        bool forwardConnection = level.HasConnection(player.Cell, player.Facing);
+        Cell forwardCell = level.GetNeighbor(player.Cell, player.Facing);
         if (forwardConnection && forwardCell != null)
         {
             Enemy enemy = (Enemy)forwardCell.Occupant;
@@ -726,7 +730,7 @@ public class GameManager : Singleton<GameManager>
         Player player = level.Player;
         while (inGame)
         {
-            Debug.Log("Player damage rate is " + player.StatusEffects.DamageRate);
+            // Debug.Log("Player damage rate is " + player.StatusEffects.DamageRate);
 
             if (player.StatusEffects.HealRate > 0f)
             {

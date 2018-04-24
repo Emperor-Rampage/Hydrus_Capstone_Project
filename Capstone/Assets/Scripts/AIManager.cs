@@ -211,7 +211,7 @@ namespace AIClasses
                             return bestAction;
 
                         Direction targetDirection = directions[UnityEngine.Random.Range(0, directions.Count)];
-                        //                        Debug.Log("-- New target direction is " + targetDirection);
+                        // Debug.Log("-- New target direction is " + targetDirection);
                         enemy.Target = targetDirection;
                     }
                 }
@@ -243,14 +243,14 @@ namespace AIClasses
                         best = v;
                 }
 
-                //                Debug.Log("Heap returned " + best.ActionIndex + " with value " + best.Value);
-                //                Debug.Log("Corresponding action is " + actionList[best.ActionIndex].Movement);
+                // Debug.Log("Heap returned " + best.ActionIndex + " with value " + best.Value);
+                // Debug.Log("Corresponding action is " + actionList[best.ActionIndex].Movement);
 
                 bestAction = actionList[best.ActionIndex];
 
                 //                List<float> values;
             }
-            //            Debug.Log("-- Best action found for " + enemy.Name + " was " + bestAction.Movement.ToString() + " .. target was " + enemy.Target);
+            // Debug.Log("-- Best action found for " + enemy.Name + " was " + bestAction.Movement.ToString() + " .. target was " + enemy.Target);
             return bestAction;
         }
 
@@ -282,7 +282,7 @@ namespace AIClasses
                 //       To be added: Player's state, cast time, cooldown, effects, type.
 
                 // If it's on cooldown, can't use the ability.
-                if (enemy.Cooldowns.ContainsKey(ability) && enemy.Cooldowns[ability] > 0f)
+                if (enemy.CooldownsRemaining.ContainsKey(ability) && enemy.CooldownsRemaining[ability] > 0f)
                     return value;
 
                 if (level != null)
@@ -318,7 +318,7 @@ namespace AIClasses
                 {
                     Debug.LogWarning("WARNING: Level is null in AIManager.");
                 }
-                Debug.Log("Calculated " + action.AbilityIndex + " as " + value);
+                // Debug.Log("Calculated " + action.AbilityIndex + " as " + value);
             }
             else if (action.Movement != Movement.Null)
             {

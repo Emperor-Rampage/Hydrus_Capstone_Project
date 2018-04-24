@@ -42,6 +42,7 @@ namespace EntityClasses
         public float MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
 
         public float CurrentHealth { get; set; }
+        public int CurrentAbility { get; set; }
 
         public float CastProgress { get; set; }
         public float CurrentCastTime { get; set; }
@@ -67,6 +68,7 @@ namespace EntityClasses
 
         //        Dictionary<AbilityObject, float> cooldowns = new Dictionary<AbilityObject, float>();
         public Dictionary<AbilityObject, float> Cooldowns { get; private set; } = new Dictionary<AbilityObject, float>();
+        public Dictionary<AbilityObject, float> CooldownsRemaining { get; private set; } = new Dictionary<AbilityObject, float>();
 
         public Entity() { Abilities = new List<AbilityObject>(); }
         public Entity(Entity entity)
@@ -96,11 +98,11 @@ namespace EntityClasses
                 return null;
             }
 
-            if (Cooldowns.ContainsKey(ability) && Cooldowns[ability] > 0)
+            if (CooldownsRemaining.ContainsKey(ability) && CooldownsRemaining[ability] > 0)
                 return null;
 
             Debug.Log("Casting abilty " + ability.Name + " with cast time of " + ability.CastTime * StatusEffects.CastTimeScale + " at " + Cell.X + ", " + Cell.Z);
-
+            CurrentAbility = index;
             coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
             State = EntityState.Casting;
             return ability;
@@ -112,13 +114,16 @@ namespace EntityClasses
             CurrentCastTime = ability.CastTime / (StatusEffects.CastTimeScale * StatusEffects.HasteScale);
             Tween.Value(0f, 1f, ((prog) => CastProgress = prog), CurrentCastTime, 0f, completeCallback: () => CastProgress = 0f);
             yield return new WaitForSeconds(CurrentCastTime);
-            // Call method in GameManager instance to perform the ability actions.
 
+            // Call method in GameManager instance to perform the ability actions.
             GameManager.Instance.PerformAbility(this, ability);
             float adjustedCooldown = ability.Cooldown / StatusEffects.CooldownScale;
             Cooldowns[ability] = adjustedCooldown;
-            Tween.Value(adjustedCooldown, 0f, (val) => Cooldowns[ability] = val, adjustedCooldown, 0f);
+            CooldownsRemaining[ability] = adjustedCooldown;
+            Tween.Value(adjustedCooldown, 0f, (val) => CooldownsRemaining[ability] = val, adjustedCooldown, 0f);
             RemoveIndicators();
+            CurrentAbility = -1;
+            CastProgress = 0f;
             State = EntityState.Idle;
         }
 

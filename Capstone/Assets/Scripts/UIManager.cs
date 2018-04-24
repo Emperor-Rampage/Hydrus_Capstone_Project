@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using AbilityClasses;
 using EntityClasses;
 using System;
+using System.Linq;
 
 [RequireComponent(typeof(Canvas))]
 public class UIManager : MonoBehaviour
@@ -57,6 +58,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image playerHealthMissing;
     [SerializeField] Image playerCastBar;
 
+    [SerializeField] GameObject playerAbilityPanel;
+    [SerializeField] GameObject playerAbilityIconPrefab;
+
     [SerializeField] GameObject enemyInfoPanel;
     [SerializeField] TMP_Text enemyNameText;
     [SerializeField] Image enemyHealthBar;
@@ -80,6 +84,8 @@ public class UIManager : MonoBehaviour
     [HideInInspector] public Resolution[] resolutions;
     List<TMP_Text> effectTextList = new List<TMP_Text>();
 
+    List<GameObject> playerAbilityIcons = new List<GameObject>();
+
 
     // TODO: Set up UI to run animations during pause (timeScale = 0)
     //       using https://docs.unity3d.com/ScriptReference/AnimatorUpdateMode.UnscaledTime.html
@@ -102,6 +108,7 @@ public class UIManager : MonoBehaviour
         }
 
         resolutionDropdown.RefreshShownValue();
+        AllButtons(menuPanel, true);
 
         GoToMenu(0);
     }
@@ -109,18 +116,43 @@ public class UIManager : MonoBehaviour
     public void Initialize_Level()
     {
         //        effectTextList = new List<TMP_Text>();
+        AllButtons(hudPanel, true);
         ShowHUD(0);
+    }
+
+    void AllButtons(GameObject parent, bool interactable = false) {
+        Button[] buttons = parent.transform.GetComponentsInChildren<Button>();
+        foreach (Button button in buttons) {
+            button.interactable = interactable;
+        }
     }
 
     public void SetUpClassButtons(List<PlayerClass> playerClasses)
     {
-        Debug.Log("Adding " + playerClasses.Count + " class buttons.");
+        // Debug.Log("Adding " + playerClasses.Count + " class buttons.");
         foreach (PlayerClass playerClass in playerClasses)
         {
             GameObject buttonObject = GameObject.Instantiate(classButtonPrefab, classMenu.transform, false);
             buttonObject.GetComponentInChildren<TMP_Text>().text = playerClass.Name;
             buttonObject.GetComponent<Button>().onClick.AddListener(() => GameManager.Instance.SelectClass(playerClass));
         }
+    }
+
+    public void SetUpAbilityIcons(Player player) {
+        // First, delete all children of the panel.
+        foreach (Transform child in playerAbilityPanel.transform) {
+            Destroy(child);
+        }
+        foreach(AbilityObject ability in player.Abilities) {
+            GameObject abilityIconObject = GameObject.Instantiate(playerAbilityIconPrefab, playerAbilityPanel.transform);
+            foreach (Transform child in abilityIconObject.transform) {
+                if (child.name == "Icon") {
+                    child.GetComponent<Image>().sprite = ability.Icon;
+                }
+            }
+            playerAbilityIcons.Add(abilityIconObject);
+        }
+        UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
     }
 
     public void SelectClass(PlayerClass selected)
@@ -136,10 +168,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     public void SetConfirmButton(bool active)
     {
-        Debug.Log("Setting confirm button to " + active);
+        // Debug.Log("Setting confirm button to " + active);
         confirmButton.enabled = active;
     }
     public void Play()
@@ -147,6 +178,7 @@ public class UIManager : MonoBehaviour
         if (manager == null)
             return;
 
+        AllButtons(menuPanel);
         manager.Map.SetCurrentLevel(0);
         manager.LoadLevel(defaultFadeTime);
     }
@@ -156,6 +188,7 @@ public class UIManager : MonoBehaviour
         if (!Application.isEditor)
         {
             FadeOut(0.5f);
+            AllButtons(menuPanel);
             Application.Quit();
         }
     }
@@ -307,6 +340,32 @@ public class UIManager : MonoBehaviour
     {
         Tween.Finish(playerCastBar.GetInstanceID());
         Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
+    }
+
+    public void UpdatePlayerAbilityHUD(List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f) {
+        for (int i = 0; i < cooldowns.Count; i++) {
+            SetPlayerAbilityIcon(i, cooldowns[i], cooldownsRemaining[i], (currentCast == i), castProgress);
+        }
+    }
+
+    void SetPlayerAbilityIcon(int index, float cooldown, float cooldownRemaining, bool casting = false, float castProgress = 0f) {
+        GameObject abilityIconObject = playerAbilityIcons[index];
+            foreach (Transform child in abilityIconObject.transform) {
+                if (child.name == "CooldownTimerImage") {
+                    child.GetComponent<Image>().fillAmount = cooldownRemaining / cooldown;
+                } else if (child.name == "CooldownTimerText") {
+                    if (cooldownRemaining <= 0f)
+                        child.GetComponent<TMP_Text>().text = "";
+                    else
+                        child.GetComponent<TMP_Text>().text = cooldownRemaining.ToString("0.0");
+                } else if (child.name == "CastTimerImage") {
+                    if (casting) {
+                        child.GetComponent<Image>().fillAmount = castProgress;
+                    } else {
+                        child.GetComponent<Image>().fillAmount = 0f;
+                    }
+                }
+            }
     }
 
     public void UpdateEnemyInfo(bool adjacentEnemy = false, string name = "", float healthPercentage = 0f, float castProgress = 0f, float castTime = 0f)
