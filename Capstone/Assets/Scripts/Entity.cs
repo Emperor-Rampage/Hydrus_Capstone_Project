@@ -101,7 +101,7 @@ namespace EntityClasses
             if (CooldownsRemaining.ContainsKey(ability) && CooldownsRemaining[ability] > 0)
                 return null;
 
-            Debug.Log("Casting abilty " + ability.Name + " with cast time of " + ability.CastTime * StatusEffects.CastTimeScale + " at " + Cell.X + ", " + Cell.Z);
+            Debug.Log("Casting abilty " + ability.Name + " with cast time of " + GetAdjustedCastTime(ability.CastTime) + " at " + Cell.X + ", " + Cell.Z);
             CurrentAbility = index;
             coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
             State = EntityState.Casting;
@@ -111,13 +111,15 @@ namespace EntityClasses
         IEnumerator CastAbility_Coroutine(AbilityObject ability)
         {
             // Wait the cast time, update cast time progress.
-            CurrentCastTime = ability.CastTime / (StatusEffects.CastTimeScale * StatusEffects.HasteScale);
+            // CurrentCastTime = ability.CastTime / (StatusEffects.CastTimeScale * StatusEffects.HasteScale);
+            CurrentCastTime = GetAdjustedCastTime(ability.CastTime);
             Tween.Value(0f, 1f, ((prog) => CastProgress = prog), CurrentCastTime, 0f, completeCallback: () => CastProgress = 0f);
             yield return new WaitForSeconds(CurrentCastTime);
 
             // Call method in GameManager instance to perform the ability actions.
             GameManager.Instance.PerformAbility(this, ability);
-            float adjustedCooldown = ability.Cooldown / StatusEffects.CooldownScale;
+            // float adjustedCooldown = ability.Cooldown / StatusEffects.CooldownScale;
+            float adjustedCooldown = GetAdjustedCooldown(ability.Cooldown);
             Cooldowns[ability] = adjustedCooldown;
             CooldownsRemaining[ability] = adjustedCooldown;
             Tween.Value(adjustedCooldown, 0f, (val) => CooldownsRemaining[ability] = val, adjustedCooldown, 0f);
@@ -215,6 +217,24 @@ namespace EntityClasses
                 newDir -= 4;
 
             return (Direction)newDir;
+        }
+
+        public float GetAdjustedCastTime(float castTime) {
+            float adjusted = castTime * (2f - StatusEffects.CastTimeScale) * (2f - StatusEffects.HasteScale);
+            Debug.Log("Adjusted cast time calculated as " + adjusted + " with base " + castTime + ", cast slow " + StatusEffects.CastTimeScale + ", haste " + StatusEffects.HasteScale);
+            return adjusted;
+        }
+
+        public float GetAdjustedCooldown(float cooldown) {
+            return cooldown * (2f - StatusEffects.CooldownScale);
+        }
+
+        public float GetAdjustedMoveSpeed(float moveSpeed) {
+            return moveSpeed * (2f - StatusEffects.MovementScale);
+        }
+
+        public float GetAdjustedDamageReduction(float damageReduction) {
+            return damageReduction * (2f - StatusEffects.DamageRate);
         }
 
         // Returns true if full health, false if not.

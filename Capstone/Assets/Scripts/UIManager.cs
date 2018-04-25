@@ -140,8 +140,10 @@ public class UIManager : MonoBehaviour
 
     public void SetUpAbilityIcons(Player player) {
         // First, delete all children of the panel.
+//        playerAbilityIcons.Clear();
+        playerAbilityIcons = new List<GameObject>();
         foreach (Transform child in playerAbilityPanel.transform) {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
         foreach(AbilityObject ability in player.Abilities) {
             GameObject abilityIconObject = GameObject.Instantiate(playerAbilityIconPrefab, playerAbilityPanel.transform);
@@ -344,7 +346,10 @@ public class UIManager : MonoBehaviour
 
     public void UpdatePlayerAbilityHUD(List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f) {
         for (int i = 0; i < cooldowns.Count; i++) {
-            SetPlayerAbilityIcon(i, cooldowns[i], cooldownsRemaining[i], (currentCast == i), castProgress);
+            bool casting = (currentCast == i);
+            if (casting)
+                Debug.Log("Casting " + i);
+            SetPlayerAbilityIcon(i, cooldowns[i], cooldownsRemaining[i], casting, castProgress);
         }
     }
 

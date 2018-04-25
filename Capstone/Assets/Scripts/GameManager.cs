@@ -218,6 +218,7 @@ public class GameManager : Singleton<GameManager>
             level.InitializeLevel(player);
             level.Player.Class = selectedClass;
             level.Player.SetupBaseAbilities();
+            level.Player.CurrentAbility = -1;
             // TODO: Set up event handler for player taking damage. Should be a callback to the GameManager that calls the correct ui updates.
             //       Or, don't.
 
@@ -820,7 +821,8 @@ public class GameManager : Singleton<GameManager>
 
         entity.State = EntityState.Moving;
 
-        float adjustedMovespeed = Movespeed / entity.StatusEffects.MovementScale;
+        // float adjustedMovespeed = Movespeed / entity.StatusEffects.MovementScale;
+        float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
         StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
