@@ -7,8 +7,9 @@ public class ButtonPress : MonoBehaviour {
     public ShakeTransform st;
     public CameraShakeObject data;
 	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+    {
+        st = Camera.main.GetComponentInParent<ShakeTransform>();
 	}
 	
 	// Update is called once per frame

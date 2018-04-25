@@ -95,22 +95,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1507410095117158
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4273174986337656}
-  - component: {fileID: 114002265930072064}
-  m_Layer: 0
-  m_Name: CameraShakeTransform
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1519681143559988
 GameObject:
   m_ObjectHideFlags: 1
@@ -145,6 +129,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1740365299357504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4714811374465166}
+  - component: {fileID: 114805781319954500}
+  m_Layer: 0
+  m_Name: CameraShakeTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1790381132296086
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,7 +153,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4453546781003118}
-  - component: {fileID: 95747206047594928}
+  - component: {fileID: 95432161447691720}
   m_Layer: 0
   m_Name: Marksman Camera
   m_TagString: Untagged
@@ -186,7 +186,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4273174986337656}
+  m_Father: {fileID: 4714811374465166}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4224863400136310
@@ -201,20 +201,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4929406626674996}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4273174986337656
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1507410095117158}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4087944478440756}
-  m_Father: {fileID: 4453546781003118}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4297462340255790
 Transform:
@@ -254,7 +240,7 @@ Transform:
   m_Children:
   - {fileID: 4929406626674996}
   - {fileID: 4507861736786626}
-  - {fileID: 4273174986337656}
+  - {fileID: 4714811374465166}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -265,7 +251,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1506079094505676}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.193, y: -0.15207, z: 0.30900002}
+  m_LocalPosition: {x: 0.193, y: -0.15207, z: 0.309}
   m_LocalScale: {x: 1.811167, y: 1.8111669, z: 1.8111678}
   m_Children:
   - {fileID: 4843613073231438}
@@ -274,6 +260,20 @@ Transform:
   m_Father: {fileID: 4453546781003118}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!4 &4714811374465166
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1740365299357504}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4087944478440756}
+  m_Father: {fileID: 4453546781003118}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4797943113709914
 Transform:
   m_ObjectHideFlags: 1
@@ -307,7 +307,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1956347214270700}
   m_LocalRotation: {x: -0.44052708, y: -0, z: -0, w: 0.89773935}
-  m_LocalPosition: {x: -0.233, y: -0.21, z: 0.26099968}
+  m_LocalPosition: {x: -0.233, y: -0.21, z: 0.2609997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4224863400136310}
@@ -563,7 +563,7 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1051873646174608}
   m_Enabled: 1
---- !u!95 &95747206047594928
+--- !u!95 &95432161447691720
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
@@ -580,12 +580,12 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114002265930072064
+--- !u!114 &114805781319954500
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1507410095117158}
+  m_GameObject: {fileID: 1740365299357504}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cce83b38e0773914dbdaf225b4e9ef4f, type: 3}
