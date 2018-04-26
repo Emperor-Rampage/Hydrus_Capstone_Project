@@ -338,7 +338,7 @@ namespace MapClasses
             // Create the player.
             if (player == null)
             {
-                Player = new Player { Index = -1, Name = "Player", Facing = Direction.Up, State = EntityState.Idle, MaxHealth = 100, CurrentHealth = 100 };
+                Player = new Player { Index = -1, IsPlayer = true, Name = "Player", Facing = Direction.Up, State = EntityState.Idle, MaxHealth = 100, CurrentHealth = 100 };
             }
             Player.Facing = Direction.Up;
             Player.State = EntityState.Idle;
@@ -374,7 +374,7 @@ namespace MapClasses
                 Debug.Log("-- Entity is idle. Destroying everything.");
                 // If the entity is present in the enemy list, it will be removed.
                 GameObject.Destroy(entity.Instance);
-                if (entity.GetType() == typeof(Enemy))
+                if (!entity.IsPlayer)
                 {
                     EnemyList.Remove((Enemy)entity);
                 }
@@ -629,16 +629,16 @@ namespace MapClasses
                 if (entity.Cell != null)
                     entity.Cell.Occupant = null;
 
-                if (entity.GetType() == typeof(Player) && IsExit(cell))
+                if (entity.IsPlayer && IsExit(cell))
                 {
                     CanExit = true;
                 }
-                else if (entity.GetType() == typeof(Player) && !IsExit(cell))
+                else if (entity.IsPlayer && !IsExit(cell))
                 {
                     CanExit = false;
                 }
 
-                if (entity.GetType() == typeof(Enemy))
+                if (!entity.IsPlayer)
                 {
                     //                    Debug.Log("Entity is an enemy, setting target to null.");
                     ((Enemy)entity).Target = Direction.Null;

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Rnrmy 2
+  m_EditorClassIdentifier: Assembly-CSharp:EntityClasses:EnemyObject
+  enemy:
+    instance: {fileID: 1762791434266384, guid: cdfbf7badbab0c140bddb2880d14e8a6, type: 2}
+    name: tutu
+    cores: 100
+    maxHealth: 100
+    abilities:
+    - {fileID: 11400000, guid: 18722e11649a12a459f2e85fa1def5d1, type: 2}
+    - {fileID: 11400000, guid: 6023d5c8414fcad448d2ab572a0b4d94, type: 2}
+    - {fileID: 11400000, guid: 88553ee344cff9948aab44e6c79173ca, type: 2}
+    StatusEffects:
+      CurrentEffects: []

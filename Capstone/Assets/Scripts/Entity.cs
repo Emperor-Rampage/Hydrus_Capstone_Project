@@ -4,6 +4,7 @@ using UnityEngine;
 using MapClasses;
 using AbilityClasses;
 using Pixelplacement;
+using Pixelplacement.TweenSystem;
 
 namespace EntityClasses
 {
@@ -29,6 +30,8 @@ namespace EntityClasses
     {
         public int Index { get; set; }
 
+        public bool IsPlayer { get; set; } = false;
+
         [SerializeField] GameObject instance;
         public GameObject Instance { get { return instance; } set { instance = value; } }
 
@@ -53,22 +56,18 @@ namespace EntityClasses
 
         public EntityState State { get; set; }
 
+        public EffectDictionary StatusEffects = new EffectDictionary();
         [SerializeField] List<AbilityObject> abilities;
         public List<AbilityObject> Abilities { get { return abilities; } private set { abilities = value; } }
 
-        public List<Indicator> Indicators { get; set; } = new List<Indicator>();
-
-        // Ability Variables
-        // TODO: Create custom data structure for current effects.
-        //       Should contain a dictionary of lists of effects (to support stacking effects), should use local "cooldown scale" (for example) variable, then multiply the value by the "value" field of each effect. For multiplicative stacking.
-
-        public EffectDictionary StatusEffects = new EffectDictionary();
-
-        List<Coroutine> coroutines = new List<Coroutine>();
-
-        //        Dictionary<AbilityObject, float> cooldowns = new Dictionary<AbilityObject, float>();
         public Dictionary<AbilityObject, float> Cooldowns { get; private set; } = new Dictionary<AbilityObject, float>();
         public Dictionary<AbilityObject, float> CooldownsRemaining { get; private set; } = new Dictionary<AbilityObject, float>();
+        public List<Indicator> Indicators { get; set; } = new List<Indicator>();
+
+        TweenBase currentAbilityTween;
+        Coroutine currentAbilityCoroutine;
+        List<Coroutine> coroutines = new List<Coroutine>();
+
 
         public Entity() { Abilities = new List<AbilityObject>(); }
         public Entity(Entity entity)
@@ -103,7 +102,8 @@ namespace EntityClasses
 
             Debug.Log("Casting abilty " + ability.Name + " with cast time of " + GetAdjustedCastTime(ability.CastTime) + " at " + Cell.X + ", " + Cell.Z);
             CurrentAbility = index;
-            coroutines.Add(GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability)));
+            currentAbilityCoroutine = GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability));
+            coroutines.Add(currentAbilityCoroutine);
             State = EntityState.Casting;
             return ability;
         }
@@ -111,14 +111,16 @@ namespace EntityClasses
         IEnumerator CastAbility_Coroutine(AbilityObject ability)
         {
             // Wait the cast time, update cast time progress.
-            // CurrentCastTime = ability.CastTime / (StatusEffects.CastTimeScale * StatusEffects.HasteScale);
             CurrentCastTime = GetAdjustedCastTime(ability.CastTime);
-            Tween.Value(0f, 1f, ((prog) => CastProgress = prog), CurrentCastTime, 0f, completeCallback: () => CastProgress = 0f);
+            currentAbilityTween = Tween.Value(0f, 1f, ((prog) => CastProgress = prog), CurrentCastTime, 0f, completeCallback: () => CastProgress = 0f);
             yield return new WaitForSeconds(CurrentCastTime);
 
             // Call method in GameManager instance to perform the ability actions.
             GameManager.Instance.PerformAbility(this, ability);
-            // float adjustedCooldown = ability.Cooldown / StatusEffects.CooldownScale;
+            StartCooldown(ability);
+        }
+
+        void StartCooldown(AbilityObject ability) {
             float adjustedCooldown = GetAdjustedCooldown(ability.Cooldown);
             Cooldowns[ability] = adjustedCooldown;
             CooldownsRemaining[ability] = adjustedCooldown;
@@ -283,20 +285,40 @@ namespace EntityClasses
         }
 
         // Returns true if alive, false if dead.
-        public bool Damage(float damage)
+        public bool Damage(float damage, bool interrupt = false)
         {
             Debug.Log(Name + " currently has " + CurrentHealth + " health. Taking " + damage + " damage.");
+
+            // Cancel any current casting.
+            if (CurrentAbility != -1 && interrupt) {
+                Debug.Log("Player damaged: Current ability is " + CurrentAbility + ", interrupt is " + interrupt);
+                if (currentAbilityTween != null) {
+                    Debug.Log("-- Tween is not null.");
+                    currentAbilityTween.Cancel();
+                }
+                if (currentAbilityCoroutine != null) {
+                    Debug.Log("-- Coroutine is not null.");
+                    GameManager.Instance.StopCoroutine(currentAbilityCoroutine);
+                    coroutines.Remove(currentAbilityCoroutine);
+                }
+
+                if (IsPlayer)
+                    GameManager.Instance.CancelPlayerAbility();
+
+                StartCooldown(abilities[CurrentAbility]);
+            }
+
             float adjustedDamage = damage * StatusEffects.DamageScale;
             if (CurrentHealth > adjustedDamage)
             {
                 CurrentHealth -= adjustedDamage;
                 Debug.Log(Name + " now has " + CurrentHealth);
                 return true;
+            } else {
+                CurrentHealth = 0;
+                Kill();
+                return false;
             }
-
-            CurrentHealth = 0;
-            Kill();
-            return false;
         }
 
         public void Kill()

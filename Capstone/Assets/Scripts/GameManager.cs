@@ -81,6 +81,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] float turnspeed;
     [SerializeField] float tickRate;
     [SerializeField] int enemyAggroDistance;
+    [SerializeField] float interruptPercentage;
 
     // Whether or not we're in-game.
     bool inGame;
@@ -675,7 +676,7 @@ public class GameManager : Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.O))
             {
-                bool alive = level.Player.Damage(25);
+                bool alive = level.Player.Damage(25, (level.Player.CastProgress >= interruptPercentage));
                 PerformEntityDeathCheck(level.Player, alive);
 
                 uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
@@ -921,6 +922,10 @@ public class GameManager : Singleton<GameManager>
         SetPlayerCastAnimation("Cast", level.Player.Abilities[index].CastTime);
     }
 
+    public void CancelPlayerAbility() {
+        uiManager.CancelPlayerCast();
+    }
+
     void CastEnemyAbility(Entity entity, int index)
     {
         if (entity.StatusEffects.Stunned || entity.StatusEffects.Silenced)
@@ -984,12 +989,10 @@ public class GameManager : Singleton<GameManager>
             AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, effect.Duration, effect.Value);
             target.StatusEffects.AddEffect(effectInstance);
         }
+        bool alive = target.Damage(ability.Damage, (target.CastProgress >= interruptPercentage));
 
-        bool alive = target.Damage(ability.Damage);
-        if (target.GetType() == typeof(Player))
-        {
+        if (target.IsPlayer)
             uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
-        }
 
         PerformEntityDeathCheck(target, alive);
     }
@@ -1003,7 +1006,8 @@ public class GameManager : Singleton<GameManager>
         }
 
         bool alive = target.Damage(0);
-        if (target.GetType() == typeof(Player))
+        // if (target.GetType() == typeof(Player))
+        if (target.IsPlayer)
         {
             uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
         }
@@ -1036,11 +1040,11 @@ public class GameManager : Singleton<GameManager>
 
     public void PerformEntityDeathCheck(Entity entity, bool alive)
     {
-        if (!alive && entity.GetType() == typeof(Player))
+        if (!alive && entity.IsPlayer)
         {
             // Do player death stuff.
         }
-        else if (!alive && entity.GetType() == typeof(Enemy))
+        else if (!alive && !entity.IsPlayer)
         {
             Debug.Log("Enemy is dead!");
             level.Player.Cores += entity.Cores;

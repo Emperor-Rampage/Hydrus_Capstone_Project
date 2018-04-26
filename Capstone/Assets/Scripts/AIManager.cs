@@ -125,7 +125,7 @@ namespace AIClasses
                             // Debug.Log("Distance between " + neighbor.X + ", " + neighbor.Z + " and " + level.Player.Cell.X + ", " + level.Player.Cell.Z + " is " + neighbor.GetDistance(level.Player.Cell) + " for direction " + direction);
                             int dist = neighbor.GetDistance(level.Player.Cell);
                             // If in combat, either go towards an empty cell or the player.
-                            if (dist < closestDist && (neighbor.Occupant == null || neighbor.Occupant.GetType() == typeof(Player)))
+                            if (dist < closestDist && (neighbor.Occupant == null || neighbor.Occupant.IsPlayer))
                             {
                                 closest = direction;
                                 closestDist = dist;

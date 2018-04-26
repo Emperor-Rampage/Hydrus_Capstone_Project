@@ -347,8 +347,14 @@ public class UIManager : MonoBehaviour
 
     public void UpdatePlayerCast(float castTime)
     {
-        Tween.Finish(playerCastBar.GetInstanceID());
+        // TODO: GET REFERENCE TO TWEEN INSTEAD OF TRYING TO USE tWEEN.STOP, IDIOT.
+        Tween.Stop(playerCastBar.GetInstanceID());
         Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
+    }
+
+    public void CancelPlayerCast() {
+        Tween.Stop(playerCastBar.GetInstanceID());
+        playerCastBar.fillAmount = 0f;
     }
 
     public void UpdatePlayerAbilityHUD(List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f)
