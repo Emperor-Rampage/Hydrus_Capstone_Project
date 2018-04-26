@@ -549,7 +549,7 @@ public class GameManager : Singleton<GameManager>
         ExitPrompt(level.CanExit);
         uiManager.UpdatePlayerCores(player.Cores);
         uiManager.UpdateEffectList(player.StatusEffects);
-        uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
+        //uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
         uiManager.UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
 
         //        Direction playerDirection = level.Player.ToAbsoluteDirection(Direction.Up);
@@ -636,7 +636,7 @@ public class GameManager : Singleton<GameManager>
                 //Probably going to make a separate method to handle all this.
                 if(level.Player.Facing == inputDir)
                 {
-                    SetPlayerAnimation("MoveForward", 0.9f);
+                    SetPlayerAnimation("MoveForward", level.Player.GetAdjustedMoveSpeed(Movespeed));
                 }
                 //                MoveEntityInstance(player, inputDir);
             }
@@ -833,16 +833,6 @@ public class GameManager : Singleton<GameManager>
         // float adjustedMovespeed = Movespeed / entity.StatusEffects.MovementScale;
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
-        //Adding animation triggers for the player.
-        if(entity == player)
-        {
-            if(level.Player.Facing == direction)
-            {
-                Debug.Log("Moving Player Forward!");
-                level.Player.Class.ClassCamera.GetComponent<Animator>().SetTrigger("MoveForward");
-            }
-        }
-
         Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
         StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
     }
@@ -927,7 +917,8 @@ public class GameManager : Singleton<GameManager>
         {
             AddIndicator(testIndicator, cell, entity);
         }
-        SetPlayerAnimation("Cast", 1.0f);
+        //Setting the cast time scale to the current cast time scale... Blegh
+        SetPlayerCastAnimation("Cast", level.Player.Abilities[index].CastTime);
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -949,12 +940,17 @@ public class GameManager : Singleton<GameManager>
 
     public void PerformAbility(Entity entity, AbilityObject ability)
     {
+        
         // Play sounds and animations.
         // Deal damage to entities in the cells.
 
         if (ability.SoundEffect != null)
         {
             audioManager.PlaySoundEffect(new SoundEffect(ability.SoundEffect, entity.Instance.transform.position));
+            if(entity == level.Player)
+            {
+                SetPlayerAnimation("CastActivation", 1.0f);
+            }
         }
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
@@ -1073,6 +1069,15 @@ public class GameManager : Singleton<GameManager>
             playerAnim.SetFloat("MoveSpeedScale", scale);
         }
 
+        playerAnim.SetTrigger(setter);
+
+    }
+
+    public void SetPlayerCastAnimation(string setter, float scale)
+    {
+        Animator playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        
+        playerAnim.SetFloat("CastTimeScale", scale);
         playerAnim.SetTrigger(setter);
 
     }
