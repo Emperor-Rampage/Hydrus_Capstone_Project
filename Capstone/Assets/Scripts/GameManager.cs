@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] AbilityObject testAbility;
     [SerializeField] PlayerClass testClass;
     [SerializeField] GameObject testIndicator;
+    [SerializeField] CameraShakeObject testShakeObject;
 
     [Space(10)]
     [Header("Setup")]
@@ -980,9 +981,10 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    //Method to Apply the effects of an ability (Damage and more)
     void ApplyAbility(Entity target, AbilityObject ability, Entity caster)
     {
-        Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
+        //Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
 
         foreach (AbilityEffect effect in ability.StatusEffects)
         {
@@ -993,6 +995,8 @@ public class GameManager : Singleton<GameManager>
 
         if (target.IsPlayer)
             uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
+            level.Player.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeObject);
+        }
 
         PerformEntityDeathCheck(target, alive);
     }
