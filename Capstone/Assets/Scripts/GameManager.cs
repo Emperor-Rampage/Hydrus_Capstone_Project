@@ -260,7 +260,7 @@ public class GameManager : Singleton<GameManager>
             //            BuildLevel_Debug(level);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
-            level.Player.Instance = GameObject.Instantiate(playerPrefab);
+            level.Player.Instance = GameObject.Instantiate(level.Player.Class.ClassCamera);
             // Manually set the position.
             SetEntityInstanceLocation(level.Player);
             // Loop through all of the enemies and spawn their instances.
@@ -620,6 +620,9 @@ public class GameManager : Singleton<GameManager>
     //              E - Turns the player right.
     void HandlePlayerInput()
     {
+        //Reference to Player in the scene for Animation purposes.
+        Player player = level.Player;
+
         if (level.Player.State == EntityState.Idle && !level.Player.StatusEffects.Stunned)
         {
             Direction inputDir = GetInputDirection();
@@ -823,6 +826,12 @@ public class GameManager : Singleton<GameManager>
 
         // float adjustedMovespeed = Movespeed / entity.StatusEffects.MovementScale;
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
+
+        //Adding animation triggers for the player.
+        if(entity == level.Player)
+        {
+
+        }
 
         Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
         StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));

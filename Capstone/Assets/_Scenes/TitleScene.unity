@@ -4542,7 +4542,7 @@ MonoBehaviour:
   testClass: {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   testIndicator: {fileID: 1762428193975288, guid: be7cdb1cd595c20428a2bfc9bcbc5a5a,
     type: 2}
-  playerPrefab: {fileID: 1999573432089804, guid: db41e22396b53c942bfd0968dbf1215c,
+  playerPrefab: {fileID: 1790381132296086, guid: b1bbff27dbcb1f843a5d3bc6afcbe158,
     type: 2}
   doNotDestroyList:
   - {fileID: 1229392500424972, guid: bd136b4367473ab41bdd52b87dd33473, type: 2}
@@ -4606,7 +4606,7 @@ MonoBehaviour:
       exitList: 00000000
       spawnList: []
   titleMusic:
-    audioClip: {fileID: 8300000, guid: 31f58d516ffc3f040bf64978f97f737c, type: 3}
+    audioClip: {fileID: 8300000, guid: 44275ceb33b8c8e46b5187b5377eaaf0, type: 3}
     volume: 1
     pitch: 1
   movespeed: 0.5
