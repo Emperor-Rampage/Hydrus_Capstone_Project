@@ -4542,7 +4542,6 @@ MonoBehaviour:
   testClass: {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   testIndicator: {fileID: 1762428193975288, guid: be7cdb1cd595c20428a2bfc9bcbc5a5a,
     type: 2}
-  testShakeObject: {fileID: 11400000, guid: 3d2cff262b65d1345a29b4bfd900bdfd, type: 2}
   playerPrefab: {fileID: 1790381132296086, guid: b1bbff27dbcb1f843a5d3bc6afcbe158,
     type: 2}
   doNotDestroyList:
