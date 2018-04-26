@@ -219,21 +219,53 @@ namespace EntityClasses
             return (Direction)newDir;
         }
 
-        public float GetAdjustedCastTime(float castTime) {
+        public List<float> GetCooldownsList()
+        {
+            List<float> cds = new List<float>();
+            foreach (AbilityObject ability in Abilities)
+            {
+                float cd = 0f;
+                Cooldowns.TryGetValue(ability, out cd);
+                cds.Add(cd);
+                // if (Cooldowns.ContainsKey(ability))
+                //     cds.Add(Cooldowns[ability]);
+            }
+            return cds;
+        }
+
+        public List<float> GetCooldownRemainingList()
+        {
+            List<float> cds = new List<float>();
+            foreach (AbilityObject ability in Abilities)
+            {
+                float cd = 0f;
+                CooldownsRemaining.TryGetValue(ability, out cd);
+                cds.Add(cd);
+                // if (Cooldowns.ContainsKey(ability))
+                //     cds.Add(Cooldowns[ability]);
+            }
+            return cds;
+        }
+
+        public float GetAdjustedCastTime(float castTime)
+        {
             float adjusted = castTime * (2f - StatusEffects.CastTimeScale) * (2f - StatusEffects.HasteScale);
             Debug.Log("Adjusted cast time calculated as " + adjusted + " with base " + castTime + ", cast slow " + StatusEffects.CastTimeScale + ", haste " + StatusEffects.HasteScale);
             return adjusted;
         }
 
-        public float GetAdjustedCooldown(float cooldown) {
+        public float GetAdjustedCooldown(float cooldown)
+        {
             return cooldown * (2f - StatusEffects.CooldownScale);
         }
 
-        public float GetAdjustedMoveSpeed(float moveSpeed) {
+        public float GetAdjustedMoveSpeed(float moveSpeed)
+        {
             return moveSpeed * (2f - StatusEffects.MovementScale);
         }
 
-        public float GetAdjustedDamageReduction(float damageReduction) {
+        public float GetAdjustedDamageReduction(float damageReduction)
+        {
             return damageReduction * (2f - StatusEffects.DamageRate);
         }
 

@@ -120,9 +120,11 @@ public class UIManager : MonoBehaviour
         ShowHUD(0);
     }
 
-    void AllButtons(GameObject parent, bool interactable = false) {
+    void AllButtons(GameObject parent, bool interactable = false)
+    {
         Button[] buttons = parent.transform.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons) {
+        foreach (Button button in buttons)
+        {
             button.interactable = interactable;
         }
     }
@@ -138,23 +140,28 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetUpAbilityIcons(Player player) {
+    public void SetUpAbilityIcons(Player player)
+    {
         // First, delete all children of the panel.
-//        playerAbilityIcons.Clear();
+        //        playerAbilityIcons.Clear();
         playerAbilityIcons = new List<GameObject>();
-        foreach (Transform child in playerAbilityPanel.transform) {
+        foreach (Transform child in playerAbilityPanel.transform)
+        {
             Destroy(child.gameObject);
         }
-        foreach(AbilityObject ability in player.Abilities) {
+        foreach (AbilityObject ability in player.Abilities)
+        {
             GameObject abilityIconObject = GameObject.Instantiate(playerAbilityIconPrefab, playerAbilityPanel.transform);
-            foreach (Transform child in abilityIconObject.transform) {
-                if (child.name == "Icon") {
+            foreach (Transform child in abilityIconObject.transform)
+            {
+                if (child.name == "Icon")
+                {
                     child.GetComponent<Image>().sprite = ability.Icon;
                 }
             }
             playerAbilityIcons.Add(abilityIconObject);
         }
-        UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
+        UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
     }
 
     public void SelectClass(PlayerClass selected)
@@ -344,33 +351,42 @@ public class UIManager : MonoBehaviour
         Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
     }
 
-    public void UpdatePlayerAbilityHUD(List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f) {
-        for (int i = 0; i < cooldowns.Count; i++) {
-            bool casting = (currentCast == i);
-            if (casting)
-                Debug.Log("Casting " + i);
-            SetPlayerAbilityIcon(i, cooldowns[i], cooldownsRemaining[i], casting, castProgress);
+    public void UpdatePlayerAbilityHUD(List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f)
+    {
+        for (int i = 0; i < cooldowns.Count; i++)
+        {
+            SetPlayerAbilityIcon(i, cooldowns[i], cooldownsRemaining[i], (currentCast == i), castProgress);
         }
     }
 
-    void SetPlayerAbilityIcon(int index, float cooldown, float cooldownRemaining, bool casting = false, float castProgress = 0f) {
+    void SetPlayerAbilityIcon(int index, float cooldown, float cooldownRemaining, bool casting = false, float castProgress = 0f)
+    {
         GameObject abilityIconObject = playerAbilityIcons[index];
-            foreach (Transform child in abilityIconObject.transform) {
-                if (child.name == "CooldownTimerImage") {
-                    child.GetComponent<Image>().fillAmount = cooldownRemaining / cooldown;
-                } else if (child.name == "CooldownTimerText") {
-                    if (cooldownRemaining <= 0f)
-                        child.GetComponent<TMP_Text>().text = "";
-                    else
-                        child.GetComponent<TMP_Text>().text = cooldownRemaining.ToString("0.0");
-                } else if (child.name == "CastTimerImage") {
-                    if (casting) {
-                        child.GetComponent<Image>().fillAmount = castProgress;
-                    } else {
-                        child.GetComponent<Image>().fillAmount = 0f;
-                    }
+        foreach (Transform child in abilityIconObject.transform)
+        {
+            if (child.name == "CooldownTimerImage")
+            {
+                child.GetComponent<Image>().fillAmount = cooldownRemaining / cooldown;
+            }
+            else if (child.name == "CooldownTimerText")
+            {
+                if (cooldownRemaining <= 0f)
+                    child.GetComponent<TMP_Text>().text = "";
+                else
+                    child.GetComponent<TMP_Text>().text = cooldownRemaining.ToString("0.0");
+            }
+            else if (child.name == "CastTimerImage")
+            {
+                if (casting)
+                {
+                    child.GetComponent<Image>().fillAmount = castProgress;
+                }
+                else
+                {
+                    child.GetComponent<Image>().fillAmount = 0f;
                 }
             }
+        }
     }
 
     public void UpdateEnemyInfo(bool adjacentEnemy = false, string name = "", float healthPercentage = 0f, float castProgress = 0f, float castTime = 0f)
