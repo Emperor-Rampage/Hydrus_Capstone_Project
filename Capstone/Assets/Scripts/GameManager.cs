@@ -549,7 +549,7 @@ public class GameManager : Singleton<GameManager>
         ExitPrompt(level.CanExit);
         uiManager.UpdatePlayerCores(player.Cores);
         uiManager.UpdateEffectList(player.StatusEffects);
-        uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
+        uiManager.UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
 
         //        Direction playerDirection = level.Player.ToAbsoluteDirection(Direction.Up);
         bool forwardConnection = level.HasConnection(player.Cell, player.Facing);
@@ -828,7 +828,7 @@ public class GameManager : Singleton<GameManager>
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         //Adding animation triggers for the player.
-        if(entity == level.Player)
+        if (entity == level.Player)
         {
 
         }
