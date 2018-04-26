@@ -618,11 +618,9 @@ public class GameManager : Singleton<GameManager>
     //              Input Direction - Gets the player's input direction, if there is any input (WASD) - Forward, left, backwards, right
     //              Q - Turns the player left.
     //              E - Turns the player right.
+    //TO DO: Add checking for the animation state, so it will know when the player steps left, right, and backwards.
     void HandlePlayerInput()
     {
-        //Reference to Player in the scene for Animation purposes.
-        Player player = level.Player;
-
         if (level.Player.State == EntityState.Idle && !level.Player.StatusEffects.Stunned)
         {
             Direction inputDir = GetInputDirection();
@@ -633,6 +631,12 @@ public class GameManager : Singleton<GameManager>
             else if (inputDir != Direction.Null)
             {
                 MoveEntityLocation(level.Player, inputDir);
+
+                //Probably going to make a separate method to handle all this.
+                if(level.Player.Facing == inputDir)
+                {
+                    SetPlayerAnimation("MoveForward", 0.9f);
+                }
                 //                MoveEntityInstance(player, inputDir);
             }
             else if (Input.GetKey(KeyCode.Q))
@@ -815,6 +819,7 @@ public class GameManager : Singleton<GameManager>
     // TODO: Adjust speed to account for any movement slows.
     void MoveEntityLocation(Entity entity, Direction direction)
     {
+        Player player = level.Player;
         Cell neighbor = level.GetDestination(entity, direction);
         if (neighbor == null)
             return;
@@ -828,9 +833,13 @@ public class GameManager : Singleton<GameManager>
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         //Adding animation triggers for the player.
-        if(entity == level.Player)
+        if(entity == player)
         {
-
+            if(level.Player.Facing == direction)
+            {
+                Debug.Log("Moving Player Forward!");
+                level.Player.Class.ClassCamera.GetComponent<Animator>().SetTrigger("MoveForward");
+            }
         }
 
         Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
@@ -917,6 +926,7 @@ public class GameManager : Singleton<GameManager>
         {
             AddIndicator(testIndicator, cell, entity);
         }
+        SetPlayerAnimation("Cast", 1.0f);
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -1047,5 +1057,22 @@ public class GameManager : Singleton<GameManager>
         indicatorInstance.transform.localScale *= Map.CellScale;
         Indicator indicator = new Indicator { Instance = indicatorInstance, Cell = cell, Entity = entity };
         indicator.AddIndicator();
+    }
+
+    // Method for changing the animation of the player
+    public void SetPlayerAnimation(string setter, float scale)
+    {
+        Animator playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        if(setter == "Cast")
+        {
+            playerAnim.SetFloat("CastTimeScale", scale);
+        }
+        else
+        {
+            playerAnim.SetFloat("MoveSpeedScale", scale);
+        }
+
+        playerAnim.SetTrigger(setter);
+
     }
 }
