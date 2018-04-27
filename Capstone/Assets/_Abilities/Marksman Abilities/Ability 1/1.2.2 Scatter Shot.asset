@@ -23,7 +23,7 @@ MonoBehaviour:
   - effect: 3
     duration: 0.5
     value: 0.3
-  type: 0
+  type: 2
   aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
   range: 0
   cooldown: 3

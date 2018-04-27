@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] AbilityObject testAbility;
     [SerializeField] PlayerClass testClass;
     [SerializeField] GameObject testIndicator;
+    [SerializeField] CameraShakeObject testShakeEvent;
 
     [Space(10)]
     [Header("Setup")]
@@ -633,12 +634,6 @@ public class GameManager : Singleton<GameManager>
             else if (inputDir != Direction.Null)
             {
                 MoveEntityLocation(level.Player, inputDir);
-
-                //Probably going to make a separate method to handle all this.
-                if(level.Player.Facing == inputDir)
-                {
-                    SetPlayerAnimation("MoveForward", level.Player.GetAdjustedMoveSpeed(Movespeed));
-                }
                 //                MoveEntityInstance(player, inputDir);
             }
             else if (Input.GetKey(KeyCode.Q))
@@ -834,6 +829,26 @@ public class GameManager : Singleton<GameManager>
         // float adjustedMovespeed = Movespeed / entity.StatusEffects.MovementScale;
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
+        //Probably going to make a separate method to handle all this.
+        if (entity.IsPlayer == true)
+        {
+            if (level.Player.Facing == direction)
+            {
+                SetPlayerAnimation("MoveForward", adjustedMovespeed);
+            }
+            else if (level.Player.GetRight() == direction)
+            {
+                SetPlayerAnimation("MoveRight", adjustedMovespeed);
+            }
+            else if (level.Player.GetLeft() == direction)
+            {
+                SetPlayerAnimation("MoveLeft", adjustedMovespeed);
+            }
+            else if (level.Player.GetBackward() == direction)
+            {
+                SetPlayerAnimation("MoveBack", adjustedMovespeed);
+            }
+        }
         Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
         StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
     }
@@ -922,8 +937,10 @@ public class GameManager : Singleton<GameManager>
         SetPlayerCastAnimation("Cast", level.Player.Abilities[index].CastTime);
     }
 
-    public void CancelPlayerAbility() {
+    public void CancelPlayerAbility()
+    {
         uiManager.CancelPlayerCast();
+        SetPlayerAnimation("Interrupt",1.0f);
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -945,17 +962,19 @@ public class GameManager : Singleton<GameManager>
 
     public void PerformAbility(Entity entity, AbilityObject ability)
     {
-        
+
         // Play sounds and animations.
         // Deal damage to entities in the cells.
 
         if (ability.SoundEffect != null)
         {
             audioManager.PlaySoundEffect(new SoundEffect(ability.SoundEffect, entity.Instance.transform.position));
-            if(entity == level.Player)
-            {
-                SetPlayerAnimation("CastActivation", 1.0f);
-            }
+           
+        }
+
+        if (entity.IsPlayer == true)
+        {
+            SetPlayerAnimation("CastActivate", 1.0f);
         }
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
@@ -992,7 +1011,12 @@ public class GameManager : Singleton<GameManager>
         bool alive = target.Damage(ability.Damage, (target.CastProgress >= interruptPercentage));
 
         if (target.IsPlayer)
+        {
             uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
+
+            if(ability.Damage > 0)
+                target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
+        }
 
         PerformEntityDeathCheck(target, alive);
     }

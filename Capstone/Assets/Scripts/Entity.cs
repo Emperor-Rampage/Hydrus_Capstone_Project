@@ -302,7 +302,7 @@ namespace EntityClasses
                     coroutines.Remove(currentAbilityCoroutine);
                 }
 
-                if (IsPlayer)
+                if (IsPlayer && damage > 0)
                     GameManager.Instance.CancelPlayerAbility();
 
                 StartCooldown(abilities[CurrentAbility]);
