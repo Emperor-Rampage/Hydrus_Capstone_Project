@@ -23,11 +23,6 @@ namespace MapClasses
     // A level class, which contains all information and methods for a specific level.
     // Handles generation of levels, connections, and procedural generation.
     // 
-    // TODO: Implement system to instantiate entities.
-    //      (Probably a list of EntitySpawn objects, which contain X and Z values and references to ScriptableObject Enemies,
-    //      which contain Entity objects.)
-    //      Maybe a seperate EntitySpawnManager, called from the GameManager.
-
     // FIXME: Clean up the validation. Right now every other method independently validates all cells and indices each time they're called.
     //          This results in some checks being performed multiple times down the call stack.
     //          Should remove as much of this as possible, even if some of it is technically unsafe code.

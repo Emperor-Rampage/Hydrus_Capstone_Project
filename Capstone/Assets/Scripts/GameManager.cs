@@ -204,6 +204,7 @@ public class GameManager : Singleton<GameManager>
     //  Also calls the intialization for the HUD, displays the level text, and updates the appropriate UI.
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
+        // FIXME: When an ability executed right as the level transitions, an exception is thrown and the game stops working.
         Player player = null;
         if (level != null)
         {
@@ -221,41 +222,7 @@ public class GameManager : Singleton<GameManager>
             level.Player.Class = selectedClass;
             level.Player.SetupBaseAbilities();
             level.Player.CurrentAbility = -1;
-            // TODO: Set up event handler for player taking damage. Should be a callback to the GameManager that calls the correct ui updates.
-            //       Or, don't.
 
-            //            level.Player.Abilities.Add(testAbility);
-            // UnityEngine.Debug.Log(level.connectionMatrix.GetLength(1));
-            // Creates debug instances for the cells and connections.
-            // TODO: Create procedural area generation.
-            //          Possibly use prefab "templates" or cell chunks, remove walls where there are connections between adjacent cells.
-            //          For corner pieces, iterate through each cell, from left to right, bottom to top,
-            //          checking connections with adjacent cells,
-            //
-            //          Create local list of corners to create, 0 = up right, 1 = down right, 2 = down left, 3 = up left
-            //
-            //          IF creating all corners, then fill completely,
-            //          ELSE IF creating outer edges, then only fill with corners in which there is no connection.
-            //
-            //          Check all connections, if procedural, if that cell has been visited,
-            //            don't instantiate any corners in that direction by removing the corresponding corners from the list.
-            //
-            //              IF connection with up,
-            //                  IF has been visited, don't create up left or up right corners - remove 3 and 0.
-            //                  IF has not been visited, create both both up left and up right corners - do nothing.
-            //              IF connection with right,
-            //                  IF has been visited, don't create up right or down right corners - remove 3 and 1.
-            //                  IF has not been visited, create both both up right and down right corners - do nothing.
-            //              IF connection with down,
-            //                  IF has been visited, don't create down left or down right corners - remove 2 and 1.
-            //                  IF has not been visited, create both both down left and down right corners - do nothing.
-            //              IF connection with left,
-            //                  IF has been visited, don't create up left or down left corners - remove 3 and 2.
-            //                  IF has not been visited, create both both up left and down left corners - do nothing.
-            //
-            //              Iterate through all remaining corners to create and instantiate them.
-            //
-            //
             BuildLevel_Procedural();
             BuildLevel_Procedural_Corners();
 
@@ -275,7 +242,7 @@ public class GameManager : Singleton<GameManager>
             }
 
             // Initialize the UI for the level.
-            uiManager.Initialize_Level();
+            uiManager.Initialize_Level(interruptPercentage);
             uiManager.SetUpAbilityIcons(level.Player);
             // Display the area text.
             uiManager.DisplayAreaText(level.name);
@@ -812,8 +779,6 @@ public class GameManager : Singleton<GameManager>
     //          Passes in the Movespeed for the time parameter, with no delay, an EaseOut animation curve, and a callback method upon completion of the tween.
     //      Starts the MoveEntityLocation_Coroutine coroutine, passing in the entity, neighbor,
     //           and Movespeed * 0.75 for the delay (So the entity is considered on the new cell after 75% of the movement is completed)
-
-    // TODO: Adjust speed to account for any movement slows.
     void MoveEntityLocation(Entity entity, Direction direction)
     {
         Player player = level.Player;
@@ -940,7 +905,7 @@ public class GameManager : Singleton<GameManager>
     public void CancelPlayerAbility()
     {
         uiManager.CancelPlayerCast();
-        SetPlayerAnimation("Interrupt",1.0f);
+        SetPlayerAnimation("Interrupt", 1.0f);
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -969,7 +934,7 @@ public class GameManager : Singleton<GameManager>
         if (ability.SoundEffect != null)
         {
             audioManager.PlaySoundEffect(new SoundEffect(ability.SoundEffect, entity.Instance.transform.position));
-           
+
         }
 
         if (entity.IsPlayer == true)
@@ -1014,7 +979,7 @@ public class GameManager : Singleton<GameManager>
         {
             uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
 
-            if(ability.Damage > 0)
+            if (ability.Damage > 0)
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
         }
 
@@ -1088,7 +1053,7 @@ public class GameManager : Singleton<GameManager>
     public void SetPlayerAnimation(string setter, float scale)
     {
         Animator playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-        if(setter == "Cast")
+        if (setter == "Cast")
         {
             playerAnim.SetFloat("CastTimeScale", scale);
         }
@@ -1104,7 +1069,7 @@ public class GameManager : Singleton<GameManager>
     public void SetPlayerCastAnimation(string setter, float scale)
     {
         Animator playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-        
+
         playerAnim.SetFloat("CastTimeScale", scale);
         playerAnim.SetTrigger(setter);
 

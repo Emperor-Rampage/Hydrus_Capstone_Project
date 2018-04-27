@@ -4583,7 +4583,7 @@ MonoBehaviour:
       name: Hub
       levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
       music:
-        audioClip: {fileID: 8300000, guid: 31f58d516ffc3f040bf64978f97f737c, type: 3}
+        audioClip: {fileID: 8300000, guid: 5de073d3cab0b07488a26b28061a92c0, type: 3}
         volume: 1
         pitch: 1
       exitList: 0100000002000000
@@ -4611,13 +4611,13 @@ MonoBehaviour:
       spawnList: []
   titleMusic:
     audioClip: {fileID: 8300000, guid: 44275ceb33b8c8e46b5187b5377eaaf0, type: 3}
-    volume: 1
+    volume: 0.75
     pitch: 1
   movespeed: 0.5
   turnspeed: 0.25
   tickRate: 0.25
   enemyAggroDistance: 5
-  interruptPercentage: 0
+  interruptPercentage: 0.5
 --- !u!4 &2078068043
 Transform:
   m_ObjectHideFlags: 0

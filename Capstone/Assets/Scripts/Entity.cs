@@ -120,7 +120,8 @@ namespace EntityClasses
             StartCooldown(ability);
         }
 
-        void StartCooldown(AbilityObject ability) {
+        void StartCooldown(AbilityObject ability)
+        {
             float adjustedCooldown = GetAdjustedCooldown(ability.Cooldown);
             Cooldowns[ability] = adjustedCooldown;
             CooldownsRemaining[ability] = adjustedCooldown;
@@ -290,19 +291,22 @@ namespace EntityClasses
             Debug.Log(Name + " currently has " + CurrentHealth + " health. Taking " + damage + " damage.");
 
             // Cancel any current casting.
-            if (CurrentAbility != -1 && interrupt) {
+            if (CurrentAbility != -1 && interrupt && damage > 0)
+            {
                 Debug.Log("Player damaged: Current ability is " + CurrentAbility + ", interrupt is " + interrupt);
-                if (currentAbilityTween != null) {
+                if (currentAbilityTween != null)
+                {
                     Debug.Log("-- Tween is not null.");
                     currentAbilityTween.Cancel();
                 }
-                if (currentAbilityCoroutine != null) {
+                if (currentAbilityCoroutine != null)
+                {
                     Debug.Log("-- Coroutine is not null.");
                     GameManager.Instance.StopCoroutine(currentAbilityCoroutine);
                     coroutines.Remove(currentAbilityCoroutine);
                 }
 
-                if (IsPlayer && damage > 0)
+                if (IsPlayer)
                     GameManager.Instance.CancelPlayerAbility();
 
                 StartCooldown(abilities[CurrentAbility]);
@@ -314,7 +318,9 @@ namespace EntityClasses
                 CurrentHealth -= adjustedDamage;
                 Debug.Log(Name + " now has " + CurrentHealth);
                 return true;
-            } else {
+            }
+            else
+            {
                 CurrentHealth = 0;
                 Kill();
                 return false;

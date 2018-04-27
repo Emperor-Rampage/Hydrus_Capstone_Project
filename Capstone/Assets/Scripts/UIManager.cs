@@ -10,6 +10,7 @@ using AbilityClasses;
 using EntityClasses;
 using System;
 using System.Linq;
+using Pixelplacement.TweenSystem;
 
 [RequireComponent(typeof(Canvas))]
 public class UIManager : MonoBehaviour
@@ -56,6 +57,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] Image playerHealthBar;
     [SerializeField] Image playerHealthMissing;
+    [SerializeField] Image playerCastBackBar;
+    [SerializeField] Image playerCastBackInterruptBar;
     [SerializeField] Image playerCastBar;
 
     [SerializeField] GameObject playerAbilityPanel;
@@ -64,6 +67,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject enemyInfoPanel;
     [SerializeField] TMP_Text enemyNameText;
     [SerializeField] Image enemyHealthBar;
+    [SerializeField] Image enemyCastBackBar;
+    [SerializeField] Image enemyCastBackInterruptBar;
     [SerializeField] Image enemyCastBar;
     [SerializeField] TMP_Text enemyCastText;
 
@@ -85,6 +90,9 @@ public class UIManager : MonoBehaviour
     List<TMP_Text> effectTextList = new List<TMP_Text>();
 
     List<GameObject> playerAbilityIcons = new List<GameObject>();
+
+    TweenBase playerHealthBarTween;
+    TweenBase playerCastBarTween;
 
 
     // TODO: Set up UI to run animations during pause (timeScale = 0)
@@ -113,9 +121,13 @@ public class UIManager : MonoBehaviour
         GoToMenu(0);
     }
 
-    public void Initialize_Level()
+    public void Initialize_Level(float interruptPercent = 0f)
     {
-        //        effectTextList = new List<TMP_Text>();
+        playerCastBackBar.fillAmount = 1f - interruptPercent;
+        playerCastBackInterruptBar.fillAmount = interruptPercent;
+        enemyCastBackBar.fillAmount = 1f - interruptPercent;
+        enemyCastBackInterruptBar.fillAmount = interruptPercent;
+
         AllButtons(hudPanel, true);
         ShowHUD(0);
     }
@@ -340,20 +352,29 @@ public class UIManager : MonoBehaviour
 
     public void UpdatePlayerHealth(float healthPercentage)
     {
-        Tween.Stop(playerHealthMissing.GetInstanceID());
-        Tween.Value(playerHealthBar.fillAmount, healthPercentage, (value) => playerHealthMissing.fillAmount = value, 0.25f, 0.25f, Tween.EaseInOut);
+        if (playerHealthBarTween != null)
+            playerHealthBarTween.Stop();
+        playerHealthBarTween = Tween.Value(playerHealthBar.fillAmount, healthPercentage, (value) => playerHealthMissing.fillAmount = value, 0.25f, 0.25f, Tween.EaseInOut);
+
         playerHealthBar.fillAmount = healthPercentage;
     }
 
     public void UpdatePlayerCast(float castTime)
     {
         // TODO: GET REFERENCE TO TWEEN INSTEAD OF TRYING TO USE tWEEN.STOP, IDIOT.
-        Tween.Stop(playerCastBar.GetInstanceID());
-        Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
+        if (playerCastBarTween != null)
+            playerCastBarTween.Stop();
+        playerCastBarTween = Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
     }
 
-    public void CancelPlayerCast() {
-        Tween.Stop(playerCastBar.GetInstanceID());
+    public void CancelPlayerCast()
+    {
+        if (playerCastBarTween != null)
+        {
+            Debug.Log("Cancelling UI cast tween!");
+            playerCastBarTween.Stop();
+            playerCastBarTween = null;
+        }
         playerCastBar.fillAmount = 0f;
     }
 

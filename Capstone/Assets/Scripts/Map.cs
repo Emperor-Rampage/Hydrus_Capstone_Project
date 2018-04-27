@@ -117,42 +117,6 @@ namespace MapClasses
             return new Vector3(x * cellScale, 0f, z * cellScale);
         }
 
-        // Returns the Vector3 position for the entity, using the entity's cell's X and Z values and multiplying them by the CellScale.
-        // Returns Vector3.zero if the entity or cell are null.
-        // TODO: Remove both GetEntityPosition methods and just use GetCellPosition,
-        //      with the assumption that the entity's pivot point is at their bottom boundary.
-        public Vector3 GetEntityPosition(IEntity entity)
-        {
-            if (entity == null)
-            {
-                Debug.LogError("ERROR: Cannot get entity's position, entity is null.");
-                return Vector3.zero;
-            }
-
-            Cell cell = entity.Cell;
-
-            if (cell == null)
-            {
-                Debug.LogError("ERROR: Cannot get entity's position, cell is null.");
-                return Vector3.zero;
-            }
-            float cellScale = CellScale;
-            return new Vector3(cell.X * cellScale, 0.5f, cell.Z * cellScale);
-        }
-
-        // Returns the Vector3 position for an entity, using a cell's X and Z values and multiplying them by the CellScale.
-        // Returns Vector3.zero if the cell is null.
-        public Vector3 GetEntityPosition(Cell cell)
-        {
-            if (cell == null)
-            {
-                Debug.LogError("ERROR: Cannot get entity's position, cell is null.");
-                return Vector3.zero;
-            }
-            float cellScale = CellScale;
-            return new Vector3(cell.X * cellScale, 0.5f, cell.Z * cellScale);
-        }
-
         public GameObject GetRandomPrefab(List<MapPrefab> prefabList)
         {
             if (prefabList == null || prefabList.Count == 0)
