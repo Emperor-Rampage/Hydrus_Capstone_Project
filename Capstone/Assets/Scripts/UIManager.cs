@@ -123,10 +123,10 @@ public class UIManager : MonoBehaviour
 
     public void Initialize_Level(float interruptPercent = 0f)
     {
-        playerCastBackBar.fillAmount = 1f - interruptPercent;
-        playerCastBackInterruptBar.fillAmount = interruptPercent;
-        enemyCastBackBar.fillAmount = 1f - interruptPercent;
-        enemyCastBackInterruptBar.fillAmount = interruptPercent;
+        playerCastBackBar.fillAmount = interruptPercent;
+        playerCastBackInterruptBar.fillAmount = 1f - interruptPercent;
+        enemyCastBackBar.fillAmount = interruptPercent;
+        enemyCastBackInterruptBar.fillAmount = 1f - interruptPercent;
 
         AllButtons(hudPanel, true);
         ShowHUD(0);
