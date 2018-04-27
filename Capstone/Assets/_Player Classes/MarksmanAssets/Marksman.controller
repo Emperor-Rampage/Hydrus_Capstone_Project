@@ -14,7 +14,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Move Left
+  - m_Name: MoveLeft
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -278,7 +278,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Move Left
+    m_ConditionEvent: MoveLeft
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102721408842829864}
@@ -373,7 +373,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
+  m_TransitionDuration: 1
   m_TransitionOffset: 0
   m_ExitTime: 0
   m_HasExitTime: 1
@@ -388,7 +388,7 @@ AnimatorState:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: MM_Cast_Loop1
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101895319913818318}
@@ -396,12 +396,12 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 1
+  m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 95dea6d11f25c3643bed94feb2de3aaa, type: 2}
   m_Tag: CastLoop
   m_SpeedParameter: CastTimeScale
@@ -509,13 +509,13 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
+  m_TimeParameterActive: 1
   m_Motion: {fileID: 7400000, guid: e0c88d1c1b3f2fe42b923f90b731c9a2, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_TimeParameter: CastTimeScale
 --- !u!1102 &1102658847755406860
 AnimatorState:
   serializedVersion: 5
@@ -625,7 +625,7 @@ AnimatorStateMachine:
     m_Position: {x: 660, y: 300, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102177170027249726}
-    m_Position: {x: 888, y: 228, z: 0}
+    m_Position: {x: 960, y: 228, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
