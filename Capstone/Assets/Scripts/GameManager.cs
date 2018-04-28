@@ -222,6 +222,7 @@ public class GameManager : Singleton<GameManager>
             level.Player.Class = selectedClass;
             level.Player.SetupBaseAbilities();
             level.Player.CurrentAbility = -1;
+            level.Player.CurrentHealth = level.Player.MaxHealth;
 
             BuildLevel_Procedural();
             BuildLevel_Procedural_Corners();
@@ -248,6 +249,7 @@ public class GameManager : Singleton<GameManager>
             uiManager.DisplayAreaText(level.name);
             // Fade in with the area name.
             uiManager.FadeIn(level.name, 2f);
+            uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
 
             audioManager.FadeInMusic(level.music, 1f);
 
@@ -1043,6 +1045,11 @@ public class GameManager : Singleton<GameManager>
         if (!alive && entity.IsPlayer)
         {
             // Do player death stuff.
+            level.Player.State = EntityState.Null;
+            level.Player.Cores = 0;
+            audioManager.FadeOutMusic(1f);
+            Map.SetCurrentLevel(0);
+            LoadLevel(0.5f);
         }
         else if (!alive && !entity.IsPlayer)
         {
