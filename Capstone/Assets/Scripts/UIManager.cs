@@ -48,6 +48,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject hudPanel;
     [SerializeField] GameObject[] hudList;
+    [SerializeField] CanvasGroup screenHighlightGroup;
+    [SerializeField] CanvasGroup screenDamageGroup;
+
     [SerializeField] TMP_Text areaText;
     [SerializeField] TMP_Text promptText;
 
@@ -59,6 +62,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image playerHealthMissing;
     [SerializeField] Image playerCastBackBar;
     [SerializeField] Image playerCastBackInterruptBar;
+    [SerializeField] Image playerCastInterruptImage;
     [SerializeField] Image playerCastBar;
 
     [SerializeField] GameObject playerAbilityPanel;
@@ -91,8 +95,12 @@ public class UIManager : MonoBehaviour
 
     List<GameObject> playerAbilityIcons = new List<GameObject>();
 
+    TweenBase screenHighlightTween;
+    TweenBase screenDamageTween;
     TweenBase playerHealthBarTween;
     TweenBase playerCastBarTween;
+
+    public bool Highlighted { get; private set; } = false;
 
 
     // TODO: Set up UI to run animations during pause (timeScale = 0)
@@ -285,6 +293,26 @@ public class UIManager : MonoBehaviour
     {
     }
 
+    public void ToggleBorderHighlight()
+    {
+        if (screenHighlightTween != null)
+            screenHighlightTween.Stop();
+
+        if (Highlighted)
+            screenHighlightTween = Tween.CanvasGroupAlpha(screenHighlightGroup, 0f, 0.15f, 0f);
+        else
+            screenHighlightTween = Tween.CanvasGroupAlpha(screenHighlightGroup, 1f, 0.15f, 0f);
+
+        Highlighted = !Highlighted;
+    }
+
+    public void FlashPlayerDamage()
+    {
+        if (screenDamageTween != null)
+            screenDamageTween.Stop();
+        screenDamageTween = Tween.CanvasGroupAlpha(screenDamageGroup, 1f, 0.15f, 0f, Tween.EaseWobble);
+    }
+
     public void UpdateEffectList(EffectDictionary effectDictionary)
     {
         List<AbilityEffect> abilityEffects = new List<AbilityEffect>();
@@ -361,7 +389,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdatePlayerCast(float castTime)
     {
-        // TODO: GET REFERENCE TO TWEEN INSTEAD OF TRYING TO USE tWEEN.STOP, IDIOT.
         if (playerCastBarTween != null)
             playerCastBarTween.Stop();
         playerCastBarTween = Tween.Value(0f, 1f, (value) => playerCastBar.fillAmount = value, castTime, 0f, completeCallback: () => playerCastBar.fillAmount = 0f);
@@ -374,7 +401,11 @@ public class UIManager : MonoBehaviour
             Debug.Log("Cancelling UI cast tween!");
             playerCastBarTween.Stop();
             playerCastBarTween = null;
+
         }
+        Color startColor = new Color(1f, 0f, 0f, 0f);
+        Color targetColor = new Color(1f, 0f, 0f, 1f);
+        Tween.Color(playerCastInterruptImage, targetColor, 0.5f, 0f, Tween.EaseWobble);
         playerCastBar.fillAmount = 0f;
     }
 

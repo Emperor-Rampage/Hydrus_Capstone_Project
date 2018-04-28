@@ -521,6 +521,19 @@ public class GameManager : Singleton<GameManager>
         //uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
         uiManager.UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
 
+        if (player.Cell.Indicators.Count > 0 && !uiManager.Highlighted)
+        {
+            Debug.Log("Player cell is being targeted.");
+            uiManager.ToggleBorderHighlight();
+            // uiManager.HighlightBorder();
+        }
+        else if (player.Cell.Indicators.Count <= 0 && uiManager.Highlighted)
+        {
+            Debug.Log("Player cell is NOT being targeted.");
+            uiManager.ToggleBorderHighlight();
+            // uiManager.UnHighlightBorder();
+        }
+
         //        Direction playerDirection = level.Player.ToAbsoluteDirection(Direction.Up);
         bool forwardConnection = level.HasConnection(player.Cell, player.Facing);
         Cell forwardCell = level.GetNeighbor(player.Cell, player.Facing);
@@ -652,9 +665,6 @@ public class GameManager : Singleton<GameManager>
             {
                 AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
                 level.Player.StatusEffects.AddEffect(effect);
-            }
-            else if (Input.GetKeyDown(KeyCode.K))
-            {
             }
         }
     }
@@ -978,6 +988,7 @@ public class GameManager : Singleton<GameManager>
         if (target.IsPlayer)
         {
             uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
+            uiManager.FlashPlayerDamage();
 
             if (ability.Damage > 0)
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);

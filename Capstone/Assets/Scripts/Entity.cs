@@ -307,7 +307,9 @@ namespace EntityClasses
                 }
 
                 if (IsPlayer)
+                {
                     GameManager.Instance.CancelPlayerAbility();
+                }
 
                 StartCooldown(abilities[CurrentAbility]);
             }
