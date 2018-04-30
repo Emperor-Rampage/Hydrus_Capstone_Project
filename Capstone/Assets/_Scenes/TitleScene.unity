@@ -4613,11 +4613,11 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 44275ceb33b8c8e46b5187b5377eaaf0, type: 3}
     volume: 0.75
     pitch: 1
-  movespeed: 0.5
-  turnspeed: 0.25
+  movespeed: 0.6
+  turnspeed: 0.4
   tickRate: 0.25
-  enemyAggroDistance: 5
-  interruptPercentage: 0.5
+  enemyAggroDistance: 4
+  interruptPercentage: 0.75
 --- !u!4 &2078068043
 Transform:
   m_ObjectHideFlags: 0
