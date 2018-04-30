@@ -188,6 +188,12 @@ public class UIManager : MonoBehaviour
         UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
     }
 
+    public void SetUpAbilityTreeMenu(AbilityTree tree) {
+        LayoutElement layoutElement = abilityTreeContentPanel.GetComponent<LayoutElement>();
+        layoutElement.preferredWidth = tree.Width;
+        layoutElement.preferredHeight = tree.Height;
+    }
+
     public void SelectClass(PlayerClass selected)
     {
         classNameText.text = selected.Name;

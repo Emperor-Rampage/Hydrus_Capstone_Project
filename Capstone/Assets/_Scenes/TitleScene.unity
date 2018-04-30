@@ -4571,6 +4571,12 @@ MonoBehaviour:
     weight: 1
   - prefab: {fileID: 1762220230523074, guid: 933b44e120f38b048a2be67da6203ea0, type: 2}
     weight: 0.475
+  abilityTree:
+    numTiers: 3
+    uiSpacing: 50
+    uiCellWidth: 100
+    uiCellHeight: 100
+    uiPadding: 300
   classes:
   - {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   - {fileID: 11400000, guid: 75f2eed1de18ea4459f00fb4ce7fade6, type: 2}

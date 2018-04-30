@@ -58,6 +58,7 @@ public class GameManager : Singleton<GameManager>
     [Space(10)]
     [Header("Game")]
 
+    [SerializeField] AbilityTree abilityTree;
     [SerializeField]
     List<PlayerClass> classes;
     PlayerClass selectedClass;
@@ -219,10 +220,14 @@ public class GameManager : Singleton<GameManager>
         {
             // Sets up cells, connections, player spawn, and generates procedural areas.
             level.InitializeLevel(player);
-            level.Player.Class = selectedClass;
-            level.Player.SetupBaseAbilities();
-            level.Player.CurrentAbility = -1;
-            level.Player.CurrentHealth = level.Player.MaxHealth;
+            player = level.Player;
+            
+            player.Class = selectedClass;
+            player.SetupBaseAbilities();
+            player.CurrentAbility = -1;
+            player.CurrentHealth = player.MaxHealth;
+            
+            abilityTree.Initialize(player);
 
             BuildLevel_Procedural();
             BuildLevel_Procedural_Corners();
@@ -230,9 +235,9 @@ public class GameManager : Singleton<GameManager>
             //            BuildLevel_Debug(level);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
-            level.Player.Instance = GameObject.Instantiate(level.Player.Class.ClassCamera);
+            player.Instance = GameObject.Instantiate(player.Class.ClassCamera);
             // Manually set the position.
-            SetEntityInstanceLocation(level.Player);
+            SetEntityInstanceLocation(player);
             // Loop through all of the enemies and spawn their instances.
             foreach (var enemy in level.EnemyList)
             {
@@ -244,12 +249,13 @@ public class GameManager : Singleton<GameManager>
 
             // Initialize the UI for the level.
             uiManager.Initialize_Level(interruptPercentage);
-            uiManager.SetUpAbilityIcons(level.Player);
+            uiManager.SetUpAbilityIcons(player);
+            uiManager.SetUpAbilityTreeMenu(abilityTree);
             // Display the area text.
             uiManager.DisplayAreaText(level.name);
             // Fade in with the area name.
             uiManager.FadeIn(level.name, 2f);
-            uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
+            uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
 
             audioManager.FadeInMusic(level.music, 1f);
 

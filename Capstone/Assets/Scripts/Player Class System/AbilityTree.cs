@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AbilityClasses;
 using EntityClasses;
 using UnityEngine;
 
-public class AbilityTree : MonoBehaviour
+[System.Serializable]
+public class AbilityTree
 {
     Player player;
     List<List<AbilityObject>> tiers;
@@ -12,11 +14,18 @@ public class AbilityTree : MonoBehaviour
     [SerializeField] float uiSpacing;
     [SerializeField] float uiCellWidth;
     [SerializeField] float uiCellHeight;
+    [SerializeField] float uiPadding;
 
+    public float Width { get { return (uiCellWidth * TotalNumLeafs) + ((uiSpacing - 1) * TotalNumLeafs) + (uiPadding * 2f); } }
+    public float Height { get { return (uiCellHeight * numTiers) + ((uiSpacing - 1) * numTiers) + (uiPadding * 2f); } }
     public float TotalNumLeafs { get; private set; }
 
-    public AbilityTree(Player player, List<AbilityObject> t1)
+    public void Initialize(Player player)
     {
+        if (player == null)
+            Debug.Log("WARNING: Passed in null player referenece to Initialize in AbilityTree");
+        this.player = player;
+        List<AbilityObject> t1 = this.player.Class.BaseAbilities;
         List<AbilityObject> prevTier;
         tiers = new List<List<AbilityObject>>();
         tiers.Add(t1);
@@ -28,10 +37,46 @@ public class AbilityTree : MonoBehaviour
             {
                 tier.AddRange(ability.NextTier);
             }
+            tiers.Add(tier);
             prevTier = tier;
         }
 
-        TotalNumLeafs = tiers[tiers.Count].Count;
+        TotalNumLeafs = tiers[tiers.Count - 1].Count;
+        Debug.Log("Number in tier 1: " + t1.Count);
+        Debug.Log("Number in tier 2: " + tiers[1].Count);
+        Debug.Log("Number of leafs: " + TotalNumLeafs);
+        Debug.Log("Number of tiers: " + numTiers);
+    }
+
+    public List<AbilityObject> GetAbilityTier(int tier1Index, int targetTierIndex) {
+        if (targetTierIndex >= 0 && targetTierIndex < tiers.Count) {
+            var tier1 = tiers[0];
+            var targetTier = tiers[targetTierIndex];
+            if (tier1 != null) {
+                var abilityTier1 = tier1[tier1Index];
+                if (abilityTier1 != null) {
+                    return targetTier.Where((abil) => abil.BaseAbility == abilityTier1).ToList();
+                }
+            }
+        }
+        return null;
+    }
+
+    public int GetAbilityLeafs(int tier1Index) {
+        int numLeafs = 0;
+        var tier1 = tiers[0];
+        var lastTier = tiers[tiers.Count];
+        if (tier1 != null && lastTier != null) {
+            var abilityTier1 = tier1[tier1Index];
+            if (abilityTier1 != null) {
+                foreach (var abilityLastTier in lastTier) {
+                    if (abilityLastTier.BaseAbility == abilityTier1) {
+                        numLeafs++;
+                    }
+                }
+            }
+        }
+        return numLeafs;
     }
 
     public bool IsAvailable(AbilityObject ability) {
@@ -48,25 +93,6 @@ public class AbilityTree : MonoBehaviour
             return true;
 
         return false;
-    }
-
-    public int GetAbilityLeafs(int tier1Index) {
-        int numLeafs = 0;
-        if (tier1Index < 0 || tier1Index >= tiers.Count) {
-            var tier1 = tiers[0];
-            var lastTier = tiers[tiers.Count];
-            if (tier1 != null && lastTier != null) {
-                var abilityTier1 = tier1[tier1Index];
-                if (abilityTier1 != null) {
-                    foreach (var abilityLastTier in lastTier) {
-                        if (abilityLastTier.BaseAbility == abilityTier1) {
-                            numLeafs++;
-                        }
-                    }
-                }
-            }
-        }
-        return numLeafs;
     }
 
     public bool IsOffsetTier(int tier)
