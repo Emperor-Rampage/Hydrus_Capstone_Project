@@ -446,11 +446,13 @@ namespace AbilityClasses
 
 
         //Upgrade System Info.
+        [SerializeField] AbilityObject baseAbility;
+        public AbilityObject BaseAbility { get { return baseAbility; } }
         [SerializeField] int tier;                                                                           //Integer used to denote the level of the ability in the upgrade tree.
         public int Tier { get { return tier; } }
 
-        [SerializeField] AbilityObject previousTier;                                                         //Reference the the previous ability level of the tree, if any. Used for validation.
-        public AbilityObject PreviousTier { get { return previousTier; } }
+        [SerializeField] List<AbilityObject> previousTier;                                                         //Reference the the previous ability level of the tree, if any. Used for validation.
+        public List<AbilityObject> PreviousTier { get { return previousTier; } }
 
         [SerializeField] List<AbilityObject> nextTier;                                                       //Reference to the next ability level of the tree, if any. Used for validation.
         public List<AbilityObject> NextTier { get { return nextTier; } }

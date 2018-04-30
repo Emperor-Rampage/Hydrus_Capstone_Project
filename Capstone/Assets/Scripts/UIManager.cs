@@ -76,6 +76,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image enemyCastBar;
     [SerializeField] TMP_Text enemyCastText;
 
+
+    [SerializeField] RectTransform abilityTreeContentPanel;
+    [SerializeField] GameObject abilityTreePrefab;
+
     // Private fields.
     int currentMenu;
     int currentHUD;

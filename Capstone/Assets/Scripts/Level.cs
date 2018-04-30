@@ -344,13 +344,15 @@ namespace MapClasses
             int enemyIndex = 0;
             foreach (var spawn in spawnList)
             {
-                Enemy enemy = new Enemy(spawn.EnemyObject.Enemy);
-                //enemy.InitializeCooldownsList();
-                enemy.Index = enemyIndex++;
-                enemy.Target = Direction.Null;
-                enemy.InCombat = false;
-                SetEntityLocation(enemy, spawn.X, spawn.Z);
-                EnemyList.Add(enemy);
+                if (spawn.EnemyObject != null && spawn.EnemyObject.Enemy != null) {
+                    Enemy enemy = new Enemy(spawn.EnemyObject.Enemy);
+                    //enemy.InitializeCooldownsList();
+                    enemy.Index = enemyIndex++;
+                    enemy.Target = Direction.Null;
+                    enemy.InCombat = false;
+                    SetEntityLocation(enemy, spawn.X, spawn.Z);
+                    EnemyList.Add(enemy);
+                }
             }
         }
 

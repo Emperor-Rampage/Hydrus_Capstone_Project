@@ -4589,7 +4589,7 @@ MonoBehaviour:
       exitList: 0100000002000000
       spawnList:
       - x: 7
-        z: 5
+        z: 9
         enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
     - sceneIndex: 2
       name: Level 1

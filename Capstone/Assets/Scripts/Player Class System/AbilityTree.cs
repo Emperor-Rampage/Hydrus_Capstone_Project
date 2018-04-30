@@ -13,7 +13,7 @@ public class AbilityTree : MonoBehaviour
     [SerializeField] float uiCellWidth;
     [SerializeField] float uiCellHeight;
 
-    public float NumLeafs { get; private set; }
+    public float TotalNumLeafs { get; private set; }
 
     public AbilityTree(Player player, List<AbilityObject> t1)
     {
@@ -31,7 +31,42 @@ public class AbilityTree : MonoBehaviour
             prevTier = tier;
         }
 
-        NumLeafs = tiers[tiers.Count].Count;
+        TotalNumLeafs = tiers[tiers.Count].Count;
+    }
+
+    public bool IsAvailable(AbilityObject ability) {
+        foreach (AbilityObject playerAbility in player.Abilities) {
+            if (ability.PreviousTier.Contains(playerAbility))
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool CanUpgrade(AbilityObject ability) {
+        if (IsAvailable(ability) && player.Cores >= ability.Cost)
+            return true;
+
+        return false;
+    }
+
+    public int GetAbilityLeafs(int tier1Index) {
+        int numLeafs = 0;
+        if (tier1Index < 0 || tier1Index >= tiers.Count) {
+            var tier1 = tiers[0];
+            var lastTier = tiers[tiers.Count];
+            if (tier1 != null && lastTier != null) {
+                var abilityTier1 = tier1[tier1Index];
+                if (abilityTier1 != null) {
+                    foreach (var abilityLastTier in lastTier) {
+                        if (abilityLastTier.BaseAbility == abilityTier1) {
+                            numLeafs++;
+                        }
+                    }
+                }
+            }
+        }
+        return numLeafs;
     }
 
     public bool IsOffsetTier(int tier)
