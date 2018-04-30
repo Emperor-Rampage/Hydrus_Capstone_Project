@@ -128,6 +128,7 @@ namespace EntityClasses
             Tween.Value(adjustedCooldown, 0f, (val) => CooldownsRemaining[ability] = val, adjustedCooldown, 0f);
             RemoveIndicators();
             CurrentAbility = -1;
+            CurrentCastTime = 0f;
             CastProgress = 0f;
             State = EntityState.Idle;
         }
@@ -288,20 +289,20 @@ namespace EntityClasses
         // Returns true if alive, false if dead.
         public bool Damage(float damage, bool interrupt = false)
         {
-            Debug.Log(Name + " currently has " + CurrentHealth + " health. Taking " + damage + " damage.");
+            // Debug.Log(Name + " currently has " + CurrentHealth + " health. Taking " + damage + " damage.");
 
             // Cancel any current casting.
             if (CurrentAbility != -1 && interrupt && damage > 0)
             {
-                Debug.Log("Player damaged: Current ability is " + CurrentAbility + ", interrupt is " + interrupt);
+                // Debug.Log("Player damaged: Current ability is " + CurrentAbility + ", interrupt is " + interrupt);
                 if (currentAbilityTween != null)
                 {
-                    Debug.Log("-- Tween is not null.");
+                    // Debug.Log("-- Tween is not null.");
                     currentAbilityTween.Cancel();
                 }
                 if (currentAbilityCoroutine != null)
                 {
-                    Debug.Log("-- Coroutine is not null.");
+                    // Debug.Log("-- Coroutine is not null.");
                     GameManager.Instance.StopCoroutine(currentAbilityCoroutine);
                     coroutines.Remove(currentAbilityCoroutine);
                 }
@@ -318,7 +319,7 @@ namespace EntityClasses
             if (CurrentHealth > adjustedDamage)
             {
                 CurrentHealth -= adjustedDamage;
-                Debug.Log(Name + " now has " + CurrentHealth);
+                // Debug.Log(Name + " now has " + CurrentHealth);
                 return true;
             }
             else

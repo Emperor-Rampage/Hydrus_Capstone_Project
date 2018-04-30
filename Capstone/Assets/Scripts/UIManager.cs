@@ -472,7 +472,11 @@ public class UIManager : MonoBehaviour
     public void UpdateEnemyCast(float castProgress, float castTime)
     {
         enemyCastBar.fillAmount = castProgress;
-        enemyCastText.text = (castTime * (1 - castProgress)).ToString("0.0");
+        float castRemaining = (castTime * (1f - castProgress));
+        if (castRemaining < Mathf.Epsilon)
+            enemyCastText.text = "";
+        else
+            enemyCastText.text = (castTime * (1 - castProgress)).ToString("0.0");
         //        Tween.Stop(enemyCastBar.GetInstanceID());
         //        Tween.Value(0f, 1f, (value) => enemyCastBar.fillAmount = value, castTime, 0f, completeCallback: () => enemyCastBar.fillAmount = 0f);
     }

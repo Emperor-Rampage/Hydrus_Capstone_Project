@@ -265,6 +265,7 @@ namespace AIClasses
             float castSlow = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.CastTimeSlow);
             float haste = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.Haste);
 
+            // TODO: Implement calculation based on ability effects.
             if (action.AbilityIndex != -1)
             {
                 // Abilities should be impossible if stunned or silenced. Less likely if cast time is slowed. More likely if move slowed.
@@ -290,8 +291,8 @@ namespace AIClasses
                     Player player = level.Player;
                     var affected = level.GetAffectedCells_Highlight(enemy, ability);
                     // Debug.Log(affected.Count);
-                    // If the ability would hit the player.
-                    if (affected.Contains(player.Cell))
+                    // If the ability would hit the player or the caster (only possible for self cast abilities)
+                    if (affected.Contains(player.Cell) || ability.Type == AbilityType.Self)
                     {
                         value += 1f;
                     }
@@ -307,9 +308,43 @@ namespace AIClasses
                     // Increase depending on amount move slowed.
                     modifier += (slow * 0.15f);
 
+                    value *= modifier;
+
+                    float effectsValue = 1f;
+
+                    foreach (var effect in ability.StatusEffects)
+                    {
+                        switch (effect.Effect)
+                        {
+                            case (AbilityStatusEff.CastTimeSlow):
+                            case (AbilityStatusEff.CooldownSlow):
+                            case (AbilityStatusEff.DamReduct):
+                            case (AbilityStatusEff.Haste):
+                            case (AbilityStatusEff.MoveSlow):
+                                {
+                                    effectsValue += (effect.Value * effect.Duration / 5f);
+                                    break;
+                                }
+                            case (AbilityStatusEff.Root):
+                            case (AbilityStatusEff.Silence):
+                            case (AbilityStatusEff.Stun):
+                                {
+                                    effectsValue += (effect.Duration / 5f);
+                                    break;
+                                }
+                            case (AbilityStatusEff.DoT):
+                            case (AbilityStatusEff.Heal):
+                                {
+                                    effectsValue += ((effect.Value / effect.Duration) / 5f);
+                                    break;
+                                }
+                        }
+                    }
+
+                    value *= effectsValue;
+
                     // value *= ((ability.Damage / 100f) + 1);
 
-                    value *= modifier;
 
                     // value = value / (player.CurrentHealth / (float)player.MaxHealth);
 
