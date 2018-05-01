@@ -9,16 +9,22 @@ using UnityEngine;
 public class AbilityTree
 {
     Player player;
+    public Player Player { get { return player; } }
     List<List<AbilityObject>> tiers;
-    [SerializeField] float numTiers;
-    [SerializeField] float uiSpacing;
-    [SerializeField] float uiCellWidth;
-    [SerializeField] float uiCellHeight;
-    [SerializeField] float uiPadding;
+    [SerializeField] int numTiers;
+    public int NumTiers { get { return numTiers; } }
+    [SerializeField] int uiPadding;
+    public int Padding { get { return uiPadding; } }
+    [SerializeField] int uiSpacing;
+    public int Spacing { get { return uiSpacing; } }
+    [SerializeField] int uiCellWidth;
+    public int CellWidth { get { return uiCellWidth; } }
+    [SerializeField] int uiCellHeight;
+    public int CellHeight { get { return uiCellHeight; } }
 
-    public float Width { get { return (uiCellWidth * TotalNumLeafs) + ((uiSpacing - 1) * TotalNumLeafs) + (uiPadding * 2f); } }
-    public float Height { get { return (uiCellHeight * numTiers) + ((uiSpacing - 1) * numTiers) + (uiPadding * 2f); } }
-    public float TotalNumLeafs { get; private set; }
+    public int Width { get { return (uiCellWidth * TotalNumLeafs) + ((uiSpacing - 1) * TotalNumLeafs) + (uiPadding * 2); } }
+    public int Height { get { return (uiCellHeight * numTiers) + ((uiSpacing - 1) * numTiers) + (uiPadding * 2); } }
+    public int TotalNumLeafs { get; private set; }
 
     public void Initialize(Player player)
     {
@@ -42,10 +48,7 @@ public class AbilityTree
         }
 
         TotalNumLeafs = tiers[tiers.Count - 1].Count;
-        Debug.Log("Number in tier 1: " + t1.Count);
-        Debug.Log("Number in tier 2: " + tiers[1].Count);
-        Debug.Log("Number of leafs: " + TotalNumLeafs);
-        Debug.Log("Number of tiers: " + numTiers);
+        Debug.Log("Number of total leafs: " + TotalNumLeafs);
     }
 
     public List<AbilityObject> GetAbilityTier(int tier1Index, int targetTierIndex) {
@@ -65,7 +68,7 @@ public class AbilityTree
     public int GetAbilityLeafs(int tier1Index) {
         int numLeafs = 0;
         var tier1 = tiers[0];
-        var lastTier = tiers[tiers.Count];
+        var lastTier = tiers[tiers.Count - 1];
         if (tier1 != null && lastTier != null) {
             var abilityTier1 = tier1[tier1Index];
             if (abilityTier1 != null) {

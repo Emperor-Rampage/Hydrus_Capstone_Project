@@ -30,8 +30,10 @@ MonoBehaviour:
   castTime: 1.5
   damage: 20
   upgradeable: 1
+  baseAbility: {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}
   tier: 2
-  previousTier: {fileID: 0}
+  previousTier:
+  - {fileID: 0}
   nextTier:
   - {fileID: 11400000, guid: fca957c0f02fff34285327972d696086, type: 2}
   cost: 50

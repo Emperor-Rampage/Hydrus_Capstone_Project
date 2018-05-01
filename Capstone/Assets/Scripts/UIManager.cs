@@ -192,6 +192,36 @@ public class UIManager : MonoBehaviour
         LayoutElement layoutElement = abilityTreeContentPanel.GetComponent<LayoutElement>();
         layoutElement.preferredWidth = tree.Width;
         layoutElement.preferredHeight = tree.Height;
+
+        GridLayoutGroup gridLayoutGroup = abilityTreeContentPanel.GetComponent<GridLayoutGroup>();
+        gridLayoutGroup.cellSize = new Vector2(tree.CellWidth, tree.CellHeight);
+        gridLayoutGroup.startAxis = GridLayoutGroup.Axis.Horizontal;
+        gridLayoutGroup.padding.top = tree.Padding;
+        gridLayoutGroup.padding.right = tree.Padding;
+        gridLayoutGroup.padding.bottom = tree.Padding;
+        gridLayoutGroup.padding.left = tree.Padding;
+        gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridLayoutGroup.constraintCount = tree.TotalNumLeafs;
+
+        gridLayoutGroup.spacing = new Vector2(tree.Spacing, tree.Spacing);
+
+        for (int t = 0; t < tree.NumTiers; t++)
+        {
+            Debug.Log("---- Tier " + t);
+            for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
+            {
+                Debug.Log("-- Ability " + t);
+                var abilityTier = tree.GetAbilityTier(a, t);
+                int leafCount = tree.GetAbilityLeafs(a);
+                int median = Mathf.FloorToInt(leafCount / 2f);
+
+                for (int c = 0; c < abilityTier.Count; c++) {
+                    Debug.Log(" Cell " + c);
+                    GameObject cell = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+                    cell.transform.GetChild(0).GetComponent<Image>().sprite = abilityTier[c].Icon;
+                }
+            }
+        }
     }
 
     public void SelectClass(PlayerClass selected)
