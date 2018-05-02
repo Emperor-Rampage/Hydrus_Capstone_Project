@@ -51,13 +51,17 @@ public class AbilityTree
         Debug.Log("Number of total leafs: " + TotalNumLeafs);
     }
 
-    public List<AbilityObject> GetAbilityTier(int tier1Index, int targetTierIndex) {
-        if (targetTierIndex >= 0 && targetTierIndex < tiers.Count) {
+    public List<AbilityObject> GetAbilityTier(int tier1Index, int targetTierIndex)
+    {
+        if (targetTierIndex >= 0 && targetTierIndex < tiers.Count)
+        {
             var tier1 = tiers[0];
             var targetTier = tiers[targetTierIndex];
-            if (tier1 != null) {
+            if (tier1 != null)
+            {
                 var abilityTier1 = tier1[tier1Index];
-                if (abilityTier1 != null) {
+                if (abilityTier1 != null)
+                {
                     return targetTier.Where((abil) => abil.BaseAbility == abilityTier1).ToList();
                 }
             }
@@ -65,15 +69,20 @@ public class AbilityTree
         return null;
     }
 
-    public int GetAbilityLeafs(int tier1Index) {
+    public int GetAbilityLeafs(int tier1Index)
+    {
         int numLeafs = 0;
         var tier1 = tiers[0];
         var lastTier = tiers[tiers.Count - 1];
-        if (tier1 != null && lastTier != null) {
+        if (tier1 != null && lastTier != null)
+        {
             var abilityTier1 = tier1[tier1Index];
-            if (abilityTier1 != null) {
-                foreach (var abilityLastTier in lastTier) {
-                    if (abilityLastTier.BaseAbility == abilityTier1) {
+            if (abilityTier1 != null)
+            {
+                foreach (var abilityLastTier in lastTier)
+                {
+                    if (abilityLastTier.BaseAbility == abilityTier1)
+                    {
                         numLeafs++;
                     }
                 }
@@ -82,8 +91,18 @@ public class AbilityTree
         return numLeafs;
     }
 
-    public bool IsAvailable(AbilityObject ability) {
-        foreach (AbilityObject playerAbility in player.Abilities) {
+    public int GetNumberOfChildren(int tierIndex, int abilityIndex)
+    {
+        int numChildren = 0;
+        var tier = tiers[tierIndex];
+        // var lastTier = tiers[]
+        return 0;
+    }
+
+    public bool IsAvailable(AbilityObject ability)
+    {
+        foreach (AbilityObject playerAbility in player.Abilities)
+        {
             if (ability.PreviousTier.Contains(playerAbility))
                 return true;
         }
@@ -91,7 +110,8 @@ public class AbilityTree
         return false;
     }
 
-    public bool CanUpgrade(AbilityObject ability) {
+    public bool CanUpgrade(AbilityObject ability)
+    {
         if (IsAvailable(ability) && player.Cores >= ability.Cost)
             return true;
 

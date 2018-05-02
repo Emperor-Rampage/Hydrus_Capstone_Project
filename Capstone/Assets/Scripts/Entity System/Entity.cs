@@ -270,7 +270,7 @@ namespace EntityClasses
 
         public float GetAdjustedDamageReduction(float damageReduction)
         {
-            return damageReduction * (2f - StatusEffects.DamageRate);
+            return damageReduction * (2f - StatusEffects.DamageScale);
         }
 
         // Returns true if full health, false if not.

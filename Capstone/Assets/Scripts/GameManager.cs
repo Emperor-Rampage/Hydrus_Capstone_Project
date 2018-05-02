@@ -58,7 +58,8 @@ public class GameManager : Singleton<GameManager>
     [Space(10)]
     [Header("Game")]
 
-    [SerializeField] AbilityTree abilityTree;
+    [SerializeField]
+    AbilityTree abilityTree;
     [SerializeField]
     List<PlayerClass> classes;
     PlayerClass selectedClass;
@@ -221,12 +222,12 @@ public class GameManager : Singleton<GameManager>
             // Sets up cells, connections, player spawn, and generates procedural areas.
             level.InitializeLevel(player);
             player = level.Player;
-            
+
             player.Class = selectedClass;
             player.SetupBaseAbilities();
             player.CurrentAbility = -1;
             player.CurrentHealth = player.MaxHealth;
-            
+
             abilityTree.Initialize(player);
 
             BuildLevel_Procedural();
@@ -730,16 +731,21 @@ public class GameManager : Singleton<GameManager>
 
             if (player.StatusEffects.DamageRate > 0f)
             {
-                player.Damage(player.StatusEffects.DamageRate * tickRate);
+                bool alive = player.Damage(player.StatusEffects.DamageRate * tickRate);
                 uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+                PerformEntityDeathCheck(player, alive);
             }
 
             foreach (Enemy enemy in level.EnemyList)
             {
                 if (enemy.StatusEffects.HealRate > 0f)
                     enemy.Heal(enemy.StatusEffects.HealRate * enemy.MaxHealth * tickRate);
+
                 if (enemy.StatusEffects.DamageRate > 0f)
-                    enemy.Damage(enemy.StatusEffects.DamageRate * tickRate);
+                {
+                    bool alive = enemy.Damage(enemy.StatusEffects.DamageRate * tickRate);
+                    PerformEntityDeathCheck(player, alive);
+                }
             }
             yield return wait;
         }
@@ -952,7 +958,6 @@ public class GameManager : Singleton<GameManager>
         if (ability.SoundEffect != null)
         {
             audioManager.PlaySoundEffect(new SoundEffect(ability.SoundEffect, entity.Instance.transform.position));
-
         }
 
         if (entity.IsPlayer == true)
@@ -1009,18 +1014,25 @@ public class GameManager : Singleton<GameManager>
     {
         foreach (AbilityEffect effect in ability.StatusEffects)
         {
-            AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, tickRate, effect.Value);
+            AbilityEffect effectInstance = null;
+            if (effect.Effect == AbilityStatusEff.Heal || effect.Effect == AbilityStatusEff.DoT)
+            {
+                effectInstance = new AbilityEffect(caster.Index, effect.Effect, tickRate, (effect.Value / effect.Duration) * tickRate);
+            }
+            else
+            {
+                effectInstance = new AbilityEffect(caster.Index, effect.Effect, tickRate, effect.Value);
+            }
             target.StatusEffects.AddEffect(effectInstance);
         }
+        // bool alive = target.Damage(0);
+        // // if (target.GetType() == typeof(Player))
+        // if (target.IsPlayer)
+        // {
+        //     uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
+        // }
 
-        bool alive = target.Damage(0);
-        // if (target.GetType() == typeof(Player))
-        if (target.IsPlayer)
-        {
-            uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
-        }
-
-        PerformEntityDeathCheck(target, alive);
+        // PerformEntityDeathCheck(target, alive);
     }
 
     IEnumerator ApplyZoneAbility_Coroutine(Cell cell, AbilityObject ability, Entity caster)

@@ -188,7 +188,11 @@ public class UIManager : MonoBehaviour
         UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
     }
 
-    public void SetUpAbilityTreeMenu(AbilityTree tree) {
+    public void SetUpAbilityTreeMenu(AbilityTree tree)
+    {
+        // TODO: Switch to a panel for each ability with a vertical layout group.
+        //       Populate with panels with horizontal layout groups with each ability's tier.
+
         LayoutElement layoutElement = abilityTreeContentPanel.GetComponent<LayoutElement>();
         layoutElement.preferredWidth = tree.Width;
         layoutElement.preferredHeight = tree.Height;
@@ -205,9 +209,10 @@ public class UIManager : MonoBehaviour
 
         gridLayoutGroup.spacing = new Vector2(tree.Spacing, tree.Spacing);
 
-        for (int t = 0; t < tree.NumTiers; t++)
+        for (int t = tree.NumTiers - 1; t >= 0; t--)
         {
             Debug.Log("---- Tier " + t);
+            int rowCount = 0;
             for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
             {
                 Debug.Log("-- Ability " + t);
@@ -215,10 +220,52 @@ public class UIManager : MonoBehaviour
                 int leafCount = tree.GetAbilityLeafs(a);
                 int median = Mathf.FloorToInt(leafCount / 2f);
 
-                for (int c = 0; c < abilityTier.Count; c++) {
+                int tierSpacing = 0;
+                // var nextAbilityTier = tree.GetAbilityTier(a, t + 1);
+                // if (nextAbilityTier != null)
+                // {
+                //     tierSpacing = Mathf.FloorToInt((nextAbilityTier.Count / abilityTier.Count) / 2f);
+                // }
+
+                tierSpacing = Mathf.FloorToInt((leafCount / abilityTier.Count) / 2f);
+
+                /*
+                
+                count1 = 4
+                count2 = 8
+                count3 = 11
+                
+                spacing1 = (count2 / count1) / 2 = (8 / 4) / 2 = 1
+                spacing2 = (count3 / count2) / 2 = (11 / 8) / 2 = 1.375 / 2 = 0.6875
+                
+                 O O O O
+                OOOOOOOO
+                OOOOOOOOOOO
+                */
+
+                for (int c = 0; c < abilityTier.Count; c++)
+                {
+
                     Debug.Log(" Cell " + c);
                     GameObject cell = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+                    cell.name = "TreeIcon_" + abilityTier[c].Name;
                     cell.transform.GetChild(0).GetComponent<Image>().sprite = abilityTier[c].Icon;
+                    rowCount++;
+
+                    for (int s = 0; s < tierSpacing; s++)
+                    {
+                        GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+                        blank.name = "Spacer";
+                        rowCount++;
+                    }
+                }
+            }
+            if (rowCount < tree.TotalNumLeafs)
+            {
+                for (int r = 0; r < (tree.TotalNumLeafs - rowCount); r++)
+                {
+                    GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+                    blank.name = "Spacer";
                 }
             }
         }
@@ -401,7 +448,7 @@ public class UIManager : MonoBehaviour
         }
         else if (effect.Effect == AbilityStatusEff.DoT)
         {
-            effectText.text = effect.Effect + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Remaining.ToString("0.0");
+            effectText.text = effect.Effect + " " + effect.Value + " / " + effect.Duration + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Remaining.ToString("0.0");
         }
         else if (effect.Effect == AbilityStatusEff.Heal)
         {

@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: Poison Sludge
   m_EditorClassIdentifier: 
-  abilityName: Default Ability Name
+  abilityName: Poison Sludge
   icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
   particleSystem: {fileID: 0}
@@ -19,15 +19,23 @@ MonoBehaviour:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
-  statusEffects: []
-  type: 0
+  statusEffects:
+  - effect: 3
+    duration: 5
+    value: 0.6
+  - effect: 9
+    duration: 5
+    value: 20
+  type: 4
   aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
   range: 0
-  cooldown: 0
-  castTime: 0
+  cooldown: 6
+  castTime: 3
   damage: 0
   upgradeable: 0
+  baseAbility: {fileID: 0}
   tier: 0
-  previousTier: {fileID: 0}
+  previousTier:
+  - {fileID: 0}
   nextTier: []
   cost: 0

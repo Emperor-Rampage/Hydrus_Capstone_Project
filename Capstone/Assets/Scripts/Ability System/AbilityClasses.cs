@@ -102,6 +102,9 @@ namespace AbilityClasses
         {
             if (EffectLibrary.ContainsKey(AbilEffect.Effect))
             {
+                if (EffectLibrary[AbilEffect.Effect].Exists(e => e.GetHashCode() == AbilEffect.GetHashCode()))
+                    return;
+
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
                 StartTween(AbilEffect);
                 CalcEffects(AbilEffect.Effect);
