@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
+  m_Name: 2.1.1 Blast Grenade
+  m_EditorClassIdentifier: 
+  abilityName: Blast Grenade
+  icon: {fileID: 21300000, guid: 5524840675e85454da438a52da934e53, type: 3}
+  toolTip: 'Tier 3 Ability: Marksman Ability 2'
+  particleSystem: {fileID: 0}
+  soundEffect:
+    audioClip: {fileID: 0}
+    volume: 0
+    pitch: 0
+  statusEffects:
+  - effect: 2
+    duration: 1.5
+    value: 0
+  type: 3
+  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  range: 0
+  cooldown: 6
+  castTime: 2
+  damage: 50
+  upgradeable: 0
+  baseAbility: {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}
+  tier: 3
+  previousTier:
+  - {fileID: 0}
+  nextTier: []
+  cost: 250
