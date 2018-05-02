@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb9837bab38bbcd40bf696524aac530d, type: 3}
+  m_Name: Knight
+  m_EditorClassIdentifier: 
+  className: Knight
+  description: The Knight class excels at getting up close and personal with targets,
+    and being able to soak damage as well.
+  baseAbilities:
+  - {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}
+  - {fileID: 11400000, guid: a2a5285717737ff4f9f86059527a83da, type: 2}
+  - {fileID: 11400000, guid: d568e20e39d58d447b983a4d8ddbd580, type: 2}
+  - {fileID: 11400000, guid: cf76a02ac1bef074f8b752ec6550be6e, type: 2}
+  classCamera: {fileID: 1029249807062346, guid: f490db42a3df48b4786da13ac16ed9ff,
+    type: 2}
