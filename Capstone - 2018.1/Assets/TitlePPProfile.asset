@@ -16,6 +16,7 @@ MonoBehaviour:
   - {fileID: 114057046107901812}
   - {fileID: 114169633598828074}
   - {fileID: 114742739242365470}
+  - {fileID: 114681566159951372}
 --- !u!114 &114057046107901812
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -27,7 +28,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1cb7e9e120078f43bce4f0b1be547a7, type: 3}
   m_Name: AmbientOcclusion
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -75,19 +76,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
   m_Name: Grain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
   colored:
     overrideState: 1
-    value: 1
+    value: 0
   intensity:
     overrideState: 1
-    value: 0.502
+    value: 0.364
   size:
     overrideState: 1
-    value: 1.69
+    value: 0.57
   lumContrib:
     overrideState: 1
     value: 1
@@ -102,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adb84e30e02715445aeb9959894e3b4d, type: 3}
   m_Name: ColorGrading
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -369,6 +370,33 @@ MonoBehaviour:
       m_Loop: 0
       m_ZeroValue: 0.5
       m_Range: 1
+--- !u!114 &114681566159951372
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556797029e73b2347956b6579e77e05b, type: 3}
+  m_Name: DepthOfField
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  focusDistance:
+    overrideState: 0
+    value: 0.1
+  aperture:
+    overrideState: 1
+    value: 0.1
+  focalLength:
+    overrideState: 1
+    value: 1
+  kernelSize:
+    overrideState: 1
+    value: 0
 --- !u!114 &114742739242365470
 MonoBehaviour:
   m_ObjectHideFlags: 3
