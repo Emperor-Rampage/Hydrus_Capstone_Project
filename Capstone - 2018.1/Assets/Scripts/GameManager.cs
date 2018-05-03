@@ -88,6 +88,8 @@ public class GameManager : Singleton<GameManager>
 
     // Whether or not we're in-game.
     bool inGame;
+    Coroutine gradualEffectsCoroutine;
+    Coroutine playerMovementCoroutine;
 
     // Properties: Because why not do things all proper-like.
     public Map Map
@@ -195,6 +197,13 @@ public class GameManager : Singleton<GameManager>
     IEnumerator LoadLevel_Coroutine(float delay)
     {
         yield return new WaitForSeconds(delay);
+
+        if (inGame && level != null) {
+            foreach (Enemy enemy in level.EnemyList) {
+                enemy.Kill();
+            }
+        }
+
         int sceneIndex = Map.CurrentLevel.sceneIndex;
         Debug.Log("Loading level " + sceneIndex);
         SceneManager.LoadScene(sceneIndex);
@@ -261,7 +270,9 @@ public class GameManager : Singleton<GameManager>
             audioManager.FadeInMusic(level.music, 1f);
 
             inGame = true;
-            StartCoroutine(ApplyGradualEffects_Coroutine());
+            if (gradualEffectsCoroutine != null)
+                StopCoroutine(gradualEffectsCoroutine);
+            gradualEffectsCoroutine = StartCoroutine(ApplyGradualEffects_Coroutine());
         }
         else
         {
@@ -287,8 +298,8 @@ public class GameManager : Singleton<GameManager>
                 Vector3 center = Map.GetCellPosition(cell);
                 GameObject cellInstance = new GameObject("Cell_" + cell.Index);
                 cellInstance.transform.position = center;
-                GameObject floorInstance = GameObject.Instantiate(Map.GetRandomPrefab(floorPrefabs), cellInstance.transform);
-                GameObject ceilingInstance = GameObject.Instantiate(Map.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
+                GameObject.Instantiate(Map.GetRandomPrefab(floorPrefabs), cellInstance.transform);
+                GameObject.Instantiate(Map.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
                 List<GameObject> wallInstances = new List<GameObject>();
                 for (int w = 0; w < 4; w++)
                 {
@@ -675,6 +686,9 @@ public class GameManager : Singleton<GameManager>
                 AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
                 level.Player.StatusEffects.AddEffect(effect);
             }
+            else if (Input.GetKeyDown(KeyCode.K)) {
+                uiManager.CancelPlayerCast();
+            }
         }
     }
 
@@ -819,7 +833,7 @@ public class GameManager : Singleton<GameManager>
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         //Probably going to make a separate method to handle all this.
-        if (entity.IsPlayer == true)
+        if (entity.IsPlayer)
         {
             if (level.Player.Facing == direction)
             {
@@ -839,7 +853,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
         Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
-        StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
+        playerMovementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
     }
 
     // Sets the destination cell to a locked state (to prevent any other entities to attempt to move to this cell)
@@ -1063,6 +1077,9 @@ public class GameManager : Singleton<GameManager>
         if (!alive && entity.IsPlayer)
         {
             // Do player death stuff.
+            if (playerMovementCoroutine != null)
+                StopCoroutine(playerMovementCoroutine);
+
             level.Player.State = EntityState.Null;
             level.Player.Cores = 0;
             audioManager.FadeOutMusic(1f);

@@ -584,7 +584,6 @@ public class UIManager : MonoBehaviour
             playerCastBarTween = null;
 
         }
-        Color startColor = new Color(1f, 0f, 0f, 0f);
         Color targetColor = new Color(1f, 0f, 0f, 1f);
         Tween.Color(playerCastInterruptImage, targetColor, 0.5f, 0f, Tween.EaseWobble);
         playerCastBar.fillAmount = 0f;

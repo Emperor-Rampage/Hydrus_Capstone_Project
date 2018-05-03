@@ -334,6 +334,7 @@ namespace EntityClasses
         {
             // Stop current coroutines.
             coroutines.ForEach((coroutine) => GameManager.Instance.StopCoroutine(coroutine));
+            StatusEffects.ClearEffects();
             RemoveIndicators();
             if (State == EntityState.Casting)
                 State = EntityState.Idle;

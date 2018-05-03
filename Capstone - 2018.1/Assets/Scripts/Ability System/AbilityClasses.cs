@@ -5,6 +5,7 @@ using EntityClasses;
 using UnityEngine;
 using Pixelplacement;
 using MapClasses;
+using Pixelplacement.TweenSystem;
 
 namespace AbilityClasses
 {
@@ -91,11 +92,13 @@ namespace AbilityClasses
         public bool Silenced { get; private set; } = false;
 
         public Dictionary<AbilityStatusEff, List<AbilityEffect>> EffectLibrary;
-        public List<AbilityEffect> CurrentEffects;
+
+        List<TweenBase> tweens;
 
         public EffectDictionary()
         {
             EffectLibrary = new Dictionary<AbilityStatusEff, List<AbilityEffect>>();
+            tweens = new List<TweenBase>();
         }
 
         public void AddEffect(AbilityEffect AbilEffect)
@@ -125,7 +128,8 @@ namespace AbilityClasses
         void StartTween(AbilityEffect eff)
         {
             eff.Remaining = eff.Duration;
-            Tween.Value(eff.Duration, 0f, (value) => eff.Remaining = value, eff.Duration, 0.0f, completeCallback: () => RemoveEffect(eff));
+            TweenBase effectTween = Tween.Value(eff.Duration, 0f, (value) => eff.Remaining = value, eff.Duration, 0.0f, completeCallback: () => RemoveEffect(eff));
+            tweens.Add(effectTween);
         }
 
         //At the end of the ability effect Tween, remove the AbilityEffect from the list of current effects.
@@ -397,6 +401,17 @@ namespace AbilityClasses
                 }
             }
             return false;
+        }
+
+        public void ClearEffects() {
+            EffectLibrary.Clear();
+            foreach (TweenBase tween in tweens) {
+                tween.Cancel();
+            }
+            tweens.Clear();
+            foreach (AbilityStatusEff type in typeof(AbilityStatusEff).GetEnumValues()) {
+                CalcEffects(type);
+            }
         }
 
     }

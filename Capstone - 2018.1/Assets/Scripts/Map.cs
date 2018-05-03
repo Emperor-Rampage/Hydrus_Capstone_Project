@@ -47,8 +47,6 @@ namespace MapClasses
         }
 
         // The index for the current level.
-        // TODO: Probably just cleaner to keep a reference to the actual level object,
-        //       since I doubt we'll be using the index for anything.
         public Level CurrentLevel { get; private set; }
 
         // This is a list of all levels. Hub area, biodome area, biodome boss, mechanical bay, mechanical bay boss, final boss.
