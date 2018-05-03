@@ -11,6 +11,7 @@ public class AbilityTree
     Player player;
     public Player Player { get { return player; } }
     List<List<AbilityObject>> tiers;
+    public List<List<GameObject>> UITiers { get; private set; } = new List<List<GameObject>>();
     [SerializeField] int numTiers;
     public int NumTiers { get { return numTiers; } }
     [SerializeField] int uiPadding;
@@ -35,20 +36,46 @@ public class AbilityTree
         List<AbilityObject> prevTier;
         tiers = new List<List<AbilityObject>>();
         tiers.Add(t1);
+        UITiers.Add(new List<GameObject>());
         prevTier = t1;
         for (int t = 1; t < numTiers; t++)
         {
             var tier = new List<AbilityObject>();
+            var uiTier = new List<GameObject>();
             foreach (AbilityObject ability in prevTier)
             {
                 tier.AddRange(ability.NextTier);
             }
             tiers.Add(tier);
+            UITiers.Add(uiTier);
             prevTier = tier;
         }
 
         TotalNumLeafs = tiers[tiers.Count - 1].Count;
+
         Debug.Log("Number of total leafs: " + TotalNumLeafs);
+    }
+
+    public int GetAbilityIndex(int tierIndex, AbilityObject ability)
+    {
+        var tier = tiers[tierIndex];
+        if (tier != null)
+        {
+            return tier.IndexOf(ability);
+        }
+        Debug.Log("ERROR: Could not find ability index.");
+        return -1;
+    }
+
+    public void AddAbilityUI(int tierIndex, int abilityIndex, GameObject abilityUI)
+    {
+        // Debug.Log("Adding ability index " + abilityIndex + " for tier " + tierIndex);
+        if (abilityIndex == -1)
+        {
+            return;
+        }
+        var tier = UITiers[tierIndex];
+        tier.Insert(abilityIndex, abilityUI);
     }
 
     public List<AbilityObject> GetAbilityTier(int tier1Index, int targetTierIndex)
@@ -89,14 +116,6 @@ public class AbilityTree
             }
         }
         return numLeafs;
-    }
-
-    public int GetNumberOfChildren(int tierIndex, int abilityIndex)
-    {
-        int numChildren = 0;
-        var tier = tiers[tierIndex];
-        // var lastTier = tiers[]
-        return 0;
     }
 
     public bool IsAvailable(AbilityObject ability)

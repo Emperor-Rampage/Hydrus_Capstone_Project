@@ -78,10 +78,12 @@ public class UIManager : MonoBehaviour
 
 
     [Header("Ability Tree Settings")]
-    [SerializeField] RectTransform abilityTreeContentPanel;
+    [SerializeField]
+    RectTransform abilityTreeContentPanel;
     [SerializeField] GameObject abilityTreePrefab;
     [SerializeField] GameObject abilityTierPrefab;
     [SerializeField] GameObject abilityVariantPrefab;
+    [SerializeField] GameObject abiltiyLinePrefab;
 
     // Private fields.
     int currentMenu;
@@ -211,13 +213,15 @@ public class UIManager : MonoBehaviour
         //  For each tier of each ability. Create a panel with a HorizontalLayoutGroup for each.
         //   For each ability in the tier. Create an instance of the icon prefab and set the icon.
 
-        for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++) {
-            
+        for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
+        {
+
             GameObject abilityPanel = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
             // TODO: Switch to calculating the width. Should be number of leaves + any padding and spacing.
             abilityPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(500f, 0f);
 
-            for (int t = 0; t < tree.NumTiers; t++) {
+            for (int t = 0; t < tree.NumTiers; t++)
+            {
 
                 GameObject tierPanel = GameObject.Instantiate(abilityTierPrefab, abilityPanel.transform);
                 // TODO: Switch to calculating the height. Should be cell height.
@@ -225,17 +229,77 @@ public class UIManager : MonoBehaviour
 
                 var abilityTier = tree.GetAbilityTier(a, t);
 
-                for (int i = 0; i < abilityTier.Count; i++) {
+                for (int i = 0; i < abilityTier.Count; i++)
+                {
+                    AbilityObject ability = abilityTier[i];
 
                     GameObject cell = GameObject.Instantiate(abilityVariantPrefab, tierPanel.transform);
                     cell.GetComponent<RectTransform>().sizeDelta = new Vector2(tree.CellWidth, tree.CellHeight);
-                    cell.name = "TreeIcon_" + abilityTier[i].Name;
-                    cell.transform.GetChild(0).GetComponent<Image>().sprite = abilityTier[i].Icon;
+                    cell.name = "TreeIcon_" + ability.Name;
+                    cell.transform.GetChild(0).GetComponent<Image>().sprite = ability.Icon;
+
+                    tree.AddAbilityUI(t, tree.GetAbilityIndex(t, ability), cell);
                 }
 
             }
 
-        } 
+        }
+
+
+        // For each base ability.
+        //  For each tier of the ability
+        //   If there is a next tier,
+        //    compare with each of the next abilities.
+        //    If contained
+        //     Get both UI elements and draw a line between them.
+        for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
+        {
+            for (int t = 0; t < tree.NumTiers; t++)
+            {
+
+                var abilityTier = tree.GetAbilityTier(a, t);
+
+                var nextTier = tree.GetAbilityTier(a, t + 1);
+
+                if (nextTier != null)
+                {
+                    for (int i = 0; i < abilityTier.Count; i++)
+                    {
+                        AbilityObject ability = abilityTier[i];
+                        for (int n = 0; n < nextTier.Count; n++)
+                        {
+                            AbilityObject nextAbility = nextTier[n];
+                            if (ability.NextTier.Contains(nextAbility))
+                            {
+                                int ability1Index = tree.GetAbilityIndex(t, ability);
+                                int ability2Index = tree.GetAbilityIndex(t + 1, nextAbility);
+
+                                GameObject ability1UI = tree.UITiers[t][ability1Index];
+                                GameObject ability2UI = tree.UITiers[t + 1][ability2Index];
+
+                                Vector2 ability1Position = ability1UI.GetComponent<RectTransform>().anchoredPosition;
+                                Vector2 ability2Position = ability2UI.GetComponent<RectTransform>().position;
+
+                                Vector3 position = new Vector3((ability1Position.x + ability2Position.x) / 2f, (ability1Position.y + ability2Position.y) / 2f, 0f);
+                                Quaternion rotation = Quaternion.identity;
+                                int length = 50;
+
+                                GameObject line = GameObject.Instantiate(abiltiyLinePrefab, ability1UI.transform);
+
+                                RectTransform lineTransform = line.GetComponent<RectTransform>();
+
+                                // Debug.Log("Placing line at " + position + " between " + ability1Position + " and " + ability2Position);
+
+                                lineTransform.anchoredPosition = position;
+                                lineTransform.rotation = rotation;
+                                lineTransform.sizeDelta = new Vector2(lineTransform.sizeDelta.x, length);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
 
@@ -260,14 +324,14 @@ public class UIManager : MonoBehaviour
         //         tierSpacing = Mathf.FloorToInt((leafCount / abilityTier.Count) / 2f);
 
         //         /*
-                
+
         //         count1 = 4
         //         count2 = 8
         //         count3 = 11
-                
+
         //         spacing1 = (count2 / count1) / 2 = (8 / 4) / 2 = 1
         //         spacing2 = (count3 / count2) / 2 = (11 / 8) / 2 = 1.375 / 2 = 0.6875
-                
+
         //          O O O O
         //         OOOOOOOO
         //         OOOOOOOOOOO

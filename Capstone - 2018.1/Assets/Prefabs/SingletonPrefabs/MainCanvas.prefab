@@ -13253,6 +13253,8 @@ MonoBehaviour:
     type: 2}
   abilityVariantPrefab: {fileID: 1495890213161800, guid: f1beab8fb58ac814fac78ebd313e44a4,
     type: 2}
+  abiltiyLinePrefab: {fileID: 1100086976608442, guid: b0efd4ae95742064c8112d07c23f593a,
+    type: 2}
   fullscreenToggle: {fileID: 114055103181394144}
   resolutionDropdown: {fileID: 114488983802351270}
   antialiasingDropdown: {fileID: 114688374313646680}
