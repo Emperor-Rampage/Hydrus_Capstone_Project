@@ -77,8 +77,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text enemyCastText;
 
 
+    [Header("Ability Tree Settings")]
     [SerializeField] RectTransform abilityTreeContentPanel;
     [SerializeField] GameObject abilityTreePrefab;
+    [SerializeField] GameObject abilityTierPrefab;
+    [SerializeField] GameObject abilityVariantPrefab;
 
     // Private fields.
     int currentMenu;
@@ -197,78 +200,105 @@ public class UIManager : MonoBehaviour
         layoutElement.preferredWidth = tree.Width;
         layoutElement.preferredHeight = tree.Height;
 
-        GridLayoutGroup gridLayoutGroup = abilityTreeContentPanel.GetComponent<GridLayoutGroup>();
-        gridLayoutGroup.cellSize = new Vector2(tree.CellWidth, tree.CellHeight);
-        gridLayoutGroup.startAxis = GridLayoutGroup.Axis.Horizontal;
-        gridLayoutGroup.padding.top = tree.Padding;
-        gridLayoutGroup.padding.right = tree.Padding;
-        gridLayoutGroup.padding.bottom = tree.Padding;
-        gridLayoutGroup.padding.left = tree.Padding;
-        gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        gridLayoutGroup.constraintCount = tree.TotalNumLeafs;
+        HorizontalLayoutGroup horizontalLayoutGroup = abilityTreeContentPanel.GetComponent<HorizontalLayoutGroup>();
+        horizontalLayoutGroup.spacing = tree.Spacing;
+        horizontalLayoutGroup.padding.top = tree.Padding;
+        horizontalLayoutGroup.padding.right = tree.Padding;
+        horizontalLayoutGroup.padding.bottom = tree.Padding;
+        horizontalLayoutGroup.padding.left = tree.Padding;
 
-        gridLayoutGroup.spacing = new Vector2(tree.Spacing, tree.Spacing);
+        // For each of the abilities. Create a panel with a VerticalLayoutGroup for each.
+        //  For each tier of each ability. Create a panel with a HorizontalLayoutGroup for each.
+        //   For each ability in the tier. Create an instance of the icon prefab and set the icon.
 
-        for (int t = tree.NumTiers - 1; t >= 0; t--)
-        {
-            Debug.Log("---- Tier " + t);
-            int rowCount = 0;
-            for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
-            {
-                Debug.Log("-- Ability " + t);
+        for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++) {
+            
+            GameObject abilityPanel = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+            // TODO: Switch to calculating the width. Should be number of leaves + any padding and spacing.
+            abilityPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(500f, 0f);
+
+            for (int t = 0; t < tree.NumTiers; t++) {
+
+                GameObject tierPanel = GameObject.Instantiate(abilityTierPrefab, abilityPanel.transform);
+                // TODO: Switch to calculating the height. Should be cell height.
+                tierPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 100f);
+
                 var abilityTier = tree.GetAbilityTier(a, t);
-                int leafCount = tree.GetAbilityLeafs(a);
-                int median = Mathf.FloorToInt(leafCount / 2f);
 
-                int tierSpacing = 0;
-                // var nextAbilityTier = tree.GetAbilityTier(a, t + 1);
-                // if (nextAbilityTier != null)
-                // {
-                //     tierSpacing = Mathf.FloorToInt((nextAbilityTier.Count / abilityTier.Count) / 2f);
-                // }
+                for (int i = 0; i < abilityTier.Count; i++) {
 
-                tierSpacing = Mathf.FloorToInt((leafCount / abilityTier.Count) / 2f);
-
-                /*
-                
-                count1 = 4
-                count2 = 8
-                count3 = 11
-                
-                spacing1 = (count2 / count1) / 2 = (8 / 4) / 2 = 1
-                spacing2 = (count3 / count2) / 2 = (11 / 8) / 2 = 1.375 / 2 = 0.6875
-                
-                 O O O O
-                OOOOOOOO
-                OOOOOOOOOOO
-                */
-
-                for (int c = 0; c < abilityTier.Count; c++)
-                {
-
-                    Debug.Log(" Cell " + c);
-                    GameObject cell = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
-                    cell.name = "TreeIcon_" + abilityTier[c].Name;
-                    cell.transform.GetChild(0).GetComponent<Image>().sprite = abilityTier[c].Icon;
-                    rowCount++;
-
-                    for (int s = 0; s < tierSpacing; s++)
-                    {
-                        GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
-                        blank.name = "Spacer";
-                        rowCount++;
-                    }
+                    GameObject cell = GameObject.Instantiate(abilityVariantPrefab, tierPanel.transform);
+                    cell.GetComponent<RectTransform>().sizeDelta = new Vector2(tree.CellWidth, tree.CellHeight);
+                    cell.name = "TreeIcon_" + abilityTier[i].Name;
+                    cell.transform.GetChild(0).GetComponent<Image>().sprite = abilityTier[i].Icon;
                 }
+
             }
-            if (rowCount < tree.TotalNumLeafs)
-            {
-                for (int r = 0; r < (tree.TotalNumLeafs - rowCount); r++)
-                {
-                    GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
-                    blank.name = "Spacer";
-                }
-            }
-        }
+
+        } 
+
+
+
+        // for (int t = tree.NumTiers - 1; t >= 0; t--)
+        // {
+        //     Debug.Log("---- Tier " + t);
+        //     int rowCount = 0;
+        //     for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
+        //     {
+        //         Debug.Log("-- Ability " + t);
+        //         var abilityTier = tree.GetAbilityTier(a, t);
+        //         int leafCount = tree.GetAbilityLeafs(a);
+        //         int median = Mathf.FloorToInt(leafCount / 2f);
+
+        //         int tierSpacing = 0;
+        //         // var nextAbilityTier = tree.GetAbilityTier(a, t + 1);
+        //         // if (nextAbilityTier != null)
+        //         // {
+        //         //     tierSpacing = Mathf.FloorToInt((nextAbilityTier.Count / abilityTier.Count) / 2f);
+        //         // }
+
+        //         tierSpacing = Mathf.FloorToInt((leafCount / abilityTier.Count) / 2f);
+
+        //         /*
+                
+        //         count1 = 4
+        //         count2 = 8
+        //         count3 = 11
+                
+        //         spacing1 = (count2 / count1) / 2 = (8 / 4) / 2 = 1
+        //         spacing2 = (count3 / count2) / 2 = (11 / 8) / 2 = 1.375 / 2 = 0.6875
+                
+        //          O O O O
+        //         OOOOOOOO
+        //         OOOOOOOOOOO
+        //         */
+
+        //         for (int c = 0; c < abilityTier.Count; c++)
+        //         {
+
+        //             Debug.Log(" Cell " + c);
+        //             GameObject cell = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+        //             cell.name = "TreeIcon_" + abilityTier[c].Name;
+        //             cell.transform.GetChild(0).GetComponent<Image>().sprite = abilityTier[c].Icon;
+        //             rowCount++;
+
+        //             for (int s = 0; s < tierSpacing; s++)
+        //             {
+        //                 GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+        //                 blank.name = "Spacer";
+        //                 rowCount++;
+        //             }
+        //         }
+        //     }
+        //     if (rowCount < tree.TotalNumLeafs)
+        //     {
+        //         for (int r = 0; r < (tree.TotalNumLeafs - rowCount); r++)
+        //         {
+        //             GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
+        //             blank.name = "Spacer";
+        //         }
+        //     }
+        // }
     }
 
     public void SelectClass(PlayerClass selected)
