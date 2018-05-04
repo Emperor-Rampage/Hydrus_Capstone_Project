@@ -71,14 +71,15 @@ MonoBehaviour:
       reflectionCacheCompressed: 0
       planarReflectionCacheCompressed: 0
       maxPlanarReflectionProbes: 128
-      skyReflectionSize: 256
+      skyReflectionSize: 1024
       skyLightingOverrideLayerMask:
         serializedVersion: 2
-        m_Bits: 0
+        m_Bits: 4294967295
     shadowInitParams:
       shadowAtlasWidth: 4096
       shadowAtlasHeight: 4096
     decalSettings:
       drawDistance: 1000
       atlasSize: 8192
-  diffusionProfileSettings: {fileID: 0}
+  diffusionProfileSettings: {fileID: 11400000, guid: abcc439731cbfe5469ab8e41199a71dc,
+    type: 2}
