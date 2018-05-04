@@ -2957,7 +2957,7 @@ GameObject:
   - component: {fileID: 1501413407}
   - component: {fileID: 1501413406}
   - component: {fileID: 1501413405}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MainMenuVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3304,7 +3304,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 1
   m_ForceIntoRT: 1
   m_OcclusionCulling: 1
@@ -3337,7 +3337,7 @@ MonoBehaviour:
   volumeTrigger: {fileID: 1646582911}
   volumeLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967240
   stopNaNPropagation: 1
   antialiasingMode: 0
   temporalAntialiasing:

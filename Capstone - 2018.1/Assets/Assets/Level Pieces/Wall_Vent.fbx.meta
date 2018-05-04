@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 746e0ecdbf81e48ee88ee15e4a95bc7f
-timeCreated: 1524168323
-licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -24,7 +22,12 @@ ModelImporter:
     4300002: Wall_Vent_01
     4300004: Wall_Vent_02
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: 78b58c65d45694e51975cf88c40bbf66, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -43,6 +46,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
