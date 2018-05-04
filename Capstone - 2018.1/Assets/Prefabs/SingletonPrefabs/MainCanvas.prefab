@@ -2490,7 +2490,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1850815428736228
 GameObject:
   m_ObjectHideFlags: 1
@@ -13251,7 +13251,7 @@ MonoBehaviour:
     type: 2}
   abilityTierPrefab: {fileID: 1608692987686854, guid: c4001e5f55e28fa489c0185e3061de1a,
     type: 2}
-  abilityVariantPrefab: {fileID: 1495890213161800, guid: f1beab8fb58ac814fac78ebd313e44a4,
+  abilityVariantPrefab: {fileID: 1620320490398226, guid: f1beab8fb58ac814fac78ebd313e44a4,
     type: 2}
   abiltiyLinePrefab: {fileID: 1100086976608442, guid: b0efd4ae95742064c8112d07c23f593a,
     type: 2}
@@ -14863,7 +14863,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.000030402467, y: 0}
-  m_SizeDelta: {x: -896.76044, y: -179.61523}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224152044384046250
 RectTransform:
@@ -15139,7 +15139,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -16810,7 +16810,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}

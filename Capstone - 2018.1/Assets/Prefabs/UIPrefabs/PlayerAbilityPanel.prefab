@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 222856483198459972}
   - component: {fileID: 114016596569985818}
   - component: {fileID: 114784736098617288}
+  - component: {fileID: 114708455818828504}
   m_Layer: 5
   m_Name: PlayerAbilityPanel
   m_TagString: Untagged
@@ -245,6 +246,7 @@ MonoBehaviour:
   m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
+  m_isTextTruncated: 0
   m_enableKerning: 1
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
@@ -272,11 +274,11 @@ MonoBehaviour:
     lineCount: 0
     pageCount: 0
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -290,6 +292,21 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114708455818828504
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1849747727093578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfd92478a429df419869a864655b55b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 114848595102062516}
+  cooldownTimer: {fileID: 114375510349520060}
+  cooldownText: {fileID: 114477805490372050}
+  castTimer: {fileID: 114356498517848360}
 --- !u!114 &114784736098617288
 MonoBehaviour:
   m_ObjectHideFlags: 1

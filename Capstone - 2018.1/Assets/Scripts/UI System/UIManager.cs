@@ -181,13 +181,18 @@ public class UIManager : MonoBehaviour
         foreach (AbilityObject ability in player.Abilities)
         {
             GameObject abilityIconObject = GameObject.Instantiate(playerAbilityIconPrefab, playerAbilityPanel.transform);
-            foreach (Transform child in abilityIconObject.transform)
+            PlayerHUDAbility container = abilityIconObject.GetComponent<PlayerHUDAbility>();
+            if (container != null)
             {
-                if (child.name == "Icon")
-                {
-                    child.GetComponent<Image>().sprite = ability.Icon;
-                }
+                container.Icon.sprite = ability.Icon;
             }
+            // foreach (Transform child in abilityIconObject.transform)
+            // {
+            //     if (child.name == "Icon")
+            //     {
+            //         child.GetComponent<Image>().sprite = ability.Icon;
+            //     }
+            // }
             playerAbilityIcons.Add(abilityIconObject);
         }
         UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
@@ -236,7 +241,11 @@ public class UIManager : MonoBehaviour
                     GameObject cell = GameObject.Instantiate(abilityVariantPrefab, tierPanel.transform);
                     cell.GetComponent<RectTransform>().sizeDelta = new Vector2(tree.CellWidth, tree.CellHeight);
                     cell.name = "TreeIcon_" + ability.Name;
-                    cell.transform.GetChild(0).GetComponent<Image>().sprite = ability.Icon;
+
+                    TreeAbility container = cell.GetComponent<TreeAbility>();
+                    container.Icon.sprite = ability.Icon;
+
+                    // cell.transform.GetChild(0).GetComponent<Image>().sprite = ability.Icon;
 
                     tree.AddAbilityUI(t, tree.GetAbilityIndex(t, ability), cell);
                 }
@@ -277,6 +286,11 @@ public class UIManager : MonoBehaviour
                                 GameObject ability1UI = tree.UITiers[t][ability1Index];
                                 GameObject ability2UI = tree.UITiers[t + 1][ability2Index];
 
+                                TreeAbility container1 = ability1UI.GetComponent<TreeAbility>();
+                                TreeAbility container2 = ability2UI.GetComponent<TreeAbility>();
+
+                                Debug.Log(container1.Icon.rectTransform.localPosition);
+
                                 Vector2 ability1Position = ability1UI.GetComponent<RectTransform>().anchoredPosition;
                                 Vector2 ability2Position = ability2UI.GetComponent<RectTransform>().position;
 
@@ -288,7 +302,7 @@ public class UIManager : MonoBehaviour
 
                                 RectTransform lineTransform = line.GetComponent<RectTransform>();
 
-                                // Debug.Log("Placing line at " + position + " between " + ability1Position + " and " + ability2Position);
+                                Debug.Log("Placing line at " + position + " between " + ability1Position + " and " + ability2Position + " .. " + abilityTreeContentPanel.transform.position);
 
                                 lineTransform.anchoredPosition = position;
                                 lineTransform.rotation = rotation;
@@ -600,31 +614,38 @@ public class UIManager : MonoBehaviour
     void SetPlayerAbilityIcon(int index, float cooldown, float cooldownRemaining, bool casting = false, float castProgress = 0f)
     {
         GameObject abilityIconObject = playerAbilityIcons[index];
-        foreach (Transform child in abilityIconObject.transform)
+        PlayerHUDAbility container = abilityIconObject.GetComponent<PlayerHUDAbility>();
+        if (container != null)
         {
-            if (child.name == "CooldownTimerImage")
-            {
-                child.GetComponent<Image>().fillAmount = cooldownRemaining / cooldown;
-            }
-            else if (child.name == "CooldownTimerText")
-            {
-                if (cooldownRemaining <= 0f)
-                    child.GetComponent<TMP_Text>().text = "";
-                else
-                    child.GetComponent<TMP_Text>().text = cooldownRemaining.ToString("0.0");
-            }
-            else if (child.name == "CastTimerImage")
-            {
-                if (casting)
-                {
-                    child.GetComponent<Image>().fillAmount = castProgress;
-                }
-                else
-                {
-                    child.GetComponent<Image>().fillAmount = 0f;
-                }
-            }
+            container.CooldownTimer.fillAmount = cooldownRemaining / cooldown;
+            container.CooldownText.text = (cooldownRemaining <= 0f) ? "" : cooldownRemaining.ToString("0.0");
+            container.CastTimer.fillAmount = (casting) ? castProgress : 0f;
         }
+        // foreach (Transform child in abilityIconObject.transform)
+        // {
+        //     if (child.name == "CooldownTimerImage")
+        //     {
+        //         child.GetComponent<Image>().fillAmount = cooldownRemaining / cooldown;
+        //     }
+        //     else if (child.name == "CooldownTimerText")
+        //     {
+        //         if (cooldownRemaining <= 0f)
+        //             child.GetComponent<TMP_Text>().text = "";
+        //         else
+        //             child.GetComponent<TMP_Text>().text = cooldownRemaining.ToString("0.0");
+        //     }
+        //     else if (child.name == "CastTimerImage")
+        //     {
+        //         if (casting)
+        //         {
+        //             child.GetComponent<Image>().fillAmount = castProgress;
+        //         }
+        //         else
+        //         {
+        //             child.GetComponent<Image>().fillAmount = 0f;
+        //         }
+        //     }
+        // }
     }
 
     public void UpdateEnemyInfo(bool adjacentEnemy = false, string name = "", float healthPercentage = 0f, float castProgress = 0f, float castTime = 0f)
