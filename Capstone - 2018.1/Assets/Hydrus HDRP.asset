@@ -38,7 +38,7 @@ MonoBehaviour:
     enableOpaqueObjects: 1
     enableTransparentObjects: 1
     enableMSAA: 0
-    enableShadowMask: 0
+    enableShadowMask: 1
     lightLoopSettings:
       enableTileAndCluster: 1
       enableComputeLightEvaluation: 1
@@ -52,10 +52,10 @@ MonoBehaviour:
     supportSSR: 1
     supportSSAO: 1
     supportSubsurfaceScattering: 1
-    supportForwardOnly: 0
-    enableUltraQualitySSS: 0
+    supportForwardOnly: 1
+    enableUltraQualitySSS: 1
     supportDBuffer: 0
-    supportMSAA: 0
+    supportMSAA: 1
     msaaSampleCount: 1
     supportMotionVectors: 1
     supportStereo: 0

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33826569417705934}
   - component: {fileID: 23166441632127500}
   - component: {fileID: 95686028986298880}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ceiling_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,6 +55,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: dad6c217f641b4173aa4d92004e8701e, type: 2}
   m_StaticBatchInfo:
@@ -100,3 +101,4 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

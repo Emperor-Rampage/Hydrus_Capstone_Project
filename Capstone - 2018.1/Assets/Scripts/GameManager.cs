@@ -188,7 +188,7 @@ public class GameManager : Singleton<GameManager>
     // Loads a level and scene with a delay in seconds.
     public void LoadLevel(float delay = 0f)
     {
-        uiManager.FadeOut("Loading..", delay);
+        uiManager.FadeOut("Loading...", delay);
         audioManager.FadeOutMusic(delay);
         StartCoroutine(LoadLevel_Coroutine(delay));
     }

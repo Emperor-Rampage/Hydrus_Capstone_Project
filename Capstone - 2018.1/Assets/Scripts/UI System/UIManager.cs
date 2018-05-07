@@ -67,6 +67,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] GameObject playerAbilityPanel;
     [SerializeField] GameObject playerAbilityIconPrefab;
+    [SerializeField] RawImage playerMiniMap;
 
     [SerializeField] GameObject enemyInfoPanel;
     [SerializeField] TMP_Text enemyNameText;

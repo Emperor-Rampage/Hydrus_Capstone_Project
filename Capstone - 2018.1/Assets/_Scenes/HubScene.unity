@@ -6253,12 +6253,12 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 47.746483
+  m_Intensity: 7.957747
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -6286,7 +6286,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1055459545}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.63, y: 1.9931, z: 6}
+  m_LocalPosition: {x: 23.63, y: 1.82, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6332,8 +6332,10 @@ MonoBehaviour:
   shadowPrecision: 0
   shadowData:
     format: 0
-    data: 
-  shadowDatas: []
+    data: 000000000000803f
+  shadowDatas:
+  - format: 0
+    data: 000000000000803f
 --- !u!114 &1055459549
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -6347,7 +6349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 1
   directionalIntensity: 3.1415927
-  punctualIntensity: 600
+  punctualIntensity: 100
   areaIntensity: 200
   m_InnerSpotPercent: 0
   lightDimmer: 1
@@ -6360,7 +6362,7 @@ MonoBehaviour:
   shapeHeight: 0.5
   aspectRatio: 1
   shapeRadius: 0
-  maxSmoothness: 1
+  maxSmoothness: 0.403
   applyRangeAttenuation: 1
   useOldInspector: 0
   featuresFoldout: 1
@@ -7711,12 +7713,12 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 47.746483
+  m_Intensity: 7.957747
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -7744,7 +7746,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1192837720}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.8, y: 1.9931, z: 14.36}
+  m_LocalPosition: {x: 13.8, y: 1.82, z: 14.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7790,8 +7792,10 @@ MonoBehaviour:
   shadowPrecision: 0
   shadowData:
     format: 0
-    data: 
-  shadowDatas: []
+    data: 000000000000803f
+  shadowDatas:
+  - format: 0
+    data: 000000000000803f
 --- !u!114 &1192837724
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -7805,7 +7809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 1
   directionalIntensity: 3.1415927
-  punctualIntensity: 600
+  punctualIntensity: 100
   areaIntensity: 200
   m_InnerSpotPercent: 0
   lightDimmer: 1
@@ -7818,7 +7822,7 @@ MonoBehaviour:
   shapeHeight: 0.5
   aspectRatio: 1
   shapeRadius: 0
-  maxSmoothness: 1
+  maxSmoothness: 0.403
   applyRangeAttenuation: 1
   useOldInspector: 0
   featuresFoldout: 1
@@ -8099,12 +8103,12 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 47.746483
+  m_Intensity: 7.957747
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -8132,7 +8136,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1283669053}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.8, y: 1.9931, z: 5.44}
+  m_LocalPosition: {x: 13.8, y: 1.82, z: 5.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8178,8 +8182,10 @@ MonoBehaviour:
   shadowPrecision: 0
   shadowData:
     format: 0
-    data: 
-  shadowDatas: []
+    data: 000000000000803f
+  shadowDatas:
+  - format: 0
+    data: 000000000000803f
 --- !u!114 &1283669057
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -8193,7 +8199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 1
   directionalIntensity: 3.1415927
-  punctualIntensity: 600
+  punctualIntensity: 100
   areaIntensity: 200
   m_InnerSpotPercent: 0
   lightDimmer: 1
@@ -8206,7 +8212,7 @@ MonoBehaviour:
   shapeHeight: 0.5
   aspectRatio: 1
   shapeRadius: 0
-  maxSmoothness: 1
+  maxSmoothness: 0.403
   applyRangeAttenuation: 1
   useOldInspector: 0
   featuresFoldout: 1
@@ -9778,6 +9784,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1466166074}
   - component: {fileID: 1466166073}
+  - component: {fileID: 1466166076}
+  - component: {fileID: 1466166075}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -9795,12 +9803,12 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 0.33
+  m_Intensity: 3.1415927
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: 0
     m_CustomResolution: -1
     m_Strength: 1
@@ -9834,6 +9842,79 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1466166075
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1466166072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c2871f720b2af4e9210febdac74517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  shadowResolution: 512
+  shadowDimmer: 1
+  shadowFadeDistance: 10000
+  viewBiasMin: 0.2
+  viewBiasMax: 100
+  viewBiasScale: 1
+  normalBiasMin: 0.5
+  normalBiasMax: 0.5
+  normalBiasScale: 1
+  sampleBiasScale: 0
+  edgeLeakFixup: 1
+  edgeToleranceNormal: 1
+  edgeTolerance: 1
+  shadowCascadeCount: 4
+  shadowCascadeRatios:
+  - 0.05
+  - 0.2
+  - 0.3
+  shadowCascadeBorders:
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  shadowAlgorithm: 0
+  shadowVariant: 0
+  shadowPrecision: 0
+  shadowData:
+    format: 0
+    data: 
+  shadowDatas: []
+--- !u!114 &1466166076
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1466166072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  directionalIntensity: 3.1415927
+  punctualIntensity: 600
+  areaIntensity: 200
+  m_InnerSpotPercent: 0
+  lightDimmer: 1
+  fadeDistance: 10000
+  affectDiffuse: 1
+  affectSpecular: 1
+  lightTypeExtent: 0
+  spotLightShape: 0
+  shapeWidth: 0.5
+  shapeHeight: 0.5
+  aspectRatio: 1
+  shapeRadius: 0
+  maxSmoothness: 1
+  applyRangeAttenuation: 1
+  useOldInspector: 0
+  featuresFoldout: 1
+  showAdditionalSettings: 0
 --- !u!1001 &1480423034
 Prefab:
   m_ObjectHideFlags: 0
@@ -11532,12 +11613,12 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 47.746483
+  m_Intensity: 7.957747
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -11565,7 +11646,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1801370093}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.8, y: 1.9931, z: 6}
+  m_LocalPosition: {x: 5.8, y: 1.82, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -11611,8 +11692,10 @@ MonoBehaviour:
   shadowPrecision: 0
   shadowData:
     format: 0
-    data: 
-  shadowDatas: []
+    data: 000000000000803f
+  shadowDatas:
+  - format: 0
+    data: 000000000000803f
 --- !u!114 &1801370097
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -11626,7 +11709,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 1
   directionalIntensity: 3.1415927
-  punctualIntensity: 600
+  punctualIntensity: 100
   areaIntensity: 200
   m_InnerSpotPercent: 0
   lightDimmer: 1
@@ -11639,7 +11722,7 @@ MonoBehaviour:
   shapeHeight: 0.5
   aspectRatio: 1
   shapeRadius: 0
-  maxSmoothness: 1
+  maxSmoothness: 0.403
   applyRangeAttenuation: 1
   useOldInspector: 0
   featuresFoldout: 1
@@ -12420,12 +12503,12 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 47.746483
+  m_Intensity: 7.957747
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -12453,7 +12536,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1932879423}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.8, y: 1.9931, z: -0.78}
+  m_LocalPosition: {x: 13.8, y: 1.82, z: -0.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -12499,8 +12582,10 @@ MonoBehaviour:
   shadowPrecision: 0
   shadowData:
     format: 0
-    data: 
-  shadowDatas: []
+    data: 000000000000803f
+  shadowDatas:
+  - format: 0
+    data: 000000000000803f
 --- !u!114 &1932879427
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -12514,7 +12599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 1
   directionalIntensity: 3.1415927
-  punctualIntensity: 600
+  punctualIntensity: 100
   areaIntensity: 200
   m_InnerSpotPercent: 0
   lightDimmer: 1
@@ -12527,7 +12612,7 @@ MonoBehaviour:
   shapeHeight: 0.5
   aspectRatio: 1
   shapeRadius: 0
-  maxSmoothness: 1
+  maxSmoothness: 0.403
   applyRangeAttenuation: 1
   useOldInspector: 0
   featuresFoldout: 1

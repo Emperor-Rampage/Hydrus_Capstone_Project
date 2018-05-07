@@ -183,7 +183,7 @@ Material:
     - _Drag: 1
     - _DstBlend: 0
     - _EmissiveColorMode: 1
-    - _EmissiveIntensity: 4.594794
+    - _EmissiveIntensity: 1
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _EnableMotionVectorForVertexAnimation: 0
