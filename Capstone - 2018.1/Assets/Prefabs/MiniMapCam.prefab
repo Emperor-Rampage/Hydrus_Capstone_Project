@@ -66,7 +66,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 7168
+    m_Bits: 23552
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8600000, guid: bac216dd052e81347862873faefab28f, type: 2}
   m_TargetDisplay: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   followRotation: 0
 --- !u!114 &114593829514613566
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 2
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1168019742351126}
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 1
   clearColorMode: 1
-  backgroundColorHDR: {r: 0.20754719, g: 0.20754719, b: 0.20754719, a: 1}
+  backgroundColorHDR: {r: 0.34109113, g: 0.7920441, b: 0.990566, a: 1}
   clearDepth: 1
   renderingPath: 1
   volumeLayerMask:

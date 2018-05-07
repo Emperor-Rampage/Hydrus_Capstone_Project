@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4031351045518832}
   - component: {fileID: 198700158605410380}
   - component: {fileID: 199973911094667928}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: IndicatorEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 33809861867445122}
   - component: {fileID: 64258966732212232}
   - component: {fileID: 23698364300422664}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 4792364465918016}
   - component: {fileID: 198580713537587632}
   - component: {fileID: 199260820440539612}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: IndicatorObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

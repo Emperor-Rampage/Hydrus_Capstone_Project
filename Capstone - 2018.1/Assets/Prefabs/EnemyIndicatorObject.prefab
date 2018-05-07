@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4703023635461728}
   - component: {fileID: 198980873026307872}
   - component: {fileID: 199637216278207024}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: EnemyIndicatorObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 33686639445804074}
   - component: {fileID: 64262367968932760}
   - component: {fileID: 23104866594905774}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 4943040324491598}
   - component: {fileID: 198936727735567738}
   - component: {fileID: 199970437788681350}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: IndicatorEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
