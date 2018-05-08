@@ -1083,6 +1083,8 @@ public class GameManager : Singleton<GameManager>
 
             level.Player.State = EntityState.Null;
             level.Player.Cores = 0;
+            if (gradualEffectsCoroutine != null)
+                StopCoroutine(gradualEffectsCoroutine);
             audioManager.FadeOutMusic(1f);
             Map.SetCurrentLevel(0);
             LoadLevel(0.5f);

@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 0
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
@@ -35,10 +35,10 @@ RenderSettings:
   m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 3
-  m_ReflectionIntensity: 1
+  m_ReflectionIntensity: 0
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 0}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -668,6 +668,10 @@ Prefab:
     - target: {fileID: 4799642123140750, guid: aecc6555022f1264ba3122784e4e384d, type: 2}
       propertyPath: m_RootOrder
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1731922114194158, guid: aecc6555022f1264ba3122784e4e384d, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aecc6555022f1264ba3122784e4e384d, type: 2}
@@ -5485,20 +5489,47 @@ MonoBehaviour:
         audioClip: {fileID: 8300000, guid: 5de073d3cab0b07488a26b28061a92c0, type: 3}
         volume: 1
         pitch: 1
-      exitList: 0100000002000000
-      spawnList:
-      - x: 7
-        z: 9
-        enemy: {fileID: 11400000, guid: 17458b0414ce3314b9be1f5402143a19, type: 2}
-    - sceneIndex: 2
+      exitList: 01000000
+      spawnList: []
+    - sceneIndex: 3
       name: Level 1
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: 31f58d516ffc3f040bf64978f97f737c, type: 3}
         volume: 1
         pitch: 1
-      exitList: 00000000
-      spawnList: []
+      exitList: 02000000
+      spawnList:
+      - x: 10
+        z: 15
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 16
+        z: 10
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 17
+        z: 8
+        enemy: {fileID: 11400000, guid: a7e8978c3d1793541a77fa941f2bd1e3, type: 2}
+      - x: 2
+        z: 17
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 2
+        z: 14
+        enemy: {fileID: 11400000, guid: a7e8978c3d1793541a77fa941f2bd1e3, type: 2}
+      - x: 6
+        z: 24
+        enemy: {fileID: 11400000, guid: a7e8978c3d1793541a77fa941f2bd1e3, type: 2}
+      - x: 10
+        z: 28
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 17
+        z: 34
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 9
+        z: 23
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 12
+        z: 37
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
     - sceneIndex: 3
       name: Level 2
       levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
@@ -5507,7 +5538,10 @@ MonoBehaviour:
         volume: 1
         pitch: 1
       exitList: 00000000
-      spawnList: []
+      spawnList:
+      - x: 5
+        z: 9
+        enemy: {fileID: 11400000, guid: 17458b0414ce3314b9be1f5402143a19, type: 2}
   titleMusic:
     audioClip: {fileID: 8300000, guid: 44275ceb33b8c8e46b5187b5377eaaf0, type: 3}
     volume: 0.75

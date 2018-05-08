@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Name: Phammaxia
   m_EditorClassIdentifier: 
   enemy:
-    instance: {fileID: 1762791434266384, guid: cdfbf7badbab0c140bddb2880d14e8a6, type: 2}
+    instance: {fileID: 1272064394801450, guid: 6f68cd1a16f232f4e9d31991d3676050, type: 2}
     name: Phammaxia
     cores: 500
     maxHealth: 500
-    StatusEffects:
-      CurrentEffects: []
     abilities:
     - {fileID: 11400000, guid: fff5878ff816b5f428baeb377ee31fe6, type: 2}
     - {fileID: 11400000, guid: d620bd853689aa74cb4eb1224f9d61c3, type: 2}
