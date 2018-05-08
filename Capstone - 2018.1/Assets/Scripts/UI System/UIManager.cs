@@ -91,6 +91,9 @@ public class UIManager : MonoBehaviour
     int currentHUD;
 
     [Header("Settings Menu Items")]
+    [SerializeField]
+    TabContainer[] settingsTabs;
+    int currentSettingsTab;
     // Serialized fields.
     [SerializeField]
     Toggle fullscreenToggle;
@@ -446,6 +449,25 @@ public class UIManager : MonoBehaviour
 
         menu.SetActive(true);
         currentMenu = index;
+    }
+
+    public void ShowSettingsTab(int index)
+    {
+        TabContainer tab = settingsTabs[index];
+        if (tab == null)
+            return;
+
+        if (currentSettingsTab >= 0 && currentSettingsTab < settingsTabs.Length)
+        {
+            TabContainer currentTab = settingsTabs[currentSettingsTab];
+            if (currentTab != null)
+            {
+                currentTab.gameObject.SetActive(false);
+            }
+        }
+
+        tab.gameObject.SetActive(true);
+        currentSettingsTab = index;
     }
 
     public void ShowHUD(int index)
