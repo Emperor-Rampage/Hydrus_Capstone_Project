@@ -37,7 +37,8 @@ public class GameManager : Singleton<GameManager>
     // For testing ability casting.
     [SerializeField] AbilityObject testAbility;
     [SerializeField] PlayerClass testClass;
-    [SerializeField] GameObject testIndicator;
+    [SerializeField] GameObject testIndicatorPlayer;
+    [SerializeField] GameObject testIndicatorEnemy;
     [SerializeField] CameraShakeObject testShakeEvent;
 
     [Space(10)]
@@ -934,7 +935,7 @@ public class GameManager : Singleton<GameManager>
         List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
         foreach (Cell cell in affected)
         {
-            AddIndicator(testIndicator, cell, entity);
+            AddIndicator(testIndicatorPlayer, cell, entity);
         }
         //Setting the cast time scale to the current cast time scale... Blegh
         SetPlayerCastAnimation("Cast", level.Player.Abilities[index].CastTime);
@@ -959,7 +960,7 @@ public class GameManager : Singleton<GameManager>
         List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
         foreach (Cell cell in affected)
         {
-            AddIndicator(testIndicator, cell, entity);
+            AddIndicator(testIndicatorEnemy, cell, entity);
         }
     }
 
