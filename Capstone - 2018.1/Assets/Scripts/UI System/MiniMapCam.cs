@@ -15,21 +15,25 @@ public class MiniMapCam : MonoBehaviour
         {
             //TO DO: Update this to grab the player from another container, instead of having to manually look for it.
 
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null) {
+                player = playerObject.transform;
+            }
         }
     }
 
     private void LateUpdate()
     {
-        Vector3 newPosition = player.position;
-        newPosition.y = transform.position.y;
-        transform.position = newPosition;
+        if (player != null) {
+            Vector3 newPosition = player.position;
+            newPosition.y = transform.position.y;
+            transform.position = newPosition;
 
-        if (followRotation == true)
-        {
-            transform.rotation = Quaternion.Euler(90f, player.eulerAngles.y, 0f);
+            if (followRotation == true)
+            {
+                transform.rotation = Quaternion.Euler(90f, player.eulerAngles.y, 0f);
+            }
         }
-
     }
 
 }

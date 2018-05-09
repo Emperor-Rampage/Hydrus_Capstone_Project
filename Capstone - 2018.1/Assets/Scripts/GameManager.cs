@@ -11,6 +11,8 @@ using AbilityClasses;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.Audio;
+using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Experimental.Rendering;
 
 
 // The main game manager. Is a singleton, and contains the general settings as well as references to other systems.
@@ -21,7 +23,7 @@ using UnityEngine.Audio;
 //
 // Should be the main root object, and generally should be the only thing calling the other systems (UIManager, AIManager, Map, Level, etc.)
 [SelectionBase]
-public class GameManager : Singleton<GameManager>
+public class GameManager : Pixelplacement.Singleton<GameManager>
 {
     [Space(10)]
     [Header("Debug")]
@@ -61,17 +63,14 @@ public class GameManager : Singleton<GameManager>
     [Space(10)]
     [Header("Game")]
     SettingsManager settingsManager;
-    SettingsManager settingsCache;
+    public RenderPipelineAsset renderPipeline;
 
-    [SerializeField]
-    AbilityTree abilityTree;
-    [SerializeField]
-    List<PlayerClass> classes;
+    [SerializeField] AbilityTree abilityTree;
+    [SerializeField] List<PlayerClass> classes;
     PlayerClass selectedClass;
 
     // A reference to the Map object, which handles the general level management.
-    [SerializeField]
-    Map map;
+    [SerializeField] Map map;
     // A reference to the current level, because caching is more efficient.
     Level level;
 
@@ -137,6 +136,7 @@ public class GameManager : Singleton<GameManager>
         Screen.fullScreen = settingsManager.Fullscreen;
 
         // TODO: Add Antialiasing settings.
+        ApplyAntialiasingSettings();
 
         QualitySettings.vSyncCount = settingsManager.VSyncIndex;
 
@@ -177,6 +177,22 @@ public class GameManager : Singleton<GameManager>
         // TODO: Add controls settings.
 
         settingsManager.SaveSettings();
+    }
+
+    void ApplyAntialiasingSettings() {
+        if (settingsManager.AntialiasingIndex == 0) {
+            Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.None;
+        } else if (settingsManager.AntialiasingIndex == 1) {
+            Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.FastApproximateAntialiasing;
+        } else if (settingsManager.AntialiasingIndex == 2) {
+            Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
+        } else if (settingsManager.AntialiasingIndex == 3) {
+            Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+        } else if (settingsManager.AntialiasingIndex == 4) {
+            Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+        } else if (settingsManager.AntialiasingIndex == 5) {
+            Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+        }
     }
 
     // Called at the start of the game.
@@ -365,6 +381,7 @@ public class GameManager : Singleton<GameManager>
             uiManager.FadeIn("Hydrus");
             audioManager.FadeInMusic(titleMusic, 0f);
         }
+        ApplyAntialiasingSettings();
     }
 
     void BuildLevel_Procedural()
