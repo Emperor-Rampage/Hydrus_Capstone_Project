@@ -167,9 +167,13 @@ public class GameManager : Singleton<GameManager>
         }
 
         // TODO: Add sound settings.
-        mixer.SetFloat("MasterVolume", settingsManager.MasterVolume);
-        mixer.SetFloat("MusicVolume", settingsManager.MusicVolume);
-        mixer.SetFloat("FXVolume", settingsManager.FXVolume);
+        float masterDBValue = 20f * Mathf.Log10(settingsManager.MasterVolume);
+        float musicDBValue = 20f * Mathf.Log10(settingsManager.MusicVolume);
+        float fxDBValue = 20f * Mathf.Log10(settingsManager.FXVolume);
+
+        mixer.SetFloat("MasterVolume", masterDBValue);
+        mixer.SetFloat("MusicVolume", musicDBValue);
+        mixer.SetFloat("FXVolume", fxDBValue);
         // TODO: Add controls settings.
 
         settingsManager.SaveSettings();

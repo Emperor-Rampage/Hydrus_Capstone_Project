@@ -31,9 +31,9 @@ public class SettingsManager
     public int VSyncIndex { get; private set; } = 0;
     public int FrameRateIndex { get; private set; } = 0;
     // Sound settings
-    public float MasterVolume { get; private set; } = 0f;
-    public float MusicVolume { get; private set; } = 0f;
-    public float FXVolume { get; private set; } = 0f;
+    public float MasterVolume { get; private set; } = 1f;
+    public float MusicVolume { get; private set; } = 1f;
+    public float FXVolume { get; private set; } = 1f;
     // Controls settings
 
 
