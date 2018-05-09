@@ -5446,6 +5446,7 @@ MonoBehaviour:
   - {fileID: 1229392500424972, guid: bd136b4367473ab41bdd52b87dd33473, type: 2}
   - {fileID: 1513351062052238, guid: da426b2a6aa6d944ea5a289adead8e1b, type: 2}
   - {fileID: 1963380610684026, guid: 206348a240dc0ac439c0f4fc2acb56cc, type: 2}
+  mixer: {fileID: 24100000, guid: b10053a6ddd96554faaf886ff5dbd5c7, type: 2}
   wallPrefabs:
   - prefab: {fileID: 1969990256235840, guid: fc6a04267be25bc41a675a961723ef23, type: 2}
     weight: 1

@@ -10,6 +10,7 @@ using AIClasses;
 using AbilityClasses;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.Audio;
 
 
 // The main game manager. Is a singleton, and contains the general settings as well as references to other systems.
@@ -48,6 +49,7 @@ public class GameManager : Singleton<GameManager>
     GameObject playerPrefab;
     // A list of GameObjects that need to be instantiated and defined as DontDestroyOnLoad.
     [SerializeField] List<GameObject> doNotDestroyList;
+    [SerializeField] AudioMixer mixer;
 
     [Header("Level Pieces")]
     [SerializeField]
@@ -58,6 +60,8 @@ public class GameManager : Singleton<GameManager>
 
     [Space(10)]
     [Header("Game")]
+    SettingsManager settingsManager;
+    SettingsManager settingsCache;
 
     [SerializeField]
     AbilityTree abilityTree;
@@ -103,6 +107,74 @@ public class GameManager : Singleton<GameManager>
 
     public float Turnspeed { get { return turnspeed; } }
 
+    public void RevertSettings()
+    {
+        settingsManager.LoadSettings();
+        uiManager.SetSettingsElements(settingsManager);
+    }
+
+    public void ResetSettingsToDefault()
+    {
+        settingsManager = new SettingsManager();
+        uiManager.SetSettingsElements(settingsManager);
+    }
+
+    public void ApplySettings()
+    {
+        settingsManager.SetSettings(uiManager);
+        // TODO: Add gameplay settings.
+
+        Resolution targetRes;
+        if (settingsManager.ResolutionIndex > 0 && settingsManager.ResolutionIndex < uiManager.resolutions.Length)
+            targetRes = uiManager.resolutions[settingsManager.ResolutionIndex];
+        else if (uiManager.resolutions.Length > 0)
+            targetRes = uiManager.resolutions[0];
+        else
+            targetRes = Screen.currentResolution;
+
+        Screen.SetResolution(targetRes.width, targetRes.height, Screen.fullScreen, targetRes.refreshRate);
+
+        Screen.fullScreen = settingsManager.Fullscreen;
+
+        // TODO: Add Antialiasing settings.
+
+        QualitySettings.vSyncCount = settingsManager.VSyncIndex;
+
+        // 0 = -1 = Uncapped, 1 = 30, 2 = 60, 3 = 80, 4 = 120, 5 = 144
+        if (settingsManager.FrameRateIndex == 0)
+        {
+            Application.targetFrameRate = -1;
+        }
+        else if (settingsManager.FrameRateIndex == 1)
+        {
+            Application.targetFrameRate = 30;
+        }
+        else if (settingsManager.FrameRateIndex == 2)
+        {
+            Application.targetFrameRate = 60;
+        }
+        else if (settingsManager.FrameRateIndex == 3)
+        {
+            Application.targetFrameRate = 80;
+        }
+        else if (settingsManager.FrameRateIndex == 4)
+        {
+            Application.targetFrameRate = 120;
+        }
+        else if (settingsManager.FrameRateIndex == 5)
+        {
+            Application.targetFrameRate = 144;
+        }
+
+        // TODO: Add sound settings.
+        mixer.SetFloat("MasterVolume", settingsManager.MasterVolume);
+        mixer.SetFloat("MusicVolume", settingsManager.MusicVolume);
+        mixer.SetFloat("FXVolume", settingsManager.FXVolume);
+        // TODO: Add controls settings.
+
+        settingsManager.SaveSettings();
+    }
+
     // Called at the start of the game.
     // Iterates through the DoNotDestroyList List, instantiates each GameObject, it to DontDestroyOnLoad, and sets up any references necessary.
     void Awake()
@@ -129,6 +201,8 @@ public class GameManager : Singleton<GameManager>
                 }
             }
         }
+        settingsManager = new SettingsManager();
+        settingsManager.LoadSettings();
     }
 
     // Nothing yet.
@@ -199,8 +273,10 @@ public class GameManager : Singleton<GameManager>
     {
         yield return new WaitForSeconds(delay);
 
-        if (inGame && level != null) {
-            foreach (Enemy enemy in level.EnemyList) {
+        if (inGame && level != null)
+        {
+            foreach (Enemy enemy in level.EnemyList)
+            {
                 enemy.Kill();
             }
         }
@@ -280,6 +356,7 @@ public class GameManager : Singleton<GameManager>
             // Do stuff to load main menu.
             inGame = false;
             uiManager.Initialize_Main();
+            uiManager.SetSettingsElements(settingsManager);
             SetUpClassMenu();
             uiManager.FadeIn("Hydrus");
             audioManager.FadeInMusic(titleMusic, 0f);
@@ -687,7 +764,8 @@ public class GameManager : Singleton<GameManager>
                 AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
                 level.Player.StatusEffects.AddEffect(effect);
             }
-            else if (Input.GetKeyDown(KeyCode.K)) {
+            else if (Input.GetKeyDown(KeyCode.K))
+            {
                 uiManager.CancelPlayerCast();
             }
         }

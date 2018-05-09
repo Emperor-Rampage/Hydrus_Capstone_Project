@@ -15,6 +15,8 @@ namespace AudioClasses
         [Header("Sound Effect Settings")]
         [SerializeField]
         AudioSource soundEffectPrefab;
+        [SerializeField]
+        AudioSource backgroundMusicPrefab;
         [SerializeField] int maxPoolSize;
         Stack<GameObject> soundEffectPool = new Stack<GameObject>();
 
@@ -38,7 +40,7 @@ namespace AudioClasses
                 FadeOutMusic(0f);
             }
 
-            GameObject sourceObject = Instantiate(soundEffectPrefab.gameObject);
+            GameObject sourceObject = Instantiate(backgroundMusicPrefab.gameObject);
             AudioSource source = sourceObject.GetComponent<AudioSource>();
             source.spatialBlend = 0f;
             source.clip = bgMusic.Clip;

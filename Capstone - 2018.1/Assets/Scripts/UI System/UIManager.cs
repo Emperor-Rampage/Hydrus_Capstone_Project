@@ -95,12 +95,10 @@ public class UIManager : MonoBehaviour
     TabContainer[] settingsTabs;
     int currentSettingsTab;
     // Serialized fields.
-    [SerializeField]
-    Toggle fullscreenToggle;
     [SerializeField] TMP_Dropdown resolutionDropdown;
-    [SerializeField] TMP_Dropdown antialiasingDropdown;
-    [SerializeField] TMP_Dropdown vSyncDropdown;
-    [SerializeField] TMP_Dropdown frameRateDropdown;
+    [SerializeField] Button settingsCancelButton;
+    [SerializeField] Button settingsResetButton;
+    [SerializeField] Button settingsSaveButton;
 
     // Private fields.
     [HideInInspector] public Resolution[] resolutions;
@@ -121,13 +119,9 @@ public class UIManager : MonoBehaviour
 
     // FIXME: During transitions, the user can still continue clicking UI elements, such as in the main menu.
     //        Should be locked out of taking other actions.
-    void Start()
-    {
-        manager = GameManager.Instance;
-    }
-
     public void Initialize_Main()
     {
+        manager = GameManager.Instance;
         resolutions = Screen.resolutions;
 
         resolutionDropdown.ClearOptions();
@@ -137,6 +131,15 @@ public class UIManager : MonoBehaviour
         }
 
         resolutionDropdown.RefreshShownValue();
+        foreach (TabContainer tab in settingsTabs)
+        {
+            tab.Initialize();
+        }
+        settingsCancelButton.onClick.AddListener(manager.RevertSettings);
+        settingsResetButton.onClick.AddListener(manager.ResetSettingsToDefault);
+        settingsSaveButton.onClick.AddListener(manager.ApplySettings);
+
+
         AllButtons(menuPanel, true);
 
         GoToMenu(0);
@@ -468,6 +471,56 @@ public class UIManager : MonoBehaviour
 
         tab.gameObject.SetActive(true);
         currentSettingsTab = index;
+    }
+
+    public T GetSettingsTab<T>() where T : TabContainer
+    {
+        foreach (TabContainer tab in settingsTabs)
+        {
+            if (tab.GetType() == typeof(T))
+            {
+                return tab as T;
+            }
+        }
+        return null;
+    }
+
+    public T GetSettingsElement<T>(string key) where T : Selectable
+    {
+        foreach (TabContainer tab in settingsTabs)
+        {
+            var element = tab.GetTabElement<T>(key);
+            if (element != default(T))
+                return element;
+        }
+        return default(T);
+    }
+
+    public void SetSettingsElements(SettingsManager settings)
+    {
+        GameplayTab gameplay = GetSettingsTab<GameplayTab>();
+        if (gameplay == null)
+        {
+            Debug.Log("ERROR: Gameplay tab is null.");
+        }
+        Slider healthSlider = gameplay.GetTabElement<Slider>(SettingsManager.MaxHealthSliderKey);
+        if (healthSlider == null)
+        {
+            Debug.Log("ERROR: Health slider is null.");
+        }
+        gameplay.GetTabElement<Slider>(SettingsManager.MaxHealthSliderKey).value = settings.HealthPercent;
+
+        GraphicsTab graphics = GetSettingsTab<GraphicsTab>();
+        graphics.GetTabElement<Toggle>(SettingsManager.FullScreenToggleKey).isOn = settings.Fullscreen;
+        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.ResolutionDropdownKey).value = settings.ResolutionIndex;
+        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.AntialiasingDropdownKey).value = settings.AntialiasingIndex;
+        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.VSyncDropdownKey).value = settings.VSyncIndex;
+        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.FrameRateDropdownKey).value = settings.FrameRateIndex;
+
+        SoundTab sound = GetSettingsTab<SoundTab>();
+        sound.GetTabElement<Slider>(SettingsManager.MasterSliderKey).value = settings.MasterVolume;
+        sound.GetTabElement<Slider>(SettingsManager.MusicSliderKey).value = settings.MusicVolume;
+        sound.GetTabElement<Slider>(SettingsManager.FXSliderKey).value = settings.FXVolume;
     }
 
     public void ShowHUD(int index)

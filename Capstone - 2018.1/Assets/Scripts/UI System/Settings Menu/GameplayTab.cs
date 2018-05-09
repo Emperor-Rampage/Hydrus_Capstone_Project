@@ -9,9 +9,10 @@ public class GameplayTab : TabContainer
     [SerializeField] Slider maxHealthSlider;
     [SerializeField] TMP_Text sliderValueText;
 
-    public void Awake()
+    public override void Initialize()
     {
-        TabElements.Add("MaxHealthSlider", maxHealthSlider);
-        TabElements.Add("SliderValueText", sliderValueText);
+        Debug.Log("Gameplay tab awake method.");
+        TabElements[SettingsManager.MaxHealthSliderKey] = maxHealthSlider;
+        TabElements[SettingsManager.MaxHealthTextKey] = sliderValueText;
     }
 }

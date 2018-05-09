@@ -21,14 +21,14 @@ public class Heap<T> where T : IHeapObject<T>
     public void BubbleItem(T obj)
     {
         BubbleUp(obj);
-        //        BubbleDown(obj);
+        BubbleDown(obj);
     }
     public void Add(T obj)
     {
         obj.HeapIndex = count;
         objects[count++] = obj;
 
-        BubbleItem(obj);
+        BubbleUp(obj);
     }
     public T RemoveFirst()
     {

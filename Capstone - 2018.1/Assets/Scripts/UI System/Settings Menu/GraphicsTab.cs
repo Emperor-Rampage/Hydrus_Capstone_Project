@@ -12,12 +12,12 @@ public class GraphicsTab : TabContainer
     [SerializeField] TMP_Dropdown vSyncDropdown;
     [SerializeField] TMP_Dropdown frameRateDropdown;
 
-    public void Awake()
+    public override void Initialize()
     {
-        TabElements.Add("FullscreenText", fullscreenToggle);
-        TabElements.Add("ResolutionDropdown", resolutionDropdown);
-        TabElements.Add("AntialiasingDropdown", antialiasingDropdown);
-        TabElements.Add("VSyncDropdown", vSyncDropdown);
-        TabElements.Add("FrameRateDropdown", frameRateDropdown);
+        TabElements[SettingsManager.FullScreenToggleKey] = fullscreenToggle;
+        TabElements[SettingsManager.ResolutionDropdownKey] = resolutionDropdown;
+        TabElements[SettingsManager.AntialiasingDropdownKey] = antialiasingDropdown;
+        TabElements[SettingsManager.VSyncDropdownKey] = vSyncDropdown;
+        TabElements[SettingsManager.FrameRateDropdownKey] = frameRateDropdown;
     }
 }

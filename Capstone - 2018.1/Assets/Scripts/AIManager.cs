@@ -33,7 +33,7 @@ namespace AIClasses
         {
             int result = Value.CompareTo(action.Value);
             //            Debug.Log("Comparing " + Value + " to " + action.Value + " .. result is " + result);
-            return result;
+            return -result;
         }
     }
 

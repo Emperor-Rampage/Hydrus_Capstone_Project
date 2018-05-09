@@ -13,13 +13,13 @@ public class SoundTab : TabContainer
     [SerializeField] Slider fxSlider;
     [SerializeField] TMP_Text fxValueText;
 
-    public void Awake()
+    public override void Initialize()
     {
-        TabElements.Add("MasterSlider", masterSlider);
-        TabElements.Add("MasterText", masterValueText);
-        TabElements.Add("MusicSlider", musicSlider);
-        TabElements.Add("MusicText", musicValueText);
-        TabElements.Add("FXSlider", fxSlider);
-        TabElements.Add("FXText", fxValueText);
+        TabElements[SettingsManager.MasterSliderKey] = masterSlider;
+        TabElements[SettingsManager.MasterTextKey] = masterValueText;
+        TabElements[SettingsManager.MusicSliderKey] = musicSlider;
+        TabElements[SettingsManager.MusicTextKey] = musicValueText;
+        TabElements[SettingsManager.FXSliderKey] = fxSlider;
+        TabElements[SettingsManager.FXTextKey] = fxValueText;
     }
 }

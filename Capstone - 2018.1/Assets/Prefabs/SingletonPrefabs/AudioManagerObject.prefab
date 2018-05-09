@@ -53,4 +53,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundEffectPrefab: {fileID: 82202162509312074, guid: e5d7cae53221e5549998dd5b76339ecc,
     type: 2}
+  backgroundMusicPrefab: {fileID: 82186474276294444, guid: f8119f9670c3aa74ca8ee2346446a2c3,
+    type: 2}
   maxPoolSize: 10
