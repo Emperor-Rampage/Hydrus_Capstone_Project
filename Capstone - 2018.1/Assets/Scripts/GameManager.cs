@@ -184,13 +184,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             Player player = level.Player;
             int adjustedMaxHealth = (int)(player.Class.Health * settingsManager.HealthPercent);
-            float adjustedPerc = (player.CurrentHealth / (float)player.MaxHealth) * settingsManager.HealthPercent;
-            int adjustedCurrent = (int)(player.CurrentHealth * adjustedPerc);
+            // float adjustedPerc = (player.CurrentHealth / (float)player.MaxHealth);
+            // int adjustedCurrent = (int)(adjustedMaxHealth * adjustedPerc);
 
-            Debug.Log("Adjusting player max health of " + player.Class.Health + " by " + settingsManager.HealthPercent + " and getting " + adjustedMaxHealth);
-            Debug.Log("-- Adjust player current health of " + player.CurrentHealth + " to " + adjustedCurrent);
+            // Debug.Log("Adjusting player max health of " + player.Class.Health + " by " + settingsManager.HealthPercent + " and getting " + adjustedMaxHealth);
+            // Debug.Log("-- Adjust player current health of " + player.CurrentHealth + " to " + adjustedCurrent);
             player.MaxHealth = adjustedMaxHealth;
-            player.CurrentHealth = adjustedCurrent;
+            // player.CurrentHealth = adjustedMaxHealth;
         }
     }
 

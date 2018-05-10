@@ -274,16 +274,14 @@ namespace EntityClasses
         }
 
         // Returns true if full health, false if not.
-        public bool Heal(float heal)
+        public void Heal(float heal)
         {
-            CurrentHealth += heal;
-            if (CurrentHealth >= MaxHealth)
-            {
-                CurrentHealth = MaxHealth;
-                return true;
-            }
-
-            return false;
+            CurrentHealth = Mathf.Clamp(CurrentHealth + heal, 0f, MaxHealth);
+            // if (CurrentHealth >= MaxHealth)
+            // {
+            //     CurrentHealth = MaxHealth;
+            //     return true;
+            // }
         }
 
         // Returns true if alive, false if dead.

@@ -14,6 +14,7 @@ MonoBehaviour:
   className: Marksman
   description: The Marksman class utilizes ranged abiities with light crowd control
     to keep one step ahead of enemies.
+  health: 100
   baseAbilities:
   - {fileID: 11400000, guid: 9c4a6f6d3fd63f944aa9ffd9a8a14526, type: 2}
   - {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}
