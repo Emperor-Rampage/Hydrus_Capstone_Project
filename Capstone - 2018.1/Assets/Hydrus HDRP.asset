@@ -76,8 +76,8 @@ MonoBehaviour:
         serializedVersion: 2
         m_Bits: 4294967295
     shadowInitParams:
-      shadowAtlasWidth: 1024
-      shadowAtlasHeight: 1024
+      shadowAtlasWidth: 4096
+      shadowAtlasHeight: 4096
     decalSettings:
       drawDistance: 1000
       atlasSize: 8192

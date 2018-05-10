@@ -16,9 +16,9 @@ MonoBehaviour:
   toolTip: 'Tier 1 Ability: Knight Ability 3'
   particleSystem: {fileID: 0}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: af1965a8bf7ca8c408c6c44e086498b7, type: 3}
+    volume: 0.5
+    pitch: 1
   statusEffects:
   - effect: 8
     duration: 3
