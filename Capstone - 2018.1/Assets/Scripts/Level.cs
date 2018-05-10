@@ -78,7 +78,7 @@ namespace MapClasses
         // Gets the data from the levelMap bitmap, setting up the MaxWidth, MaxDepth, and numIndexes.
         // Instantiates the list of cells, and creates the connection matrix.
         // Then calls each of the initialization methods: Cell creation, static connection creation, and then procedural generation.
-        public void InitializeLevel(Player player = null)
+        public void InitializeLevel(Player player = null, PlayerClass selectedClass = null)
         {
             if (levelMap == null)
                 return;
@@ -96,7 +96,7 @@ namespace MapClasses
             Initialized = true;
             InitializeConnections();
             InitializeProcedural();
-            InitializeEntities(player);
+            InitializeEntities(player, selectedClass);
 
             Debug.Log("Level initialization finished.");
         }
@@ -322,7 +322,7 @@ namespace MapClasses
             }
         }
 
-        void InitializeEntities(Player player)
+        void InitializeEntities(Player player, PlayerClass selectedClass)
         {
             // First initialize the player entity.
             // Then iterate through all enemy spawns and initialize each of them
@@ -331,12 +331,19 @@ namespace MapClasses
 
             Player = player;
             // Create the player.
-            if (player == null)
+            if (player == null && selectedClass != null)
             {
-                Player = new Player { Index = -1, IsPlayer = true, Name = "Player", Facing = Direction.Up, State = EntityState.Idle, MaxHealth = 100, CurrentHealth = 100 };
+                Player = new Player { Index = -1, IsPlayer = true, Class = selectedClass, Name = selectedClass.Name, Facing = Direction.Up, State = EntityState.Idle, MaxHealth = selectedClass.Health, CurrentHealth = selectedClass.Health };
+                Player.SetupBaseAbilities();
             }
+            else if (player == null && selectedClass == null)
+            {
+                Debug.LogError("ERROR: No player class was selected when trying to initialize level.");
+            }
+            Player.CurrentAbility = -1;
             Player.Facing = Direction.Up;
             Player.State = EntityState.Idle;
+
             //Player.InitializeCooldownsList();
             // Set the player's location to the player spawn.
             SetEntityLocation(Player, PlayerSpawnCell);
@@ -344,7 +351,8 @@ namespace MapClasses
             int enemyIndex = 0;
             foreach (var spawn in spawnList)
             {
-                if (spawn.EnemyObject != null && spawn.EnemyObject.Enemy != null) {
+                if (spawn.EnemyObject != null && spawn.EnemyObject.Enemy != null)
+                {
                     Enemy enemy = new Enemy(spawn.EnemyObject.Enemy);
                     //enemy.InitializeCooldownsList();
                     enemy.Index = enemyIndex++;

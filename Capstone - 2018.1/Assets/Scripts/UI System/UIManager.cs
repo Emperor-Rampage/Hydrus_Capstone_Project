@@ -77,6 +77,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image enemyCastBar;
     [SerializeField] TMP_Text enemyCastText;
 
+    // HUD Settings Menu
+    [SerializeField] SettingsContainer hudSettingsContainer;
+    public SettingsContainer HUDSettings { get { return hudSettingsContainer; } }
+    int currentHUDSettingsTab;
 
     [Header("Ability Tree Settings")]
     [SerializeField]
@@ -92,16 +96,14 @@ public class UIManager : MonoBehaviour
 
     [Header("Settings Menu Items")]
     [SerializeField]
-    TabContainer[] settingsTabs;
+    SettingsContainer mainSettingsContainer;
+    public SettingsContainer MainMenuSettings { get { return mainSettingsContainer; } }
     int currentSettingsTab;
-    // Serialized fields.
-    [SerializeField] TMP_Dropdown resolutionDropdown;
-    [SerializeField] Button settingsCancelButton;
-    [SerializeField] Button settingsResetButton;
-    [SerializeField] Button settingsSaveButton;
 
     // Private fields.
     [HideInInspector] public Resolution[] resolutions;
+
+
     List<TMP_Text> effectTextList = new List<TMP_Text>();
 
     List<GameObject> playerAbilityIcons = new List<GameObject>();
@@ -111,6 +113,7 @@ public class UIManager : MonoBehaviour
     TweenBase playerHealthBarTween;
     TweenBase playerCastBarTween;
 
+    public bool Paused { get; private set; }
     public bool Highlighted { get; private set; } = false;
 
 
@@ -119,26 +122,34 @@ public class UIManager : MonoBehaviour
 
     // FIXME: During transitions, the user can still continue clicking UI elements, such as in the main menu.
     //        Should be locked out of taking other actions.
-    public void Initialize_Main()
+
+    public void Initialize()
     {
         manager = GameManager.Instance;
+
+        // Connect settings buttons with GameManager methods.
+        mainSettingsContainer.backButton.onClick.AddListener(manager.RevertSettings);
+        mainSettingsContainer.resetButton.onClick.AddListener(manager.ResetSettingsToDefault);
+        mainSettingsContainer.applyButton.onClick.AddListener(manager.ApplySettings);
+
+        // Connect hud settings buttons with GameManager methods.
+        hudSettingsContainer.backButton.onClick.AddListener(manager.RevertSettings);
+        hudSettingsContainer.resetButton.onClick.AddListener(manager.ResetSettingsToDefault);
+        hudSettingsContainer.applyButton.onClick.AddListener(manager.ApplySettings);
+    }
+    public void Initialize_Main()
+    {
         resolutions = Screen.resolutions;
 
-        resolutionDropdown.ClearOptions();
-        foreach (Resolution res in resolutions)
+        mainSettingsContainer.resolutionDropdown.ClearOptions();
+        hudSettingsContainer.resolutionDropdown.ClearOptions();
+        for (int r = 0; r < resolutions.Length; r++)
         {
-            resolutionDropdown.options.Add(new TMP_Dropdown.OptionData(res.ToString()));
+            mainSettingsContainer.resolutionDropdown.options.Add(new TMP_Dropdown.OptionData(resolutions[r].ToString()));
+            hudSettingsContainer.resolutionDropdown.options.Add(new TMP_Dropdown.OptionData(resolutions[r].ToString()));
         }
-
-        resolutionDropdown.RefreshShownValue();
-        foreach (TabContainer tab in settingsTabs)
-        {
-            tab.Initialize();
-        }
-        settingsCancelButton.onClick.AddListener(manager.RevertSettings);
-        settingsResetButton.onClick.AddListener(manager.ResetSettingsToDefault);
-        settingsSaveButton.onClick.AddListener(manager.ApplySettings);
-
+        mainSettingsContainer.resolutionDropdown.RefreshShownValue();
+        hudSettingsContainer.resolutionDropdown.RefreshShownValue();
 
         AllButtons(menuPanel, true);
 
@@ -193,13 +204,6 @@ public class UIManager : MonoBehaviour
             {
                 container.Icon.sprite = ability.Icon;
             }
-            // foreach (Transform child in abilityIconObject.transform)
-            // {
-            //     if (child.name == "Icon")
-            //     {
-            //         child.GetComponent<Image>().sprite = ability.Icon;
-            //     }
-            // }
             playerAbilityIcons.Add(abilityIconObject);
         }
         UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
@@ -321,69 +325,6 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
-
-
-
-        // for (int t = tree.NumTiers - 1; t >= 0; t--)
-        // {
-        //     Debug.Log("---- Tier " + t);
-        //     int rowCount = 0;
-        //     for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
-        //     {
-        //         Debug.Log("-- Ability " + t);
-        //         var abilityTier = tree.GetAbilityTier(a, t);
-        //         int leafCount = tree.GetAbilityLeafs(a);
-        //         int median = Mathf.FloorToInt(leafCount / 2f);
-
-        //         int tierSpacing = 0;
-        //         // var nextAbilityTier = tree.GetAbilityTier(a, t + 1);
-        //         // if (nextAbilityTier != null)
-        //         // {
-        //         //     tierSpacing = Mathf.FloorToInt((nextAbilityTier.Count / abilityTier.Count) / 2f);
-        //         // }
-
-        //         tierSpacing = Mathf.FloorToInt((leafCount / abilityTier.Count) / 2f);
-
-        //         /*
-
-        //         count1 = 4
-        //         count2 = 8
-        //         count3 = 11
-
-        //         spacing1 = (count2 / count1) / 2 = (8 / 4) / 2 = 1
-        //         spacing2 = (count3 / count2) / 2 = (11 / 8) / 2 = 1.375 / 2 = 0.6875
-
-        //          O O O O
-        //         OOOOOOOO
-        //         OOOOOOOOOOO
-        //         */
-
-        //         for (int c = 0; c < abilityTier.Count; c++)
-        //         {
-
-        //             Debug.Log(" Cell " + c);
-        //             GameObject cell = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
-        //             cell.name = "TreeIcon_" + abilityTier[c].Name;
-        //             cell.transform.GetChild(0).GetComponent<Image>().sprite = abilityTier[c].Icon;
-        //             rowCount++;
-
-        //             for (int s = 0; s < tierSpacing; s++)
-        //             {
-        //                 GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
-        //                 blank.name = "Spacer";
-        //                 rowCount++;
-        //             }
-        //         }
-        //     }
-        //     if (rowCount < tree.TotalNumLeafs)
-        //     {
-        //         for (int r = 0; r < (tree.TotalNumLeafs - rowCount); r++)
-        //         {
-        //             GameObject blank = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
-        //             blank.name = "Spacer";
-        //         }
-        //     }
-        // }
     }
 
     public void SelectClass(PlayerClass selected)
@@ -412,6 +353,29 @@ public class UIManager : MonoBehaviour
         AllButtons(menuPanel);
         manager.Map.SetCurrentLevel(0);
         manager.LoadLevel(defaultFadeTime);
+    }
+
+    public void TogglePause()
+    {
+        Paused = !Paused;
+
+        if (Paused)
+        {
+            Time.timeScale = 0f;
+            ShowHUD(1);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            ShowHUD(0);
+        }
+    }
+
+    public void ExitGame()
+    {
+        Paused = false;
+        Time.timeScale = 1f;
+        manager.LoadMainMenu(defaultFadeTime);
     }
 
     public void QuitGame()
@@ -454,73 +418,59 @@ public class UIManager : MonoBehaviour
         currentMenu = index;
     }
 
+    public void SetAllSettingsElements(SettingsManager settings)
+    {
+        SetSettingsElements(settings);
+        SetHUDSettingsElements(settings);
+    }
+
     public void ShowSettingsTab(int index)
     {
-        TabContainer tab = settingsTabs[index];
-        if (tab == null)
-            return;
-
-        if (currentSettingsTab >= 0 && currentSettingsTab < settingsTabs.Length)
+        if (currentHUDSettingsTab >= 0 && currentHUDSettingsTab < mainSettingsContainer.tabs.Length)
         {
-            TabContainer currentTab = settingsTabs[currentSettingsTab];
+            Tab currentTab = mainSettingsContainer.tabs[currentHUDSettingsTab];
             if (currentTab != null)
             {
                 currentTab.gameObject.SetActive(false);
             }
         }
 
+        if (index < 0 || index >= hudSettingsContainer.tabs.Length)
+            return;
+
+        Tab tab = mainSettingsContainer.tabs[index];
+        if (tab == null)
+            return;
+
+        mainSettingsContainer.tabTitle.text = tab.Title;
         tab.gameObject.SetActive(true);
-        currentSettingsTab = index;
-    }
-
-    public T GetSettingsTab<T>() where T : TabContainer
-    {
-        foreach (TabContainer tab in settingsTabs)
-        {
-            if (tab.GetType() == typeof(T))
-            {
-                return tab as T;
-            }
-        }
-        return null;
-    }
-
-    public T GetSettingsElement<T>(string key) where T : Selectable
-    {
-        foreach (TabContainer tab in settingsTabs)
-        {
-            var element = tab.GetTabElement<T>(key);
-            if (element != default(T))
-                return element;
-        }
-        return default(T);
+        currentHUDSettingsTab = index;
     }
 
     public void SetSettingsElements(SettingsManager settings)
     {
-        GameplayTab gameplay = GetSettingsTab<GameplayTab>();
-        if (gameplay == null)
-        {
-            Debug.Log("ERROR: Gameplay tab is null.");
-        }
-        Slider healthSlider = gameplay.GetTabElement<Slider>(SettingsManager.MaxHealthSliderKey);
-        if (healthSlider == null)
-        {
-            Debug.Log("ERROR: Health slider is null.");
-        }
-        gameplay.GetTabElement<Slider>(SettingsManager.MaxHealthSliderKey).value = settings.HealthPercent;
+        mainSettingsContainer.maxHealthSlider.value = settings.HealthPercent;
 
-        GraphicsTab graphics = GetSettingsTab<GraphicsTab>();
-        graphics.GetTabElement<Toggle>(SettingsManager.FullScreenToggleKey).isOn = settings.Fullscreen;
-        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.ResolutionDropdownKey).value = settings.ResolutionIndex;
-        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.AntialiasingDropdownKey).value = settings.AntialiasingIndex;
-        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.VSyncDropdownKey).value = settings.VSyncIndex;
-        graphics.GetTabElement<TMP_Dropdown>(SettingsManager.FrameRateDropdownKey).value = settings.FrameRateIndex;
+        mainSettingsContainer.fullscreenToggle.isOn = settings.Fullscreen;
+        mainSettingsContainer.resolutionDropdown.value = settings.ResolutionIndex;
+        mainSettingsContainer.antialiasingDropdown.value = settings.AntialiasingIndex;
+        mainSettingsContainer.vSyncDropdown.value = settings.VSyncIndex;
+        mainSettingsContainer.frameRateDropdown.value = settings.FrameRateIndex;
 
-        SoundTab sound = GetSettingsTab<SoundTab>();
-        sound.GetTabElement<Slider>(SettingsManager.MasterSliderKey).value = settings.MasterVolume;
-        sound.GetTabElement<Slider>(SettingsManager.MusicSliderKey).value = settings.MusicVolume;
-        sound.GetTabElement<Slider>(SettingsManager.FXSliderKey).value = settings.FXVolume;
+        mainSettingsContainer.masterSlider.value = settings.MasterVolume;
+        mainSettingsContainer.musicSlider.value = settings.MusicVolume;
+        mainSettingsContainer.fxSlider.value = settings.FXVolume;
+
+        UpdateSettingsElements(settings);
+    }
+
+    public void UpdateSettingsElements(SettingsManager settings)
+    {
+        mainSettingsContainer.maxHealthText.text = mainSettingsContainer.maxHealthSlider.value.ToString("0%");
+
+        mainSettingsContainer.masterValueText.text = mainSettingsContainer.masterSlider.value.ToString("0%");
+        mainSettingsContainer.musicValueText.text = mainSettingsContainer.musicSlider.value.ToString("0%");
+        mainSettingsContainer.fxValueText.text = mainSettingsContainer.fxSlider.value.ToString("0%");
     }
 
     public void ShowHUD(int index)
@@ -560,8 +510,53 @@ public class UIManager : MonoBehaviour
         currentHUD = index;
     }
 
-    public void TogglePause()
+    public void ShowHUDSettingsTab(int index)
     {
+        if (currentHUDSettingsTab >= 0 && currentHUDSettingsTab < hudSettingsContainer.tabs.Length)
+        {
+            Tab currentTab = hudSettingsContainer.tabs[currentHUDSettingsTab];
+            if (currentTab != null)
+            {
+                currentTab.gameObject.SetActive(false);
+            }
+        }
+
+        if (index < 0 || index >= hudSettingsContainer.tabs.Length)
+            return;
+
+        Tab tab = hudSettingsContainer.tabs[index];
+        if (tab == null)
+            return;
+
+        hudSettingsContainer.tabTitle.text = tab.Title;
+        tab.gameObject.SetActive(true);
+        currentHUDSettingsTab = index;
+    }
+
+    public void SetHUDSettingsElements(SettingsManager settings)
+    {
+        hudSettingsContainer.maxHealthSlider.value = settings.HealthPercent;
+
+        hudSettingsContainer.fullscreenToggle.isOn = settings.Fullscreen;
+        hudSettingsContainer.resolutionDropdown.value = settings.ResolutionIndex;
+        hudSettingsContainer.antialiasingDropdown.value = settings.AntialiasingIndex;
+        hudSettingsContainer.vSyncDropdown.value = settings.VSyncIndex;
+        hudSettingsContainer.frameRateDropdown.value = settings.FrameRateIndex;
+
+        hudSettingsContainer.masterSlider.value = settings.MasterVolume;
+        hudSettingsContainer.musicSlider.value = settings.MusicVolume;
+        hudSettingsContainer.fxSlider.value = settings.FXVolume;
+
+        UpdateHUDSettingsElements(settings);
+    }
+
+    public void UpdateHUDSettingsElements(SettingsManager settings)
+    {
+        hudSettingsContainer.maxHealthText.text = hudSettingsContainer.maxHealthSlider.value.ToString("0%");
+
+        hudSettingsContainer.masterValueText.text = hudSettingsContainer.masterSlider.value.ToString("0%");
+        hudSettingsContainer.musicValueText.text = hudSettingsContainer.musicSlider.value.ToString("0%");
+        hudSettingsContainer.fxValueText.text = hudSettingsContainer.fxSlider.value.ToString("0%");
     }
 
     public void ToggleBorderHighlight()

@@ -52,12 +52,13 @@ namespace MapClasses
         // This is a list of all levels. Hub area, biodome area, biodome boss, mechanical bay, mechanical bay boss, final boss.
         [SerializeField] public List<Level> levels;
 
-        // I don't remember why I had this here,
-        //      probably just wanted to keep a list of all entities in the level for later use.
-        public List<IEntity> Entities { get; private set; }
-
         // Would work just as well anywhere else.
         public Map()
+        {
+            CurrentLevel = null;
+        }
+
+        public void Reset()
         {
             CurrentLevel = null;
         }

@@ -17,6 +17,8 @@ public class PlayerClass : ScriptableObject
     [SerializeField]
     string description;
     public string Description { get { return description; } }
+    [SerializeField] int health;
+    public int Health { get { return health; } }
 
     //List of the Base abilities offered by the class.
     [SerializeField] List<AbilityObject> baseAbilities;
