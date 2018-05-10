@@ -120,6 +120,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         settingsManager.SetSettings(uiManager);
         // TODO: Add gameplay settings.
+        ApplyAdjustedHealth();
 
         Resolution targetRes;
         if (settingsManager.ResolutionIndex > 0 && settingsManager.ResolutionIndex < uiManager.resolutions.Length)
@@ -175,6 +176,22 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         // TODO: Add controls settings.
 
         settingsManager.SaveSettings();
+    }
+
+    void ApplyAdjustedHealth()
+    {
+        if (level != null && level.Player != null)
+        {
+            Player player = level.Player;
+            int adjustedMaxHealth = (int)(player.Class.Health * settingsManager.HealthPercent);
+            float adjustedPerc = (player.CurrentHealth / (float)player.MaxHealth) * settingsManager.HealthPercent;
+            int adjustedCurrent = (int)(player.CurrentHealth * adjustedPerc);
+
+            Debug.Log("Adjusting player max health of " + player.Class.Health + " by " + settingsManager.HealthPercent + " and getting " + adjustedMaxHealth);
+            Debug.Log("-- Adjust player current health of " + player.CurrentHealth + " to " + adjustedCurrent);
+            player.MaxHealth = adjustedMaxHealth;
+            player.CurrentHealth = adjustedCurrent;
+        }
     }
 
     void ApplyAntialiasingSettings()
@@ -378,13 +395,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (level != null)
         {
             // Sets up cells, connections, player spawn, and generates procedural areas.
-            level.InitializeLevel(player);
+            level.InitializeLevel(player, selectedClass);
             player = level.Player;
-
-            player.Class = selectedClass;
-            player.SetupBaseAbilities();
-            player.CurrentAbility = -1;
-            player.CurrentHealth = player.MaxHealth;
+            ApplyAdjustedHealth();
 
             abilityTree.Initialize(player);
 
@@ -1234,14 +1247,15 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void PerformEntityDeathCheck(Entity entity, bool alive)
     {
+        Player player = level.Player;
         if (!alive && entity.IsPlayer)
         {
             // Do player death stuff.
             if (playerMovementCoroutine != null)
                 StopCoroutine(playerMovementCoroutine);
 
-            level.Player.State = EntityState.Null;
-            level.Player.Cores = 0;
+            player.State = EntityState.Null;
+            player.Cores = 0;
             if (gradualEffectsCoroutine != null)
                 StopCoroutine(gradualEffectsCoroutine);
             audioManager.FadeOutMusic(1f);
@@ -1251,7 +1265,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         else if (!alive && !entity.IsPlayer)
         {
             Debug.Log("Enemy is dead!");
-            level.Player.Cores += entity.Cores;
+            player.Cores += entity.Cores;
+            // Regenerate 20% of missing health on kill.
+            player.Heal((player.MaxHealth - player.CurrentHealth) * 0.2f);
             StartCoroutine(level.RemoveEntity(entity));
         }
     }
