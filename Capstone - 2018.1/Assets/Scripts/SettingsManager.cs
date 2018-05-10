@@ -39,40 +39,23 @@ public class SettingsManager
 
     public void SetSettings(UIManager uiManager)
     {
+        // If paused, grab the HUD settings stuff.
+        // If not pause,d grab the Main Menu settings stuff.
+        SettingsContainer container = (uiManager.Paused) ? uiManager.HUDSettings : uiManager.MainMenuSettings;
+
         // Gameplay
-        Slider maxHealthElement = uiManager.GetSettingsElement<Slider>(MaxHealthSliderKey);
-        HealthPercent = maxHealthElement.value;
-
+        HealthPercent = container.maxHealthSlider.value;
         // Graphics
-
-        Toggle fullscreenElement = uiManager.GetSettingsElement<Toggle>(FullScreenToggleKey);
-        Fullscreen = fullscreenElement.isOn;
-
-        TMP_Dropdown resolutionElement = uiManager.GetSettingsElement<TMP_Dropdown>(ResolutionDropdownKey);
-        ResolutionIndex = resolutionElement.value;
-
-        TMP_Dropdown antialiasingElement = uiManager.GetSettingsElement<TMP_Dropdown>(AntialiasingDropdownKey);
-        AntialiasingIndex = antialiasingElement.value;
-
-        TMP_Dropdown vsyncElement = uiManager.GetSettingsElement<TMP_Dropdown>(VSyncDropdownKey);
-        VSyncIndex = vsyncElement.value;
-
-        TMP_Dropdown frameRateElement = uiManager.GetSettingsElement<TMP_Dropdown>(FrameRateDropdownKey);
-        FrameRateIndex = frameRateElement.value;
-
+        Fullscreen = container.fullscreenToggle.isOn;
+        ResolutionIndex = container.resolutionDropdown.value;
+        AntialiasingIndex = container.antialiasingDropdown.value;
+        VSyncIndex = container.vSyncDropdown.value;
+        FrameRateIndex = container.frameRateDropdown.value;
         // Sound
-
-        Slider masterVolumeElement = uiManager.GetSettingsElement<Slider>(MasterSliderKey);
-        MasterVolume = masterVolumeElement.value;
-
-        Slider musicVolumeElement = uiManager.GetSettingsElement<Slider>(MusicSliderKey);
-        MusicVolume = musicVolumeElement.value;
-
-        Slider fxVolumeElement = uiManager.GetSettingsElement<Slider>(FXSliderKey);
-        FXVolume = fxVolumeElement.value;
-
+        MasterVolume = container.masterSlider.value;
+        MusicVolume = container.musicSlider.value;
+        FXVolume = container.fxSlider.value;
         // Controls
-
     }
     public void LoadSettings()
     {

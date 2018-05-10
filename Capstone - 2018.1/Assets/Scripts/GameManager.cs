@@ -12,8 +12,6 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.Audio;
 using UnityEngine.Rendering.PostProcessing;
-using UnityEngine.Experimental.Rendering;
-
 
 // The main game manager. Is a singleton, and contains the general settings as well as references to other systems.
 // Contains fields and properties for:
@@ -63,7 +61,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     [Space(10)]
     [Header("Game")]
     SettingsManager settingsManager;
-    public RenderPipelineAsset renderPipeline;
 
     [SerializeField] AbilityTree abilityTree;
     [SerializeField] List<PlayerClass> classes;
@@ -92,6 +89,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     // Whether or not we're in-game.
     bool inGame;
+    bool paused;
     Coroutine gradualEffectsCoroutine;
     Coroutine playerMovementCoroutine;
 
@@ -109,13 +107,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public void RevertSettings()
     {
         settingsManager.LoadSettings();
-        uiManager.SetSettingsElements(settingsManager);
+        uiManager.SetAllSettingsElements(settingsManager);
     }
 
     public void ResetSettingsToDefault()
     {
         settingsManager = new SettingsManager();
-        uiManager.SetSettingsElements(settingsManager);
+        uiManager.SetAllSettingsElements(settingsManager);
     }
 
     public void ApplySettings()
@@ -179,18 +177,30 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         settingsManager.SaveSettings();
     }
 
-    void ApplyAntialiasingSettings() {
-        if (settingsManager.AntialiasingIndex == 0) {
+    void ApplyAntialiasingSettings()
+    {
+        if (settingsManager.AntialiasingIndex == 0)
+        {
             Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.None;
-        } else if (settingsManager.AntialiasingIndex == 1) {
+        }
+        else if (settingsManager.AntialiasingIndex == 1)
+        {
             Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.FastApproximateAntialiasing;
-        } else if (settingsManager.AntialiasingIndex == 2) {
+        }
+        else if (settingsManager.AntialiasingIndex == 2)
+        {
             Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
-        } else if (settingsManager.AntialiasingIndex == 3) {
+        }
+        else if (settingsManager.AntialiasingIndex == 3)
+        {
             Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
-        } else if (settingsManager.AntialiasingIndex == 4) {
+        }
+        else if (settingsManager.AntialiasingIndex == 4)
+        {
             Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
-        } else if (settingsManager.AntialiasingIndex == 5) {
+        }
+        else if (settingsManager.AntialiasingIndex == 5)
+        {
             Camera.main.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
         }
     }
@@ -199,30 +209,40 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // Iterates through the DoNotDestroyList List, instantiates each GameObject, it to DontDestroyOnLoad, and sets up any references necessary.
     void Awake()
     {
-        Debug.Log("GameManager Awake function executing..");
-        foreach (var gm in doNotDestroyList)
+        if (Instance != null && Instance != this)
         {
-            if (gm != null)
+            Destroy(this);
+        }
+        else
+        {
+            Debug.Log("GameManager Awake function executing..");
+            foreach (var gm in doNotDestroyList)
             {
-                Debug.Log("Instantiating " + gm.name + " and setting to do not destroy.");
-                var gmInstance = Instantiate(gm);
-                DontDestroyOnLoad(gmInstance);
-                if (gmInstance.GetComponent<UIManager>() != null && uiManager == null)
+                if (gm != null)
                 {
-                    uiManager = gmInstance.GetComponent<UIManager>();
-                }
-                else if (gmInstance.GetComponent<AudioManager>() != null && audioManager == null)
-                {
-                    audioManager = gmInstance.GetComponent<AudioManager>();
-                }
-                else if (gmInstance.GetComponent<AIManager>() != null && aiManager == null)
-                {
-                    aiManager = gmInstance.GetComponent<AIManager>();
+                    Debug.Log("Instantiating " + gm.name + " and setting to do not destroy.");
+                    var gmInstance = Instantiate(gm);
+                    DontDestroyOnLoad(gmInstance);
+                    if (gmInstance.GetComponent<UIManager>() != null && uiManager == null)
+                    {
+                        uiManager = gmInstance.GetComponent<UIManager>();
+                    }
+                    else if (gmInstance.GetComponent<AudioManager>() != null && audioManager == null)
+                    {
+                        audioManager = gmInstance.GetComponent<AudioManager>();
+                    }
+                    else if (gmInstance.GetComponent<AIManager>() != null && aiManager == null)
+                    {
+                        aiManager = gmInstance.GetComponent<AIManager>();
+                    }
                 }
             }
+            settingsManager = new SettingsManager();
+            settingsManager.LoadSettings();
+
+            uiManager.Initialize();
+            SetUpClassMenu();
         }
-        settingsManager = new SettingsManager();
-        settingsManager.LoadSettings();
     }
 
     // Nothing yet.
@@ -235,15 +255,20 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // Otherwise, update the player's hud and handle the player's input.
     void Update()
     {
-        if (!inGame)
-            return;
-
-        // Update all HUD elements.
-        UpdateHUD();
-        // Get player input and do stuff.
-        HandlePlayerInput();
-        // Let the enemy's do stuff.
-        HandleEnemyAI();
+        if (inGame)
+        {
+            // Update all HUD elements.
+            UpdateHUD();
+            // Get player input and do stuff.
+            HandlePlayerInput();
+            // Let the enemy's do stuff.
+            HandleEnemyAI();
+        }
+        else
+        {
+            // Updates title screen elements.
+            UpdateUI();
+        }
     }
 
     // Add OnLevelLoaded
@@ -278,6 +303,33 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         selectedClass = playerClass;
         uiManager.SelectClass(selectedClass);
         uiManager.SetConfirmButton(true);
+    }
+
+    public void LoadMainMenu(float delay = 0f)
+    {
+        uiManager.FadeOut("Loading...", delay);
+        audioManager.FadeOutMusic(delay);
+        StartCoroutine(LoadMainMenu_Coroutine(delay));
+    }
+
+    IEnumerator LoadMainMenu_Coroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (inGame && level != null)
+        {
+            foreach (Enemy enemy in level.EnemyList)
+            {
+                enemy.Kill();
+            }
+        }
+
+        inGame = false;
+        int sceneIndex = 0;
+        Debug.Log("Loading level " + sceneIndex);
+        level = null;
+        Map.Reset();
+        SceneManager.LoadScene(sceneIndex);
     }
 
     // Loads a level and scene with a delay in seconds.
@@ -376,9 +428,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // Do stuff to load main menu.
             inGame = false;
             uiManager.Initialize_Main();
-            uiManager.SetSettingsElements(settingsManager);
-            SetUpClassMenu();
-            uiManager.FadeIn("Hydrus");
+            uiManager.SetAllSettingsElements(settingsManager);
+            uiManager.FadeIn("Hydrus", 3f);
             audioManager.FadeInMusic(titleMusic, 0f);
         }
         ApplyAntialiasingSettings();
@@ -629,6 +680,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
     }
 
+    void UpdateUI()
+    {
+        uiManager.UpdateSettingsElements(settingsManager);
+    }
+
     // General update HUD method.
     void UpdateHUD()
     {
@@ -639,6 +695,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         uiManager.UpdateEffectList(player.StatusEffects);
         //uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
         uiManager.UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
+
+        if (uiManager.Paused)
+        {
+            uiManager.UpdateHUDSettingsElements(settingsManager);
+        }
 
         if (player.Cell.Indicators.Count > 0 && !uiManager.Highlighted)
         {
@@ -723,6 +784,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     //TO DO: Add checking for the animation state, so it will know when the player steps left, right, and backwards.
     void HandlePlayerInput()
     {
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        {
+            uiManager.TogglePause();
+        }
         if (level.Player.State == EntityState.Idle && !level.Player.StatusEffects.Stunned)
         {
             Direction inputDir = GetInputDirection();
@@ -761,21 +826,16 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.M)) // Plays the test sound.
             {
-                //                testSound.Position = Vector3.zero; //level.Player.Instance.transform.position;
                 audioManager.PlaySoundEffect(testSound);
             }
-            else if (Input.GetKeyDown(KeyCode.N)) // Casts the test ability.
-            {
-                CastPlayerAbility(level.Player, 0);
-            }
-            else if (Input.GetKeyDown(KeyCode.O))
+            else if (Input.GetKeyDown(KeyCode.Minus))
             {
                 bool alive = level.Player.Damage(25, (level.Player.CastProgress >= interruptPercentage));
                 PerformEntityDeathCheck(level.Player, alive);
 
                 uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
             }
-            else if (Input.GetKeyDown(KeyCode.P))
+            else if (Input.GetKeyDown(KeyCode.Equals))
             {
                 level.Player.Heal(25);
                 uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
