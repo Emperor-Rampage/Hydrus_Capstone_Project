@@ -23,8 +23,8 @@ MonoBehaviour:
   type: 1
   aoeSprite: {fileID: 0}
   range: 0
-  cooldown: 15
-  castTime: 5
+  cooldown: 4
+  castTime: 2.75
   damage: 50
   upgradeable: 0
   baseAbility: {fileID: 0}

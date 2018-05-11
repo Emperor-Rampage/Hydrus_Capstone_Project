@@ -14,10 +14,8 @@ MonoBehaviour:
   enemy:
     instance: {fileID: 1762791434266384, guid: cdfbf7badbab0c140bddb2880d14e8a6, type: 2}
     name: Trilobite Beetle
-    cores: 15
-    maxHealth: 100
+    cores: 40
+    maxHealth: 75
     abilities:
     - {fileID: 11400000, guid: db6c27b91e6743d48a71fc76069a3d59, type: 2}
     - {fileID: 11400000, guid: 88553ee344cff9948aab44e6c79173ca, type: 2}
-    StatusEffects:
-      CurrentEffects: []

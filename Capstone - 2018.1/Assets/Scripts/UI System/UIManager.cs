@@ -300,7 +300,7 @@ public class UIManager : MonoBehaviour
                                 TreeAbility container1 = ability1UI.GetComponent<TreeAbility>();
                                 TreeAbility container2 = ability2UI.GetComponent<TreeAbility>();
 
-                                Debug.Log(container1.Icon.rectTransform.localPosition);
+                                // Debug.Log(container1.Icon.rectTransform.localPosition);
 
                                 Vector2 ability1Position = ability1UI.GetComponent<RectTransform>().anchoredPosition;
                                 Vector2 ability2Position = ability2UI.GetComponent<RectTransform>().position;
@@ -313,7 +313,7 @@ public class UIManager : MonoBehaviour
 
                                 RectTransform lineTransform = line.GetComponent<RectTransform>();
 
-                                Debug.Log("Placing line at " + position + " between " + ability1Position + " and " + ability2Position + " .. " + abilityTreeContentPanel.transform.position);
+                                // Debug.Log("Placing line at " + position + " between " + ability1Position + " and " + ability2Position + " .. " + abilityTreeContentPanel.transform.position);
 
                                 lineTransform.anchoredPosition = position;
                                 lineTransform.rotation = rotation;
@@ -390,7 +390,7 @@ public class UIManager : MonoBehaviour
 
     public void GoToMenu(int index)
     {
-        Debug.Log("Going to menu " + index + " from menu " + currentMenu);
+        // Debug.Log("Going to menu " + index + " from menu " + currentMenu);
         // If the index is invalid, return.
         if (index < 0 || index >= menuList.Length)
             return;
@@ -475,7 +475,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowHUD(int index)
     {
-        Debug.Log("Showing HUD " + index + " and hiding HUD " + currentHUD);
+        // Debug.Log("Showing HUD " + index + " and hiding HUD " + currentHUD);
 
         // If invalid index, return.
         if (index < 0 || index >= hudList.Length)
@@ -664,7 +664,7 @@ public class UIManager : MonoBehaviour
     {
         if (playerCastBarTween != null)
         {
-            Debug.Log("Cancelling UI cast tween!");
+            // Debug.Log("Cancelling UI cast tween!");
             playerCastBarTween.Stop();
             playerCastBarTween = null;
 

@@ -21,10 +21,10 @@ MonoBehaviour:
     pitch: -1
   statusEffects: []
   type: 3
-  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  aoeSprite: {fileID: 2800000, guid: bd232c0ab78814d4a818594656678595, type: 3}
   range: 0
   cooldown: 2
-  castTime: 1
+  castTime: 1.25
   damage: 25
   upgradeable: 1
   baseAbility: {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}

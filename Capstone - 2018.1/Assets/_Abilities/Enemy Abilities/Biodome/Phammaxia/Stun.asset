@@ -21,13 +21,13 @@ MonoBehaviour:
     pitch: 0
   statusEffects:
   - effect: 2
-    duration: 4.75
+    duration: 2.5
     value: 1
   type: 1
   aoeSprite: {fileID: 0}
   range: 0
-  cooldown: 8
-  castTime: 2
+  cooldown: 5
+  castTime: 1.5
   damage: 5
   upgradeable: 0
   baseAbility: {fileID: 0}

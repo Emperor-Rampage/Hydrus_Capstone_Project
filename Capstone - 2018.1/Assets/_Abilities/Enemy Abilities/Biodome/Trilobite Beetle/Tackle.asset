@@ -23,11 +23,13 @@ MonoBehaviour:
   type: 1
   aoeSprite: {fileID: 0}
   range: 0
-  cooldown: 2
-  castTime: 0.5
-  damage: 10
+  cooldown: 1.5
+  castTime: 1
+  damage: 15
   upgradeable: 0
+  baseAbility: {fileID: 0}
   tier: 0
-  previousTier: {fileID: 0}
+  previousTier:
+  - {fileID: 0}
   nextTier: []
   cost: 0

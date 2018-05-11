@@ -100,7 +100,7 @@ namespace EntityClasses
             if (CooldownsRemaining.ContainsKey(ability) && CooldownsRemaining[ability] > 0)
                 return null;
 
-            Debug.Log("Casting abilty " + ability.Name + " with cast time of " + GetAdjustedCastTime(ability.CastTime) + " at " + Cell.X + ", " + Cell.Z);
+            // Debug.Log("Casting abilty " + ability.Name + " with cast time of " + GetAdjustedCastTime(ability.CastTime) + " at " + Cell.X + ", " + Cell.Z);
             CurrentAbility = index;
             currentAbilityCoroutine = GameManager.Instance.StartCoroutine(CastAbility_Coroutine(ability));
             coroutines.Add(currentAbilityCoroutine);
@@ -254,7 +254,7 @@ namespace EntityClasses
         public float GetAdjustedCastTime(float castTime)
         {
             float adjusted = castTime * (2f - StatusEffects.CastTimeScale) * (2f - StatusEffects.HasteScale);
-            Debug.Log("Adjusted cast time calculated as " + adjusted + " with base " + castTime + ", cast slow " + StatusEffects.CastTimeScale + ", haste " + StatusEffects.HasteScale);
+            // Debug.Log("Adjusted cast time calculated as " + adjusted + " with base " + castTime + ", cast slow " + StatusEffects.CastTimeScale + ", haste " + StatusEffects.HasteScale);
             return adjusted;
         }
 
@@ -360,7 +360,7 @@ namespace EntityClasses
             Abilities.Clear();
             if (Class.BaseAbilities == null)
             {
-                Debug.Log("Class object has no base abilities.");
+                Debug.LogError("ERROR: Class object has no base abilities.");
             }
             foreach (AbilityObject ability in Class.BaseAbilities)
             {

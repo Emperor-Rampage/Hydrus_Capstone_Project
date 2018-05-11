@@ -23,14 +23,19 @@ MonoBehaviour:
   - effect: 8
     duration: 2
     value: 0.5
+  - effect: 3
+    duration: 0.5
+    value: 0.25
   type: 0
   aoeSprite: {fileID: 0}
   range: 0
   cooldown: 4
-  castTime: 1
+  castTime: 1.5
   damage: 0
   upgradeable: 0
+  baseAbility: {fileID: 0}
   tier: 0
-  previousTier: {fileID: 0}
+  previousTier:
+  - {fileID: 0}
   nextTier: []
   cost: 0

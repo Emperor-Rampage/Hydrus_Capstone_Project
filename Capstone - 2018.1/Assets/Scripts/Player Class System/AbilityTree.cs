@@ -30,7 +30,7 @@ public class AbilityTree
     public void Initialize(Player player)
     {
         if (player == null)
-            Debug.Log("WARNING: Passed in null player referenece to Initialize in AbilityTree");
+            Debug.LogWarning("WARNING: Passed in null player referenece to Initialize in AbilityTree");
         this.player = player;
         List<AbilityObject> t1 = this.player.Class.BaseAbilities;
         List<AbilityObject> prevTier;
@@ -53,7 +53,7 @@ public class AbilityTree
 
         TotalNumLeafs = tiers[tiers.Count - 1].Count;
 
-        Debug.Log("Number of total leafs: " + TotalNumLeafs);
+        // Debug.Log("Number of total leafs: " + TotalNumLeafs);
     }
 
     public int GetAbilityIndex(int tierIndex, AbilityObject ability)
@@ -63,7 +63,7 @@ public class AbilityTree
         {
             return tier.IndexOf(ability);
         }
-        Debug.Log("ERROR: Could not find ability index.");
+        Debug.LogError("ERROR: Could not find ability index.");
         return -1;
     }
 

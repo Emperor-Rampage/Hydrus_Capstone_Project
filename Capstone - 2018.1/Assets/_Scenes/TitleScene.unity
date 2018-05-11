@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 0
-  m_AmbientMode: 3
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.425
@@ -3987,7 +3987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 2078068042}
-  levelToLoad: 0
+  levelToLoad: 1
 --- !u!4 &1691095255
 Transform:
   m_ObjectHideFlags: 0
@@ -5376,12 +5376,36 @@ MonoBehaviour:
         enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
       - x: 17
         z: 34
-        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+        enemy: {fileID: 11400000, guid: a7e8978c3d1793541a77fa941f2bd1e3, type: 2}
       - x: 9
         z: 23
         enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
-      - x: 12
-        z: 37
+      - x: 13
+        z: 36
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 8
+        z: 12
+        enemy: {fileID: 11400000, guid: a7e8978c3d1793541a77fa941f2bd1e3, type: 2}
+      - x: 15
+        z: 36
+        enemy: {fileID: 11400000, guid: a7e8978c3d1793541a77fa941f2bd1e3, type: 2}
+      - x: 4
+        z: 26
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 7
+        z: 30
+        enemy: {fileID: 11400000, guid: a7e8978c3d1793541a77fa941f2bd1e3, type: 2}
+      - x: 3
+        z: 38
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 5
+        z: 38
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 1
+        z: 8
+        enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
+      - x: 16
+        z: 20
         enemy: {fileID: 11400000, guid: 9322dced00be1b84889421ae2b7ce6ff, type: 2}
     - sceneIndex: 3
       name: Level 2
@@ -5400,7 +5424,7 @@ MonoBehaviour:
     volume: 0.75
     pitch: 1
   movespeed: 0.6
-  turnspeed: 0.4
+  turnspeed: 0.3
   tickRate: 0.25
   enemyAggroDistance: 4
   interruptPercentage: 0.75

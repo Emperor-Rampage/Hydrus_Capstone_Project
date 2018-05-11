@@ -238,13 +238,13 @@ namespace MapClasses
                     bool hasBeenVisited = visitedProcedural.Contains(nCell);
                     if (nCell.Type == CellType.Procedural && neighborHasConnections && !hasBeenVisited && !definiteFound)
                     {
-                        Debug.Log("Unvisited procedural found with existing connections.");
+                        // Debug.Log("Unvisited procedural found with existing connections.");
                         definiteFound = true;
                         definiteIndex = nIndex;
                     }
                     else if (nCell.Type == CellType.Connection && !hasBeenVisited && !definiteFound)
                     {
-                        Debug.Log("Unvisited connection found.");
+                        // Debug.Log("Unvisited connection found.");
                         definiteFound = true;
                         definiteIndex = nIndex;
                     }
@@ -366,17 +366,17 @@ namespace MapClasses
 
         public IEnumerator RemoveEntity(Entity entity)
         {
-            Debug.Log("Removing entity..");
+            // Debug.Log("Removing entity..");
             if (entity != null)
             {
-                Debug.Log("-- Entity is not null.");
+                // Debug.Log("-- Entity is not null.");
                 while (entity.State != EntityState.Idle)
                 {
-                    Debug.Log("-- Entity is not idle, waiting a frame. Instead is " + entity.State);
+                    // Debug.Log("-- Entity is not idle, waiting a frame. Instead is " + entity.State);
                     yield return null;
                 }
 
-                Debug.Log("-- Entity is idle. Destroying everything.");
+                // Debug.Log("-- Entity is idle. Destroying everything.");
                 // If the entity is present in the enemy list, it will be removed.
                 GameObject.Destroy(entity.Instance);
                 if (!entity.IsPlayer)
@@ -645,7 +645,7 @@ namespace MapClasses
 
                 if (!entity.IsPlayer)
                 {
-                    //                    Debug.Log("Entity is an enemy, setting target to null.");
+                    // Debug.Log("Entity is an enemy, setting target to null.");
                     ((Enemy)entity).Target = Direction.Null;
                 }
 

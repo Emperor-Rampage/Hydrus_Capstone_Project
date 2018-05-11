@@ -118,6 +118,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void ApplySettings()
     {
+        Debug.Log("Applying player settings.");
         settingsManager.SetSettings(uiManager);
         // TODO: Add gameplay settings.
         ApplyAdjustedHealth();
@@ -166,6 +167,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
 
         // TODO: Add sound settings.
+        Debug.Log("Master volume: " + settingsManager.MasterVolume);
         float masterDBValue = 20f * Mathf.Log10(settingsManager.MasterVolume);
         float musicDBValue = 20f * Mathf.Log10(settingsManager.MusicVolume);
         float fxDBValue = 20f * Mathf.Log10(settingsManager.FXVolume);
@@ -254,17 +256,20 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     }
                 }
             }
-            settingsManager = new SettingsManager();
-            settingsManager.LoadSettings();
-
             uiManager.Initialize();
             SetUpClassMenu();
+
+            settingsManager = new SettingsManager();
+            settingsManager.LoadSettings();
         }
     }
 
     // Nothing yet.
     void Start()
     {
+        // Have to do this hear instead of in OnLevelLoaded or Awake because AudioMixer.SetFloat doesn't work in either method.
+        // Because Unity is the best.
+        ApplySettings();
     }
 
     // Executes every frame.
@@ -312,7 +317,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void SelectClass(PlayerClass playerClass)
     {
-        Debug.Log("Selecting class " + playerClass.Name);
+        // Debug.Log("Selecting class " + playerClass.Name);
         //        if (index < 0 || index >= classes.Count)
         if (playerClass == null)
             return;
@@ -343,7 +348,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         inGame = false;
         int sceneIndex = 0;
-        Debug.Log("Loading level " + sceneIndex);
+        // Debug.Log("Loading level " + sceneIndex);
         level = null;
         Map.Reset();
         SceneManager.LoadScene(sceneIndex);
@@ -371,7 +376,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
 
         int sceneIndex = Map.CurrentLevel.sceneIndex;
-        Debug.Log("Loading level " + sceneIndex);
+        // Debug.Log("Loading level " + sceneIndex);
         SceneManager.LoadScene(sceneIndex);
     }
 
@@ -381,6 +386,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     //  Also calls the intialization for the HUD, displays the level text, and updates the appropriate UI.
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
+        Time.timeScale = 1f;
         // FIXME: When an ability executed right as the level transitions, an exception is thrown and the game stops working.
         Player player = null;
         if (level != null)
@@ -716,13 +722,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         if (player.Cell.Indicators.Count > 0 && !uiManager.Highlighted)
         {
-            Debug.Log("Player cell is being targeted.");
+            // Debug.Log("Player cell is being targeted.");
             uiManager.ToggleBorderHighlight();
             // uiManager.HighlightBorder();
         }
         else if (player.Cell.Indicators.Count <= 0 && uiManager.Highlighted)
         {
-            Debug.Log("Player cell is NOT being targeted.");
+            // Debug.Log("Player cell is NOT being targeted.");
             uiManager.ToggleBorderHighlight();
             // uiManager.UnHighlightBorder();
         }
@@ -1025,7 +1031,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 SetPlayerAnimation("MoveBack", adjustedMovespeed);
             }
         }
-        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseLinear, completeCallback: () => entity.State = EntityState.Idle);
+        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseInOut, completeCallback: () => entity.State = EntityState.Idle);
         playerMovementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
     }
 
@@ -1059,7 +1065,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void TurnEntityInstanceLeft(Entity entity)
     {
         entity.State = EntityState.Moving;
-        Tween.Rotate(entity.Instance.transform, new Vector3(0f, -90f, 0f), Space.World, Turnspeed, 0f, completeCallback: (() => FinishTurning(entity)));
+        Tween.Rotate(entity.Instance.transform, new Vector3(0f, -90f, 0f), Space.World, Turnspeed, 0f, Tween.EaseOut, completeCallback: (() => FinishTurning(entity)));
         entity.TurnLeft();
     }
 
@@ -1073,7 +1079,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void TurnEntityInstanceRight(Entity entity)
     {
         entity.State = EntityState.Moving;
-        Tween.Rotate(entity.Instance.transform, new Vector3(0f, 90f, 0f), Space.World, Turnspeed, 0f, completeCallback: (() => FinishTurning(entity)));
+        Tween.Rotate(entity.Instance.transform, new Vector3(0f, 90f, 0f), Space.World, Turnspeed, 0f, Tween.EaseOut, completeCallback: (() => FinishTurning(entity)));
         entity.TurnRight();
     }
 
@@ -1153,7 +1159,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
-        Debug.Log(entity.Name + " casting " + ability.SoundEffect);
+        // Debug.Log(entity.Name + " casting " + ability.SoundEffect);
 
         foreach (Cell cell in affected)
         {
@@ -1176,7 +1182,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     void ApplyAbility(Entity target, AbilityObject ability, Entity caster)
     {
-        Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
+        // Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
 
         foreach (AbilityEffect effect in ability.StatusEffects)
         {
@@ -1256,6 +1262,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             player.State = EntityState.Null;
             player.Cores = 0;
+            player.CurrentHealth = player.MaxHealth;
             if (gradualEffectsCoroutine != null)
                 StopCoroutine(gradualEffectsCoroutine);
             audioManager.FadeOutMusic(1f);
@@ -1264,10 +1271,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
         else if (!alive && !entity.IsPlayer)
         {
-            Debug.Log("Enemy is dead!");
+            // Debug.Log("Enemy is dead!");
             player.Cores += entity.Cores;
             // Regenerate 20% of missing health on kill.
+            // Debug.Log("Healing player for " + ((float)(player.MaxHealth - player.CurrentHealth)) * 0.2f);
             player.Heal((player.MaxHealth - player.CurrentHealth) * 0.2f);
+            uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
             StartCoroutine(level.RemoveEntity(entity));
         }
     }

@@ -78,7 +78,7 @@ namespace AudioClasses
             AudioSource source;
             if (soundEffectPool.Count > 0)
             {
-                Debug.Log("Source found, pulling from pool. Pool now contains " + soundEffectPool.Count);
+                // Debug.Log("Source found, pulling from pool. Pool now contains " + soundEffectPool.Count);
                 sourceObject = soundEffectPool.Pop();
                 sourceObject.transform.position = soundEffect.Position;
                 source = sourceObject.GetComponent<AudioSource>();
@@ -89,7 +89,7 @@ namespace AudioClasses
             }
             else
             {
-                Debug.Log("Pool is empty, creating new source.");
+                // Debug.Log("Pool is empty, creating new source.");
                 sourceObject = Instantiate(soundEffectPrefab.gameObject, soundEffect.Position, Quaternion.identity, this.transform);
                 source = sourceObject.GetComponent<AudioSource>();
                 source.clip = soundEffect.Clip;
@@ -111,7 +111,7 @@ namespace AudioClasses
 
             if (soundEffectPool.Count > maxPoolSize)
             {
-                Debug.Log("Reached maxPoolSize, trimming excess.");
+                // Debug.Log("Reached maxPoolSize, trimming excess.");
                 for (int i = soundEffectPool.Count; i > maxPoolSize; i--)
                 {
                     Destroy(soundEffectPool.Pop());
