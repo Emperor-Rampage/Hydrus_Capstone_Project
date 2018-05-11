@@ -66,6 +66,7 @@ namespace EntityClasses
 
         TweenBase currentAbilityTween;
         Coroutine currentAbilityCoroutine;
+        Coroutine currentMovementCoroutine;
         List<Coroutine> coroutines = new List<Coroutine>();
 
 
@@ -122,6 +123,9 @@ namespace EntityClasses
 
         void StartCooldown(AbilityObject ability)
         {
+            coroutines.Remove(currentAbilityCoroutine);
+            currentAbilityCoroutine = null;
+
             float adjustedCooldown = GetAdjustedCooldown(ability.Cooldown);
             Cooldowns[ability] = adjustedCooldown;
             CooldownsRemaining[ability] = adjustedCooldown;
@@ -131,6 +135,18 @@ namespace EntityClasses
             CurrentCastTime = 0f;
             CastProgress = 0f;
             State = EntityState.Idle;
+        }
+
+        public void AddMovementCoroutine(Coroutine movementCoroutine)
+        {
+            currentMovementCoroutine = movementCoroutine;
+            coroutines.Add(currentMovementCoroutine);
+        }
+
+        public void RemoveMovementCoroutine()
+        {
+            coroutines.Remove(currentMovementCoroutine);
+            currentMovementCoroutine = null;
         }
 
         public void TurnLeft()

@@ -16,6 +16,7 @@ public class SettingsContainer : MonoBehaviour
     [Header("Graphics")]
     public Toggle fullscreenToggle;
     public TMP_Dropdown resolutionDropdown;
+    public TMP_Dropdown textureDropdown;
     public TMP_Dropdown antialiasingDropdown;
     public TMP_Dropdown vSyncDropdown;
     public TMP_Dropdown frameRateDropdown;

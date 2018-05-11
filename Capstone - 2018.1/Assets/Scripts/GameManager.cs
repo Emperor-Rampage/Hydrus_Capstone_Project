@@ -135,6 +135,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         Screen.fullScreen = settingsManager.Fullscreen;
 
+        QualitySettings.masterTextureLimit = settingsManager.TextureQualityIndex;
+
         // TODO: Add Antialiasing settings.
         ApplyAntialiasingSettings();
 
@@ -1012,8 +1014,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         //Probably going to make a separate method to handle all this.
+        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseInOut, completeCallback: () => entity.State = EntityState.Idle);
+        Coroutine movementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
         if (entity.IsPlayer)
         {
+            playerMovementCoroutine = movementCoroutine;
             if (level.Player.Facing == direction)
             {
                 SetPlayerAnimation("MoveForward", adjustedMovespeed);
@@ -1031,8 +1036,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 SetPlayerAnimation("MoveBack", adjustedMovespeed);
             }
         }
-        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseInOut, completeCallback: () => entity.State = EntityState.Idle);
-        playerMovementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
     }
 
     // Sets the destination cell to a locked state (to prevent any other entities to attempt to move to this cell)
@@ -1044,6 +1047,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         cell.Locked = true;
         yield return new WaitForSeconds(delay);
         level.SetEntityLocation(entity, cell);
+        // entity.RemoveMovementCoroutine();
         cell.Locked = false;
     }
 
@@ -1256,6 +1260,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         Player player = level.Player;
         if (!alive && entity.IsPlayer)
         {
+            inGame = false;
             // Do player death stuff.
             if (playerMovementCoroutine != null)
                 StopCoroutine(playerMovementCoroutine);

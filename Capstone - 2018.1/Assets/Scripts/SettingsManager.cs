@@ -12,6 +12,7 @@ public class SettingsManager
     public const string MaxHealthTextKey = "MaxHealthText";
     public const string FullScreenToggleKey = "FullscreenToggle";
     public const string ResolutionDropdownKey = "ResolutionDropdown";
+    public const string TextureDropdownKey = "TextureDropdown";
     public const string AntialiasingDropdownKey = "AntialiasingDropdown";
     public const string VSyncDropdownKey = "VSyncDropdown";
     public const string FrameRateDropdownKey = "FrameRateDropdown";
@@ -27,6 +28,7 @@ public class SettingsManager
     // Graphics settings
     public bool Fullscreen { get; private set; } = true;
     public int ResolutionIndex { get; private set; } = 0;
+    public int TextureQualityIndex { get; private set; } = 0;
     public int AntialiasingIndex { get; private set; } = 0;
     public int VSyncIndex { get; private set; } = 0;
     public int FrameRateIndex { get; private set; } = 0;
@@ -48,6 +50,7 @@ public class SettingsManager
         // Graphics
         Fullscreen = container.fullscreenToggle.isOn;
         ResolutionIndex = container.resolutionDropdown.value;
+        TextureQualityIndex = container.textureDropdown.value;
         AntialiasingIndex = container.antialiasingDropdown.value;
         VSyncIndex = container.vSyncDropdown.value;
         FrameRateIndex = container.frameRateDropdown.value;
@@ -62,19 +65,20 @@ public class SettingsManager
         if (PlayerPrefs.HasKey(FirstPlayKey))
         {
             // Gameplay
-            HealthPercent = PlayerPrefs.GetFloat(MaxHealthSliderKey);
+            HealthPercent = PlayerPrefs.GetFloat(MaxHealthSliderKey, HealthPercent);
 
             // Graphics
-            Fullscreen = GetBool(FullScreenToggleKey);
-            ResolutionIndex = PlayerPrefs.GetInt(ResolutionDropdownKey);
-            AntialiasingIndex = PlayerPrefs.GetInt(AntialiasingDropdownKey);
-            VSyncIndex = PlayerPrefs.GetInt(VSyncDropdownKey);
-            FrameRateIndex = PlayerPrefs.GetInt(FrameRateDropdownKey);
+            Fullscreen = GetBool(FullScreenToggleKey, Fullscreen);
+            ResolutionIndex = PlayerPrefs.GetInt(ResolutionDropdownKey, ResolutionIndex);
+            TextureQualityIndex = PlayerPrefs.GetInt(TextureDropdownKey, TextureQualityIndex);
+            AntialiasingIndex = PlayerPrefs.GetInt(AntialiasingDropdownKey, AntialiasingIndex);
+            VSyncIndex = PlayerPrefs.GetInt(VSyncDropdownKey, VSyncIndex);
+            FrameRateIndex = PlayerPrefs.GetInt(FrameRateDropdownKey, FrameRateIndex);
 
             // Sound
-            MasterVolume = PlayerPrefs.GetFloat(MasterSliderKey);
-            MusicVolume = PlayerPrefs.GetFloat(MusicSliderKey);
-            FXVolume = PlayerPrefs.GetFloat(FXSliderKey);
+            MasterVolume = PlayerPrefs.GetFloat(MasterSliderKey, MasterVolume);
+            MusicVolume = PlayerPrefs.GetFloat(MusicSliderKey, MusicVolume);
+            FXVolume = PlayerPrefs.GetFloat(FXSliderKey, FXVolume);
 
             // Controls
         }
@@ -89,6 +93,7 @@ public class SettingsManager
         // Graphics
         SetBool(FullScreenToggleKey, Fullscreen);
         PlayerPrefs.SetInt(ResolutionDropdownKey, ResolutionIndex);
+        PlayerPrefs.SetInt(TextureDropdownKey, TextureQualityIndex);
         PlayerPrefs.SetInt(AntialiasingDropdownKey, AntialiasingIndex);
         PlayerPrefs.SetInt(VSyncDropdownKey, VSyncIndex);
         PlayerPrefs.SetInt(FrameRateDropdownKey, FrameRateIndex);

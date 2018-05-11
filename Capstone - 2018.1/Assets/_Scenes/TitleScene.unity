@@ -5339,7 +5339,7 @@ MonoBehaviour:
       name: Hub
       levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
       music:
-        audioClip: {fileID: 8300000, guid: 5de073d3cab0b07488a26b28061a92c0, type: 3}
+        audioClip: {fileID: 8300000, guid: 31f58d516ffc3f040bf64978f97f737c, type: 3}
         volume: 1
         pitch: 1
       exitList: 01000000
@@ -5348,7 +5348,7 @@ MonoBehaviour:
       name: Level 1
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
       music:
-        audioClip: {fileID: 8300000, guid: 31f58d516ffc3f040bf64978f97f737c, type: 3}
+        audioClip: {fileID: 8300000, guid: 5de073d3cab0b07488a26b28061a92c0, type: 3}
         volume: 1
         pitch: 1
       exitList: 02000000
@@ -5411,8 +5411,8 @@ MonoBehaviour:
       name: Level 2
       levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
       music:
-        audioClip: {fileID: 8300000, guid: 31f58d516ffc3f040bf64978f97f737c, type: 3}
-        volume: 1
+        audioClip: {fileID: 8300000, guid: 81d653672f436ce4d832f67ac1e8212f, type: 3}
+        volume: 0.3
         pitch: 1
       exitList: 00000000
       spawnList:
