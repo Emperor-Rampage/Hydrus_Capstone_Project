@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
   m_Name: 4.1.0_LargeStimpack
   m_EditorClassIdentifier: 
+  index: 20
   abilityName: Stimpack
   icon: {fileID: 21300000, guid: 396ab3bf9b62b3b46945155e1608bdb6, type: 3}
   toolTip: 'Tier 2 Ability: Knight Ability 4'

@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: 4.0.0 Weapon Bash
   m_EditorClassIdentifier: 
+  index: 40
   abilityName: Weapon Bash
   icon: {fileID: 21300000, guid: d5979f919bce08441984bb20cb625070, type: 3}
   toolTip: 'Tier 1 Ability: Marksman Ability 4

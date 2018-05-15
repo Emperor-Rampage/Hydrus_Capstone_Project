@@ -21,14 +21,14 @@ MonoBehaviour:
     pitch: 0
   statusEffects:
   - effect: 9
-    duration: 5
-    value: 15
+    duration: 4
+    value: 12
   type: 1
   aoeSprite: {fileID: 2800000, guid: bd232c0ab78814d4a818594656678595, type: 3}
   range: 0
   cooldown: 1.5
-  castTime: 0.5
-  damage: 10
+  castTime: 0.75
+  damage: 5
   upgradeable: 0
   baseAbility: {fileID: 0}
   tier: 0

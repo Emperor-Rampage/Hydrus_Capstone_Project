@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: 1.1.0 Quick Shot
   m_EditorClassIdentifier: 
+  index: 25
   abilityName: QuickShot
   icon: {fileID: 21300000, guid: 4fde9cf516fa4fd4c95fbebc9d989764, type: 3}
   toolTip: 'Tier 2 Basic Ability: Favors Speed'

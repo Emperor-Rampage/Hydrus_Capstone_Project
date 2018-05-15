@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
   m_Name: 1.1.1_GreaterCleave
   m_EditorClassIdentifier: 
+  index: 2
   abilityName: Greater Cleave
   icon: {fileID: 21300000, guid: 2254765e4d24f094787849d192856d86, type: 3}
   toolTip: 'Tier 3 Ability: Knight Ability 1'

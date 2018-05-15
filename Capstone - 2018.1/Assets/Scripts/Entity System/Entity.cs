@@ -69,7 +69,6 @@ namespace EntityClasses
         Coroutine currentMovementCoroutine;
         List<Coroutine> coroutines = new List<Coroutine>();
 
-
         public Entity() { Abilities = new List<AbilityObject>(); }
         public Entity(Entity entity)
         {

@@ -422,6 +422,8 @@ namespace AbilityClasses
         //This is the basic template for all abilites in the game. This container holds all the info we need to make the abilites actually activate.
 
         //Basic Ability Information
+        [SerializeField] int index;
+        public int Index { get { return index; } }
         [SerializeField] string abilityName = "Default Ability Name";                                        //Ability Name
         public string Name { get { return abilityName; } }
 

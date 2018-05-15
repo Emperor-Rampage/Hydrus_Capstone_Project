@@ -14,8 +14,8 @@ MonoBehaviour:
   enemy:
     instance: {fileID: 1520558863252124, guid: fe55edd5d2780e748a51af351ca5eedb, type: 2}
     name: Flower Spider
-    cores: 10
-    maxHealth: 75
+    cores: 20
+    maxHealth: 65
     abilities:
     - {fileID: 11400000, guid: 18722e11649a12a459f2e85fa1def5d1, type: 2}
     - {fileID: 11400000, guid: 6023d5c8414fcad448d2ab572a0b4d94, type: 2}

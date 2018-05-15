@@ -1,12 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using AbilityClasses;
+using EntityClasses;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class PlayerData {
+    [SerializeField]
+    public int classIndex;
+    [SerializeField]
+    public List<int> abilityIndexes;
+    [SerializeField]
+    public int cores;
+}
+
 public class SettingsManager
 {
+    const string gameSaveFileName = "gameSave.json";
     public const string FirstPlayKey = "FirstPlay";
     public const string MaxHealthSliderKey = "MaxHealthSlider";
     public const string MaxHealthTextKey = "MaxHealthText";
@@ -38,6 +52,36 @@ public class SettingsManager
     public float FXVolume { get; private set; } = 1f;
     // Controls settings
 
+
+    public void SaveGame(PlayerData data) {
+        string playerJsonString = JsonUtility.ToJson(data);
+        Debug.Log("Saving playerData " + data.classIndex + ", " + data.abilityIndexes + ", " + data.cores + " into " + playerJsonString);
+
+        string filePath = Path.Combine(Application.persistentDataPath, gameSaveFileName);
+        File.WriteAllText(filePath, playerJsonString);
+
+        // if (player != null) {
+        //     Debug.Log("Player is not null. Saving.");
+        //     PlayerPrefs.SetString(GameSaveKey, JsonUtility.ToJson(player));
+        // }
+    }
+    public PlayerData LoadGame() {
+        PlayerData data = null;
+
+        string filePath = Path.Combine(Application.persistentDataPath, gameSaveFileName);
+
+        if (File.Exists(filePath)) {
+            string dataJsonString = File.ReadAllText(filePath);
+            data = JsonUtility.FromJson<PlayerData>(dataJsonString);
+        }
+
+        // if (PlayerPrefs.HasKey(GameSaveKey)) {
+        //     Debug.Log("Player available. Loading.");
+        //     player = (Player)JsonUtility.FromJson(PlayerPrefs.GetString(GameSaveKey, ""), typeof(Player));
+        // }
+        // Debug.Log("Loaded Player " + player.Name);
+        return data;
+    }
 
     public void SetSettings(UIManager uiManager)
     {

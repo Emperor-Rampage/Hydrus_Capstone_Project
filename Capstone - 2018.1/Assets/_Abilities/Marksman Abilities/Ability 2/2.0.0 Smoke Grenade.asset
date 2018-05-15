@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: 2.0.0 Smoke Grenade
   m_EditorClassIdentifier: 
+  index: 31
   abilityName: Smoke Grenade
   icon: {fileID: 21300000, guid: e653114103b1dd74ca7461bfca794cdd, type: 3}
   toolTip: 'Tier 1 Ability: Marksman Ability 2
