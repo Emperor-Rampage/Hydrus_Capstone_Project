@@ -78,6 +78,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // A reference to the AudioManager instance, which is created at runtime, and handles all audio.
     AudioManager audioManager;
     AIManager aiManager;
+    public MiniMapCam MiniMapCam { get; private set; }
 
     [SerializeField] BackgroundMusic titleMusic;
 
@@ -109,12 +110,21 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public float Turnspeed { get { return turnspeed; } }
 
     public void NewGame() {
+        List<int> indexes = new List<int>();
+        foreach (AbilityObject ability in selectedClass.BaseAbilities) {
+            indexes.Add(ability.Index);
+        }
+        playerData = new PlayerData {
+            classIndex = classes.IndexOf(selectedClass),
+            abilityIndexes = indexes,
+            cores = 0
+        };
         Map.SetCurrentLevel(0);
         LoadLevel(1f);
     }
     public void Continue() {
         playerData = settingsManager.LoadGame();
-        if (playerData.classIndex > 0 && playerData.classIndex < classes.Count) {
+        if (playerData.classIndex >= 0 && playerData.classIndex < classes.Count) {
             selectedClass = classes[playerData.classIndex];
             Map.SetCurrentLevel(0);
             LoadLevel(1f);
@@ -228,7 +238,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // Debug.Log("Adjusting player max health of " + player.Class.Health + " by " + settingsManager.HealthPercent + " and getting " + adjustedMaxHealth);
             // Debug.Log("-- Adjust player current health of " + player.CurrentHealth + " to " + adjustedCurrent);
             level.Player.MaxHealth = adjustedMaxHealth;
-            // player.CurrentHealth = adjustedMaxHealth;
+            level.Player.CurrentHealth = adjustedMaxHealth;
         }
     }
 
@@ -289,6 +299,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     else if (gmInstance.GetComponent<AIManager>() != null && aiManager == null)
                     {
                         aiManager = gmInstance.GetComponent<AIManager>();
+                    } else if (gmInstance.GetComponent<MiniMapCam>() != null && MiniMapCam == null) {
+                        MiniMapCam = gmInstance.GetComponent<MiniMapCam>();
                     }
                 }
             }
@@ -297,6 +309,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             settingsManager = new SettingsManager();
             settingsManager.LoadSettings();
+            // Save it after attempting to load, just to generate the config file on the first play.
+            settingsManager.SaveSettings();
         }
     }
 
@@ -852,7 +866,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (player.State == EntityState.Idle && !player.StatusEffects.Stunned)
         {
             Direction inputDir = GetInputDirection();
-            if (Input.GetKeyDown(KeyCode.Space) && level.CanExit)
+            if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit)
             {
                 ExitLevel();
             }
@@ -861,27 +875,27 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 MoveEntityLocation(player, inputDir);
                 //                MoveEntityInstance(player, inputDir);
             }
-            else if (Input.GetKey(KeyCode.Q))
+            else if (Input.GetKey(settingsManager.TurnLeftKey))
             {
                 TurnEntityInstanceLeft(player);
             }
-            else if (Input.GetKey(KeyCode.E))
+            else if (Input.GetKey(settingsManager.TurnRightKey))
             {
                 TurnEntityInstanceRight(player);
             }
-            else if (Input.GetKey(KeyCode.Alpha1))
+            else if (Input.GetKey(settingsManager.Ability1Key))
             {
                 CastPlayerAbility(player, 0);
             }
-            else if (Input.GetKey(KeyCode.Alpha2))
+            else if (Input.GetKey(settingsManager.Ability2Key))
             {
                 CastPlayerAbility(player, 1);
             }
-            else if (Input.GetKey(KeyCode.Alpha3))
+            else if (Input.GetKey(settingsManager.Ability3Key))
             {
                 CastPlayerAbility(player, 2);
             }
-            else if (Input.GetKey(KeyCode.Alpha4))
+            else if (Input.GetKey(settingsManager.Ability4Key))
             {
                 CastPlayerAbility(player, 3);
             }

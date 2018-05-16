@@ -389,11 +389,13 @@ public class UIManager : MonoBehaviour
 
         if (Paused)
         {
+            manager.MiniMapCam.SetZoom(40f);
             Time.timeScale = 0f;
             ShowHUD(1);
         }
         else
         {
+            manager.MiniMapCam.SetZoom(10f);
             Time.timeScale = 1f;
             ShowHUD(0);
         }
@@ -401,6 +403,7 @@ public class UIManager : MonoBehaviour
 
     public void ExitGame()
     {
+        manager.MiniMapCam.SetZoom(10f);
         Paused = false;
         Time.timeScale = 1f;
         manager.SaveGame();
