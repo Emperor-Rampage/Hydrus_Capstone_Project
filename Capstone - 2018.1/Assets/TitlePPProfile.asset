@@ -35,7 +35,7 @@ MonoBehaviour:
     value: 0
   intensity:
     overrideState: 1
-    value: 0.364
+    value: 0.157
   size:
     overrideState: 1
     value: 0.57
@@ -80,13 +80,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a79b01ea5641d4aa6daa2e23605641, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
   intensity:
     overrideState: 1
-    value: 0.35
+    value: 15.43
   threshold:
     overrideState: 1
     value: 1

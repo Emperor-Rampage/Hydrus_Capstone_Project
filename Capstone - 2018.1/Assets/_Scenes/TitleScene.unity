@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3738,8 +3738,8 @@ MonoBehaviour:
   volumeTrigger: {fileID: 1646582911}
   volumeLayer:
     serializedVersion: 2
-    m_Bits: 4294967240
-  stopNaNPropagation: 1
+    m_Bits: 4294934984
+  stopNaNPropagation: 0
   antialiasingMode: 0
   temporalAntialiasing:
     jitterSpread: 0.75
@@ -4332,8 +4332,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 254.6479
-  m_Range: 40.23
+  m_Intensity: 5
+  m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -4598,7 +4598,7 @@ GameObject:
   - component: {fileID: 1886764132}
   - component: {fileID: 1886764131}
   m_Layer: 0
-  m_Name: Point Light
+  m_Name: Planet Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4700,7 +4700,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 795774.7
+  m_Intensity: 10
   m_Range: 1361.0115
   m_SpotAngle: 134.08441
   m_CookieSize: 10
