@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 33535125001853828}
   - component: {fileID: 23257333634476380}
   - component: {fileID: 95134761475949424}
+  - component: {fileID: 205841920910989532}
   m_Layer: 0
   m_Name: Enemy_mesh
   m_TagString: Untagged
@@ -407,3 +408,26 @@ MonoBehaviour:
   m_selectedFaces: 
   m_SelectedEdges: []
   m_selectedTriangles: 
+--- !u!205 &205841920910989532
+LODGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1762791434266384}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 47.25464, z: 0.0000076293945}
+  m_Size: 94.808685
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LODs:
+  - screenRelativeHeight: 0.18222766
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23257333634476380}
+  - screenRelativeHeight: 0.17912216
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.17912216
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1

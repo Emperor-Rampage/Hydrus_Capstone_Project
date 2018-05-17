@@ -27,7 +27,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!1 &1625103231251036
 GameObject:
@@ -44,7 +44,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!1 &1969990256235840
 GameObject:
@@ -54,12 +54,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4517989333519598}
+  - component: {fileID: 205494636723207210}
   m_Layer: 0
   m_Name: Wall_Plain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!4 &4027007181828570
 Transform:
@@ -94,7 +95,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1969990256235840}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4027007181828570}
@@ -117,7 +118,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: dad6c217f641b4173aa4d92004e8701e, type: 2}
+  - {fileID: 2100000, guid: ddadae8cfd81bf146a264f8cbe6c7180, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -204,3 +205,26 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!205 &205494636723207210
+LODGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1969990256235840}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.00000017881393, y: 0.5, z: 0.49500006}
+  m_Size: 1.0000004
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LODs:
+  - screenRelativeHeight: 0.17707202
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23268082414652772}
+  - screenRelativeHeight: 0.17557877
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.17557877
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1

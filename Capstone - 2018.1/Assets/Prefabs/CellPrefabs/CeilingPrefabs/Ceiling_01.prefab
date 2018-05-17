@@ -21,13 +21,13 @@ GameObject:
   - component: {fileID: 4536134894090198}
   - component: {fileID: 33826569417705934}
   - component: {fileID: 23166441632127500}
-  - component: {fileID: 95686028986298880}
+  - component: {fileID: 205587082680655718}
   m_Layer: 9
   m_Name: Ceiling_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!4 &4536134894090198
 Transform:
@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1020256479579238}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1, z: 0.5}
+  m_LocalPosition: {x: 0.5, y: 0.9, z: 0.5}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 0}
@@ -84,21 +84,26 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1020256479579238}
   m_Mesh: {fileID: 4300000, guid: 18bca190f46d1474ba12bbb59c20bba1, type: 3}
---- !u!95 &95686028986298880
-Animator:
-  serializedVersion: 3
+--- !u!205 &205587082680655718
+LODGroup:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1020256479579238}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: -49.999992, y: -5.684342e-14, z: -50}
+  m_Size: 100
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LODs:
+  - screenRelativeHeight: 0.18158951
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23166441632127500}
+  - screenRelativeHeight: 0.18158951
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.18007742
+    fadeTransitionWidth: 0
+    renderers: []
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 18bca190f46d1474ba12bbb59c20bba1, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

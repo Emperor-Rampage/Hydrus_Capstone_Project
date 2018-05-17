@@ -26,7 +26,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!1 &1946939287889384
 GameObject:
@@ -43,7 +43,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!1 &1971128421880550
 GameObject:
@@ -60,7 +60,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!1 &1990609193198232
 GameObject:
@@ -70,13 +70,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4189613981755562}
-  - component: {fileID: 95850939814617994}
+  - component: {fileID: 205569119618949746}
   m_Layer: 0
   m_Name: Pillar_Pipes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!4 &4189613981755562
 Transform:
@@ -85,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1990609193198232}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children:
   - {fileID: 4493791370454824}
@@ -101,7 +101,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1374193731812504}
   m_LocalRotation: {x: 6.123234e-17, y: 1, z: -6.123234e-17, w: -6.123234e-17}
-  m_LocalPosition: {x: 12.831818, y: 0.0000023841858, z: 6.3866653}
+  m_LocalPosition: {x: 12.831818, y: -10, z: 6.3866653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4189613981755562}
@@ -114,7 +114,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1946939287889384}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4189613981755562}
@@ -127,7 +127,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1971128421880550}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.925926, y: 0.0000023841858, z: -10.000008}
+  m_LocalPosition: {x: -9.925926, y: -10, z: -10.000008}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4189613981755562}
@@ -148,7 +148,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: dad6c217f641b4173aa4d92004e8701e, type: 2}
+  - {fileID: 2100000, guid: 6c6d557a8d962914db5a7fcafb601b00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -183,7 +183,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: dad6c217f641b4173aa4d92004e8701e, type: 2}
+  - {fileID: 2100000, guid: 6c6d557a8d962914db5a7fcafb601b00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -218,7 +218,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: dad6c217f641b4173aa4d92004e8701e, type: 2}
+  - {fileID: 2100000, guid: 38646b0938f862545bade9d8137ab4b7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -259,21 +259,28 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1971128421880550}
   m_Mesh: {fileID: 4300002, guid: 4a471de69d84b437da56ee60aa3040ad, type: 3}
---- !u!95 &95850939814617994
-Animator:
-  serializedVersion: 3
+--- !u!205 &205569119618949746
+LODGroup:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1990609193198232}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 1.4529457, y: 50, z: -1.0163822}
+  m_Size: 100
+  m_FadeMode: 0
+  m_AnimateCrossFading: 1
+  m_LODs:
+  - screenRelativeHeight: 0.17707202
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23884484406961150}
+    - renderer: {fileID: 23017185557222676}
+    - renderer: {fileID: 23156989719465754}
+  - screenRelativeHeight: 0.17557877
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.17557877
+    fadeTransitionWidth: 0
+    renderers: []
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 4a471de69d84b437da56ee60aa3040ad, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

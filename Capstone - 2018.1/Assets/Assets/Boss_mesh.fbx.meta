@@ -9,7 +9,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Mantid1
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mantid_combine_initialShadingGroup1
+    second: {fileID: 2100000, guid: 78b58c65d45694e51975cf88c40bbf66, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

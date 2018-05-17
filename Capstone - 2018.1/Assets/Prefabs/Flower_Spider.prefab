@@ -55,6 +55,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4258758728559934}
+  - component: {fileID: 205430943340143456}
   m_Layer: 0
   m_Name: Flower_Spider
   m_TagString: Untagged
@@ -417,3 +418,26 @@ MonoBehaviour:
   m_selectedFaces: 
   m_SelectedEdges: []
   m_selectedTriangles: 
+--- !u!205 &205430943340143456
+LODGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1520558863252124}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0.23145524, z: -0.046123147}
+  m_Size: 1.1043137
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LODs:
+  - screenRelativeHeight: 0.18463264
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23013217749361844}
+  - screenRelativeHeight: 0.18310794
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.18310794
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1

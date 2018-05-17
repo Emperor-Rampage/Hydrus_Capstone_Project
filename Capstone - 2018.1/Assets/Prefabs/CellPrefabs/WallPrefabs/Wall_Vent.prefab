@@ -25,7 +25,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!1 &1233838711814772
 GameObject:
@@ -42,7 +42,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!1 &1579247910275024
 GameObject:
@@ -59,7 +59,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!1 &1600698400641220
 GameObject:
@@ -69,12 +69,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4959713198212302}
+  - component: {fileID: 205082782263384758}
   m_Layer: 0
   m_Name: Wall_Vent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!1 &1828434612929150
 GameObject:
@@ -91,7 +92,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!4 &4317926696351564
 Transform:
@@ -154,7 +155,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1600698400641220}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4712912242135486}
@@ -177,7 +178,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: dad6c217f641b4173aa4d92004e8701e, type: 2}
+  - {fileID: 2100000, guid: ddadae8cfd81bf146a264f8cbe6c7180, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -212,7 +213,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: dad6c217f641b4173aa4d92004e8701e, type: 2}
+  - {fileID: 2100000, guid: 6c6d557a8d962914db5a7fcafb601b00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -306,3 +307,28 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!205 &205082782263384758
+LODGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1600698400641220}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.000749141, y: 0.5, z: 0.54968214}
+  m_Size: 1.0014982
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LODs:
+  - screenRelativeHeight: 0.18463264
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23749372492509688}
+    - renderer: {fileID: 23471945800409672}
+    - renderer: {fileID: 23269912795671876}
+  - screenRelativeHeight: 0.18007742
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.18007742
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
