@@ -78,7 +78,7 @@ namespace MapClasses
         // Gets the data from the levelMap bitmap, setting up the MaxWidth, MaxDepth, and numIndexes.
         // Instantiates the list of cells, and creates the connection matrix.
         // Then calls each of the initialization methods: Cell creation, static connection creation, and then procedural generation.
-        public void InitializeLevel(Player player = null, PlayerClass selectedClass = null)
+        public void InitializeLevel(Player player = null, PlayerData playerData = null, PlayerClass selectedClass = null)
         {
             if (levelMap == null)
                 return;
@@ -96,7 +96,7 @@ namespace MapClasses
             Initialized = true;
             InitializeConnections();
             InitializeProcedural();
-            InitializeEntities(player, selectedClass);
+            InitializeEntities(player, playerData, selectedClass);
 
             Debug.Log("Level initialization finished.");
         }
@@ -200,7 +200,7 @@ namespace MapClasses
         // This generates rooms. Remove this last step to generate hallways.
         void TraverseProcedural(Cell origin)
         {
-            Debug.Log("Traversing..");
+            // Debug.Log("Traversing..");
             List<Cell> visitedProcedural = new List<Cell>();
 
             Cell cell = origin;
@@ -322,7 +322,7 @@ namespace MapClasses
             }
         }
 
-        void InitializeEntities(Player player, PlayerClass selectedClass)
+        void InitializeEntities(Player player, PlayerData playerData, PlayerClass selectedClass)
         {
             // First initialize the player entity.
             // Then iterate through all enemy spawns and initialize each of them
@@ -331,15 +331,36 @@ namespace MapClasses
 
             Player = player;
             // Create the player.
-            if (player == null && selectedClass != null)
-            {
-                Player = new Player { Index = -1, IsPlayer = true, Class = selectedClass, Name = selectedClass.Name, Facing = Direction.Up, State = EntityState.Idle, MaxHealth = selectedClass.Health, CurrentHealth = selectedClass.Health };
-                Player.SetupBaseAbilities();
+            if (player == null) {
+                Player = new Player { Index = -1 };
+                if (selectedClass != null) {
+                    Player.Class = selectedClass;
+                    Player.Name = selectedClass.Name;
+                    Player.MaxHealth = selectedClass.Health;
+                    Player.CurrentHealth = selectedClass.Health;
+                }
+                // If loading a player. Set the cores and the current abilities.
+                if (playerData != null) {
+                    GameManager manager = GameManager.Instance;
+                    foreach (int index in playerData.abilityIndexes) {
+                        Player.Abilities.Add(manager.GetPlayerAbility(index));
+                    }
+                    // Player.Abilities.AddRange(playerData);
+                    Player.Cores = playerData.cores;
+                } else {
+                    Player.SetupBaseAbilities();
+                }
             }
+            // if (player == null && selectedClass != null)
+            // {
+            //     Player = new Player { Index = -1, IsPlayer = true, Class = selectedClass, Name = selectedClass.Name, Facing = Direction.Up, State = EntityState.Idle, MaxHealth = selectedClass.Health, CurrentHealth = selectedClass.Health };
+            //     Player.SetupBaseAbilities();
+            // }
             else if (player == null && selectedClass == null)
             {
                 Debug.LogError("ERROR: No player class was selected when trying to initialize level.");
             }
+            Player.IsPlayer = true;
             Player.CurrentAbility = -1;
             Player.Facing = Direction.Up;
             Player.State = EntityState.Idle;

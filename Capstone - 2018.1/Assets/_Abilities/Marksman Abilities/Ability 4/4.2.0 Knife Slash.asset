@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: 4.2.0 Knife Slash
   m_EditorClassIdentifier: 
+  index: 43
   abilityName: Knife Slash
   icon: {fileID: 21300000, guid: 259d1c283f41382429ea58b48ef39e3c, type: 3}
   toolTip: 'Tier 2 Ability: Marksman Ability 4'

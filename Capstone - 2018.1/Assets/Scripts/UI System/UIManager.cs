@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject menuPanel;
     [SerializeField] GameObject[] menuList;
+    [SerializeField] Button continueButton;
 
     [Header("Class Select Menu Settings")]
     [SerializeField]
@@ -151,8 +152,16 @@ public class UIManager : MonoBehaviour
         mainSettingsContainer.resolutionDropdown.RefreshShownValue();
         hudSettingsContainer.resolutionDropdown.RefreshShownValue();
 
-        AllButtons(menuPanel, true);
+        if (screenHighlightTween != null)
+            screenHighlightTween.Stop();
+        screenHighlightTween = null;
+        screenHighlightGroup.alpha = 0f;
+        if (screenDamageTween != null)
+            screenDamageTween.Stop();
+        screenDamageTween = null;
+        screenDamageGroup.alpha = 0f;
 
+        AllButtons(menuPanel, true);
         GoToMenu(0);
     }
 
@@ -162,6 +171,15 @@ public class UIManager : MonoBehaviour
         playerCastBackInterruptBar.fillAmount = 1f - interruptPercent;
         enemyCastBackBar.fillAmount = interruptPercent;
         enemyCastBackInterruptBar.fillAmount = 1f - interruptPercent;
+
+        if (screenHighlightTween != null)
+            screenHighlightTween.Stop();
+        screenHighlightTween = null;
+        screenHighlightGroup.alpha = 0f;
+        if (screenDamageTween != null)
+            screenDamageTween.Stop();
+        screenDamageTween = null;
+        screenDamageGroup.alpha = 0f;
 
         AllButtons(hudPanel, true);
         ShowHUD(0);
@@ -265,7 +283,6 @@ public class UIManager : MonoBehaviour
 
         }
 
-
         // For each base ability.
         //  For each tier of the ability
         //   If there is a next tier,
@@ -340,6 +357,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void SetContinueButton(bool active) {
+        continueButton.enabled = active;
+    }
+
     public void SetConfirmButton(bool active)
     {
         // Debug.Log("Setting confirm button to " + active);
@@ -351,8 +372,15 @@ public class UIManager : MonoBehaviour
             return;
 
         AllButtons(menuPanel);
-        manager.Map.SetCurrentLevel(0);
-        manager.LoadLevel(defaultFadeTime);
+        manager.NewGame();
+    }
+
+    public void Continue() {
+        if (manager == null)
+            return;
+        
+        AllButtons(menuPanel);
+        manager.Continue();
     }
 
     public void TogglePause()
@@ -361,11 +389,13 @@ public class UIManager : MonoBehaviour
 
         if (Paused)
         {
+            manager.MiniMapCam.SetZoom(40f);
             Time.timeScale = 0f;
             ShowHUD(1);
         }
         else
         {
+            manager.MiniMapCam.SetZoom(10f);
             Time.timeScale = 1f;
             ShowHUD(0);
         }
@@ -373,8 +403,10 @@ public class UIManager : MonoBehaviour
 
     public void ExitGame()
     {
+        manager.MiniMapCam.SetZoom(10f);
         Paused = false;
         Time.timeScale = 1f;
+        manager.SaveGame();
         manager.LoadMainMenu(defaultFadeTime);
     }
 

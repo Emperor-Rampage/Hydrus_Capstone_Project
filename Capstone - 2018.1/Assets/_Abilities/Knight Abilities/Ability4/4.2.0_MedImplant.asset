@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
   m_Name: 4.2.0_MedImplant
   m_EditorClassIdentifier: 
+  index: 22
   abilityName: Med Implant
   icon: {fileID: 21300000, guid: 78121a3a0436d0f4f815feef92427b59, type: 3}
   toolTip: 'Tier 2 Ability: Knight Ability 4'

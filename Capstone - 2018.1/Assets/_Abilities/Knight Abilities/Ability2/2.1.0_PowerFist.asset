@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421fb0c9e9f82be4ba7dab4ba97fa733, type: 3}
   m_Name: 2.1.0_PowerFist
   m_EditorClassIdentifier: 
+  index: 7
   abilityName: Power Fist
   icon: {fileID: 21300000, guid: 2da6fe9e5349b984e8a888448ed0e453, type: 3}
   toolTip: 'Tier 2 Ability: Knight Ability 2'

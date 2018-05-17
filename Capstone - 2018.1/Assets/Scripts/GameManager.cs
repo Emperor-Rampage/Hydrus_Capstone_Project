@@ -64,23 +64,28 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     [SerializeField] AbilityTree abilityTree;
     [SerializeField] List<PlayerClass> classes;
+    [SerializeField] List<AbilityObject> playerAbilities;
     PlayerClass selectedClass;
 
     // A reference to the Map object, which handles the general level management.
     [SerializeField] Map map;
     // A reference to the current level, because caching is more efficient.
     Level level;
+    PlayerData playerData;
 
     // A reference to the UIManager instance, which is created at runtime, and handles all user interface actions.
     UIManager uiManager;
     // A reference to the AudioManager instance, which is created at runtime, and handles all audio.
     AudioManager audioManager;
     AIManager aiManager;
+    public MiniMapCam MiniMapCam { get; private set; }
 
     [SerializeField] BackgroundMusic titleMusic;
 
     // How long it takes an entity to move from one square to another.
     [SerializeField] float movespeed;
+    [SerializeField] AnimationCurve moveCurve;
+    [SerializeField] AnimationCurve turnCurve;
     // How long it takes an entity to turn 90 degrees.
     [SerializeField] float turnspeed;
     [SerializeField] float tickRate;
@@ -103,6 +108,45 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public float Movespeed { get { return movespeed; } }
 
     public float Turnspeed { get { return turnspeed; } }
+
+    public void NewGame() {
+        List<int> indexes = new List<int>();
+        foreach (AbilityObject ability in selectedClass.BaseAbilities) {
+            indexes.Add(ability.Index);
+        }
+        playerData = new PlayerData {
+            classIndex = classes.IndexOf(selectedClass),
+            abilityIndexes = indexes,
+            cores = 0
+        };
+        Map.SetCurrentLevel(0);
+        LoadLevel(1f);
+    }
+    public void Continue() {
+        playerData = settingsManager.LoadGame();
+        if (playerData.classIndex >= 0 && playerData.classIndex < classes.Count) {
+            selectedClass = classes[playerData.classIndex];
+            Map.SetCurrentLevel(0);
+            LoadLevel(1f);
+        } else {
+            Debug.LogError("ERROR: Loaded player does not have a selected class.");
+        }
+    }
+
+    public void SaveGame() {
+        if (level != null && level.Player != null) {
+            List<int> indexes = new List<int>();
+            foreach (AbilityObject ability in level.Player.Abilities) {
+                indexes.Add(ability.Index);
+            }
+            PlayerData data = new PlayerData() {
+                classIndex = classes.IndexOf(level.Player.Class),
+                abilityIndexes = indexes,
+                cores = level.Player.Cores
+            };
+            settingsManager.SaveGame(data);
+        }
+    }
 
     public void RevertSettings()
     {
@@ -186,15 +230,15 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         if (level != null && level.Player != null)
         {
-            Player player = level.Player;
-            int adjustedMaxHealth = (int)(player.Class.Health * settingsManager.HealthPercent);
+            // Player player = level.Player;
+            int adjustedMaxHealth = (int)(level.Player.Class.Health * settingsManager.HealthPercent);
             // float adjustedPerc = (player.CurrentHealth / (float)player.MaxHealth);
             // int adjustedCurrent = (int)(adjustedMaxHealth * adjustedPerc);
 
             // Debug.Log("Adjusting player max health of " + player.Class.Health + " by " + settingsManager.HealthPercent + " and getting " + adjustedMaxHealth);
             // Debug.Log("-- Adjust player current health of " + player.CurrentHealth + " to " + adjustedCurrent);
-            player.MaxHealth = adjustedMaxHealth;
-            // player.CurrentHealth = adjustedMaxHealth;
+            level.Player.MaxHealth = adjustedMaxHealth;
+            level.Player.CurrentHealth = adjustedMaxHealth;
         }
     }
 
@@ -255,6 +299,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     else if (gmInstance.GetComponent<AIManager>() != null && aiManager == null)
                     {
                         aiManager = gmInstance.GetComponent<AIManager>();
+                    } else if (gmInstance.GetComponent<MiniMapCam>() != null && MiniMapCam == null) {
+                        MiniMapCam = gmInstance.GetComponent<MiniMapCam>();
                     }
                 }
             }
@@ -263,6 +309,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             settingsManager = new SettingsManager();
             settingsManager.LoadSettings();
+            // Save it after attempting to load, just to generate the config file on the first play.
+            settingsManager.SaveSettings();
         }
     }
 
@@ -391,7 +439,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         Time.timeScale = 1f;
         // FIXME: When an ability executed right as the level transitions, an exception is thrown and the game stops working.
         Player player = null;
-        if (level != null)
+        if (level != null && player == null)
         {
             player = level.Player;
         }
@@ -403,7 +451,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (level != null)
         {
             // Sets up cells, connections, player spawn, and generates procedural areas.
-            level.InitializeLevel(player, selectedClass);
+            level.InitializeLevel(player, playerData, selectedClass);
             player = level.Player;
             ApplyAdjustedHealth();
 
@@ -449,6 +497,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // Do stuff to load main menu.
             inGame = false;
             uiManager.Initialize_Main();
+            if (settingsManager.LoadGame() != null)
+                uiManager.SetContinueButton(true);
+            else
+                uiManager.SetContinueButton(false);
+
             uiManager.SetAllSettingsElements(settingsManager);
             uiManager.FadeIn("Hydrus", 3f);
             audioManager.FadeInMusic(titleMusic, 0f);
@@ -805,45 +858,46 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     //TO DO: Add checking for the animation state, so it will know when the player steps left, right, and backwards.
     void HandlePlayerInput()
     {
+        Player player = level.Player;
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
             uiManager.TogglePause();
         }
-        if (level.Player.State == EntityState.Idle && !level.Player.StatusEffects.Stunned)
+        if (player.State == EntityState.Idle && !player.StatusEffects.Stunned)
         {
             Direction inputDir = GetInputDirection();
-            if (Input.GetKeyDown(KeyCode.Space) && level.CanExit)
+            if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit)
             {
                 ExitLevel();
             }
             else if (inputDir != Direction.Null)
             {
-                MoveEntityLocation(level.Player, inputDir);
+                MoveEntityLocation(player, inputDir);
                 //                MoveEntityInstance(player, inputDir);
             }
-            else if (Input.GetKey(KeyCode.Q))
+            else if (Input.GetKey(settingsManager.TurnLeftKey))
             {
-                TurnEntityInstanceLeft(level.Player);
+                TurnEntityInstanceLeft(player);
             }
-            else if (Input.GetKey(KeyCode.E))
+            else if (Input.GetKey(settingsManager.TurnRightKey))
             {
-                TurnEntityInstanceRight(level.Player);
+                TurnEntityInstanceRight(player);
             }
-            else if (Input.GetKey(KeyCode.Alpha1))
+            else if (Input.GetKey(settingsManager.Ability1Key))
             {
-                CastPlayerAbility(level.Player, 0);
+                CastPlayerAbility(player, 0);
             }
-            else if (Input.GetKey(KeyCode.Alpha2))
+            else if (Input.GetKey(settingsManager.Ability2Key))
             {
-                CastPlayerAbility(level.Player, 1);
+                CastPlayerAbility(player, 1);
             }
-            else if (Input.GetKey(KeyCode.Alpha3))
+            else if (Input.GetKey(settingsManager.Ability3Key))
             {
-                CastPlayerAbility(level.Player, 2);
+                CastPlayerAbility(player, 2);
             }
-            else if (Input.GetKey(KeyCode.Alpha4))
+            else if (Input.GetKey(settingsManager.Ability4Key))
             {
-                CastPlayerAbility(level.Player, 3);
+                CastPlayerAbility(player, 3);
             }
             else if (Input.GetKeyDown(KeyCode.M)) // Plays the test sound.
             {
@@ -851,20 +905,20 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             }
             else if (Input.GetKeyDown(KeyCode.Minus))
             {
-                bool alive = level.Player.Damage(25, (level.Player.CastProgress >= interruptPercentage));
-                PerformEntityDeathCheck(level.Player, alive);
+                bool alive = player.Damage(25, (player.CastProgress >= interruptPercentage));
+                PerformEntityDeathCheck(player, alive);
 
-                uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
+                uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
             }
             else if (Input.GetKeyDown(KeyCode.Equals))
             {
-                level.Player.Heal(25);
-                uiManager.UpdatePlayerHealth(level.Player.CurrentHealth / level.Player.MaxHealth);
+                player.Heal(25);
+                uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
                 AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
-                level.Player.StatusEffects.AddEffect(effect);
+                player.StatusEffects.AddEffect(effect);
             }
             else if (Input.GetKeyDown(KeyCode.K))
             {
@@ -1000,7 +1054,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     //           and Movespeed * 0.75 for the delay (So the entity is considered on the new cell after 75% of the movement is completed)
     void MoveEntityLocation(Entity entity, Direction direction)
     {
-        Player player = level.Player;
+        // Player player = level.Player;
         Cell neighbor = level.GetDestination(entity, direction);
         if (neighbor == null)
             return;
@@ -1014,7 +1068,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         //Probably going to make a separate method to handle all this.
-        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, Tween.EaseInOut, completeCallback: () => entity.State = EntityState.Idle);
+        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, moveCurve, completeCallback: () => entity.State = EntityState.Idle);
         Coroutine movementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
         if (entity.IsPlayer)
         {
@@ -1069,7 +1123,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void TurnEntityInstanceLeft(Entity entity)
     {
         entity.State = EntityState.Moving;
-        Tween.Rotate(entity.Instance.transform, new Vector3(0f, -90f, 0f), Space.World, Turnspeed, 0f, Tween.EaseOut, completeCallback: (() => FinishTurning(entity)));
+        Tween.Rotate(entity.Instance.transform, new Vector3(0f, -90f, 0f), Space.World, Turnspeed, 0f, turnCurve, completeCallback: (() => FinishTurning(entity)));
         entity.TurnLeft();
     }
 
@@ -1083,7 +1137,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void TurnEntityInstanceRight(Entity entity)
     {
         entity.State = EntityState.Moving;
-        Tween.Rotate(entity.Instance.transform, new Vector3(0f, 90f, 0f), Space.World, Turnspeed, 0f, Tween.EaseOut, completeCallback: (() => FinishTurning(entity)));
+        Tween.Rotate(entity.Instance.transform, new Vector3(0f, 90f, 0f), Space.World, Turnspeed, 0f, turnCurve, completeCallback: (() => FinishTurning(entity)));
         entity.TurnRight();
     }
 
@@ -1308,7 +1362,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
 
         playerAnim.SetTrigger(setter);
-
     }
 
     public void SetPlayerCastAnimation(string setter, float scale)
@@ -1317,6 +1370,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         playerAnim.SetFloat("CastTimeScale", scale);
         playerAnim.SetTrigger(setter);
+    }
 
+    public AbilityObject GetPlayerAbility(int index) {
+        return playerAbilities.SingleOrDefault((abil) => abil.Index == index);
     }
 }

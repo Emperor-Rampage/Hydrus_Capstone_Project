@@ -5252,6 +5252,7 @@ MonoBehaviour:
   - {fileID: 1229392500424972, guid: bd136b4367473ab41bdd52b87dd33473, type: 2}
   - {fileID: 1513351062052238, guid: da426b2a6aa6d944ea5a289adead8e1b, type: 2}
   - {fileID: 1963380610684026, guid: 206348a240dc0ac439c0f4fc2acb56cc, type: 2}
+  - {fileID: 1168019742351126, guid: 2584b9b395ca1514fbf91d14ff00fa85, type: 2}
   mixer: {fileID: 24100000, guid: b10053a6ddd96554faaf886ff5dbd5c7, type: 2}
   wallPrefabs:
   - prefab: {fileID: 1969990256235840, guid: fc6a04267be25bc41a675a961723ef23, type: 2}
@@ -5284,6 +5285,52 @@ MonoBehaviour:
   classes:
   - {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   - {fileID: 11400000, guid: 75f2eed1de18ea4459f00fb4ce7fade6, type: 2}
+  playerAbilities:
+  - {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}
+  - {fileID: 11400000, guid: f3e0d75f9c52b85479ecd9dcafb1cf9d, type: 2}
+  - {fileID: 11400000, guid: 1693b4f5d21d78d488fcb00155539234, type: 2}
+  - {fileID: 11400000, guid: d2e6629acf978de44b9f2cc4193dbdea, type: 2}
+  - {fileID: 11400000, guid: 5fffe7124163ad94d90d7a75c9046605, type: 2}
+  - {fileID: 11400000, guid: a2a5285717737ff4f9f86059527a83da, type: 2}
+  - {fileID: 11400000, guid: e31cd218b101c074ab20cfea6ea279d3, type: 2}
+  - {fileID: 11400000, guid: 2401c9e6881116643a2acb7086e6095c, type: 2}
+  - {fileID: 11400000, guid: 9003cffda0702284a9419b6fcebae9a0, type: 2}
+  - {fileID: 11400000, guid: 23a2882e404b6da4491d25e04ff533a7, type: 2}
+  - {fileID: 11400000, guid: 72217b08ec1e8cb42a5f737d066f901f, type: 2}
+  - {fileID: 11400000, guid: d568e20e39d58d447b983a4d8ddbd580, type: 2}
+  - {fileID: 11400000, guid: 6cd4bdd14d282fd40a600c67a81f1032, type: 2}
+  - {fileID: 11400000, guid: caafc7176fbc3b34b83335bdb07c035b, type: 2}
+  - {fileID: 11400000, guid: 2638983515e975d4a92549af7b2f08a1, type: 2}
+  - {fileID: 11400000, guid: 0bf7d91ae7a2a0f459cca1979aaf09d6, type: 2}
+  - {fileID: 11400000, guid: d807c1b8df870f6488af71b432018419, type: 2}
+  - {fileID: 11400000, guid: b49c05bf2fc882f498d0a4580ae9ac3a, type: 2}
+  - {fileID: 11400000, guid: 5fd37e436b8f8ae4fbda46c4b29bf5e7, type: 2}
+  - {fileID: 11400000, guid: dc831637f56ca3d488f0ce31b56c8cb3, type: 2}
+  - {fileID: 11400000, guid: 896fafc2816c9ad49b6db89498933afe, type: 2}
+  - {fileID: 11400000, guid: 966195e730f749040bcbf94d7f050285, type: 2}
+  - {fileID: 11400000, guid: 9c4a6f6d3fd63f944aa9ffd9a8a14526, type: 2}
+  - {fileID: 11400000, guid: 3a83249f34a3cb94c9724f0355fd1142, type: 2}
+  - {fileID: 11400000, guid: 20ef51449fadbd040b2dd06e11fd8a7f, type: 2}
+  - {fileID: 11400000, guid: e941a97f9bc84834ca3936037271c62c, type: 2}
+  - {fileID: 11400000, guid: f50b636d937fb9249b3174e7d92513b5, type: 2}
+  - {fileID: 11400000, guid: 859522dbbf526304a927c23bcf8f6bfa, type: 2}
+  - {fileID: 11400000, guid: 9df42e0eec26acf4dbf80b02fa595ee5, type: 2}
+  - {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}
+  - {fileID: 11400000, guid: 7d63be0cea1fc3f45b1c9771e8d9d140, type: 2}
+  - {fileID: 11400000, guid: fca957c0f02fff34285327972d696086, type: 2}
+  - {fileID: 11400000, guid: 19c2463605e9d7c448fe5da627f83b6a, type: 2}
+  - {fileID: 11400000, guid: e278ca60be4993e4182a2f34aaa93424, type: 2}
+  - {fileID: 11400000, guid: 668432af727c32745b9e7382f0cef636, type: 2}
+  - {fileID: 11400000, guid: b48c8157ff5c8074cb59891ba4d9d1ca, type: 2}
+  - {fileID: 11400000, guid: 157c60249e31bbc4f9b97b948a2d68bd, type: 2}
+  - {fileID: 11400000, guid: 4c028c9880836c345b508bf447ec3d52, type: 2}
+  - {fileID: 11400000, guid: 8e341a7b1d488d5499734548cfdf700a, type: 2}
+  - {fileID: 11400000, guid: cc456cde6b913f3419cafb4055e3e183, type: 2}
+  - {fileID: 11400000, guid: 4a0a90a59daf5a24483708bd9ea77969, type: 2}
+  - {fileID: 11400000, guid: 8d0bd128c0efdce4ca395a83fcc9b085, type: 2}
+  - {fileID: 11400000, guid: d5543d450b995e44e83d0f2ffec1b03e, type: 2}
+  - {fileID: 11400000, guid: d14bef12b9057944999637ef6bc70a2a, type: 2}
+  - {fileID: 11400000, guid: cf76a02ac1bef074f8b752ec6550be6e, type: 2}
   map:
     cellScale: 2
     maxWidth: 100
@@ -5378,6 +5425,54 @@ MonoBehaviour:
     volume: 0.75
     pitch: 1
   movespeed: 0.6
+  moveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.55353
+      outSlope: 2.55353
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.053105317
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.2830191
+      outSlope: 0.2830191
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22083336
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  turnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.8348706
+      outSlope: 2.8348706
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06378132
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   turnspeed: 0.3
   tickRate: 0.25
   enemyAggroDistance: 4

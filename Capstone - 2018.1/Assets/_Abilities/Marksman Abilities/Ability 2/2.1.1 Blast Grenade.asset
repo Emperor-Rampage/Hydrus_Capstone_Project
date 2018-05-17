@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: 2.1.1 Blast Grenade
   m_EditorClassIdentifier: 
+  index: 33
   abilityName: Blast Grenade
   icon: {fileID: 21300000, guid: 5524840675e85454da438a52da934e53, type: 3}
   toolTip: 'Tier 3 Ability: Marksman Ability 2'

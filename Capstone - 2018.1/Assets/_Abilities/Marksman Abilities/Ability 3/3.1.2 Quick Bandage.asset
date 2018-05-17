@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
   m_Name: 3.1.2 Quick Bandage
   m_EditorClassIdentifier: 
+  index: 39
   abilityName: Quick Bandage
   icon: {fileID: 21300000, guid: cfe6d61ec2a31ce40b9cb8908f3f0d86, type: 3}
   toolTip: 'Tier # Ability: Marksman Ability 3
