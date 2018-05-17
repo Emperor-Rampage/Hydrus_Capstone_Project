@@ -28,6 +28,10 @@ public class SettingsContainer : MonoBehaviour
     public TMP_Text musicValueText;
     public Slider fxSlider;
     public TMP_Text fxValueText;
+    public Slider ambientSlider;
+    public TMP_Text ambientValueText;
+    public Slider systemSlider;
+    public TMP_Text systemValueText;
 
     [Header("Controls")]
 
