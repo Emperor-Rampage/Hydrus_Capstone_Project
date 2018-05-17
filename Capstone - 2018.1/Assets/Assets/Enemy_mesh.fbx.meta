@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: df51248f91ab24885bc9cdeb389787ea
-timeCreated: 1523997233
-licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -17,7 +15,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: phong1
-    second: {fileID: 2100000, guid: c320bc476f22c4972bfb2b520bf849a1, type: 2}
+    second: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   materials:
     importMaterials: 1
     materialName: 0
@@ -36,6 +34,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
