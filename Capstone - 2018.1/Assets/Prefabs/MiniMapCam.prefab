@@ -51,7 +51,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.39627093, g: 0.48063517, b: 0.6132076, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -92,7 +92,7 @@ MonoBehaviour:
   player: {fileID: 0}
 --- !u!114 &114593829514613566
 MonoBehaviour:
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1168019742351126}

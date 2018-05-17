@@ -11,6 +11,23 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1393431088256448}
   m_IsPrefabParent: 1
+--- !u!1 &1153903131396902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4926217690588694}
+  - component: {fileID: 33811566964055090}
+  - component: {fileID: 23789292244463538}
+  m_Layer: 0
+  m_Name: Pillar_Main
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 16
+  m_IsActive: 1
 --- !u!1 &1393431088256448
 GameObject:
   m_ObjectHideFlags: 0
@@ -19,16 +36,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4824314375289450}
-  - component: {fileID: 33790426404692728}
-  - component: {fileID: 23278583049297002}
-  - component: {fileID: 95438286390453134}
-  - component: {fileID: 205281036059171408}
+  - component: {fileID: 205456367379932898}
   m_Layer: 0
   m_Name: Pillar_Plain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 16
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4824314375289450
 Transform:
@@ -36,19 +50,33 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1393431088256448}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
-  m_Children: []
+  m_Children:
+  - {fileID: 4926217690588694}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23278583049297002
+--- !u!4 &4926217690588694
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1153903131396902}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4824314375289450}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &23789292244463538
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1393431088256448}
+  m_GameObject: {fileID: 1153903131396902}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -78,50 +106,33 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33790426404692728
+--- !u!33 &33811566964055090
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1393431088256448}
+  m_GameObject: {fileID: 1153903131396902}
   m_Mesh: {fileID: 4300000, guid: 44a507e90951a435bb9e5ea2828038cf, type: 3}
---- !u!95 &95438286390453134
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1393431088256448}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 44a507e90951a435bb9e5ea2828038cf, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!205 &205281036059171408
+--- !u!205 &205456367379932898
 LODGroup:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1393431088256448}
   serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
-  m_Size: 1
+  m_LocalReferencePoint: {x: 0, y: 49.967518, z: 0}
+  m_Size: 99.93502
   m_FadeMode: 0
   m_AnimateCrossFading: 1
   m_LODs:
-  - screenRelativeHeight: 0.6
+  - screenRelativeHeight: 0.18158951
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23789292244463538}
+  - screenRelativeHeight: 0.18158951
     fadeTransitionWidth: 0
     renderers: []
-  - screenRelativeHeight: 0.6
-    fadeTransitionWidth: 0
-    renderers: []
-  - screenRelativeHeight: 0.6
+  - screenRelativeHeight: 0.18158951
     fadeTransitionWidth: 0
     renderers: []
   m_Enabled: 1
