@@ -8,8 +8,12 @@ using UnityEngine;
 [System.Serializable]
 public class AbilityTree
 {
+    // TODO: Move ability tree ui stuff to the UIManager
+    // TODO: Switch over saving/loading of abilities to using the AbilityTree
+    //       instead of a list in the GameManager. Should all be in one place.
+    //       Save by tier and index in that tier.
     Player player;
-    public Player Player { get { return player; } }
+    public Player Player { get { return player; } set { player = value; } }
     List<List<AbilityObject>> tiers;
     public List<List<GameObject>> UITiers { get; private set; } = new List<List<GameObject>>();
     [SerializeField] int numTiers;
@@ -27,12 +31,9 @@ public class AbilityTree
     public int Height { get { return (uiCellHeight * numTiers) + ((uiSpacing - 1) * numTiers) + (uiPadding * 2); } }
     public int TotalNumLeafs { get; private set; }
 
-    public void Initialize(Player player)
+    public void Initialize(PlayerClass playerClass)
     {
-        if (player == null)
-            Debug.LogWarning("WARNING: Passed in null player referenece to Initialize in AbilityTree");
-        this.player = player;
-        List<AbilityObject> t1 = this.player.Class.BaseAbilities;
+        List<AbilityObject> t1 = playerClass.BaseAbilities;
         List<AbilityObject> prevTier;
         tiers = new List<List<AbilityObject>>();
         tiers.Add(t1);
@@ -53,10 +54,20 @@ public class AbilityTree
 
         TotalNumLeafs = tiers[tiers.Count - 1].Count;
 
-        // Debug.Log("Number of total leafs: " + TotalNumLeafs);
     }
 
-    public int GetAbilityIndex(int tierIndex, AbilityObject ability)
+    public AbilityObject GetTreeAbility(int tierIndex, int abilityIndex)
+    {
+        var tier = tiers[tierIndex];
+        if (tier != null)
+        {
+            return tier.SingleOrDefault((abil) => abil.Index == abilityIndex);
+        }
+        Debug.LogError("ERROR: Could not find ability object");
+        return null;
+    }
+
+    public int GetTreeAbilityIndex(int tierIndex, AbilityObject ability)
     {
         var tier = tiers[tierIndex];
         if (tier != null)
@@ -131,10 +142,7 @@ public class AbilityTree
 
     public bool CanUpgrade(AbilityObject ability)
     {
-        if (IsAvailable(ability) && player.Cores >= ability.Cost)
-            return true;
-
-        return false;
+        return (IsAvailable(ability) && player.Cores >= ability.Cost);
     }
 
     public bool IsOffsetTier(int tier)

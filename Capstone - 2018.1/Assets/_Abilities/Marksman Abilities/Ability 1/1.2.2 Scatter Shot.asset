@@ -25,14 +25,14 @@ MonoBehaviour:
     duration: 0.5
     value: 0.3
   type: 2
-  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  aoeSprite: {fileID: 2800000, guid: 0e8b0e400c9b49a4f9767f9d9629e5bc, type: 3}
   range: 0
   cooldown: 3
   castTime: 2.25
   damage: 30
   upgradeable: 0
   baseAbility: {fileID: 11400000, guid: 9c4a6f6d3fd63f944aa9ffd9a8a14526, type: 2}
-  tier: 3
+  tier: 2
   previousTier:
   - {fileID: 0}
   nextTier: []

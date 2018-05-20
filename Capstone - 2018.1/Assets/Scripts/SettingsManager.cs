@@ -9,9 +9,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class PlayerData {
+public class PlayerData
+{
     [SerializeField]
     public int classIndex;
+    [SerializeField]
+    public List<int> abilityTiers;
     [SerializeField]
     public List<int> abilityIndexes;
     [SerializeField]
@@ -19,7 +22,8 @@ public class PlayerData {
 }
 
 [System.Serializable]
-public class SettingsData {
+public class SettingsData
+{
     // Gameplay
     public float healthPercent = 1f;
 
@@ -30,7 +34,7 @@ public class SettingsData {
     public int antialiasingIndex = 0;
     public int vSyncIndex = 0;
     public int frameRateIndex = 0;
-    
+
     // Sound
     public float masterVolume = 1f;
     public float musicVolume = 1f;
@@ -89,12 +93,14 @@ public class SettingsManager
     public KeyCode Ability3Key { get { return SettingsData.ability3Key; } private set { SettingsData.ability3Key = value; } }
     public KeyCode Ability4Key { get { return SettingsData.ability4Key; } private set { SettingsData.ability4Key = value; } }
 
-    public PlayerData LoadGame() {
+    public PlayerData LoadGame()
+    {
         PlayerData data = null;
 
         string filePath = Path.Combine(Application.persistentDataPath, gameSaveFileName);
 
-        if (File.Exists(filePath)) {
+        if (File.Exists(filePath))
+        {
             string dataJsonString = File.ReadAllText(filePath);
             data = JsonUtility.FromJson<PlayerData>(dataJsonString);
         }
@@ -107,7 +113,8 @@ public class SettingsManager
         return data;
     }
 
-    public void SaveGame(PlayerData data) {
+    public void SaveGame(PlayerData data)
+    {
         string dataJsonString = JsonUtility.ToJson(data, true);
         // Debug.Log("Saving playerData " + data.classIndex + ", " + data.abilityIndexes + ", " + data.cores + " into " + playerJsonString);
 
@@ -127,7 +134,7 @@ public class SettingsManager
         SettingsContainer container = (uiManager.Paused) ? uiManager.HUDSettings : uiManager.MainMenuSettings;
 
         // Gameplay
-    
+
         SettingsData.healthPercent = container.maxHealthSlider.value;
         // Graphics
         SettingsData.fullscreen = container.fullscreenToggle.isOn;
@@ -162,7 +169,8 @@ public class SettingsManager
     {
         string filePath = Path.Combine(Application.persistentDataPath, settingsFileName);
 
-        if (File.Exists(filePath)) {
+        if (File.Exists(filePath))
+        {
             string dataJsonString = File.ReadAllText(filePath);
             SettingsData = JsonUtility.FromJson<SettingsData>(dataJsonString);
             return true;

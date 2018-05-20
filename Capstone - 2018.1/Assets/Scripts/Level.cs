@@ -331,31 +331,35 @@ namespace MapClasses
 
             Player = player;
             // Create the player.
-            if (player == null) {
+            if (player == null)
+            {
                 Player = new Player { Index = -1 };
-                if (selectedClass != null) {
+                if (selectedClass != null)
+                {
                     Player.Class = selectedClass;
                     Player.Name = selectedClass.Name;
                     Player.MaxHealth = selectedClass.Health;
                     Player.CurrentHealth = selectedClass.Health;
                 }
                 // If loading a player. Set the cores and the current abilities.
-                if (playerData != null) {
+                if (playerData != null)
+                {
                     GameManager manager = GameManager.Instance;
-                    foreach (int index in playerData.abilityIndexes) {
-                        Player.Abilities.Add(manager.GetPlayerAbility(index));
+                    for (int i = 0; i < playerData.abilityIndexes.Count; i++)
+                    {
+                        AbilityObject ability = manager.AbilityTree.GetTreeAbility(playerData.abilityTiers[i], playerData.abilityIndexes[i]);
+                        if (ability == null)
+                            Debug.LogError("ERROR: Attempting to load null ability: Tier " + playerData.abilityTiers[i] + ", Index " + playerData.abilityIndexes[i]);
+
+                        Player.Abilities.Add(ability);
                     }
-                    // Player.Abilities.AddRange(playerData);
                     Player.Cores = playerData.cores;
-                } else {
+                }
+                else
+                {
                     Player.SetupBaseAbilities();
                 }
             }
-            // if (player == null && selectedClass != null)
-            // {
-            //     Player = new Player { Index = -1, IsPlayer = true, Class = selectedClass, Name = selectedClass.Name, Facing = Direction.Up, State = EntityState.Idle, MaxHealth = selectedClass.Health, CurrentHealth = selectedClass.Health };
-            //     Player.SetupBaseAbilities();
-            // }
             else if (player == null && selectedClass == null)
             {
                 Debug.LogError("ERROR: No player class was selected when trying to initialize level.");

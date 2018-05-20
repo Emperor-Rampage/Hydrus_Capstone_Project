@@ -63,8 +63,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     SettingsManager settingsManager;
 
     [SerializeField] AbilityTree abilityTree;
+    public AbilityTree AbilityTree { get { return abilityTree; } private set { abilityTree = value; } }
     [SerializeField] List<PlayerClass> classes;
-    [SerializeField] List<AbilityObject> playerAbilities;
+    // [SerializeField] List<AbilityObject> playerAbilities;
     PlayerClass selectedClass;
 
     // A reference to the Map object, which handles the general level management.
@@ -109,38 +110,56 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public float Turnspeed { get { return turnspeed; } }
 
-    public void NewGame() {
+    public void NewGame()
+    {
+        List<int> tiers = new List<int>();
         List<int> indexes = new List<int>();
-        foreach (AbilityObject ability in selectedClass.BaseAbilities) {
+        foreach (AbilityObject ability in selectedClass.BaseAbilities)
+        {
+            tiers.Add(ability.Tier);
             indexes.Add(ability.Index);
         }
-        playerData = new PlayerData {
+        playerData = new PlayerData
+        {
             classIndex = classes.IndexOf(selectedClass),
+            abilityTiers = tiers,
             abilityIndexes = indexes,
             cores = 0
         };
         Map.SetCurrentLevel(0);
         LoadLevel(1f);
     }
-    public void Continue() {
+    public void Continue()
+    {
         playerData = settingsManager.LoadGame();
-        if (playerData.classIndex >= 0 && playerData.classIndex < classes.Count) {
+        if (playerData.classIndex >= 0 && playerData.classIndex < classes.Count)
+        {
             selectedClass = classes[playerData.classIndex];
             Map.SetCurrentLevel(0);
             LoadLevel(1f);
-        } else {
+        }
+        else
+        {
             Debug.LogError("ERROR: Loaded player does not have a selected class.");
         }
     }
 
-    public void SaveGame() {
-        if (level != null && level.Player != null) {
+    public void SaveGame()
+    {
+        if (level != null && level.Player != null)
+        {
+            List<int> tiers = new List<int>();
             List<int> indexes = new List<int>();
-            foreach (AbilityObject ability in level.Player.Abilities) {
+            foreach (AbilityObject ability in level.Player.Abilities)
+            {
+                tiers.Add(ability.Tier);
                 indexes.Add(ability.Index);
+                // indexes.Add(ability.Index);
             }
-            PlayerData data = new PlayerData() {
+            PlayerData data = new PlayerData()
+            {
                 classIndex = classes.IndexOf(level.Player.Class),
+                abilityTiers = tiers,
                 abilityIndexes = indexes,
                 cores = level.Player.Cores
             };
@@ -299,7 +318,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     else if (gmInstance.GetComponent<AIManager>() != null && aiManager == null)
                     {
                         aiManager = gmInstance.GetComponent<AIManager>();
-                    } else if (gmInstance.GetComponent<MiniMapCam>() != null && MiniMapCam == null) {
+                    }
+                    else if (gmInstance.GetComponent<MiniMapCam>() != null && MiniMapCam == null)
+                    {
                         MiniMapCam = gmInstance.GetComponent<MiniMapCam>();
                     }
                 }
@@ -417,6 +438,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         yield return new WaitForSeconds(delay);
 
+        // abilityTree = new AbilityTree();
         if (inGame && level != null)
         {
             foreach (Enemy enemy in level.EnemyList)
@@ -450,17 +472,18 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         // Otherwise, we're loading the title screen.
         if (level != null)
         {
+            AbilityTree.Initialize(selectedClass);
             // Sets up cells, connections, player spawn, and generates procedural areas.
             level.InitializeLevel(player, playerData, selectedClass);
             player = level.Player;
             ApplyAdjustedHealth();
 
-            abilityTree.Initialize(player);
+            AbilityTree.Player = player;
 
             BuildLevel_Procedural();
             BuildLevel_Procedural_Corners();
 
-            //            BuildLevel_Debug(level);
+            // BuildLevel_Debug(level);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
             player.Instance = GameObject.Instantiate(player.Class.ClassCamera);
@@ -478,7 +501,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // Initialize the UI for the level.
             uiManager.Initialize_Level(interruptPercentage);
             uiManager.SetUpAbilityIcons(player);
-            uiManager.SetUpAbilityTreeMenu(abilityTree);
+            uiManager.SetUpAbilityTreeMenu(AbilityTree);
             // Display the area text.
             uiManager.DisplayAreaText(level.name);
             // Fade in with the area name.
@@ -1372,7 +1395,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         playerAnim.SetTrigger(setter);
     }
 
-    public AbilityObject GetPlayerAbility(int index) {
-        return playerAbilities.SingleOrDefault((abil) => abil.Index == index);
-    }
+    // public AbilityObject GetPlayerAbility(int index)
+    // {
+    //     return playerAbilities.SingleOrDefault((abil) => abil.Index == index);
+    // }
 }

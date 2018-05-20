@@ -32,7 +32,7 @@ MonoBehaviour:
   damage: 0
   upgradeable: 0
   baseAbility: {fileID: 11400000, guid: d568e20e39d58d447b983a4d8ddbd580, type: 2}
-  tier: 3
+  tier: 2
   previousTier:
   - {fileID: 0}
   nextTier: []

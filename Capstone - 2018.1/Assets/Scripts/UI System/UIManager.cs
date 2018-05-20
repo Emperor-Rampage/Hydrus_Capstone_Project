@@ -11,6 +11,7 @@ using EntityClasses;
 using System;
 using System.Linq;
 using Pixelplacement.TweenSystem;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Canvas))]
 public class UIManager : MonoBehaviour
@@ -84,8 +85,8 @@ public class UIManager : MonoBehaviour
     int currentHUDSettingsTab;
 
     [Header("Ability Tree Settings")]
-    [SerializeField]
-    RectTransform abilityTreeContentPanel;
+    AbilityTree abilityTree;
+    [SerializeField] RectTransform abilityTreeContentPanel;
     [SerializeField] GameObject abilityTreePrefab;
     [SerializeField] GameObject abilityTierPrefab;
     [SerializeField] GameObject abilityVariantPrefab;
@@ -229,8 +230,13 @@ public class UIManager : MonoBehaviour
 
     public void SetUpAbilityTreeMenu(AbilityTree tree)
     {
+        foreach (Transform child in abilityTreeContentPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
         // TODO: Switch to a panel for each ability with a vertical layout group.
         //       Populate with panels with horizontal layout groups with each ability's tier.
+        abilityTree = tree;
 
         LayoutElement layoutElement = abilityTreeContentPanel.GetComponent<LayoutElement>();
         layoutElement.preferredWidth = tree.Width;
@@ -272,11 +278,21 @@ public class UIManager : MonoBehaviour
                     cell.name = "TreeIcon_" + ability.Name;
 
                     TreeAbility container = cell.GetComponent<TreeAbility>();
+                    container.Tier = ability.Tier;
+                    container.Index = ability.Index;
+                    // container.Index = abilityTree.GetTreeAbilityIndex(ability.Tier - 1, ability);
                     container.Icon.sprite = ability.Icon;
+
+                    EventTrigger trigger = cell.GetComponent<EventTrigger>();
+                    EventTrigger.Entry entry = new EventTrigger.Entry();
+                    entry.eventID = EventTriggerType.PointerEnter;
+                    entry.callback.AddListener((data) => OnTreeAbilityHover((PointerEventData)data));
+                    trigger.triggers.Add(entry);
 
                     // cell.transform.GetChild(0).GetComponent<Image>().sprite = ability.Icon;
 
-                    tree.AddAbilityUI(t, tree.GetAbilityIndex(t, ability), cell);
+                    tree.AddAbilityUI(t, i, cell);
+                    // tree.AddAbilityUI(t, tree.GetTreeAbilityIndex(t, ability), cell);
                 }
 
             }
@@ -308,11 +324,13 @@ public class UIManager : MonoBehaviour
                             AbilityObject nextAbility = nextTier[n];
                             if (ability.NextTier.Contains(nextAbility))
                             {
-                                int ability1Index = tree.GetAbilityIndex(t, ability);
-                                int ability2Index = tree.GetAbilityIndex(t + 1, nextAbility);
+                                int ability1Index = ability.Index;
+                                int ability2Index = nextAbility.Index;
+                                // int ability1Index = tree.GetTreeAbilityIndex(t, ability);
+                                // int ability2Index = tree.GetTreeAbilityIndex(t + 1, nextAbility);
 
-                                GameObject ability1UI = tree.UITiers[t][ability1Index];
-                                GameObject ability2UI = tree.UITiers[t + 1][ability2Index];
+                                GameObject ability1UI = tree.UITiers[t][i];
+                                GameObject ability2UI = tree.UITiers[t + 1][n];
 
                                 TreeAbility container1 = ability1UI.GetComponent<TreeAbility>();
                                 TreeAbility container2 = ability2UI.GetComponent<TreeAbility>();
@@ -357,7 +375,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetContinueButton(bool active) {
+    public void SetContinueButton(bool active)
+    {
         continueButton.enabled = active;
     }
 
@@ -375,10 +394,11 @@ public class UIManager : MonoBehaviour
         manager.NewGame();
     }
 
-    public void Continue() {
+    public void Continue()
+    {
         if (manager == null)
             return;
-        
+
         AllButtons(menuPanel);
         manager.Continue();
     }
@@ -724,31 +744,6 @@ public class UIManager : MonoBehaviour
             container.CooldownText.text = (cooldownRemaining <= 0f) ? "" : cooldownRemaining.ToString("0.0");
             container.CastTimer.fillAmount = (casting) ? castProgress : 0f;
         }
-        // foreach (Transform child in abilityIconObject.transform)
-        // {
-        //     if (child.name == "CooldownTimerImage")
-        //     {
-        //         child.GetComponent<Image>().fillAmount = cooldownRemaining / cooldown;
-        //     }
-        //     else if (child.name == "CooldownTimerText")
-        //     {
-        //         if (cooldownRemaining <= 0f)
-        //             child.GetComponent<TMP_Text>().text = "";
-        //         else
-        //             child.GetComponent<TMP_Text>().text = cooldownRemaining.ToString("0.0");
-        //     }
-        //     else if (child.name == "CastTimerImage")
-        //     {
-        //         if (casting)
-        //         {
-        //             child.GetComponent<Image>().fillAmount = castProgress;
-        //         }
-        //         else
-        //         {
-        //             child.GetComponent<Image>().fillAmount = 0f;
-        //         }
-        //     }
-        // }
     }
 
     public void UpdateEnemyInfo(bool adjacentEnemy = false, string name = "", float healthPercentage = 0f, float castProgress = 0f, float castTime = 0f)
@@ -783,6 +778,21 @@ public class UIManager : MonoBehaviour
             enemyCastText.text = (castTime * (1 - castProgress)).ToString("0.0");
         //        Tween.Stop(enemyCastBar.GetInstanceID());
         //        Tween.Value(0f, 1f, (value) => enemyCastBar.fillAmount = value, castTime, 0f, completeCallback: () => enemyCastBar.fillAmount = 0f);
+    }
+
+    public void OnTreeAbilityHover(PointerEventData data)
+    {
+        Debug.Log("Hovered over " + data.pointerEnter);
+        TreeAbility treeAbility = data.pointerEnter.GetComponentInParent<TreeAbility>();
+        if (treeAbility == null)
+            return;
+
+        AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
+
+        if (ability != null)
+        {
+            Debug.Log("Hovered over " + ability.Name);
+        }
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)
