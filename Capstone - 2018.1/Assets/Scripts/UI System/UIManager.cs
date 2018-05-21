@@ -85,12 +85,13 @@ public class UIManager : MonoBehaviour
     int currentHUDSettingsTab;
 
     [Header("Ability Tree Settings")]
-    AbilityTree abilityTree;
+    [SerializeField] AbilityInfoContainer abilityInfoContainer;
     [SerializeField] RectTransform abilityTreeContentPanel;
     [SerializeField] GameObject abilityTreePrefab;
     [SerializeField] GameObject abilityTierPrefab;
     [SerializeField] GameObject abilityVariantPrefab;
     [SerializeField] GameObject abiltiyLinePrefab;
+    AbilityTree abilityTree;
 
     // Private fields.
     int currentMenu;
@@ -284,10 +285,15 @@ public class UIManager : MonoBehaviour
                     container.Icon.sprite = ability.Icon;
 
                     EventTrigger trigger = cell.GetComponent<EventTrigger>();
-                    EventTrigger.Entry entry = new EventTrigger.Entry();
-                    entry.eventID = EventTriggerType.PointerEnter;
-                    entry.callback.AddListener((data) => OnTreeAbilityHover((PointerEventData)data));
-                    trigger.triggers.Add(entry);
+                    EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+                    enterEntry.eventID = EventTriggerType.PointerEnter;
+                    enterEntry.callback.AddListener((data) => OnTreeAbilityHover((PointerEventData)data));
+                    trigger.triggers.Add(enterEntry);
+                    EventTrigger.Entry exitEntry = new EventTrigger.Entry();
+                    exitEntry.eventID = EventTriggerType.PointerExit;
+                    exitEntry.callback.AddListener((data) => OnTreeAbilityUnHover((PointerEventData)data));
+                    trigger.triggers.Add(exitEntry);
+
 
                     // cell.transform.GetChild(0).GetComponent<Image>().sprite = ability.Icon;
 
@@ -305,61 +311,61 @@ public class UIManager : MonoBehaviour
         //    compare with each of the next abilities.
         //    If contained
         //     Get both UI elements and draw a line between them.
-        for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
-        {
-            for (int t = 0; t < tree.NumTiers; t++)
-            {
+        // for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
+        // {
+        //     for (int t = 0; t < tree.NumTiers; t++)
+        //     {
 
-                var abilityTier = tree.GetAbilityTier(a, t);
+        //         var abilityTier = tree.GetAbilityTier(a, t);
 
-                var nextTier = tree.GetAbilityTier(a, t + 1);
+        //         var nextTier = tree.GetAbilityTier(a, t + 1);
 
-                if (nextTier != null)
-                {
-                    for (int i = 0; i < abilityTier.Count; i++)
-                    {
-                        AbilityObject ability = abilityTier[i];
-                        for (int n = 0; n < nextTier.Count; n++)
-                        {
-                            AbilityObject nextAbility = nextTier[n];
-                            if (ability.NextTier.Contains(nextAbility))
-                            {
-                                int ability1Index = ability.Index;
-                                int ability2Index = nextAbility.Index;
-                                // int ability1Index = tree.GetTreeAbilityIndex(t, ability);
-                                // int ability2Index = tree.GetTreeAbilityIndex(t + 1, nextAbility);
+        //         if (nextTier != null)
+        //         {
+        //             for (int i = 0; i < abilityTier.Count; i++)
+        //             {
+        //                 AbilityObject ability = abilityTier[i];
+        //                 for (int n = 0; n < nextTier.Count; n++)
+        //                 {
+        //                     AbilityObject nextAbility = nextTier[n];
+        //                     if (ability.NextTier.Contains(nextAbility))
+        //                     {
+        //                         int ability1Index = ability.Index;
+        //                         int ability2Index = nextAbility.Index;
+        //                         // int ability1Index = tree.GetTreeAbilityIndex(t, ability);
+        //                         // int ability2Index = tree.GetTreeAbilityIndex(t + 1, nextAbility);
 
-                                GameObject ability1UI = tree.UITiers[t][i];
-                                GameObject ability2UI = tree.UITiers[t + 1][n];
+        //                         GameObject ability1UI = tree.UITiers[t][i];
+        //                         GameObject ability2UI = tree.UITiers[t + 1][n];
 
-                                TreeAbility container1 = ability1UI.GetComponent<TreeAbility>();
-                                TreeAbility container2 = ability2UI.GetComponent<TreeAbility>();
+        //                         TreeAbility container1 = ability1UI.GetComponent<TreeAbility>();
+        //                         TreeAbility container2 = ability2UI.GetComponent<TreeAbility>();
 
-                                // Debug.Log(container1.Icon.rectTransform.localPosition);
+        //                         // Debug.Log(container1.Icon.rectTransform.localPosition);
 
-                                Vector2 ability1Position = ability1UI.GetComponent<RectTransform>().anchoredPosition;
-                                Vector2 ability2Position = ability2UI.GetComponent<RectTransform>().position;
+        //                         Vector2 ability1Position = ability1UI.GetComponent<RectTransform>().anchoredPosition;
+        //                         Vector2 ability2Position = ability2UI.GetComponent<RectTransform>().position;
 
-                                Vector3 position = new Vector3((ability1Position.x + ability2Position.x) / 2f, (ability1Position.y + ability2Position.y) / 2f, 0f);
-                                Quaternion rotation = Quaternion.identity;
-                                int length = 50;
+        //                         Vector3 position = new Vector3((ability1Position.x + ability2Position.x) / 2f, (ability1Position.y + ability2Position.y) / 2f, 0f);
+        //                         Quaternion rotation = Quaternion.identity;
+        //                         int length = 50;
 
-                                GameObject line = GameObject.Instantiate(abiltiyLinePrefab, ability1UI.transform);
+        //                         GameObject line = GameObject.Instantiate(abiltiyLinePrefab, ability1UI.transform);
 
-                                RectTransform lineTransform = line.GetComponent<RectTransform>();
+        //                         RectTransform lineTransform = line.GetComponent<RectTransform>();
 
-                                // Debug.Log("Placing line at " + position + " between " + ability1Position + " and " + ability2Position + " .. " + abilityTreeContentPanel.transform.position);
+        //                         // Debug.Log("Placing line at " + position + " between " + ability1Position + " and " + ability2Position + " .. " + abilityTreeContentPanel.transform.position);
 
-                                lineTransform.anchoredPosition = position;
-                                lineTransform.rotation = rotation;
-                                lineTransform.sizeDelta = new Vector2(lineTransform.sizeDelta.x, length);
+        //                         lineTransform.anchoredPosition = position;
+        //                         lineTransform.rotation = rotation;
+        //                         lineTransform.sizeDelta = new Vector2(lineTransform.sizeDelta.x, length);
 
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     public void SelectClass(PlayerClass selected)
@@ -419,6 +425,14 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 1f;
             ShowHUD(0);
         }
+    }
+
+    public void ToggleTree()
+    {
+        if (currentHUD == 4)
+            ShowHUD(0);
+        else
+            ShowHUD(4);
     }
 
     public void ExitGame()
@@ -782,7 +796,8 @@ public class UIManager : MonoBehaviour
 
     public void OnTreeAbilityHover(PointerEventData data)
     {
-        Debug.Log("Hovered over " + data.pointerEnter);
+        abilityInfoContainer.gameObject.SetActive(true);
+
         TreeAbility treeAbility = data.pointerEnter.GetComponentInParent<TreeAbility>();
         if (treeAbility == null)
             return;
@@ -792,7 +807,36 @@ public class UIManager : MonoBehaviour
         if (ability != null)
         {
             Debug.Log("Hovered over " + ability.Name);
+            abilityInfoContainer.NameText.text = ability.Name;
+            abilityInfoContainer.CostText.text = ability.Cost.ToString();
+            abilityInfoContainer.TypeText.text = ability.Type.ToString();
+            abilityInfoContainer.TooltipText.text = ability.ToolTip;
+            abilityInfoContainer.CooldownText.text = "Cooldown: " + ability.Cooldown;
+            abilityInfoContainer.CastTimeText.text = "Cast Time: " + ability.CastTime;
+            abilityInfoContainer.DamageText.text = "Damage: " + ability.Damage;
+            if (ability.Type == AbilityType.Ranged)
+            {
+                abilityInfoContainer.AreaText.text = "Range: " + ability.Range;
+                abilityInfoContainer.AOEImage.texture = null;
+                abilityInfoContainer.AOEImage.enabled = false;
+            }
+            else if (ability.Type == AbilityType.AreaOfEffect || ability.Type == AbilityType.Zone)
+            {
+                abilityInfoContainer.AreaText.text = "Area Shape";
+                abilityInfoContainer.AOEImage.texture = ability.AOESprite;
+            }
+            else
+            {
+                abilityInfoContainer.AreaText.text = "";
+                abilityInfoContainer.AOEImage.texture = null;
+                abilityInfoContainer.AOEImage.enabled = false;
+            }
         }
+    }
+
+    public void OnTreeAbilityUnHover(PointerEventData data)
+    {
+        abilityInfoContainer.gameObject.SetActive(false);
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)

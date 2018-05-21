@@ -5339,8 +5339,8 @@ MonoBehaviour:
     weight: 0.475
   abilityTree:
     numTiers: 3
-    uiPadding: 100
-    uiSpacing: 25
+    uiPadding: 300
+    uiSpacing: 50
     uiCellWidth: 50
     uiCellHeight: 50
   classes:

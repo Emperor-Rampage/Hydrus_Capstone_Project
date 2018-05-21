@@ -886,7 +886,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             uiManager.TogglePause();
         }
-        if (player.State == EntityState.Idle && !player.StatusEffects.Stunned)
+
+        if (!uiManager.Paused && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
         {
             Direction inputDir = GetInputDirection();
             if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit)
@@ -922,10 +923,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             {
                 CastPlayerAbility(player, 3);
             }
-            else if (Input.GetKeyDown(KeyCode.M)) // Plays the test sound.
-            {
-                audioManager.PlaySoundEffect(testSound);
-            }
             else if (Input.GetKeyDown(KeyCode.Minus))
             {
                 bool alive = player.Damage(25, (player.CastProgress >= interruptPercentage));
@@ -938,14 +935,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 player.Heal(25);
                 uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
             }
-            else if (Input.GetKeyDown(KeyCode.L))
+            else if (Input.GetKeyDown(KeyCode.F))
             {
-                AbilityEffect effect = new AbilityEffect(-1, (AbilityStatusEff)Random.Range(0, 10), Random.Range(0, 10), Random.Range(0f, 1f));
-                player.StatusEffects.AddEffect(effect);
-            }
-            else if (Input.GetKeyDown(KeyCode.K))
-            {
-                uiManager.CancelPlayerCast();
+                uiManager.ToggleTree();
             }
         }
     }

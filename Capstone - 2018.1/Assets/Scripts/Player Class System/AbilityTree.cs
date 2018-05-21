@@ -27,8 +27,8 @@ public class AbilityTree
     [SerializeField] int uiCellHeight;
     public int CellHeight { get { return uiCellHeight; } }
 
-    public int Width { get { return (uiCellWidth * TotalNumLeafs) + ((uiSpacing - 1) * TotalNumLeafs) + (uiPadding * 2); } }
-    public int Height { get { return (uiCellHeight * numTiers) + ((uiSpacing - 1) * numTiers) + (uiPadding * 2); } }
+    public int Width { get { return (uiCellWidth * TotalNumLeafs) + ((uiSpacing) * TotalNumLeafs) + (uiPadding * 2); } }
+    public int Height { get { return (uiCellHeight * numTiers) + ((uiSpacing) * numTiers) + (uiPadding * 2); } }
     public int TotalNumLeafs { get; private set; }
 
     public void Initialize(PlayerClass playerClass)
@@ -61,7 +61,9 @@ public class AbilityTree
         var tier = tiers[tierIndex];
         if (tier != null)
         {
-            return tier.SingleOrDefault((abil) => abil.Index == abilityIndex);
+            AbilityObject ability = tier.FirstOrDefault((abil) => abil.Index == abilityIndex);
+            return ability;
+            // return tier.SingleOrDefault((abil) => abil.Index == abilityIndex);
         }
         Debug.LogError("ERROR: Could not find ability object");
         return null;
