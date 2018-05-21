@@ -31,7 +31,7 @@ MonoBehaviour:
   baseAbility: {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}
   tier: 1
   previousTier:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}
   nextTier:
   - {fileID: 11400000, guid: 5fffe7124163ad94d90d7a75c9046605, type: 2}
   - {fileID: 11400000, guid: d14bef12b9057944999637ef6bc70a2a, type: 2}

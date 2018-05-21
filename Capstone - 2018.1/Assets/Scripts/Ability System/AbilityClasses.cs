@@ -477,8 +477,8 @@ namespace AbilityClasses
         [SerializeField] List<AbilityObject> nextTier;                                                       //Reference to the next ability level of the tree, if any. Used for validation.
         public List<AbilityObject> NextTier { get { return nextTier; } }
 
-        [SerializeField] float cost;                                                                         //The Core cost to upgrade the ability, if any.
-        public float Cost { get { return cost; } }
+        [SerializeField] int cost;                                                                         //The Core cost to upgrade the ability, if any.
+        public int Cost { get { return cost; } }
     }
 
     public class Indicator

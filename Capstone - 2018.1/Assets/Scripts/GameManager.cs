@@ -439,6 +439,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         yield return new WaitForSeconds(delay);
 
         // abilityTree = new AbilityTree();
+        if (playerMovementCoroutine != null)
+            StopCoroutine(playerMovementCoroutine);
         if (inGame && level != null)
         {
             foreach (Enemy enemy in level.EnemyList)

@@ -92,6 +92,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject abilityVariantPrefab;
     [SerializeField] GameObject abiltiyLinePrefab;
     AbilityTree abilityTree;
+    List<TreeAbility> treeAbilities = new List<TreeAbility>();
 
     // Private fields.
     int currentMenu;
@@ -235,6 +236,7 @@ public class UIManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        treeAbilities.Clear();
         // TODO: Switch to a panel for each ability with a vertical layout group.
         //       Populate with panels with horizontal layout groups with each ability's tier.
         abilityTree = tree;
@@ -256,12 +258,11 @@ public class UIManager : MonoBehaviour
 
         for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
         {
-
             GameObject abilityPanel = GameObject.Instantiate(abilityTreePrefab, abilityTreeContentPanel);
             // TODO: Switch to calculating the width. Should be number of leaves + any padding and spacing.
             abilityPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(500f, 0f);
 
-            for (int t = 0; t < tree.NumTiers; t++)
+            for (int t = tree.NumTiers - 1; t >= 0; t--)
             {
 
                 GameObject tierPanel = GameObject.Instantiate(abilityTierPrefab, abilityPanel.transform);
@@ -284,20 +285,39 @@ public class UIManager : MonoBehaviour
                     // container.Index = abilityTree.GetTreeAbilityIndex(ability.Tier - 1, ability);
                     container.Icon.sprite = ability.Icon;
 
+                    if (tree.IsCurrentAbility(ability) || tree.IsAvailable(ability)) {
+                        container.DimObject.SetActive(false);
+                    } else {
+                        container.DimObject.SetActive(true);
+                    }
+                    // if (!tree.IsCurrentAbility(ability) && !tree.IsAvailable(ability)) {
+                    //     container.DimObject.SetActive(true);
+                    // } else {
+                    //     container.DimObject.SetActive(false);
+                    // }
+
                     EventTrigger trigger = cell.GetComponent<EventTrigger>();
+
                     EventTrigger.Entry enterEntry = new EventTrigger.Entry();
                     enterEntry.eventID = EventTriggerType.PointerEnter;
                     enterEntry.callback.AddListener((data) => OnTreeAbilityHover((PointerEventData)data));
                     trigger.triggers.Add(enterEntry);
+
                     EventTrigger.Entry exitEntry = new EventTrigger.Entry();
                     exitEntry.eventID = EventTriggerType.PointerExit;
                     exitEntry.callback.AddListener((data) => OnTreeAbilityUnHover((PointerEventData)data));
                     trigger.triggers.Add(exitEntry);
 
+                    EventTrigger.Entry clickEntry = new EventTrigger.Entry();
+                    clickEntry.eventID = EventTriggerType.PointerClick;
+                    clickEntry.callback.AddListener((data) => OnTreeAbilityClicked((PointerEventData)data));
+                    trigger.triggers.Add(clickEntry);
+
 
                     // cell.transform.GetChild(0).GetComponent<Image>().sprite = ability.Icon;
 
-                    tree.AddAbilityUI(t, i, cell);
+                    treeAbilities.Add(container);
+                    // tree.AddAbilityUI(t, i, cell);
                     // tree.AddAbilityUI(t, tree.GetTreeAbilityIndex(t, ability), cell);
                 }
 
@@ -794,6 +814,19 @@ public class UIManager : MonoBehaviour
         //        Tween.Value(0f, 1f, (value) => enemyCastBar.fillAmount = value, castTime, 0f, completeCallback: () => enemyCastBar.fillAmount = 0f);
     }
 
+    void RefreshAbilityTree() {
+        foreach (TreeAbility treeAbility in treeAbilities) {
+            AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
+            if (ability != null) {
+                if (abilityTree.IsCurrentAbility(ability) || abilityTree.IsAvailable(ability)) {
+                    treeAbility.DimObject.SetActive(false);
+                } else {
+                    treeAbility.DimObject.SetActive(true);
+                }
+            }
+        }
+    }
+
     public void OnTreeAbilityHover(PointerEventData data)
     {
         abilityInfoContainer.gameObject.SetActive(true);
@@ -801,6 +834,8 @@ public class UIManager : MonoBehaviour
         TreeAbility treeAbility = data.pointerEnter.GetComponentInParent<TreeAbility>();
         if (treeAbility == null)
             return;
+
+        treeAbility.HighlightObject.SetActive(true);
 
         AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
 
@@ -817,18 +852,17 @@ public class UIManager : MonoBehaviour
             if (ability.Type == AbilityType.Ranged)
             {
                 abilityInfoContainer.AreaText.text = "Range: " + ability.Range;
-                abilityInfoContainer.AOEImage.texture = null;
                 abilityInfoContainer.AOEImage.enabled = false;
             }
             else if (ability.Type == AbilityType.AreaOfEffect || ability.Type == AbilityType.Zone)
             {
                 abilityInfoContainer.AreaText.text = "Area Shape";
                 abilityInfoContainer.AOEImage.texture = ability.AOESprite;
+                abilityInfoContainer.AOEImage.enabled = true;
             }
             else
             {
                 abilityInfoContainer.AreaText.text = "";
-                abilityInfoContainer.AOEImage.texture = null;
                 abilityInfoContainer.AOEImage.enabled = false;
             }
         }
@@ -837,6 +871,20 @@ public class UIManager : MonoBehaviour
     public void OnTreeAbilityUnHover(PointerEventData data)
     {
         abilityInfoContainer.gameObject.SetActive(false);
+
+        TreeAbility treeAbility = data.pointerEnter.GetComponentInParent<TreeAbility>();
+        if (treeAbility == null)
+            return;
+        treeAbility.HighlightObject.SetActive(false);
+    }
+
+    public void OnTreeAbilityClicked(PointerEventData data) {
+        TreeAbility treeAbility = data.pointerPress.GetComponentInParent<TreeAbility>();
+        AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
+
+        abilityTree.UpgradeAbility(ability);
+        RefreshAbilityTree();
+        SetUpAbilityIcons(abilityTree.Player);
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)

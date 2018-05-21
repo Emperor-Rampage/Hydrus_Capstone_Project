@@ -15,7 +15,7 @@ public class AbilityTree
     Player player;
     public Player Player { get { return player; } set { player = value; } }
     List<List<AbilityObject>> tiers;
-    public List<List<GameObject>> UITiers { get; private set; } = new List<List<GameObject>>();
+    // public List<List<GameObject>> UITiers { get; private set; } = new List<List<GameObject>>();
     [SerializeField] int numTiers;
     public int NumTiers { get { return numTiers; } }
     [SerializeField] int uiPadding;
@@ -37,23 +37,40 @@ public class AbilityTree
         List<AbilityObject> prevTier;
         tiers = new List<List<AbilityObject>>();
         tiers.Add(t1);
-        UITiers.Add(new List<GameObject>());
+        // UITiers.Add(new List<GameObject>());
         prevTier = t1;
         for (int t = 1; t < numTiers; t++)
         {
             var tier = new List<AbilityObject>();
-            var uiTier = new List<GameObject>();
+            // var uiTier = new List<GameObject>();
             foreach (AbilityObject ability in prevTier)
             {
                 tier.AddRange(ability.NextTier);
             }
             tiers.Add(tier);
-            UITiers.Add(uiTier);
+            // UITiers.Add(uiTier);
             prevTier = tier;
         }
 
         TotalNumLeafs = tiers[tiers.Count - 1].Count;
+    }
 
+    public bool UpgradeAbility(AbilityObject ability) {
+        if (ability != null) {
+            if (CanUpgrade(ability)) {
+                AbilityObject baseAbility = ability.BaseAbility;
+                foreach (AbilityObject playerAbility in Player.Abilities) {
+                    if (ability.PreviousTier.Contains(playerAbility)) {
+                        int index = Player.Abilities.IndexOf(playerAbility);
+                        Player.Abilities[index] = ability;
+
+                        Player.Cores -= ability.Cost;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public AbilityObject GetTreeAbility(int tierIndex, int abilityIndex)
@@ -80,16 +97,16 @@ public class AbilityTree
         return -1;
     }
 
-    public void AddAbilityUI(int tierIndex, int abilityIndex, GameObject abilityUI)
-    {
-        // Debug.Log("Adding ability index " + abilityIndex + " for tier " + tierIndex);
-        if (abilityIndex == -1)
-        {
-            return;
-        }
-        var tier = UITiers[tierIndex];
-        tier.Insert(abilityIndex, abilityUI);
-    }
+    // public void AddAbilityUI(int tierIndex, int abilityIndex, GameObject abilityUI)
+    // {
+    //     // Debug.Log("Adding ability index " + abilityIndex + " for tier " + tierIndex);
+    //     if (abilityIndex == -1)
+    //     {
+    //         return;
+    //     }
+    //     var tier = UITiers[tierIndex];
+    //     tier.Insert(abilityIndex, abilityUI);
+    // }
 
     public List<AbilityObject> GetAbilityTier(int tier1Index, int targetTierIndex)
     {
@@ -129,6 +146,10 @@ public class AbilityTree
             }
         }
         return numLeafs;
+    }
+
+    public bool IsCurrentAbility(AbilityObject ability) {
+        return player.Abilities.Contains(ability);
     }
 
     public bool IsAvailable(AbilityObject ability)

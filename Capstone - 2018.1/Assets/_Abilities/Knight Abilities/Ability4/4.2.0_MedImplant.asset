@@ -34,7 +34,7 @@ MonoBehaviour:
   baseAbility: {fileID: 11400000, guid: cf76a02ac1bef074f8b752ec6550be6e, type: 2}
   tier: 1
   previousTier:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: cf76a02ac1bef074f8b752ec6550be6e, type: 2}
   nextTier:
   - {fileID: 11400000, guid: 966195e730f749040bcbf94d7f050285, type: 2}
   cost: 50

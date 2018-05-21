@@ -27,7 +27,7 @@ MonoBehaviour:
     duration: 1.5
     value: 0.3
   type: 3
-  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  aoeSprite: {fileID: 2800000, guid: 669b4c1eb1fe41e48bc72776fc072745, type: 3}
   range: 0
   cooldown: 4
   castTime: 1
@@ -35,8 +35,7 @@ MonoBehaviour:
   upgradeable: 1
   baseAbility: {fileID: 11400000}
   tier: 0
-  previousTier:
-  - {fileID: 0}
+  previousTier: []
   nextTier:
   - {fileID: 11400000, guid: 7d63be0cea1fc3f45b1c9771e8d9d140, type: 2}
   - {fileID: 11400000, guid: 19c2463605e9d7c448fe5da627f83b6a, type: 2}

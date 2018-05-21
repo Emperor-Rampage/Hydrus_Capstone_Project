@@ -22,7 +22,7 @@ MonoBehaviour:
     pitch: 0
   statusEffects: []
   type: 3
-  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  aoeSprite: {fileID: 2800000, guid: 59d1853563fe5d1488aca4d44c719b99, type: 3}
   range: 0
   cooldown: 8
   castTime: 3
@@ -31,7 +31,7 @@ MonoBehaviour:
   baseAbility: {fileID: 11400000, guid: d568e20e39d58d447b983a4d8ddbd580, type: 2}
   tier: 1
   previousTier:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: d568e20e39d58d447b983a4d8ddbd580, type: 2}
   nextTier:
   - {fileID: 11400000, guid: d807c1b8df870f6488af71b432018419, type: 2}
   - {fileID: 11400000, guid: b49c05bf2fc882f498d0a4580ae9ac3a, type: 2}

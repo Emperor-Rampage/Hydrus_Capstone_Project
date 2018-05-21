@@ -30,8 +30,7 @@ MonoBehaviour:
   upgradeable: 1
   baseAbility: {fileID: 11400000}
   tier: 0
-  previousTier:
-  - {fileID: 0}
+  previousTier: []
   nextTier:
   - {fileID: 11400000, guid: e31cd218b101c074ab20cfea6ea279d3, type: 2}
   - {fileID: 11400000, guid: 9003cffda0702284a9419b6fcebae9a0, type: 2}
