@@ -12,6 +12,10 @@ using System;
 using System.Linq;
 using Pixelplacement.TweenSystem;
 using UnityEngine.EventSystems;
+using AudioClasses;
+
+// TODO: Use an enum to define ui sounds. Store them in a dictionary with the enum as the key and the SoundEffect as the value.
+// TODO: Pass the enum in each ui element's event trigger.
 
 [RequireComponent(typeof(Canvas))]
 public class UIManager : MonoBehaviour
@@ -25,6 +29,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] const float defaultFadeTime = 1f;
     AnimationCurve defaultFadeCurve = Tween.EaseInOutStrong;
     [SerializeField] TMP_Text fadeText;
+    [Header("Sound Settings")]
+    [SerializeField]
+    public SoundEffect menuFX1;
+    [SerializeField]
+    public SoundEffect menuFX2;
+    [SerializeField]
+    public SoundEffect menuFXAscending;
+    [SerializeField]
+    public SoundEffect menuFXDescending;
 
     [Space(2)]
     [Header("Menu Settings")]
@@ -85,6 +98,7 @@ public class UIManager : MonoBehaviour
     int currentHUDSettingsTab;
 
     [Header("Ability Tree Settings")]
+    [SerializeField] TMP_Text treeCoresText;
     [SerializeField] AbilityInfoContainer abilityInfoContainer;
     [SerializeField] RectTransform abilityTreeContentPanel;
     [SerializeField] GameObject abilityTreePrefab;
@@ -118,6 +132,8 @@ public class UIManager : MonoBehaviour
     TweenBase playerCastBarTween;
 
     public bool Paused { get; private set; }
+    public bool ShowingTree { get; private set; }
+    public bool ShowingMap { get; private set; }
     public bool Highlighted { get; private set; } = false;
 
 
@@ -331,6 +347,7 @@ public class UIManager : MonoBehaviour
         //    compare with each of the next abilities.
         //    If contained
         //     Get both UI elements and draw a line between them.
+
         // for (int a = 0; a < tree.Player.Class.BaseAbilities.Count; a++)
         // {
         //     for (int t = 0; t < tree.NumTiers; t++)
@@ -449,16 +466,20 @@ public class UIManager : MonoBehaviour
 
     public void ToggleTree()
     {
-        if (currentHUD == 4)
-            ShowHUD(0);
-        else
+        ShowingTree = !ShowingTree;
+        if (ShowingTree) {
             ShowHUD(4);
+        } else {
+            ShowHUD(0);
+        }
     }
 
     public void ExitGame()
     {
         manager.MiniMapCam.SetZoom(10f);
         Paused = false;
+        ShowingTree = false;
+        ShowingMap = false;
         Time.timeScale = 1f;
         manager.SaveGame();
         manager.LoadMainMenu(defaultFadeTime);
@@ -728,6 +749,7 @@ public class UIManager : MonoBehaviour
     public void UpdatePlayerCores(int newCores)
     {
         coresText.text = "Cores: " + newCores;
+        treeCoresText.text = "Cores: " + newCores;
     }
 
     public void UpdatePlayerHealth(float healthPercentage)
@@ -843,7 +865,6 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("Hovered over " + ability.Name);
             abilityInfoContainer.NameText.text = ability.Name;
-            abilityInfoContainer.CostText.text = ability.Cost.ToString();
             abilityInfoContainer.TypeText.text = ability.Type.ToString();
             abilityInfoContainer.TooltipText.text = ability.ToolTip;
             abilityInfoContainer.CooldownText.text = "Cooldown: " + ability.Cooldown;
@@ -865,6 +886,25 @@ public class UIManager : MonoBehaviour
                 abilityInfoContainer.AreaText.text = "";
                 abilityInfoContainer.AOEImage.enabled = false;
             }
+
+            GameObject effectsObject = abilityInfoContainer.EffectsObject;
+            
+            // Clear the list of effects.
+            foreach (Transform child in effectsObject.transform) {
+                Destroy(child.gameObject);
+            }
+            // Display all of the effects.
+            foreach (AbilityEffect effect in ability.StatusEffects) {
+                TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
+                DisplayEffectInTree(effectText, effect);
+            }
+            // If the ability has no effects, display None.
+            if (ability.StatusEffects.Count <= 0) {
+                TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
+                effectText.text = "None";
+            }
+
+            abilityInfoContainer.CostText.text = "Cost: " + ability.Cost.ToString();
         }
     }
 
@@ -885,6 +925,34 @@ public class UIManager : MonoBehaviour
         abilityTree.UpgradeAbility(ability);
         RefreshAbilityTree();
         SetUpAbilityIcons(abilityTree.Player);
+    }
+
+    void DisplayEffectInTree(TMP_Text effectText, AbilityEffect effect)
+    {
+        if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
+        {
+            effectText.text = effect.Effect + " - " + effect.Duration.ToString("0.0");
+        }
+        else if (effect.Effect == AbilityStatusEff.DoT)
+        {
+            effectText.text = effect.Effect + " " + effect.Value + " / " + effect.Duration + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Duration.ToString("0.0");
+        }
+        else if (effect.Effect == AbilityStatusEff.Heal)
+        {
+            effectText.text = effect.Effect + " " + (effect.Value * 100f / effect.Duration).ToString("0.0") + "%/sec - " + effect.Duration.ToString("0.0");
+        }
+        else
+        {
+            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Duration.ToString("0.0");
+        }
+    }
+
+    public void OnButtonHover(SoundEffect soundEffect) {
+        manager.AudioManager.PlayUISound(soundEffect);
+    }
+
+    public void OnMenuButtonClick(SoundEffect soundEffect) {
+        manager.AudioManager.PlayUISound(soundEffect);
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)

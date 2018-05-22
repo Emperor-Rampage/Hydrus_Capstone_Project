@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01c59c5a704cf5e4a90376369a1ef118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxUISounds: 10
   soundEffectPrefab: {fileID: 82202162509312074, guid: e5d7cae53221e5549998dd5b76339ecc,
     type: 2}
   backgroundMusicPrefab: {fileID: 82186474276294444, guid: f8119f9670c3aa74ca8ee2346446a2c3,

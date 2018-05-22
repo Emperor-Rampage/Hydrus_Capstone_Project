@@ -34,6 +34,7 @@ public class AbilityTree
     public void Initialize(PlayerClass playerClass)
     {
         List<AbilityObject> t1 = playerClass.BaseAbilities;
+
         List<AbilityObject> prevTier;
         tiers = new List<List<AbilityObject>>();
         tiers.Add(t1);
@@ -41,15 +42,19 @@ public class AbilityTree
         prevTier = t1;
         for (int t = 1; t < numTiers; t++)
         {
-            var tier = new List<AbilityObject>();
+            var tier = new HashSet<AbilityObject>();
             // var uiTier = new List<GameObject>();
             foreach (AbilityObject ability in prevTier)
             {
-                tier.AddRange(ability.NextTier);
+                foreach (AbilityObject nextAbility in ability.NextTier) {
+                    tier.Add(nextAbility);
+                }
+                // tier.AddRange(ability.NextTier);
             }
-            tiers.Add(tier);
+            var tierList = tier.ToList();
+            tiers.Add(tierList);
             // UITiers.Add(uiTier);
-            prevTier = tier;
+            prevTier = tierList;
         }
 
         TotalNumLeafs = tiers[tiers.Count - 1].Count;

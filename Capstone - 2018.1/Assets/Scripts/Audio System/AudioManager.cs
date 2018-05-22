@@ -7,6 +7,10 @@ namespace AudioClasses
 {
     public class AudioManager : MonoBehaviour
     {
+        [Header("UI Sound Settings")]
+        [SerializeField] int maxUISounds;
+        Stack<AudioSource> uiSoundPool = new Stack<AudioSource>();
+
         [Header("Music Settings")]
 
         [SerializeField]
@@ -25,6 +29,56 @@ namespace AudioClasses
         // FIXME: Odd bug. Sometimes if the player moves immediately after the cast of an ability is complete,
         //        the sound effect will glitch and only play for a single frame.
         //        Attempts to replicate this bug seemed to indicate that it is random.
+
+        public void PlayUISound(SoundEffect soundEffect) {
+            if (soundEffect.Clip == null)
+            {
+                Debug.LogWarning("WARNING: SoundEffect AudioClip is null.");
+                return;
+            }
+
+            // Get an audio source from the pool, set its clip, volume, and pitch from the soundEffect object.
+            // If the pool is empty, create a new source and do the same.
+            // Then, play the sound. push into the pool when done.
+
+            AudioSource source;
+            if (uiSoundPool.Count > 0)
+            {
+                source = uiSoundPool.Pop();
+                source.clip = soundEffect.Clip;
+                source.volume = soundEffect.Volume;
+                source.pitch = soundEffect.Pitch;
+            }
+            else
+            {
+                source = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+                source.clip = soundEffect.Clip;
+                source.volume = soundEffect.Volume;
+                source.pitch = soundEffect.Pitch;
+            }
+
+            source.Play();
+            StartCoroutine(AddToUIPool(source, source.clip.length));
+        }
+
+        IEnumerator AddToUIPool(AudioSource source, float delay = 0f)
+        {
+            // Wait the duration of the sound effect, then push it into the pool.
+            // If the pool size has exceeded the maximum pool size, pop the excess off the stack and trim the stack.
+            yield return new WaitForSeconds(delay);
+            // sourceObject.SetActive(false);
+            uiSoundPool.Push(source);
+
+            if (uiSoundPool.Count > maxUISounds)
+            {
+                // Debug.Log("Reached maxPoolSize, trimming excess.");
+                for (int i = uiSoundPool.Count; i > maxUISounds; i--)
+                {
+                    Destroy(uiSoundPool.Pop());
+                }
+                uiSoundPool.TrimExcess();
+            }
+        }
 
         public void FadeInMusic(BackgroundMusic bgMusic, float fadeTime = defaultFadeTime)
         {

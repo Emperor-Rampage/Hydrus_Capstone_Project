@@ -78,6 +78,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     UIManager uiManager;
     // A reference to the AudioManager instance, which is created at runtime, and handles all audio.
     AudioManager audioManager;
+    public AudioManager AudioManager { get { return audioManager; } }
     AIManager aiManager;
     public MiniMapCam MiniMapCam { get; private set; }
 
@@ -888,58 +889,60 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             uiManager.TogglePause();
         }
-
-        if (!uiManager.Paused && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
-        {
-            Direction inputDir = GetInputDirection();
-            if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit)
-            {
-                ExitLevel();
-            }
-            else if (inputDir != Direction.Null)
-            {
-                MoveEntityLocation(player, inputDir);
-                //                MoveEntityInstance(player, inputDir);
-            }
-            else if (Input.GetKey(settingsManager.TurnLeftKey))
-            {
-                TurnEntityInstanceLeft(player);
-            }
-            else if (Input.GetKey(settingsManager.TurnRightKey))
-            {
-                TurnEntityInstanceRight(player);
-            }
-            else if (Input.GetKey(settingsManager.Ability1Key))
-            {
-                CastPlayerAbility(player, 0);
-            }
-            else if (Input.GetKey(settingsManager.Ability2Key))
-            {
-                CastPlayerAbility(player, 1);
-            }
-            else if (Input.GetKey(settingsManager.Ability3Key))
-            {
-                CastPlayerAbility(player, 2);
-            }
-            else if (Input.GetKey(settingsManager.Ability4Key))
-            {
-                CastPlayerAbility(player, 3);
-            }
-            else if (Input.GetKeyDown(KeyCode.Minus))
-            {
-                bool alive = player.Damage(25, (player.CastProgress >= interruptPercentage));
-                PerformEntityDeathCheck(player, alive);
-
-                uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
-            }
-            else if (Input.GetKeyDown(KeyCode.Equals))
-            {
-                player.Heal(25);
-                uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
-            }
-            else if (Input.GetKeyDown(KeyCode.F))
+        if (!uiManager.Paused) {
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 uiManager.ToggleTree();
+            }
+
+            if (!uiManager.ShowingTree && ! uiManager.ShowingMap && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
+            {
+                Direction inputDir = GetInputDirection();
+                if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit)
+                {
+                    ExitLevel();
+                }
+                else if (inputDir != Direction.Null)
+                {
+                    MoveEntityLocation(player, inputDir);
+                    //                MoveEntityInstance(player, inputDir);
+                }
+                else if (Input.GetKey(settingsManager.TurnLeftKey))
+                {
+                    TurnEntityInstanceLeft(player);
+                }
+                else if (Input.GetKey(settingsManager.TurnRightKey))
+                {
+                    TurnEntityInstanceRight(player);
+                }
+                else if (Input.GetKey(settingsManager.Ability1Key))
+                {
+                    CastPlayerAbility(player, 0);
+                }
+                else if (Input.GetKey(settingsManager.Ability2Key))
+                {
+                    CastPlayerAbility(player, 1);
+                }
+                else if (Input.GetKey(settingsManager.Ability3Key))
+                {
+                    CastPlayerAbility(player, 2);
+                }
+                else if (Input.GetKey(settingsManager.Ability4Key))
+                {
+                    CastPlayerAbility(player, 3);
+                }
+                else if (Input.GetKeyDown(KeyCode.Minus))
+                {
+                    bool alive = player.Damage(25, (player.CastProgress >= interruptPercentage));
+                    PerformEntityDeathCheck(player, alive);
+
+                    uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+                }
+                else if (Input.GetKeyDown(KeyCode.Equals))
+                {
+                    player.Heal(25);
+                    uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+                }
             }
         }
     }

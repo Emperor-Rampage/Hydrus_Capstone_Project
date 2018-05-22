@@ -8,8 +8,6 @@ public class AbilityInfoContainer : MonoBehaviour
 {
     [SerializeField] TMP_Text nameText;
     public TMP_Text NameText { get { return nameText; } }
-    [SerializeField] TMP_Text costText;
-    public TMP_Text CostText { get { return costText; } }
     [SerializeField] TMP_Text typeText;
     public TMP_Text TypeText { get { return typeText; } }
     [SerializeField] TMP_Text tooltipText;
@@ -24,4 +22,8 @@ public class AbilityInfoContainer : MonoBehaviour
     public TMP_Text AreaText { get { return areaText; } }
     [SerializeField] RawImage aoeImage;
     public RawImage AOEImage { get { return aoeImage; } }
+    [SerializeField] GameObject effectsObject;
+    public GameObject EffectsObject { get { return effectsObject; } }
+    [SerializeField] TMP_Text costText;
+    public TMP_Text CostText { get { return costText; } }
 }

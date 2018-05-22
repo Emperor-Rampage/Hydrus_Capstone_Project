@@ -22,7 +22,7 @@ MonoBehaviour:
     pitch: 0
   statusEffects: []
   type: 1
-  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  aoeSprite: {fileID: 0}
   range: 0
   cooldown: 8
   castTime: 1.5
