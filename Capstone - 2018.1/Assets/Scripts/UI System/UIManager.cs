@@ -31,13 +31,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text fadeText;
     [Header("Sound Settings")]
     [SerializeField]
-    public SoundEffect menuFX1;
-    [SerializeField]
-    public SoundEffect menuFX2;
-    [SerializeField]
-    public SoundEffect menuFXAscending;
-    [SerializeField]
-    public SoundEffect menuFXDescending;
+    UISound defaultHoverSound = null;
+    [SerializeField] UISound defaultClickSound = null;
 
     [Space(2)]
     [Header("Menu Settings")]
@@ -301,9 +296,12 @@ public class UIManager : MonoBehaviour
                     // container.Index = abilityTree.GetTreeAbilityIndex(ability.Tier - 1, ability);
                     container.Icon.sprite = ability.Icon;
 
-                    if (tree.IsCurrentAbility(ability) || tree.IsAvailable(ability)) {
+                    if (tree.IsCurrentAbility(ability) || tree.IsAvailable(ability))
+                    {
                         container.DimObject.SetActive(false);
-                    } else {
+                    }
+                    else
+                    {
                         container.DimObject.SetActive(true);
                     }
                     // if (!tree.IsCurrentAbility(ability) && !tree.IsAvailable(ability)) {
@@ -467,9 +465,12 @@ public class UIManager : MonoBehaviour
     public void ToggleTree()
     {
         ShowingTree = !ShowingTree;
-        if (ShowingTree) {
+        if (ShowingTree)
+        {
             ShowHUD(4);
-        } else {
+        }
+        else
+        {
             ShowHUD(0);
         }
     }
@@ -565,8 +566,10 @@ public class UIManager : MonoBehaviour
         mainSettingsContainer.frameRateDropdown.value = settings.FrameRateIndex;
 
         mainSettingsContainer.masterSlider.value = settings.MasterVolume;
+        mainSettingsContainer.systemSlider.value = settings.SystemVolume;
         mainSettingsContainer.musicSlider.value = settings.MusicVolume;
         mainSettingsContainer.fxSlider.value = settings.FXVolume;
+        mainSettingsContainer.ambientSlider.value = settings.AmbientVolume;
 
         UpdateSettingsElements(settings);
     }
@@ -576,8 +579,10 @@ public class UIManager : MonoBehaviour
         mainSettingsContainer.maxHealthText.text = mainSettingsContainer.maxHealthSlider.value.ToString("0%");
 
         mainSettingsContainer.masterValueText.text = mainSettingsContainer.masterSlider.value.ToString("0%");
+        mainSettingsContainer.systemValueText.text = mainSettingsContainer.systemSlider.value.ToString("0%");
         mainSettingsContainer.musicValueText.text = mainSettingsContainer.musicSlider.value.ToString("0%");
         mainSettingsContainer.fxValueText.text = mainSettingsContainer.fxSlider.value.ToString("0%");
+        mainSettingsContainer.ambientValueText.text = mainSettingsContainer.ambientSlider.value.ToString("0%");
     }
 
     public void ShowHUD(int index)
@@ -651,8 +656,10 @@ public class UIManager : MonoBehaviour
         hudSettingsContainer.frameRateDropdown.value = settings.FrameRateIndex;
 
         hudSettingsContainer.masterSlider.value = settings.MasterVolume;
+        hudSettingsContainer.systemSlider.value = settings.SystemVolume;
         hudSettingsContainer.musicSlider.value = settings.MusicVolume;
         hudSettingsContainer.fxSlider.value = settings.FXVolume;
+        hudSettingsContainer.ambientSlider.value = settings.AmbientVolume;
 
         UpdateHUDSettingsElements(settings);
     }
@@ -662,8 +669,10 @@ public class UIManager : MonoBehaviour
         hudSettingsContainer.maxHealthText.text = hudSettingsContainer.maxHealthSlider.value.ToString("0%");
 
         hudSettingsContainer.masterValueText.text = hudSettingsContainer.masterSlider.value.ToString("0%");
+        hudSettingsContainer.systemValueText.text = hudSettingsContainer.systemSlider.value.ToString("0%");
         hudSettingsContainer.musicValueText.text = hudSettingsContainer.musicSlider.value.ToString("0%");
         hudSettingsContainer.fxValueText.text = hudSettingsContainer.fxSlider.value.ToString("0%");
+        hudSettingsContainer.ambientValueText.text = hudSettingsContainer.ambientSlider.value.ToString("0%");
     }
 
     public void ToggleBorderHighlight()
@@ -836,13 +845,19 @@ public class UIManager : MonoBehaviour
         //        Tween.Value(0f, 1f, (value) => enemyCastBar.fillAmount = value, castTime, 0f, completeCallback: () => enemyCastBar.fillAmount = 0f);
     }
 
-    void RefreshAbilityTree() {
-        foreach (TreeAbility treeAbility in treeAbilities) {
+    void RefreshAbilityTree()
+    {
+        foreach (TreeAbility treeAbility in treeAbilities)
+        {
             AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
-            if (ability != null) {
-                if (abilityTree.IsCurrentAbility(ability) || abilityTree.IsAvailable(ability)) {
+            if (ability != null)
+            {
+                if (abilityTree.IsCurrentAbility(ability) || abilityTree.IsAvailable(ability))
+                {
                     treeAbility.DimObject.SetActive(false);
-                } else {
+                }
+                else
+                {
                     treeAbility.DimObject.SetActive(true);
                 }
             }
@@ -888,18 +903,21 @@ public class UIManager : MonoBehaviour
             }
 
             GameObject effectsObject = abilityInfoContainer.EffectsObject;
-            
+
             // Clear the list of effects.
-            foreach (Transform child in effectsObject.transform) {
+            foreach (Transform child in effectsObject.transform)
+            {
                 Destroy(child.gameObject);
             }
             // Display all of the effects.
-            foreach (AbilityEffect effect in ability.StatusEffects) {
+            foreach (AbilityEffect effect in ability.StatusEffects)
+            {
                 TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
                 DisplayEffectInTree(effectText, effect);
             }
             // If the ability has no effects, display None.
-            if (ability.StatusEffects.Count <= 0) {
+            if (ability.StatusEffects.Count <= 0)
+            {
                 TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
                 effectText.text = "None";
             }
@@ -918,7 +936,8 @@ public class UIManager : MonoBehaviour
         treeAbility.HighlightObject.SetActive(false);
     }
 
-    public void OnTreeAbilityClicked(PointerEventData data) {
+    public void OnTreeAbilityClicked(PointerEventData data)
+    {
         TreeAbility treeAbility = data.pointerPress.GetComponentInParent<TreeAbility>();
         AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
 
@@ -947,12 +966,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnButtonHover(SoundEffect soundEffect) {
-        manager.AudioManager.PlayUISound(soundEffect);
+    public void OnButtonHover(UISound uiSound = null)
+    {
+        if (uiSound == null)
+            uiSound = defaultHoverSound;
+        manager.AudioManager.PlayUISound(uiSound);
     }
 
-    public void OnMenuButtonClick(SoundEffect soundEffect) {
-        manager.AudioManager.PlayUISound(soundEffect);
+    public void OnButtonClick(UISound uiSound = null)
+    {
+        if (uiSound == null)
+            uiSound = defaultClickSound;
+        manager.AudioManager.PlayUISound(uiSound);
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)

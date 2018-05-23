@@ -235,12 +235,16 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         // TODO: Add sound settings.
         Debug.Log("Master volume: " + settingsManager.MasterVolume);
         float masterDBValue = 20f * Mathf.Log10(settingsManager.MasterVolume);
+        float systemDBValue = 20f * Mathf.Log10(settingsManager.SystemVolume);
         float musicDBValue = 20f * Mathf.Log10(settingsManager.MusicVolume);
         float fxDBValue = 20f * Mathf.Log10(settingsManager.FXVolume);
+        float ambientDBValue = 20f * Mathf.Log10(settingsManager.AmbientVolume);
 
         mixer.SetFloat("MasterVolume", masterDBValue);
+        mixer.SetFloat("SystemVolume", systemDBValue);
         mixer.SetFloat("MusicVolume", musicDBValue);
         mixer.SetFloat("FXVolume", fxDBValue);
+        mixer.SetFloat("AmbientVolume", ambientDBValue);
         // TODO: Add controls settings.
 
         settingsManager.SaveSettings();
@@ -889,13 +893,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             uiManager.TogglePause();
         }
-        if (!uiManager.Paused) {
+        if (!uiManager.Paused)
+        {
             if (Input.GetKeyDown(KeyCode.F))
             {
                 uiManager.ToggleTree();
             }
 
-            if (!uiManager.ShowingTree && ! uiManager.ShowingMap && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
+            if (!uiManager.ShowingTree && !uiManager.ShowingMap && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
             {
                 Direction inputDir = GetInputDirection();
                 if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit)

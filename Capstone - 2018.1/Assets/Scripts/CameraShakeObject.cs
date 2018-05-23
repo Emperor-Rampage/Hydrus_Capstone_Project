@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Custom Shake Event", menuName = "Custom/Custome Shake Event", order = 1)]
+[CreateAssetMenu(fileName = "Custom Shake Event", menuName = "Game/Custom Shake Event", order = 1)]
 public class CameraShakeObject : ScriptableObject
 {
     public enum Target

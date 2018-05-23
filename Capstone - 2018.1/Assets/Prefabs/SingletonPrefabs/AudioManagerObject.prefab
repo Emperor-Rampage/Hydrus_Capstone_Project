@@ -52,6 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxUISounds: 10
+  uiAudioMixerGroup: {fileID: 243121292516530790, guid: b10053a6ddd96554faaf886ff5dbd5c7,
+    type: 2}
   soundEffectPrefab: {fileID: 82202162509312074, guid: e5d7cae53221e5549998dd5b76339ecc,
     type: 2}
   backgroundMusicPrefab: {fileID: 82186474276294444, guid: f8119f9670c3aa74ca8ee2346446a2c3,

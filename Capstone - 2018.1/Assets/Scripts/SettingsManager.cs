@@ -37,8 +37,10 @@ public class SettingsData
 
     // Sound
     public float masterVolume = 1f;
+    public float systemVolume = 1f;
     public float musicVolume = 1f;
     public float fxVolume = 1f;
+    public float ambientVolume = 1f;
 
     // Controls
     public KeyCode interactKey = KeyCode.Space;
@@ -82,8 +84,10 @@ public class SettingsManager
     public int FrameRateIndex { get { return SettingsData.frameRateIndex; } private set { SettingsData.frameRateIndex = value; } }
     // Sound settings
     public float MasterVolume { get { return SettingsData.masterVolume; } private set { SettingsData.masterVolume = value; } }
+    public float SystemVolume { get { return SettingsData.systemVolume; } private set { SettingsData.systemVolume = value; } }
     public float MusicVolume { get { return SettingsData.musicVolume; } private set { SettingsData.musicVolume = value; } }
     public float FXVolume { get { return SettingsData.fxVolume; } private set { SettingsData.fxVolume = value; } }
+    public float AmbientVolume { get { return SettingsData.ambientVolume; } private set { SettingsData.ambientVolume = value; } }
     // Controls settings
     public KeyCode InteractKey { get { return SettingsData.interactKey; } private set { SettingsData.interactKey = value; } }
     public KeyCode TurnLeftKey { get { return SettingsData.turnLeftKey; } private set { SettingsData.turnLeftKey = value; } }
@@ -105,11 +109,6 @@ public class SettingsManager
             data = JsonUtility.FromJson<PlayerData>(dataJsonString);
         }
 
-        // if (PlayerPrefs.HasKey(GameSaveKey)) {
-        //     Debug.Log("Player available. Loading.");
-        //     player = (Player)JsonUtility.FromJson(PlayerPrefs.GetString(GameSaveKey, ""), typeof(Player));
-        // }
-        // Debug.Log("Loaded Player " + player.Name);
         return data;
     }
 
@@ -120,11 +119,6 @@ public class SettingsManager
 
         string filePath = Path.Combine(Application.persistentDataPath, gameSaveFileName);
         File.WriteAllText(filePath, dataJsonString);
-
-        // if (player != null) {
-        //     Debug.Log("Player is not null. Saving.");
-        //     PlayerPrefs.SetString(GameSaveKey, JsonUtility.ToJson(player));
-        // }
     }
 
     public void SetSettings(UIManager uiManager)
@@ -145,24 +139,12 @@ public class SettingsManager
         SettingsData.frameRateIndex = container.frameRateDropdown.value;
         // Sound
         SettingsData.masterVolume = container.masterSlider.value;
+        SettingsData.systemVolume = container.systemSlider.value;
         SettingsData.musicVolume = container.musicSlider.value;
         SettingsData.fxVolume = container.fxSlider.value;
-
+        SettingsData.ambientVolume = container.ambientSlider.value;
         // Controls
-        // // Gameplay
-        // HealthPercent = container.maxHealthSlider.value;
-        // // Graphics
-        // Fullscreen = container.fullscreenToggle.isOn;
-        // ResolutionIndex = container.resolutionDropdown.value;
-        // TextureQualityIndex = container.textureDropdown.value;
-        // AntialiasingIndex = container.antialiasingDropdown.value;
-        // VSyncIndex = container.vSyncDropdown.value;
-        // FrameRateIndex = container.frameRateDropdown.value;
-        // // Sound
-        // MasterVolume = container.masterSlider.value;
-        // MusicVolume = container.musicSlider.value;
-        // FXVolume = container.fxSlider.value;
-        // // Controls
+
     }
 
     public bool LoadSettings()
@@ -177,27 +159,6 @@ public class SettingsManager
         }
 
         return false;
-
-        // if (PlayerPrefs.HasKey(FirstPlayKey))
-        // {
-        //     // Gameplay
-        //     HealthPercent = PlayerPrefs.GetFloat(MaxHealthSliderKey, HealthPercent);
-
-        //     // Graphics
-        //     Fullscreen = GetBool(FullScreenToggleKey, Fullscreen);
-        //     ResolutionIndex = PlayerPrefs.GetInt(ResolutionDropdownKey, ResolutionIndex);
-        //     TextureQualityIndex = PlayerPrefs.GetInt(TextureDropdownKey, TextureQualityIndex);
-        //     AntialiasingIndex = PlayerPrefs.GetInt(AntialiasingDropdownKey, AntialiasingIndex);
-        //     VSyncIndex = PlayerPrefs.GetInt(VSyncDropdownKey, VSyncIndex);
-        //     FrameRateIndex = PlayerPrefs.GetInt(FrameRateDropdownKey, FrameRateIndex);
-
-        //     // Sound
-        //     MasterVolume = PlayerPrefs.GetFloat(MasterSliderKey, MasterVolume);
-        //     MusicVolume = PlayerPrefs.GetFloat(MusicSliderKey, MusicVolume);
-        //     FXVolume = PlayerPrefs.GetFloat(FXSliderKey, FXVolume);
-
-        //     // Controls
-        // }
     }
     public void SaveSettings()
     {
@@ -205,26 +166,6 @@ public class SettingsManager
 
         string filePath = Path.Combine(Application.persistentDataPath, settingsFileName);
         File.WriteAllText(filePath, dataJsonString);
-
-        // SetBool(FirstPlayKey, false);
-
-        // // Gameplay
-        // PlayerPrefs.SetFloat(MaxHealthSliderKey, HealthPercent);
-
-        // // Graphics
-        // SetBool(FullScreenToggleKey, Fullscreen);
-        // PlayerPrefs.SetInt(ResolutionDropdownKey, ResolutionIndex);
-        // PlayerPrefs.SetInt(TextureDropdownKey, TextureQualityIndex);
-        // PlayerPrefs.SetInt(AntialiasingDropdownKey, AntialiasingIndex);
-        // PlayerPrefs.SetInt(VSyncDropdownKey, VSyncIndex);
-        // PlayerPrefs.SetInt(FrameRateDropdownKey, FrameRateIndex);
-
-        // // Sound
-        // PlayerPrefs.SetFloat(MasterSliderKey, MasterVolume);
-        // PlayerPrefs.SetFloat(MusicSliderKey, MusicVolume);
-        // PlayerPrefs.SetFloat(FXSliderKey, FXVolume);
-
-        // // Controls
     }
 
     void SetBool(string name, bool value)

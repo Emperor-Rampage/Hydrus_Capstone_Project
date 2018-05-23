@@ -24,14 +24,14 @@ public class SettingsContainer : MonoBehaviour
     [Header("Sound")]
     public Slider masterSlider;
     public TMP_Text masterValueText;
+    public Slider systemSlider;
+    public TMP_Text systemValueText;
     public Slider musicSlider;
     public TMP_Text musicValueText;
     public Slider fxSlider;
     public TMP_Text fxValueText;
     public Slider ambientSlider;
     public TMP_Text ambientValueText;
-    public Slider systemSlider;
-    public TMP_Text systemValueText;
 
     [Header("Controls")]
 

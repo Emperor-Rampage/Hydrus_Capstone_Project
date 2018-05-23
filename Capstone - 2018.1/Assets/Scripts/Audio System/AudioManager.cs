@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Pixelplacement;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace AudioClasses
 {
@@ -9,6 +10,7 @@ namespace AudioClasses
     {
         [Header("UI Sound Settings")]
         [SerializeField] int maxUISounds;
+        [SerializeField] AudioMixerGroup uiAudioMixerGroup;
         Stack<AudioSource> uiSoundPool = new Stack<AudioSource>();
 
         [Header("Music Settings")]
@@ -30,7 +32,8 @@ namespace AudioClasses
         //        the sound effect will glitch and only play for a single frame.
         //        Attempts to replicate this bug seemed to indicate that it is random.
 
-        public void PlayUISound(SoundEffect soundEffect) {
+        public void PlayUISound(UISound soundEffect)
+        {
             if (soundEffect.Clip == null)
             {
                 Debug.LogWarning("WARNING: SoundEffect AudioClip is null.");
@@ -52,6 +55,7 @@ namespace AudioClasses
             else
             {
                 source = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+                source.outputAudioMixerGroup = uiAudioMixerGroup;
                 source.clip = soundEffect.Clip;
                 source.volume = soundEffect.Volume;
                 source.pitch = soundEffect.Pitch;
