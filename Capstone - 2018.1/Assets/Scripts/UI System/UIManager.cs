@@ -216,6 +216,18 @@ public class UIManager : MonoBehaviour
             GameObject buttonObject = GameObject.Instantiate(classButtonPrefab, classMenu.transform, false);
             buttonObject.GetComponentInChildren<TMP_Text>().text = playerClass.Name;
             buttonObject.GetComponent<Button>().onClick.AddListener(() => GameManager.Instance.SelectClass(playerClass));
+
+            EventTrigger trigger = buttonObject.GetComponent<EventTrigger>();
+
+            EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+            enterEntry.eventID = EventTriggerType.PointerEnter;
+            enterEntry.callback.AddListener((data) => OnButtonHover());
+            trigger.triggers.Add(enterEntry);
+
+            EventTrigger.Entry clickEntry = new EventTrigger.Entry();
+            clickEntry.eventID = EventTriggerType.PointerClick;
+            clickEntry.callback.AddListener((data) => OnButtonClick());
+            trigger.triggers.Add(clickEntry);
         }
     }
 
@@ -337,6 +349,14 @@ public class UIManager : MonoBehaviour
 
             }
 
+        }
+
+        foreach (TreeAbility treeAbility in treeAbilities)
+        {
+            AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
+            foreach (AbilityObject nextAbility in ability.NextTier) {
+                TreeAbility nextTreeAbility = treeAbilities.FirstOrDefault((tAbil) => tAbil.Index == nextAbility.Index && tAbil.Tier == nextAbility.Tier);
+            }
         }
 
         // For each base ability.
@@ -924,6 +944,7 @@ public class UIManager : MonoBehaviour
 
             abilityInfoContainer.CostText.text = "Cost: " + ability.Cost.ToString();
         }
+        OnButtonHover();
     }
 
     public void OnTreeAbilityUnHover(PointerEventData data)
@@ -944,6 +965,7 @@ public class UIManager : MonoBehaviour
         abilityTree.UpgradeAbility(ability);
         RefreshAbilityTree();
         SetUpAbilityIcons(abilityTree.Player);
+        OnButtonClick();
     }
 
     void DisplayEffectInTree(TMP_Text effectText, AbilityEffect effect)
