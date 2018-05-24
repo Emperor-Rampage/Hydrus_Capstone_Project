@@ -53,10 +53,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     [Header("Level Pieces")]
     [SerializeField]
-    List<MapPrefab> wallPrefabs;
-    [SerializeField] List<MapPrefab> floorPrefabs;
-    [SerializeField] List<MapPrefab> ceilingPrefabs;
-    [SerializeField] List<MapPrefab> cornerPrefabs;
+    List<LevelPrefab> wallPrefabs;
+    [SerializeField] List<LevelPrefab> floorPrefabs;
+    [SerializeField] List<LevelPrefab> ceilingPrefabs;
+    [SerializeField] List<LevelPrefab> cornerPrefabs;
+    [SerializeField] List<LevelPrefab> doorPrefabs;
 
     [Space(10)]
     [Header("Game")]
@@ -69,7 +70,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     PlayerClass selectedClass;
 
     // A reference to the Map object, which handles the general level management.
-    [SerializeField] Map map;
+    [SerializeField] LevelManager levelManager;
     // A reference to the current level, because caching is more efficient.
     Level level;
     PlayerData playerData;
@@ -101,10 +102,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     Coroutine playerMovementCoroutine;
 
     // Properties: Because why not do things all proper-like.
-    public Map Map
+    public LevelManager LevelManager
     {
-        get { return map; }
-        private set { map = value; }
+        get { return levelManager; }
+        private set { levelManager = value; }
     }
 
     public float Movespeed { get { return movespeed; } }
@@ -127,7 +128,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             abilityIndexes = indexes,
             cores = 0
         };
-        Map.SetCurrentLevel(0);
+        LevelManager.SetCurrentLevel(0);
         LoadLevel(1f);
     }
     public void Continue()
@@ -136,7 +137,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (playerData.classIndex >= 0 && playerData.classIndex < classes.Count)
         {
             selectedClass = classes[playerData.classIndex];
-            Map.SetCurrentLevel(0);
+            LevelManager.SetCurrentLevel(0);
             LoadLevel(1f);
         }
         else
@@ -426,7 +427,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         int sceneIndex = 0;
         // Debug.Log("Loading level " + sceneIndex);
         level = null;
-        Map.Reset();
+        LevelManager.Reset();
         SceneManager.LoadScene(sceneIndex);
     }
 
@@ -454,7 +455,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             }
         }
 
-        int sceneIndex = Map.CurrentLevel.sceneIndex;
+        int sceneIndex = LevelManager.CurrentLevel.sceneIndex;
         // Debug.Log("Loading level " + sceneIndex);
         SceneManager.LoadScene(sceneIndex);
     }
@@ -473,7 +474,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             player = level.Player;
         }
         // Check to see if we're loading a level.
-        level = Map.CurrentLevel;
+        level = LevelManager.CurrentLevel;
 
         // If there is a level to load, load it in.
         // Otherwise, we're loading the title screen.
@@ -541,7 +542,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     void BuildLevel_Procedural()
     {
-        float cellScale = Map.CellScale;
+        float cellScale = LevelManager.CellScale;
         foreach (Cell cell in level.cells)
         {
             // TODO: Switch to cell.Type == CellType.Procedural, instead of != CellType.Empty.
@@ -549,25 +550,27 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // and manually place the static areas.
             if (cell.Type != CellType.Empty && level.HasConnections(cell))
             {
-                Vector3 center = Map.GetCellPosition(cell);
+                Vector3 center = LevelManager.GetCellPosition(cell);
                 GameObject cellInstance = new GameObject("Cell_" + cell.Index);
                 cellInstance.transform.position = center;
-                GameObject.Instantiate(Map.GetRandomPrefab(floorPrefabs), cellInstance.transform);
-                GameObject.Instantiate(Map.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
+                GameObject.Instantiate(LevelManager.GetRandomPrefab(floorPrefabs), cellInstance.transform);
+                GameObject.Instantiate(LevelManager.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
                 List<GameObject> wallInstances = new List<GameObject>();
                 for (int w = 0; w < 4; w++)
                 {
-                    GameObject wallInstance = GameObject.Instantiate(Map.GetRandomPrefab(wallPrefabs), cellInstance.transform);
+                    GameObject wallInstance;
+                    if (cell.Type != CellType.Exit) {
+                        wallInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(wallPrefabs), cellInstance.transform);
+                    } else {
+                        Debug.Log("Connecton cell! Adding a door prefab to all walls.");
+                        wallInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(doorPrefabs), cellInstance.transform);
+                    }
                     wallInstance.name = "Wall_" + ((Direction)w).ToString();
                     wallInstance.transform.rotation = Quaternion.Euler(0f, 90f * w, 0f);
                     wallInstances.Add(wallInstance);
                 }
 
                 cellInstance.transform.localScale = Vector3.one * cellScale;
-
-
-                //                GameObject cellInstance = GameObject.Instantiate(cellPrefabDebug, center, Quaternion.identity);
-                //                cellInstance.transform.localScale = Vector3.one * cellScale;
 
                 for (int d = 0; d < 4; d++)
                 {
@@ -583,7 +586,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     void BuildLevel_Procedural_Corners()
     {
-        float cellScale = Map.CellScale;
+        float cellScale = LevelManager.CellScale;
         Vector3 offset = new Vector3(0.5f * cellScale, 0f, 0.5f * cellScale);
         // Iterate through each corner. Of cell up left, up right, down left, down right,
         //      IF, none are connected and at least one has connections, create CORNER
@@ -593,9 +596,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         //      OR, are all connected (four connections), do not create CORNER
 
         // Iterating through corners. Corner would be +0.5,+0.5. Actually iterating through down-left cell indices.
-        for (int x = -1; x < Map.MaxWidth; x++)
+        for (int x = -1; x < LevelManager.MaxWidth; x++)
         {
-            for (int z = -1; z < Map.MaxDepth; z++)
+            for (int z = -1; z < LevelManager.MaxDepth; z++)
             {
                 // Get the indexes for surrounding cells.
                 List<int> cornerIndexes = new List<int>();
@@ -662,8 +665,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     if (connections)
                     {
                         // Create corner.
-                        Vector3 center = Map.GetCellPosition(x, z) + offset;
-                        GameObject cornerInstance = GameObject.Instantiate(Map.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                        Vector3 center = LevelManager.GetCellPosition(x, z) + offset;
+                        GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
                         // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
                         cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                     }
@@ -688,8 +691,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     else
                     {
                         // Create corner
-                        Vector3 center = Map.GetCellPosition(x, z) + offset;
-                        GameObject cornerInstance = GameObject.Instantiate(Map.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                        Vector3 center = LevelManager.GetCellPosition(x, z) + offset;
+                        GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
                         // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
                         cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                     }
@@ -697,8 +700,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 else if (numConnections == 3)
                 {
                     // Create corner
-                    Vector3 center = Map.GetCellPosition(x, z) + offset;
-                    GameObject cornerInstance = GameObject.Instantiate(Map.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                    Vector3 center = LevelManager.GetCellPosition(x, z) + offset;
+                    GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
                     // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
                     cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                 }
@@ -731,7 +734,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     //   If there is a connection, creates a block to indicate the connection.
     void BuildLevel_Debug(Level level)
     {
-        float cellScale = Map.CellScale;
+        float cellScale = LevelManager.CellScale;
         // Main iteration.
         foreach (Cell cell in level.cells)
         {
@@ -739,7 +742,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (cell.Type != CellType.Empty && level.HasConnections(cell))
             {
                 // Gets the correct positions, sizes, and colors and sets up the block with the determined values.
-                Vector3 center = Map.GetCellPosition(cell);
+                Vector3 center = LevelManager.GetCellPosition(cell);
                 Vector3 size = new Vector3(0.5f, 0.1f, 0.5f) * cellScale;
                 GameObject block = GameObject.Instantiate(blockPrefab, center, Quaternion.identity);
                 block.transform.localScale = size;
@@ -898,6 +901,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (Input.GetKeyDown(KeyCode.F))
             {
                 uiManager.ToggleTree();
+            } else if (Input.GetKeyDown(KeyCode.V)) {
+                uiManager.ToggleMap();
             }
 
             if (!uiManager.ShowingTree && !uiManager.ShowingMap && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
@@ -1032,7 +1037,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         level.Player.State = EntityState.Null;
         audioManager.FadeOutMusic(1f);
         // If the entity has moved to an exit cell and the entity is the player.
-        Map.NextLevel(level.Player.Cell);
+        LevelManager.NextLevel(level.Player.Cell);
         LoadLevel(0.5f);
     }
 
@@ -1093,7 +1098,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         //Probably going to make a separate method to handle all this.
-        Tween.Position(entity.Instance.transform, Map.GetCellPosition(neighbor), adjustedMovespeed, 0f, moveCurve, completeCallback: () => entity.State = EntityState.Idle);
+        Tween.Position(entity.Instance.transform, LevelManager.GetCellPosition(neighbor), adjustedMovespeed, 0f, moveCurve, completeCallback: () => entity.State = EntityState.Idle);
         Coroutine movementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
         if (entity.IsPlayer)
         {
@@ -1178,7 +1183,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void SetEntityInstanceLocation(Entity entity)
     {
         var eTransform = entity.Instance.transform;
-        eTransform.position = Map.GetCellPosition(entity.Cell);
+        eTransform.position = LevelManager.GetCellPosition(entity.Cell);
         eTransform.rotation = Quaternion.Euler(0f, 90f * (int)entity.Facing, 0f);
     }
 
@@ -1227,6 +1232,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void PerformAbility(Entity entity, AbilityObject ability)
     {
+        if (entity == null || entity.Instance == null || ability == null)
+            return;
 
         // Play sounds and animations.
         // Deal damage to entities in the cells.
@@ -1350,7 +1357,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (gradualEffectsCoroutine != null)
                 StopCoroutine(gradualEffectsCoroutine);
             audioManager.FadeOutMusic(1f);
-            Map.SetCurrentLevel(0);
+            LevelManager.SetCurrentLevel(0);
             LoadLevel(0.5f);
         }
         else if (!alive && !entity.IsPlayer)
@@ -1367,8 +1374,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void AddIndicator(GameObject indicatorPrefab, Cell cell, Entity entity)
     {
-        GameObject indicatorInstance = GameObject.Instantiate(indicatorPrefab, Map.GetCellPosition(cell), indicatorPrefab.transform.rotation);
-        indicatorInstance.transform.localScale *= Map.CellScale;
+        GameObject indicatorInstance = GameObject.Instantiate(indicatorPrefab, LevelManager.GetCellPosition(cell), indicatorPrefab.transform.rotation);
+        indicatorInstance.transform.localScale *= LevelManager.CellScale;
         Indicator indicator = new Indicator { Instance = indicatorInstance, Cell = cell, Entity = entity };
         indicator.AddIndicator();
     }

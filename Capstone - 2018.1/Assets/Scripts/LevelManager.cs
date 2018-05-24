@@ -6,7 +6,7 @@ using EntityClasses;
 namespace MapClasses
 {
     [System.Serializable]
-    public class MapPrefab
+    public class LevelPrefab
     {
         [SerializeField] GameObject prefab;
         public GameObject Prefab { get { return prefab; } }
@@ -20,7 +20,7 @@ namespace MapClasses
     // A map class that mainly serves as a container for the base level fields, properties, and methods.
     // Contains a list of Levels, the current level index, and methods for setting the current level and moving to new levels.
     [System.Serializable]
-    public class Map
+    public class LevelManager
     {
 
         // Just an arbitrary float which all cell instances' sizes are multiplied by.
@@ -53,7 +53,7 @@ namespace MapClasses
         [SerializeField] public List<Level> levels;
 
         // Would work just as well anywhere else.
-        public Map()
+        public LevelManager()
         {
             CurrentLevel = null;
         }
@@ -116,14 +116,14 @@ namespace MapClasses
             return new Vector3(x * cellScale, 0f, z * cellScale);
         }
 
-        public GameObject GetRandomPrefab(List<MapPrefab> prefabList)
+        public GameObject GetRandomPrefab(List<LevelPrefab> prefabList)
         {
             if (prefabList == null || prefabList.Count == 0)
                 return null;
 
             float totalWeight = 0f;
 
-            foreach (MapPrefab pref in prefabList)
+            foreach (LevelPrefab pref in prefabList)
             {
                 totalWeight += pref.Weight;
             }
@@ -131,7 +131,7 @@ namespace MapClasses
             GameObject prefab = null;
             float choice = Random.Range(0f, totalWeight);
             float cumulative = 0f;
-            foreach (MapPrefab pref in prefabList)
+            foreach (LevelPrefab pref in prefabList)
             {
                 cumulative += pref.Weight;
                 if (choice <= cumulative)

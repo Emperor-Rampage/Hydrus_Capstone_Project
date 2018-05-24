@@ -4004,7 +4004,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 2078068042}
-  levelToLoad: 1
+  levelToLoad: 0
 --- !u!4 &1691095255
 Transform:
   m_ObjectHideFlags: 0
@@ -5337,6 +5337,9 @@ MonoBehaviour:
     weight: 1
   - prefab: {fileID: 1762220230523074, guid: 933b44e120f38b048a2be67da6203ea0, type: 2}
     weight: 0.475
+  doorPrefabs:
+  - prefab: {fileID: 1923685445801174, guid: ef956e87fa85b2b4a80d5cc53a4a415e, type: 2}
+    weight: 1
   abilityTree:
     numTiers: 3
     uiPadding: 300
@@ -5346,7 +5349,7 @@ MonoBehaviour:
   classes:
   - {fileID: 11400000, guid: 57ef3e67e8afae6468c524fa748229f4, type: 2}
   - {fileID: 11400000, guid: 75f2eed1de18ea4459f00fb4ce7fade6, type: 2}
-  map:
+  levelManager:
     cellScale: 2
     maxWidth: 100
     maxDepth: 100
@@ -5361,7 +5364,7 @@ MonoBehaviour:
       exitList: 01000000
       spawnList: []
     - sceneIndex: 3
-      name: Level 1
+      name: Biodome
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: 5de073d3cab0b07488a26b28061a92c0, type: 3}
@@ -5370,46 +5373,43 @@ MonoBehaviour:
       exitList: 02000000
       spawnList:
       - x: 10
-        z: 15
+        z: 14
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
+      - x: 9
+        z: 16
         enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
+      - x: 18
+        z: 5
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
       - x: 16
-        z: 10
-        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
-      - x: 17
         z: 8
         enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
       - x: 2
-        z: 17
-        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
-      - x: 2
-        z: 14
-        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
-      - x: 6
-        z: 24
-        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
-      - x: 10
-        z: 28
-        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
-      - x: 17
-        z: 34
-        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
-      - x: 9
-        z: 23
-        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
-      - x: 13
-        z: 36
-        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
-      - x: 8
         z: 12
         enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
-      - x: 15
-        z: 36
-        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
-      - x: 4
-        z: 26
+      - x: 1
+        z: 8
         enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
-      - x: 7
+      - x: 5
+        z: 22
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
+      - x: 10
+        z: 24
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
+      - x: 8
         z: 30
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
+      - x: 15
+        z: 19
+        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
+      - x: 6
+        z: 25
+        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
+      - x: 3
+        z: 24
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
+      - x: 3
+        z: 17
         enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
       - x: 3
         z: 38
@@ -5417,23 +5417,32 @@ MonoBehaviour:
       - x: 5
         z: 38
         enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
-      - x: 1
-        z: 8
-        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
       - x: 16
-        z: 20
+        z: 36
         enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
+      - x: 11
+        z: 28
+        enemy: {fileID: 11400000, guid: 1b78a0ab5dbb0da4ba67b87fd4b890d5, type: 2}
+      - x: 14
+        z: 34
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
+      - x: 16
+        z: 33
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
+      - x: 13
+        z: 36
+        enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
     - sceneIndex: 3
-      name: Level 2
+      name: Boss!
       levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
       music:
-        audioClip: {fileID: 8300000, guid: 81d653672f436ce4d832f67ac1e8212f, type: 3}
-        volume: 0.3
-        pitch: 1
-      exitList: 00000000
+        audioClip: {fileID: 0}
+        volume: 0
+        pitch: 0
+      exitList: 
       spawnList:
       - x: 5
-        z: 9
+        z: 5
         enemy: {fileID: 11400000, guid: 17458b0414ce3314b9be1f5402143a19, type: 2}
   titleMusic:
     audioClip: {fileID: 8300000, guid: 44275ceb33b8c8e46b5187b5377eaaf0, type: 3}

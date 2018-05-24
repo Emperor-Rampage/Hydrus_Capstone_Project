@@ -84,10 +84,10 @@ namespace MapClasses
                 return;
 
             Debug.Log("Level initialization started..");
-
-            GameManager.Instance.Map.MaxWidth = levelMap.width;
-            GameManager.Instance.Map.MaxDepth = levelMap.height;
-            numIndexes = GameManager.Instance.Map.MaxWidth * GameManager.Instance.Map.MaxDepth;
+            LevelManager levelManager = GameManager.Instance.LevelManager;
+            levelManager.MaxWidth = levelMap.width;
+            levelManager.MaxDepth = levelMap.height;
+            numIndexes = levelManager.MaxWidth * levelManager.MaxDepth;
             cells = new List<Cell>();
             connectionMatrix = new bool[numIndexes, 4];
             // Get the pixels from the texturemap.

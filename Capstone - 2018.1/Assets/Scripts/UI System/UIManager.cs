@@ -106,6 +106,11 @@ public class UIManager : MonoBehaviour
     // Private fields.
     int currentMenu;
     int currentHUD;
+    [Header("Overlay Map Settings")]
+    [SerializeField]
+    TMP_Text mapText;
+    [SerializeField] float miniMapZoom;
+    [SerializeField] float overlayMapZoom;
 
     [Header("Settings Menu Items")]
     [SerializeField]
@@ -348,7 +353,6 @@ public class UIManager : MonoBehaviour
                 }
 
             }
-
         }
 
         foreach (TreeAbility treeAbility in treeAbilities)
@@ -470,13 +474,11 @@ public class UIManager : MonoBehaviour
 
         if (Paused)
         {
-            manager.MiniMapCam.SetZoom(40f);
             Time.timeScale = 0f;
             ShowHUD(1);
         }
         else
         {
-            manager.MiniMapCam.SetZoom(10f);
             Time.timeScale = 1f;
             ShowHUD(0);
         }
@@ -485,6 +487,7 @@ public class UIManager : MonoBehaviour
     public void ToggleTree()
     {
         ShowingTree = !ShowingTree;
+        ShowingMap = false;
         if (ShowingTree)
         {
             ShowHUD(4);
@@ -492,6 +495,18 @@ public class UIManager : MonoBehaviour
         else
         {
             ShowHUD(0);
+        }
+    }
+
+    public void ToggleMap() {
+        ShowingMap = !ShowingMap;
+        ShowingTree = false;
+        if (ShowingMap) {
+            ShowHUD(5);
+            manager.MiniMapCam.SetZoom(overlayMapZoom);
+        } else {
+            ShowHUD(0);
+            manager.MiniMapCam.SetZoom(miniMapZoom);
         }
     }
 
@@ -1044,6 +1059,7 @@ public class UIManager : MonoBehaviour
 
     public void DisplayAreaText(string text)
     {
+        mapText.text = text;
         areaText.text = text;
     }
 }

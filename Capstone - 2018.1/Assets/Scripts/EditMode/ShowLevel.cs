@@ -11,7 +11,7 @@ public class ShowLevel : MonoBehaviour
 
     [SerializeField] GameManager manager;
     [SerializeField] int levelToLoad = 0;
-    Map map;
+    LevelManager levelManager;
 
     void OnDrawGizmos()
     {
@@ -20,9 +20,9 @@ public class ShowLevel : MonoBehaviour
         if (manager == null)
             return;
 
-        map = manager.Map;
+        levelManager = manager.LevelManager;
 
-        var levels = map.levels;
+        var levels = levelManager.levels;
 
         if (levelToLoad < 0 || levelToLoad >= levels.Count)
         {
@@ -51,11 +51,11 @@ public class ShowLevel : MonoBehaviour
         int width = levelMap.width;
         int depth = levelMap.height;
 
-        Vector3 size = new Vector3(0.98f, 0f, 0.98f) * map.CellScale;
+        Vector3 size = new Vector3(0.98f, 0f, 0.98f) * levelManager.CellScale;
         for (int p = 0; p < levelPixels.Length; p++)
         {
             Gizmos.color = levelPixels[p];
-            Vector3 center = new Vector3(Cell.GetX(p, width) * map.CellScale, 0, Cell.GetZ(p, width) * map.CellScale);
+            Vector3 center = new Vector3(Cell.GetX(p, width) * levelManager.CellScale, 0, Cell.GetZ(p, width) * levelManager.CellScale);
 
             Gizmos.DrawWireCube(center, size);
         }
@@ -72,13 +72,13 @@ public class ShowLevel : MonoBehaviour
             if (spawn.EnemyObject != null && spawn.EnemyObject.Enemy != null)
             {
                 Gizmos.color = new Color(1, 0, 0, 0.1f);
-                Vector3 center = new Vector3(spawn.X * map.CellScale, 0f, spawn.Z * map.CellScale);
+                Vector3 center = new Vector3(spawn.X * levelManager.CellScale, 0f, spawn.Z * levelManager.CellScale);
                 foreach (MeshFilter filter in spawn.EnemyObject.Enemy.Instance.GetComponentsInChildren<MeshFilter>())
                 {
                     Transform pieceTransform = filter.transform;
                     if (pieceTransform != null && filter.sharedMesh != null)
                     {
-                        Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.localPosition, pieceTransform.localRotation, filter.transform.localScale * map.CellScale);
+                        Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.localPosition, pieceTransform.localRotation, filter.transform.localScale * levelManager.CellScale);
                     }
                 }
             }

@@ -19,3 +19,4 @@ MonoBehaviour:
     abilities:
     - {fileID: 11400000, guid: 18722e11649a12a459f2e85fa1def5d1, type: 2}
     - {fileID: 11400000, guid: 6023d5c8414fcad448d2ab572a0b4d94, type: 2}
+    - {fileID: 11400000, guid: 7ba8f67cc9cd3dc4ea7432797ec48a65, type: 2}

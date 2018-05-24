@@ -65,7 +65,7 @@ namespace MapClasses
 
         public int GetIndex()
         {
-            return ((Z * GameManager.Instance.Map.MaxWidth) + X);
+            return ((Z * GameManager.Instance.LevelManager.MaxWidth) + X);
         }
         public bool AreNeighbors(Cell cell2)
         {
@@ -193,12 +193,12 @@ namespace MapClasses
 
         public static int GetIndex(int x, int z)
         {
-            Map map = GameManager.Instance.Map;
-            if (x >= map.MaxWidth || z >= map.MaxDepth)
+            LevelManager levelManager = GameManager.Instance.LevelManager;
+            if (x >= levelManager.MaxWidth || z >= levelManager.MaxDepth)
             {
                 return -1;
             }
-            return ((z * GameManager.Instance.Map.MaxWidth) + x);
+            return ((z * GameManager.Instance.LevelManager.MaxWidth) + x);
         }
         public static int GetX(int index, int maxWidth)
         {
@@ -206,7 +206,7 @@ namespace MapClasses
         }
         public static int GetX(int index)
         {
-            return index % GameManager.Instance.Map.MaxWidth;
+            return index % GameManager.Instance.LevelManager.MaxWidth;
         }
         public static int GetZ(int index, int maxWidth)
         {
@@ -215,7 +215,7 @@ namespace MapClasses
 
         public static int GetZ(int index)
         {
-            return (int)(index / GameManager.Instance.Map.MaxWidth);
+            return (int)(index / GameManager.Instance.LevelManager.MaxWidth);
         }
 
         /// <summary>
