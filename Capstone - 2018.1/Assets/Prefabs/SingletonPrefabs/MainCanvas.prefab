@@ -36061,7 +36061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.49264705, g: 0.49264705, b: 0.49264705, a: 0.828}
+  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -37432,6 +37432,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadePanel: {fileID: 225313121783286288}
   fadeText: {fileID: 114781997597237048}
+  highlightUIPrefab: {fileID: 198687347439502988, guid: 83631a41b9a47454cb499b4b7e4c4a09,
+    type: 2}
   defaultHoverSound: {fileID: 11400000, guid: 8a48770a578b8c348b70cebadd767d75, type: 2}
   defaultClickSound: {fileID: 11400000, guid: 21012a84bb87c5f4890a053ce87600c8, type: 2}
   menuPanel: {fileID: 1924599195921466}

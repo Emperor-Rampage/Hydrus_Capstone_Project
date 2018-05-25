@@ -29,6 +29,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] const float defaultFadeTime = 1f;
     AnimationCurve defaultFadeCurve = Tween.EaseInOutStrong;
     [SerializeField] TMP_Text fadeText;
+    [SerializeField] ParticleSystem highlightUIPrefab;
+    // TODO: Add support for highlighting ui elements with highlight particle system.
+
     [Header("Sound Settings")]
     [SerializeField]
     UISound defaultHoverSound = null;
@@ -253,6 +256,8 @@ public class UIManager : MonoBehaviour
             {
                 container.Icon.sprite = ability.Icon;
             }
+            // ParticleSystem highlight = ParticleSystem.Instantiate(highlightUIPrefab, abilityIconObject.GetComponent<RectTransform>().position, Quaternion.identity, gameObject.transform);
+            // highlight.transform.SetAsFirstSibling();
             playerAbilityIcons.Add(abilityIconObject);
         }
         UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
@@ -358,7 +363,8 @@ public class UIManager : MonoBehaviour
         foreach (TreeAbility treeAbility in treeAbilities)
         {
             AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
-            foreach (AbilityObject nextAbility in ability.NextTier) {
+            foreach (AbilityObject nextAbility in ability.NextTier)
+            {
                 TreeAbility nextTreeAbility = treeAbilities.FirstOrDefault((tAbil) => tAbil.Index == nextAbility.Index && tAbil.Tier == nextAbility.Tier);
             }
         }
@@ -498,13 +504,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ToggleMap() {
+    public void ToggleMap()
+    {
         ShowingMap = !ShowingMap;
         ShowingTree = false;
-        if (ShowingMap) {
+        if (ShowingMap)
+        {
             ShowHUD(5);
             manager.MiniMapCam.SetZoom(overlayMapZoom);
-        } else {
+        }
+        else
+        {
             ShowHUD(0);
             manager.MiniMapCam.SetZoom(miniMapZoom);
         }
