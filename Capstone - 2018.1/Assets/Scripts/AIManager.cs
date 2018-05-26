@@ -6,6 +6,7 @@ using UnityEngine;
 using EntityClasses;
 using AbilityClasses;
 using MapClasses;
+using AStar;
 
 namespace AIClasses
 {
@@ -88,6 +89,7 @@ namespace AIClasses
         */
 
         //        GameManager manager;
+        AStarManager astar = new AStarManager();
 
         void Start()
         {
@@ -96,7 +98,15 @@ namespace AIClasses
 
         public EnemyAction ExecuteAIOnEnemy(Enemy enemy, Level level)
         {
-            //            Debug.Log("Executing AI on " + enemy.Name);
+            if (enemy == null || level == null)
+            {
+                Debug.LogError("ERROR: Passed in null enemy or level to AIManager.ExecuteAIOnEnemy");
+                return null;
+            }
+
+            astar.Level = level;
+
+            // Debug.Log("Executing AI on " + enemy.Name);
             EnemyAction bestAction = new EnemyAction { AbilityIndex = -1, Movement = Movement.Null };
             if (enemy.InCombat)
             {
@@ -111,31 +121,51 @@ namespace AIClasses
 
                     // Iterate through abilities.
 
+                    Cell enemyCell = enemy.Cell;
+                    Cell playerCell = level.Player.Cell;
+                    Path pathToPlayer = astar.GetBestPath(enemyCell, playerCell);
+                    if (pathToPlayer == null)
+                    {
+                        Debug.Log("Could not find path to player.");
+                        enemy.Target = Direction.Null;
+                    }
+                    else
+                    {
+                        Cell nextCell = pathToPlayer.Next() as Cell;
+                        Direction closest = enemyCell.GetNeighborDirection(nextCell);
+                        // Debug.Log("Found path to player. Current cell is " + enemyCell.X + ", " + enemyCell.Z +
+                        // ". Next cell is " + nextCell.X + ", " + nextCell.Z + ".  Direction is " + closest);
+                        enemy.Target = closest;
+                    }
+
                     // Get best direction for target.
                     // if (enemy.Target == Direction.Null)
                     // {
-                    int closestDist = 1000;
-                    Direction closest = Direction.Null;
-                    //                    List<Direction> directions = new List<Direction>(); //level.GetNeighbors(enemy.Cell);
-                    foreach (Direction direction in Enum.GetValues(typeof(Direction)))
-                    {
-                        Cell neighbor = level.GetNeighbor(enemy.Cell, direction);
-                        if (neighbor != null && !neighbor.Locked)
-                        {
-                            // Debug.Log("Distance between " + neighbor.X + ", " + neighbor.Z + " and " + level.Player.Cell.X + ", " + level.Player.Cell.Z + " is " + neighbor.GetDistance(level.Player.Cell) + " for direction " + direction);
-                            int dist = neighbor.GetDistance(level.Player.Cell);
-                            // If in combat, either go towards an empty cell or the player.
-                            if (dist < closestDist && (neighbor.Occupant == null || neighbor.Occupant.IsPlayer))
-                            {
-                                closest = direction;
-                                closestDist = dist;
-                            }
-                        }
-                        //                            directions.Add(direction);
-                    }
 
-                    if (closest != Direction.Null)
-                        enemy.Target = closest;
+
+                    // int closestDist = 1000;
+                    // Direction closest = Direction.Null;
+                    // //                    List<Direction> directions = new List<Direction>(); //level.GetNeighbors(enemy.Cell);
+                    // foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+                    // {
+                    //     Cell neighbor = level.GetNeighbor(enemy.Cell, direction);
+                    //     if (neighbor != null && !neighbor.Locked)
+                    //     {
+                    //         // Debug.Log("Distance between " + neighbor.X + ", " + neighbor.Z + " and " + level.Player.Cell.X + ", " + level.Player.Cell.Z + " is " + neighbor.GetDistance(level.Player.Cell) + " for direction " + direction);
+                    //         int dist = neighbor.GetDistance(level.Player.Cell);
+                    //         // If in combat, either go towards an empty cell or the player.
+                    //         if (dist < closestDist && (neighbor.Occupant == null || neighbor.Occupant.IsPlayer))
+                    //         {
+                    //             closest = direction;
+                    //             closestDist = dist;
+                    //         }
+                    //     }
+                    //     //                            directions.Add(direction);
+                    // }
+
+                    // if (closest != Direction.Null)
+                    //     enemy.Target = closest;
+
                     // }
                     // Debug.Log("Best movement determined to be " + enemy.Target);
 

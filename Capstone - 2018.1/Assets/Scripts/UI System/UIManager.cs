@@ -1,26 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using MapClasses;
-using Pixelplacement;
-using TMPro;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using Pixelplacement;
+using Pixelplacement.TweenSystem;
+using TMPro;
 
+using MapClasses;
 using AbilityClasses;
 using EntityClasses;
-using System;
-using System.Linq;
-using Pixelplacement.TweenSystem;
-using UnityEngine.EventSystems;
 using AudioClasses;
 
 // TODO: Use an enum to define ui sounds. Store them in a dictionary with the enum as the key and the SoundEffect as the value.
 // TODO: Pass the enum in each ui element's event trigger.
 
-[RequireComponent(typeof(Canvas))]
+[RequireComponent(typeof(Canvas), typeof(TutorialManager))]
 public class UIManager : MonoBehaviour
 {
     GameManager manager;
+    TutorialManager tutorialManager;
 
     [Header("Main Settings")]
     // Serialized fields.
@@ -326,11 +327,6 @@ public class UIManager : MonoBehaviour
                     {
                         container.DimObject.SetActive(true);
                     }
-                    // if (!tree.IsCurrentAbility(ability) && !tree.IsAvailable(ability)) {
-                    //     container.DimObject.SetActive(true);
-                    // } else {
-                    //     container.DimObject.SetActive(false);
-                    // }
 
                     EventTrigger trigger = cell.GetComponent<EventTrigger>();
 

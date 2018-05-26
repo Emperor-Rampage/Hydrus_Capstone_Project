@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using AbilityClasses;
-using EntityClasses;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
+
+using AbilityClasses;
+using EntityClasses;
 
 [System.Serializable]
 public class PlayerData
@@ -50,6 +51,8 @@ public class SettingsData
     public KeyCode ability2Key = KeyCode.Alpha2;
     public KeyCode ability3Key = KeyCode.Alpha3;
     public KeyCode ability4Key = KeyCode.Alpha4;
+    public KeyCode mapMenuKey = KeyCode.F;
+    public KeyCode treeMenuKey = KeyCode.G;
 }
 
 public class SettingsManager
@@ -96,6 +99,8 @@ public class SettingsManager
     public KeyCode Ability2Key { get { return SettingsData.ability2Key; } private set { SettingsData.ability2Key = value; } }
     public KeyCode Ability3Key { get { return SettingsData.ability3Key; } private set { SettingsData.ability3Key = value; } }
     public KeyCode Ability4Key { get { return SettingsData.ability4Key; } private set { SettingsData.ability4Key = value; } }
+    public KeyCode MapMenuKey { get { return SettingsData.mapMenuKey; } private set { SettingsData.mapMenuKey = value; } }
+    public KeyCode TreeMenuKey { get { return SettingsData.treeMenuKey; } private set { SettingsData.treeMenuKey = value; } }
 
     public PlayerData LoadGame()
     {

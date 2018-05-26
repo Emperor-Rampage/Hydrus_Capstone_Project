@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using UnityEngine.Rendering.PostProcessing;
 using Pixelplacement;
 
 using MapClasses;
@@ -8,10 +12,6 @@ using EntityClasses;
 using AudioClasses;
 using AIClasses;
 using AbilityClasses;
-using UnityEngine.SceneManagement;
-using System.Linq;
-using UnityEngine.Audio;
-using UnityEngine.Rendering.PostProcessing;
 
 // The main game manager. Is a singleton, and contains the general settings as well as references to other systems.
 // Contains fields and properties for:
@@ -77,6 +77,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     // A reference to the UIManager instance, which is created at runtime, and handles all user interface actions.
     UIManager uiManager;
+    TutorialManager tutorialManager;
     // A reference to the AudioManager instance, which is created at runtime, and handles all audio.
     AudioManager audioManager;
     public AudioManager AudioManager { get { return audioManager; } }
@@ -316,6 +317,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     if (gmInstance.GetComponent<UIManager>() != null && uiManager == null)
                     {
                         uiManager = gmInstance.GetComponent<UIManager>();
+                        tutorialManager = gmInstance.GetComponent<TutorialManager>();
                     }
                     else if (gmInstance.GetComponent<AudioManager>() != null && audioManager == null)
                     {
@@ -358,10 +360,16 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             // Update all HUD elements.
             UpdateHUD();
-            // Get player input and do stuff.
-            HandlePlayerInput();
-            // Let the enemy's do stuff.
-            HandleEnemyAI();
+            if (tutorialManager.InTutorial)
+            {
+            }
+            else
+            {
+                // Get player input and do stuff.
+                HandlePlayerInput();
+                // Let the enemy's do stuff.
+                HandleEnemyAI();
+            }
         }
         else
         {
@@ -559,10 +567,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 for (int w = 0; w < 4; w++)
                 {
                     GameObject wallInstance;
-                    if (cell.Type != CellType.Exit) {
+                    if (cell.Type != CellType.Exit)
+                    {
                         wallInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(wallPrefabs), cellInstance.transform);
-                    } else {
-                        Debug.Log("Connecton cell! Adding a door prefab to all walls.");
+                    }
+                    else
+                    {
+                        // Debug.Log("Connecton cell! Adding a door prefab to all walls.");
                         wallInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(doorPrefabs), cellInstance.transform);
                     }
                     wallInstance.name = "Wall_" + ((Direction)w).ToString();
@@ -892,17 +903,19 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void HandlePlayerInput()
     {
         Player player = level.Player;
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             uiManager.TogglePause();
         }
         if (!uiManager.Paused)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(settingsManager.MapMenuKey))
+            {
+                uiManager.ToggleMap();
+            }
+            else if (Input.GetKeyDown(settingsManager.TreeMenuKey))
             {
                 uiManager.ToggleTree();
-            } else if (Input.GetKeyDown(KeyCode.V)) {
-                uiManager.ToggleMap();
             }
 
             if (!uiManager.ShowingTree && !uiManager.ShowingMap && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
@@ -954,6 +967,18 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
                 }
             }
+        }
+    }
+
+    void HandleTutorialInput()
+    {
+        if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape))
+        {
+            tutorialManager.NextScreen();
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            uiManager.TogglePause();
         }
     }
 

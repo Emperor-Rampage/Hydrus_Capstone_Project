@@ -4,6 +4,7 @@ using MapClasses;
 using UnityEngine;
 using EntityClasses;
 using AbilityClasses;
+using AStar;
 
 namespace MapClasses
 {
@@ -19,7 +20,7 @@ namespace MapClasses
     }
 
 
-    public class Cell
+    public class Cell : INode
     {
         public static Color EmptyColor = new Color(0, 0, 0, 0);
         public static Color StaticColor = new Color(0, 1, 0, 1);
@@ -32,6 +33,7 @@ namespace MapClasses
         public int Index { get; private set; }
         public int X { get; private set; }
         public int Z { get; private set; }
+        public NodeInfo NodeInfo { get; set; } = new NodeInfo();
         public CellType Type { get; set; }
         public bool Locked { get; set; }
         public Entity Occupant { get; set; }
@@ -39,6 +41,7 @@ namespace MapClasses
         public Item Item { get; set; }
 
         public List<Indicator> Indicators { get; set; } = new List<Indicator>();
+
 
         /*
         ---------------------------------------------------------------------
@@ -172,6 +175,38 @@ namespace MapClasses
         public int GetDistance(Cell cell2)
         {
             return Mathf.Abs(X - cell2.X) + Mathf.Abs(Z - cell2.Z);
+        }
+
+        public Direction GetNeighborDirection(Cell cell2)
+        {
+            if (cell2 == null)
+            {
+                Debug.LogError("ERROR: Passed null cell2 into Cell.GetNeighborDirection.");
+                return Direction.Null;
+            }
+            int x2 = cell2.X;
+            int z2 = cell2.Z;
+
+            if (X == x2)
+            {
+                // If it's up.
+                // Or if it's down.
+                if (z2 - Z == 1)
+                    return Direction.Up;
+                else if (z2 - Z == -1)
+                    return Direction.Down;
+            }
+            else if (Z == z2)
+            {
+                // If it's right.
+                // Or if it's left.
+                if (x2 - X == 1)
+                    return Direction.Right;
+                else if (x2 - X == -1)
+                    return Direction.Left;
+            }
+
+            return Direction.Null;
         }
 
         #endregion

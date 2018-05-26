@@ -603,14 +603,14 @@ namespace MapClasses
             if (!Initialized)
                 return null;
 
-            if (!HasConnection(entity.Cell, direction))
-                return null;
-
             Cell eCell = entity.Cell;
             if (eCell == null)
                 return null;
 
-            Cell neighbor = GetNeighbor(entity.Cell, direction);
+            if (!HasConnection(eCell, direction))
+                return null;
+
+            Cell neighbor = GetNeighbor(eCell, direction);
 
             if (neighbor == null)
                 return null;
@@ -620,6 +620,25 @@ namespace MapClasses
 
             return neighbor;
             //            return SetEntityLocation(entity, nCell);
+        }
+
+        public Cell GetDestination(Cell cell, Direction direction)
+        {
+            if (!Initialized)
+                return null;
+
+            if (!HasConnection(cell, direction))
+                return null;
+
+            Cell neighbor = GetNeighbor(cell, direction);
+
+            if (neighbor == null)
+                return null;
+
+            if (neighbor.Locked || neighbor.Occupant != null)
+                return null;
+
+            return neighbor;
         }
 
         // Not using anymore.
@@ -947,6 +966,20 @@ namespace MapClasses
                 newDir += 4;
 
             return (Direction)newDir;
+        }
+
+        public List<Cell> GetPath(Cell cell1, Cell cell2)
+        {
+            List<Cell> shortestPath = new List<Cell>();
+            Cell current = cell1;
+            while (true)
+            {
+
+                foreach (Direction direction in typeof(Direction).GetEnumValues())
+                {
+
+                }
+            }
         }
 
         public int GetDistance(int x1, int z1, int x2, int z2)
