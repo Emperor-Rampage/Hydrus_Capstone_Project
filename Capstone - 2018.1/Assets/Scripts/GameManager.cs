@@ -1082,7 +1082,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 if (enemy.StatusEffects.DamageRate > 0f)
                 {
                     bool alive = enemy.Damage(enemy.StatusEffects.DamageRate * tickRate);
-                    PerformEntityDeathCheck(player, alive);
+                    PerformEntityDeathCheck(enemy, alive);
                 }
             }
             yield return wait;
