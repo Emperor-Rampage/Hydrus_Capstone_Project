@@ -473,6 +473,8 @@ public class UIManager : MonoBehaviour
     public void TogglePause()
     {
         Paused = !Paused;
+        ShowingTree = false;
+        ShowingMap = false;
 
         if (Paused)
         {
@@ -482,6 +484,7 @@ public class UIManager : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
+            manager.MiniMapCam.SetZoom(miniMapZoom);
             ShowHUD(0);
         }
     }
@@ -496,6 +499,8 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            Time.timeScale = 1f;
+            manager.MiniMapCam.SetZoom(miniMapZoom);
             ShowHUD(0);
         }
     }
@@ -506,13 +511,14 @@ public class UIManager : MonoBehaviour
         ShowingTree = false;
         if (ShowingMap)
         {
-            ShowHUD(5);
             manager.MiniMapCam.SetZoom(overlayMapZoom);
+            ShowHUD(5);
         }
         else
         {
-            ShowHUD(0);
+            Time.timeScale = 1f;
             manager.MiniMapCam.SetZoom(miniMapZoom);
+            ShowHUD(0);
         }
     }
 
@@ -1025,24 +1031,24 @@ public class UIManager : MonoBehaviour
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)
     {
-        Tween.CanvasGroupAlpha(fadePanel, 1f, speed, 0f, defaultFadeCurve);
+        Tween.CanvasGroupAlpha(fadePanel, 1f, speed, 0f, defaultFadeCurve, obeyTimescale: false);
         fadeText.text = text;
     }
 
     public void FadeOut(float speed = defaultFadeTime)
     {
-        Tween.CanvasGroupAlpha(fadePanel, 1f, speed, 0f, defaultFadeCurve);
+        Tween.CanvasGroupAlpha(fadePanel, 1f, speed, 0f, defaultFadeCurve, obeyTimescale: false);
         fadeText.text = "";
     }
 
     public void FadeIn(string text = "", float speed = defaultFadeTime)
     {
-        Tween.CanvasGroupAlpha(fadePanel, 0f, speed, 0f, defaultFadeCurve);
+        Tween.CanvasGroupAlpha(fadePanel, 0f, speed, 0f, defaultFadeCurve, obeyTimescale: false);
         fadeText.text = text;
     }
     public void FadeIn(float speed = defaultFadeTime)
     {
-        Tween.CanvasGroupAlpha(fadePanel, 0f, speed, 0f, defaultFadeCurve);
+        Tween.CanvasGroupAlpha(fadePanel, 0f, speed, 0f, defaultFadeCurve, obeyTimescale: false);
         fadeText.text = "";
     }
 

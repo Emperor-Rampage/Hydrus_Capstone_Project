@@ -9,10 +9,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e606a427b1727846b8919968aa4bb82, type: 3}
-  m_Name: Thorn Cannon
+  m_Name: Thorn Shot
   m_EditorClassIdentifier: 
   index: 0
-  abilityName: Thorn Cannon
+  abilityName: Thorn Shot
   icon: {fileID: 0}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
   particleSystem: {fileID: 0}
@@ -20,12 +20,15 @@ MonoBehaviour:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
-  statusEffects: []
+  statusEffects:
+  - effect: 3
+    duration: 0.25
+    value: 0.5
   type: 2
   aoeSprite: {fileID: 0}
   range: 2
   cooldown: 2
-  castTime: 1.25
+  castTime: 1.75
   damage: 10
   upgradeable: 0
   baseAbility: {fileID: 0}

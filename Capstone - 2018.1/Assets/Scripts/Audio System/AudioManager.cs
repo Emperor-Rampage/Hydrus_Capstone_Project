@@ -106,7 +106,7 @@ namespace AudioClasses
             source.loop = true;
 
             source.Play();
-            Tween.Volume(source, 0f, bgMusic.Volume, fadeTime, 0f, completeCallback: () => musicPlaying = source);
+            Tween.Volume(source, 0f, bgMusic.Volume, fadeTime, 0f, completeCallback: () => musicPlaying = source, obeyTimescale: false);
         }
 
         public void FadeOutMusic(float fadeTime = defaultFadeTime)
@@ -117,7 +117,7 @@ namespace AudioClasses
                 return;
             }
 
-            Tween.Volume(musicPlaying, 0f, fadeTime, 0f, completeCallback: () => Destroy(musicPlaying.gameObject));
+            Tween.Volume(musicPlaying, 0f, fadeTime, 0f, completeCallback: () => Destroy(musicPlaying.gameObject), obeyTimescale: false);
         }
 
         public void PlaySoundEffect(SoundEffect soundEffect)

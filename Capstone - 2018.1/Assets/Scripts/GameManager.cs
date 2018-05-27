@@ -129,6 +129,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             abilityIndexes = indexes,
             cores = 0
         };
+        tutorialManager.RunTutorial = true;
         LevelManager.SetCurrentLevel(0);
         LoadLevel(1f);
     }
@@ -362,6 +363,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             UpdateHUD();
             if (tutorialManager.InTutorial)
             {
+                HandleTutorialInput();
             }
             else
             {
@@ -496,8 +498,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             AbilityTree.Player = player;
 
-            BuildLevel_Procedural();
-            BuildLevel_Procedural_Corners();
+            GameObject levelContainer = new GameObject("_Level");
+            BuildLevel_Procedural(levelContainer);
+            BuildLevel_Procedural_Corners(levelContainer);
 
             // BuildLevel_Debug(level);
 
@@ -530,6 +533,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (gradualEffectsCoroutine != null)
                 StopCoroutine(gradualEffectsCoroutine);
             gradualEffectsCoroutine = StartCoroutine(ApplyGradualEffects_Coroutine());
+
+            if (!tutorialManager.Introduction.Complete)
+                tutorialManager.RunIntroduction();
         }
         else
         {
@@ -548,8 +554,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         ApplyAntialiasingSettings();
     }
 
-    void BuildLevel_Procedural()
+    void BuildLevel_Procedural(GameObject levelContainer)
     {
+        if (levelContainer == null)
+        {
+            levelContainer = new GameObject("_LevelCells");
+        }
         float cellScale = LevelManager.CellScale;
         foreach (Cell cell in level.cells)
         {
@@ -560,6 +570,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             {
                 Vector3 center = LevelManager.GetCellPosition(cell);
                 GameObject cellInstance = new GameObject("Cell_" + cell.Index);
+                cellInstance.transform.SetParent(levelContainer.transform);
                 cellInstance.transform.position = center;
                 GameObject.Instantiate(LevelManager.GetRandomPrefab(floorPrefabs), cellInstance.transform);
                 GameObject.Instantiate(LevelManager.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
@@ -595,8 +606,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
     }
 
-    void BuildLevel_Procedural_Corners()
+    void BuildLevel_Procedural_Corners(GameObject levelContainer)
     {
+        if (levelContainer == null)
+        {
+            levelContainer = new GameObject("_LevelCorners");
+        }
+
         float cellScale = LevelManager.CellScale;
         Vector3 offset = new Vector3(0.5f * cellScale, 0f, 0.5f * cellScale);
         // Iterate through each corner. Of cell up left, up right, down left, down right,
@@ -677,7 +693,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     {
                         // Create corner.
                         Vector3 center = LevelManager.GetCellPosition(x, z) + offset;
-                        GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                        GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity, levelContainer.transform);
                         // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
                         cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                     }
@@ -703,7 +719,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     {
                         // Create corner
                         Vector3 center = LevelManager.GetCellPosition(x, z) + offset;
-                        GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                        GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity, levelContainer.transform);
                         // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
                         cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                     }
@@ -712,7 +728,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 {
                     // Create corner
                     Vector3 center = LevelManager.GetCellPosition(x, z) + offset;
-                    GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity);
+                    GameObject cornerInstance = GameObject.Instantiate(LevelManager.GetRandomPrefab(cornerPrefabs), center, Quaternion.identity, levelContainer.transform);
                     // GameObject cornerInstance = GameObject.Instantiate(cornerPrefabDebug, center, Quaternion.identity);
                     cornerInstance.transform.localScale = cornerInstance.transform.localScale * cellScale;
                 }
@@ -966,6 +982,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     player.Heal(25);
                     uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
                 }
+                // else if (Input.GetKeyDown(KeyCode.I))
+                // {
+                //     tutorialManager.RunIntroduction();
+                // }
             }
         }
     }
@@ -975,10 +995,24 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape))
         {
             tutorialManager.NextScreen();
+            if (tutorialManager.Current.Complete)
+            {
+                if (tutorialManager.Current == tutorialManager.Introduction)
+                    tutorialManager.RunMovementTutorial();
+                else if (tutorialManager.Current == tutorialManager.Movement)
+                    tutorialManager.RunCombatTutorial();
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
-            uiManager.TogglePause();
+            TutorialManager.SectionDone.Invoke();
+            if (tutorialManager.Current.Complete)
+            {
+                if (tutorialManager.Current == tutorialManager.Introduction)
+                    tutorialManager.RunMovementTutorial();
+                else if (tutorialManager.Current == tutorialManager.Movement)
+                    tutorialManager.RunCombatTutorial();
+            }
         }
     }
 

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(TMP_Text))]
-public class TutorialContinueGlow : MonoBehaviour
+public class TextGlow : MonoBehaviour
 {
     [SerializeField] Color color;
     [SerializeField] float amount;
