@@ -542,7 +542,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 StopCoroutine(gradualEffectsCoroutine);
             gradualEffectsCoroutine = StartCoroutine(ApplyGradualEffects_Coroutine());
 
-            if (!tutorialManager.Introduction.Complete)
+            if (tutorialManager.RunTutorial && !tutorialManager.Introduction.Complete)
                 tutorialManager.RunIntroduction();
         }
         else
@@ -1014,13 +1014,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
             TutorialManager.SectionDone.Invoke();
-            if (tutorialManager.Current.Complete)
-            {
-                if (tutorialManager.Current == tutorialManager.Introduction)
-                    tutorialManager.RunMovementTutorial();
-                else if (tutorialManager.Current == tutorialManager.Movement)
-                    tutorialManager.RunCombatTutorial();
-            }
+            tutorialManager.RunTutorial = false;
         }
     }
 
