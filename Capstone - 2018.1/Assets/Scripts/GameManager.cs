@@ -136,16 +136,16 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public void Continue()
     {
         playerData = settingsManager.LoadGame();
-        if (playerData.classIndex >= 0 && playerData.classIndex < classes.Count)
-        {
-            selectedClass = classes[playerData.classIndex];
-            LevelManager.SetCurrentLevel(0);
-            LoadLevel(1f);
-        }
-        else
+        if (playerData.classIndex < 0 || playerData.classIndex >= classes.Count)
         {
             Debug.LogError("ERROR: Loaded player does not have a selected class.");
+            return;
         }
+
+        selectedClass = classes[playerData.classIndex];
+        tutorialManager.RunTutorial = false;
+        LevelManager.SetCurrentLevel(0);
+        LoadLevel(1f);
     }
 
     public void SaveGame()
