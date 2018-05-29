@@ -406,14 +406,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         uiManager.SetUpClassButtons(classes);
         if (classes.Count > 0)
         {
-            uiManager.SelectClass(classes[0]);
+            SelectClass(classes[0]);
         }
     }
 
     public void SelectClass(PlayerClass playerClass)
     {
-        // Debug.Log("Selecting class " + playerClass.Name);
-        //        if (index < 0 || index >= classes.Count)
         if (playerClass == null)
             return;
 
@@ -443,7 +441,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         inGame = false;
         int sceneIndex = 0;
-        // Debug.Log("Loading level " + sceneIndex);
         level = null;
         LevelManager.Reset();
         SceneManager.LoadScene(sceneIndex);
@@ -462,7 +459,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         yield return new WaitForSeconds(delay);
 
-        // abilityTree = new AbilityTree();
         if (playerMovementCoroutine != null)
             StopCoroutine(playerMovementCoroutine);
         if (inGame && level != null)
@@ -474,7 +470,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
 
         int sceneIndex = LevelManager.CurrentLevel.sceneIndex;
-        // Debug.Log("Loading level " + sceneIndex);
         SceneManager.LoadScene(sceneIndex);
     }
 
@@ -509,8 +504,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             GameObject levelContainer = new GameObject("_Level");
             BuildLevel_Procedural(levelContainer);
             BuildLevel_Procedural_Corners(levelContainer);
-
-            // BuildLevel_Debug(level);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
             player.Instance = GameObject.Instantiate(player.Class.ClassCamera);
@@ -990,10 +983,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     player.Heal(25);
                     uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
                 }
-                // else if (Input.GetKeyDown(KeyCode.I))
-                // {
-                //     tutorialManager.RunIntroduction();
-                // }
+                else if (Input.GetKeyDown(KeyCode.I))
+                {
+                    tutorialManager.RunUpgradeTutorial();
+                }
             }
         }
     }
