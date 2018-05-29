@@ -479,6 +479,9 @@ public class UIManager : MonoBehaviour
         if (Paused)
         {
             Time.timeScale = 0f;
+            ShowingMap = false;
+            ShowingTree = false;
+            manager.MiniMapCam.SetZoom(miniMapZoom);
             ShowHUD(1);
         }
         else

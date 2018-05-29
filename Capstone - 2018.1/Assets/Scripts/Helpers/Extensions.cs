@@ -6,18 +6,20 @@ using UnityEngine;
 public static class Extensions
 {
     public static Vector3 GetHitLocation(Player player, Entity target) {
-        Vector3 location;
+        Vector3 location = Vector3.zero;
         if (player == null || target == null) {
             Debug.LogError("ERROR: Passed in null argument into GetHitLocation.");
-            location = Vector3.zero;
         } else {
             if (player.Instance == null || target.Instance == null) {
                 Debug.Log("ERROR: Player or target instance is null in GetHitLocation.");
             } else {
                 // TODO: Use Vector3.Lerp or Vector3.MoveTowards to get distance from target in player's direction.
+                Vector3 playerLoc = target.Instance.transform.position;
+                Vector3 targetLoc = target.Instance.transform.position;
+                location = Vector3.MoveTowards(targetLoc, playerLoc, 0.25f);
             }
         }
-        location = Vector3.zero;
+        // location = Vector3.zero;
         return location;
     }
 

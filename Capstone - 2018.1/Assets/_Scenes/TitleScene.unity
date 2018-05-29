@@ -5494,7 +5494,7 @@ MonoBehaviour:
   - prefab: {fileID: 1969990256235840, guid: fc6a04267be25bc41a675a961723ef23, type: 2}
     weight: 1
   - prefab: {fileID: 1468026032645310, guid: f044207eba2e9f34c92071c854d7ee02, type: 2}
-    weight: 0.1
+    weight: 0.05
   - prefab: {fileID: 1600698400641220, guid: e7737d674d802e546a59fec884375d75, type: 2}
     weight: 0.09
   floorPrefabs:
