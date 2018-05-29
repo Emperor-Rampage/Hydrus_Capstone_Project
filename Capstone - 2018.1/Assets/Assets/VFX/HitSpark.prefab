@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 4155731299948146}
   - component: {fileID: 198001430747635680}
   - component: {fileID: 199693617375679806}
+  - component: {fileID: 114935183867711632}
   m_Layer: 0
   m_Name: HitSpark
   m_TagString: Untagged
@@ -165,6 +166,17 @@ Transform:
   m_Father: {fileID: 4155731299948146}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &114935183867711632
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1841269387380064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de512f517e26b734590e54977a28621a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &198001430747635680
 ParticleSystem:
   m_ObjectHideFlags: 1

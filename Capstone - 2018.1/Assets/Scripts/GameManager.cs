@@ -12,6 +12,7 @@ using EntityClasses;
 using AudioClasses;
 using AIClasses;
 using AbilityClasses;
+using ParticleClasses;
 
 // The main game manager. Is a singleton, and contains the general settings as well as references to other systems.
 // Contains fields and properties for:
@@ -74,6 +75,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // A reference to the current level, because caching is more efficient.
     Level level;
     PlayerData playerData;
+
+    //A reference to the particle effect manager that handles all particle system work
+    ParticleSystemController particleManager;
 
     // A reference to the UIManager instance, which is created at runtime, and handles all user interface actions.
     UIManager uiManager;
@@ -331,6 +335,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     else if (gmInstance.GetComponent<MiniMapCam>() != null && MiniMapCam == null)
                     {
                         MiniMapCam = gmInstance.GetComponent<MiniMapCam>();
+                    }
+                    else if (gmInstance.GetComponent<ParticleSystemController>() != null && particleManager == null)
+                    {
+                        particleManager = gmInstance.GetComponent<ParticleSystemController>();
                     }
                 }
             }
@@ -1348,7 +1356,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (ability.Damage > 0)
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
         }
-
+        else if(ability.Type != AbilityType.Self && target.IsPlayer == false)
+        {
+            particleManager.PlayHitSpark(target);
+        }
+        
         PerformEntityDeathCheck(target, alive);
     }
 

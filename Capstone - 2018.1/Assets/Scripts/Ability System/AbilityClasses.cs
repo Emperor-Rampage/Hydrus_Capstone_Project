@@ -438,6 +438,9 @@ namespace AbilityClasses
         [SerializeField] ParticleSystem particleSystem;                                                      //Container for the Particle Effect System of the Ability.
         public ParticleSystem ParticleSystem { get { return particleSystem; } }
 
+        [SerializeField] Transform particleOrigin;                                                           //Container for the origin point of Particle Effect for Ability.
+        public Transform ParticleOrigin { get { return particleOrigin; } }
+
         [SerializeField] SoundEffect soundEffect;                                                            //Sound Effect to play on activation.
         public SoundEffect SoundEffect { get { return soundEffect; } }
 
