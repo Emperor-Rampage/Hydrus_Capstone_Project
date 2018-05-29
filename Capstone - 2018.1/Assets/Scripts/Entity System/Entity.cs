@@ -246,8 +246,6 @@ namespace EntityClasses
                 float cd = 0f;
                 Cooldowns.TryGetValue(ability, out cd);
                 cds.Add(cd);
-                // if (Cooldowns.ContainsKey(ability))
-                //     cds.Add(Cooldowns[ability]);
             }
             return cds;
         }

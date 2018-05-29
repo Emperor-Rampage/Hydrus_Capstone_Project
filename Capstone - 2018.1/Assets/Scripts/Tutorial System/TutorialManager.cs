@@ -47,6 +47,7 @@ public class TutorialManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         currentSection.Complete = true;
+        currentSection.gameObject.SetActive(false);
         tutorialPanel.SetActive(false);
         InTutorial = false;
     }

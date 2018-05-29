@@ -856,6 +856,8 @@ public class UIManager : MonoBehaviour
         if (container != null)
         {
             container.CooldownTimer.fillAmount = cooldownRemaining / cooldown;
+            if (cooldownRemaining == 0f)
+                container.CooldownTimer.fillAmount = 0f;
             container.CooldownText.text = (cooldownRemaining <= 0f) ? "" : cooldownRemaining.ToString("0.0");
             container.CastTimer.fillAmount = (casting) ? castProgress : 0f;
         }
