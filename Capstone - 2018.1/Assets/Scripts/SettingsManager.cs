@@ -122,6 +122,8 @@ public class SettingsManager
         // Gameplay
         SettingsData.healthPercent = container.maxHealthSlider.value;
         SettingsData.timeLimit = container.timeLimitSlider.value;
+        if (!container.timeLimitToggle.isOn)
+            SettingsData.timeLimit = 0f;
         // Graphics
         SettingsData.fullscreen = container.fullscreenToggle.isOn;
         SettingsData.resolutionIndex = container.resolutionDropdown.value;

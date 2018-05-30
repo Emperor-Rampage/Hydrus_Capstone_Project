@@ -12,6 +12,7 @@ public class SettingsContainer : MonoBehaviour
     [Header("Gameplay")]
     public Slider maxHealthSlider;
     public TMP_Text maxHealthText;
+    public Toggle timeLimitToggle;
     public Slider timeLimitSlider;
     public TMP_Text timeLimitText;
 

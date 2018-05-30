@@ -103,6 +103,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // Whether or not we're in-game.
     bool inGame;
     bool paused;
+    bool useTimeLimit;
+    float timeRemaining;
     Coroutine gradualEffectsCoroutine;
     Coroutine playerMovementCoroutine;
 
@@ -193,6 +195,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         settingsManager.SetSettings(uiManager);
         // TODO: Add gameplay settings.
         ApplyAdjustedHealth();
+        ApplyUseTimeLimit();
 
         Resolution targetRes;
         if (settingsManager.ResolutionIndex > 0 && settingsManager.ResolutionIndex < uiManager.resolutions.Length)
@@ -271,6 +274,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             level.Player.MaxHealth = adjustedMaxHealth;
             level.Player.CurrentHealth = adjustedMaxHealth;
         }
+    }
+
+    void ApplyUseTimeLimit() {
+        useTimeLimit = (settingsManager.TimeLimit != 0f);
     }
 
     void ApplyAntialiasingSettings()
@@ -367,8 +374,17 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         if (inGame)
         {
+            if (useTimeLimit) {
+                timeRemaining = Mathf.Clamp(timeRemaining - Time.deltaTime, 0f, settingsManager.TimeLimit);
+                // If the player is out of time. KILL THEM.
+                if (timeRemaining <= 0) {
+                    if (level != null && level.Player != null)
+                        PerformEntityDeathCheck(level.Player, false);
+                }
+            }
             // Update all HUD elements.
             UpdateHUD();
+
             if (tutorialManager.InTutorial)
             {
                 HandleTutorialInput();
@@ -402,7 +418,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void SetUpClassMenu()
     {
-        uiManager.SetConfirmButton(false);
+        uiManager.SetConfirmButtonActive(false);
         uiManager.SetUpClassButtons(classes);
         if (classes.Count > 0)
         {
@@ -417,7 +433,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         selectedClass = playerClass;
         uiManager.SelectClass(selectedClass);
-        uiManager.SetConfirmButton(true);
+        uiManager.SetConfirmButtonActive(true);
     }
 
     public void LoadMainMenu(float delay = 0f)
@@ -493,6 +509,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         // Otherwise, we're loading the title screen.
         if (level != null)
         {
+            ApplyUseTimeLimit();
+            // If it's the hub, don't use a time limit.
+            if (scene.buildIndex == 1) {
+                useTimeLimit = false;
+            }
+            timeRemaining = settingsManager.TimeLimit;
             AbilityTree.Initialize(selectedClass);
             // Sets up cells, connections, player spawn, and generates procedural areas.
             level.InitializeLevel(player, playerData, selectedClass);
@@ -524,6 +546,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             uiManager.SetUpAbilityTreeMenu(AbilityTree);
             // Display the area text.
             uiManager.DisplayAreaText(level.name);
+            uiManager.SetTimeTextActive(useTimeLimit);
             // Fade in with the area name.
             uiManager.FadeIn(level.name, 2f);
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
@@ -544,9 +567,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             inGame = false;
             uiManager.Initialize_Main();
             if (settingsManager.LoadGame() != null)
-                uiManager.SetContinueButton(true);
+                uiManager.SetContinueButtonActive(true);
             else
-                uiManager.SetContinueButton(false);
+                uiManager.SetContinueButtonActive(false);
 
             uiManager.SetAllSettingsElements(settingsManager);
             uiManager.FadeIn("Hydrus", 3f);
@@ -826,6 +849,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         Player player = level.Player;
         // If standing at an exit, give option to go through exit.
         ExitPrompt(level.CanExit);
+        uiManager.UpdateTimeText(timeRemaining);
         uiManager.UpdatePlayerCores(player.Cores);
         uiManager.UpdateEffectList(player.StatusEffects);
         //uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);

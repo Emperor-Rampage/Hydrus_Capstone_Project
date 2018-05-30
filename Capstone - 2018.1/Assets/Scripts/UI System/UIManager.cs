@@ -66,6 +66,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] CanvasGroup screenDamageGroup;
 
     [SerializeField] TMP_Text areaText;
+    [SerializeField] TMP_Text timeLimitText;
     [SerializeField] TMP_Text promptText;
 
     [SerializeField] TMP_Text coresText;
@@ -442,18 +443,20 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetContinueButton(bool active)
+    public void SetContinueButtonActive(bool active)
     {
         continueButton.interactable = active;
-        // continueButton.enabled = active;
     }
 
-    public void SetConfirmButton(bool active)
+    public void SetConfirmButtonActive(bool active)
     {
-        // Debug.Log("Setting confirm button to " + active);
         confirmButton.interactable = active;
-        // confirmButton.enabled = active;
     }
+
+    public void SetTimeTextActive(bool active) {
+        timeLimitText.gameObject.SetActive(active);
+    }
+
     public void Play()
     {
         if (manager == null)
@@ -610,6 +613,7 @@ public class UIManager : MonoBehaviour
     public void SetSettingsElements(SettingsManager settings)
     {
         mainSettingsContainer.maxHealthSlider.value = settings.HealthPercent;
+        hudSettingsContainer.timeLimitToggle.isOn = (settings.TimeLimit != 0f);
         mainSettingsContainer.timeLimitSlider.value = settings.TimeLimit;
 
         mainSettingsContainer.fullscreenToggle.isOn = settings.Fullscreen;
@@ -631,7 +635,7 @@ public class UIManager : MonoBehaviour
     {
         mainSettingsContainer.maxHealthText.text = mainSettingsContainer.maxHealthSlider.value.ToString("0%");
         TimeSpan time = TimeSpan.FromSeconds(mainSettingsContainer.timeLimitSlider.value);
-        string timeString = String.Format("{0:0}:{1:00}", (int)time.TotalMinutes, time.Seconds);
+        string timeString = String.Format("{0:00}:{1:00}", (int)time.TotalMinutes, time.Seconds);
         mainSettingsContainer.timeLimitText.text = timeString;
 
         mainSettingsContainer.masterValueText.text = mainSettingsContainer.masterSlider.value.ToString("0%");
@@ -704,7 +708,14 @@ public class UIManager : MonoBehaviour
     public void SetHUDSettingsElements(SettingsManager settings)
     {
         hudSettingsContainer.maxHealthSlider.value = settings.HealthPercent;
+        hudSettingsContainer.maxHealthText.text = hudSettingsContainer.maxHealthSlider.value.ToString("0%");
+
+        hudSettingsContainer.timeLimitToggle.isOn = (settings.TimeLimit != 0f);
+
         hudSettingsContainer.timeLimitSlider.value = settings.TimeLimit;
+        TimeSpan time = TimeSpan.FromSeconds(hudSettingsContainer.timeLimitSlider.value);
+        string timeString = String.Format("{0:00}:{1:00}", (int)time.TotalMinutes, time.Seconds);
+        hudSettingsContainer.timeLimitText.text = timeString;
 
         hudSettingsContainer.fullscreenToggle.isOn = settings.Fullscreen;
         hudSettingsContainer.resolutionDropdown.value = settings.ResolutionIndex;
@@ -723,11 +734,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHUDSettingsElements(SettingsManager settings)
     {
-        hudSettingsContainer.maxHealthText.text = hudSettingsContainer.maxHealthSlider.value.ToString("0%");
-        TimeSpan time = TimeSpan.FromSeconds(hudSettingsContainer.timeLimitSlider.value);
-        string timeString = String.Format("{0:00}:{1:00}", (int)time.TotalMinutes, time.Seconds);
-        hudSettingsContainer.timeLimitText.text = timeString;
-
         hudSettingsContainer.masterValueText.text = hudSettingsContainer.masterSlider.value.ToString("0%");
         hudSettingsContainer.systemValueText.text = hudSettingsContainer.systemSlider.value.ToString("0%");
         hudSettingsContainer.musicValueText.text = hudSettingsContainer.musicSlider.value.ToString("0%");
@@ -1088,5 +1094,10 @@ public class UIManager : MonoBehaviour
     {
         mapText.text = text;
         areaText.text = text;
+    }
+
+    public void UpdateTimeText(float secondsRemaining) {
+        TimeSpan time = TimeSpan.FromSeconds(secondsRemaining);
+        timeLimitText.text = String.Format("{0:00}:{1:00}.{2:000}", (int)time.TotalMinutes, time.Seconds, time.Milliseconds);
     }
 }
