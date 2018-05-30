@@ -610,6 +610,7 @@ public class UIManager : MonoBehaviour
     public void SetSettingsElements(SettingsManager settings)
     {
         mainSettingsContainer.maxHealthSlider.value = settings.HealthPercent;
+        mainSettingsContainer.timeLimitSlider.value = settings.TimeLimit;
 
         mainSettingsContainer.fullscreenToggle.isOn = settings.Fullscreen;
         mainSettingsContainer.resolutionDropdown.value = settings.ResolutionIndex;
@@ -629,6 +630,9 @@ public class UIManager : MonoBehaviour
     public void UpdateSettingsElements(SettingsManager settings)
     {
         mainSettingsContainer.maxHealthText.text = mainSettingsContainer.maxHealthSlider.value.ToString("0%");
+        TimeSpan time = TimeSpan.FromSeconds(mainSettingsContainer.timeLimitSlider.value);
+        string timeString = String.Format("{0:0}:{1:00}", (int)time.TotalMinutes, time.Seconds);
+        mainSettingsContainer.timeLimitText.text = timeString;
 
         mainSettingsContainer.masterValueText.text = mainSettingsContainer.masterSlider.value.ToString("0%");
         mainSettingsContainer.systemValueText.text = mainSettingsContainer.systemSlider.value.ToString("0%");
@@ -700,6 +704,7 @@ public class UIManager : MonoBehaviour
     public void SetHUDSettingsElements(SettingsManager settings)
     {
         hudSettingsContainer.maxHealthSlider.value = settings.HealthPercent;
+        hudSettingsContainer.timeLimitSlider.value = settings.TimeLimit;
 
         hudSettingsContainer.fullscreenToggle.isOn = settings.Fullscreen;
         hudSettingsContainer.resolutionDropdown.value = settings.ResolutionIndex;
@@ -719,6 +724,9 @@ public class UIManager : MonoBehaviour
     public void UpdateHUDSettingsElements(SettingsManager settings)
     {
         hudSettingsContainer.maxHealthText.text = hudSettingsContainer.maxHealthSlider.value.ToString("0%");
+        TimeSpan time = TimeSpan.FromSeconds(hudSettingsContainer.timeLimitSlider.value);
+        string timeString = String.Format("{0:00}:{1:00}", (int)time.TotalMinutes, time.Seconds);
+        hudSettingsContainer.timeLimitText.text = timeString;
 
         hudSettingsContainer.masterValueText.text = hudSettingsContainer.masterSlider.value.ToString("0%");
         hudSettingsContainer.systemValueText.text = hudSettingsContainer.systemSlider.value.ToString("0%");

@@ -1343,11 +1343,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (ability.Damage > 0)
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
         }
-        else if(ability.Type != AbilityType.Self && target.IsPlayer == false)
+        else if (ability.Type != AbilityType.Self && target.IsPlayer == false)
         {
             particleManager.PlayHitSpark(target);
         }
-        
+
         PerformEntityDeathCheck(target, alive);
     }
 
@@ -1420,12 +1420,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
         else if (!alive && !entity.IsPlayer)
         {
-            // Debug.Log("Enemy is dead!");
             player.Cores += entity.Cores;
             // Regenerate 20% of missing health on kill.
-            // Debug.Log("Healing player for " + ((float)(player.MaxHealth - player.CurrentHealth)) * 0.2f);
             player.Heal((player.MaxHealth - player.CurrentHealth) * 0.2f);
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+            if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)
+            {
+                tutorialManager.RunUpgradeTutorial();
+            }
             StartCoroutine(level.RemoveEntity(entity));
         }
     }

@@ -8,6 +8,7 @@ using TMPro;
 
 using AbilityClasses;
 using EntityClasses;
+using System;
 
 [System.Serializable]
 public class PlayerData
@@ -27,6 +28,7 @@ public class SettingsData
 {
     // Gameplay
     public float healthPercent = 1f;
+    public float timeLimit = 300f;
 
     // Graphics
     public bool fullscreen = true;
@@ -60,24 +62,9 @@ public class SettingsManager
     const string gameSaveFileName = "gameSave.json";
     const string settingsFileName = "settings.json";
     public SettingsData SettingsData { get; set; } = new SettingsData();
-    public const string FirstPlayKey = "FirstPlay";
-    public const string MaxHealthSliderKey = "MaxHealthSlider";
-    public const string MaxHealthTextKey = "MaxHealthText";
-    public const string FullScreenToggleKey = "FullscreenToggle";
-    public const string ResolutionDropdownKey = "ResolutionDropdown";
-    public const string TextureDropdownKey = "TextureDropdown";
-    public const string AntialiasingDropdownKey = "AntialiasingDropdown";
-    public const string VSyncDropdownKey = "VSyncDropdown";
-    public const string FrameRateDropdownKey = "FrameRateDropdown";
-    public const string MasterSliderKey = "MasterSlider";
-    public const string MasterTextKey = "MasterText";
-    public const string MusicSliderKey = "MusicSlider";
-    public const string MusicTextKey = "MusicText";
-    public const string FXSliderKey = "FXSlider";
-    public const string FXTextKey = "FXText";
-
     // Gameplay settings
     public float HealthPercent { get { return SettingsData.healthPercent; } private set { SettingsData.healthPercent = value; } }
+    public float TimeLimit { get { return SettingsData.timeLimit; } private set { SettingsData.timeLimit = value; } }
     // Graphics settings
     public bool Fullscreen { get { return SettingsData.fullscreen; } private set { SettingsData.fullscreen = value; } }
     public int ResolutionIndex { get { return SettingsData.resolutionIndex; } private set { SettingsData.resolutionIndex = value; } }
@@ -133,8 +120,8 @@ public class SettingsManager
         SettingsContainer container = (uiManager.Paused) ? uiManager.HUDSettings : uiManager.MainMenuSettings;
 
         // Gameplay
-
         SettingsData.healthPercent = container.maxHealthSlider.value;
+        SettingsData.timeLimit = container.timeLimitSlider.value;
         // Graphics
         SettingsData.fullscreen = container.fullscreenToggle.isOn;
         SettingsData.resolutionIndex = container.resolutionDropdown.value;
@@ -171,24 +158,5 @@ public class SettingsManager
 
         string filePath = Path.Combine(Application.persistentDataPath, settingsFileName);
         File.WriteAllText(filePath, dataJsonString);
-    }
-
-    void SetBool(string name, bool value)
-    {
-        PlayerPrefs.SetInt(name, value ? 1 : 0);
-    }
-
-    bool GetBool(string name)
-    {
-        return PlayerPrefs.GetInt(name) == 1;
-    }
-
-    bool GetBool(string name, bool defaultValue)
-    {
-        if (PlayerPrefs.HasKey(name))
-        {
-            return GetBool(name);
-        }
-        return defaultValue;
     }
 }
