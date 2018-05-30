@@ -444,13 +444,15 @@ public class UIManager : MonoBehaviour
 
     public void SetContinueButton(bool active)
     {
-        continueButton.enabled = active;
+        continueButton.interactable = active;
+        // continueButton.enabled = active;
     }
 
     public void SetConfirmButton(bool active)
     {
         // Debug.Log("Setting confirm button to " + active);
-        confirmButton.enabled = active;
+        confirmButton.interactable = active;
+        // confirmButton.enabled = active;
     }
     public void Play()
     {

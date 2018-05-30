@@ -9,17 +9,15 @@ public class TutorialManager : MonoBehaviour
 {
     public static UnityEvent SectionDone;
     // UIManager uiManager;
-    [SerializeField]
-    GameObject tutorialPanel;
-    [SerializeField]
-    TutorialSection introductionSection;
+    [SerializeField] GameObject tutorialPanel;
+    [SerializeField] TutorialSection introductionSection;
     public TutorialSection Introduction { get { return introductionSection; } }
-    [SerializeField]
-    TutorialSection movementSection;
+    [SerializeField] TutorialSection movementSection;
     public TutorialSection Movement { get { return movementSection; } }
-    [SerializeField]
-    TutorialSection combatSection;
+    [SerializeField] TutorialSection combatSection;
     public TutorialSection Combat { get { return combatSection; } }
+    [SerializeField] TutorialSection upgradeSection;
+    public TutorialSection Upgrade { get { return upgradeSection; } }
     TutorialSection currentSection;
     public TutorialSection Current { get { return currentSection; } }
 
@@ -78,7 +76,8 @@ public class TutorialManager : MonoBehaviour
     // 		 Should run upon the player killing their first enemy.
     public void RunUpgradeTutorial()
     {
-        Time.timeScale = 0f;
+        currentSection = upgradeSection;
+        Run();
     }
 
     // Goes to the next screen in the current tutorial.
