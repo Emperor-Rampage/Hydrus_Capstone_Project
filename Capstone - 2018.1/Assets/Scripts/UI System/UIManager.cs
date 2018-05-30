@@ -17,11 +17,11 @@ using AudioClasses;
 // TODO: Use an enum to define ui sounds. Store them in a dictionary with the enum as the key and the SoundEffect as the value.
 // TODO: Pass the enum in each ui element's event trigger.
 
-[RequireComponent(typeof(Canvas), typeof(TutorialManager))]
+[RequireComponent(typeof(Canvas), typeof(TutorialManager), typeof(MouseLookManager))]
 public class UIManager : MonoBehaviour
 {
     GameManager manager;
-    TutorialManager tutorialManager;
+    MouseLookManager mouseLookManager;
 
     [Header("Main Settings")]
     // Serialized fields.
@@ -151,6 +151,7 @@ public class UIManager : MonoBehaviour
     public void Initialize()
     {
         manager = GameManager.Instance;
+        mouseLookManager = GetComponent<MouseLookManager>();
 
         // Connect settings buttons with GameManager methods.
         mainSettingsContainer.backButton.onClick.AddListener(manager.RevertSettings);
@@ -164,6 +165,8 @@ public class UIManager : MonoBehaviour
     }
     public void Initialize_Main()
     {
+        mouseLookManager.enabled = false;
+
         resolutions = Screen.resolutions;
 
         mainSettingsContainer.resolutionDropdown.ClearOptions();
@@ -191,6 +194,8 @@ public class UIManager : MonoBehaviour
 
     public void Initialize_Level(float interruptPercent = 0f)
     {
+        mouseLookManager.enabled = true;
+
         playerCastBackBar.fillAmount = interruptPercent;
         playerCastBackInterruptBar.fillAmount = 1f - interruptPercent;
         enemyCastBackBar.fillAmount = interruptPercent;
@@ -1098,6 +1103,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateTimeText(float secondsRemaining) {
         TimeSpan time = TimeSpan.FromSeconds(secondsRemaining);
-        timeLimitText.text = String.Format("<mspace=2.25em>{0:00}:{1:00}.{2:000}", (int)time.TotalMinutes, time.Seconds, time.Milliseconds);
+        timeLimitText.text = String.Format("<mspace=2.25em>{0:00}:{1:00}.{2:00}", (int)time.TotalMinutes, time.Seconds, time.Milliseconds);
     }
 }

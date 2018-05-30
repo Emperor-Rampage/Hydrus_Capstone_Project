@@ -62,6 +62,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     [Space(10)]
     [Header("Game")]
+    // TODO: Move MouseLookManager from its own singleton to the UIManager.
+    //       This is to allow it to be enabled and disabled more easily on pause and other ui events.
+    MouseLookManager mouseLookManager;
     SettingsManager settingsManager;
 
     [SerializeField] AbilityTree abilityTree;
@@ -330,6 +333,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     {
                         uiManager = gmInstance.GetComponent<UIManager>();
                         tutorialManager = gmInstance.GetComponent<TutorialManager>();
+                        mouseLookManager = gmInstance.GetComponent<MouseLookManager>();
                     }
                     else if (gmInstance.GetComponent<AudioManager>() != null && audioManager == null)
                     {
@@ -529,6 +533,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
             player.Instance = GameObject.Instantiate(player.Class.ClassCamera);
+            mouseLookManager.SetTarget(player.Instance);
             // Manually set the position.
             SetEntityInstanceLocation(player);
             // Loop through all of the enemies and spawn their instances.
@@ -1006,10 +1011,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 {
                     player.Heal(25);
                     uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
-                }
-                else if (Input.GetKeyDown(KeyCode.I))
-                {
-                    tutorialManager.RunUpgradeTutorial();
                 }
             }
         }
