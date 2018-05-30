@@ -1098,6 +1098,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateTimeText(float secondsRemaining) {
         TimeSpan time = TimeSpan.FromSeconds(secondsRemaining);
-        timeLimitText.text = String.Format("{0:00}:{1:00}.{2:000}", (int)time.TotalMinutes, time.Seconds, time.Milliseconds);
+        timeLimitText.text = String.Format("<mspace=2.25em>{0:00}:{1:00}.{2:000}", (int)time.TotalMinutes, time.Seconds, time.Milliseconds);
     }
 }
