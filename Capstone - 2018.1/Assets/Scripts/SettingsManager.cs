@@ -46,6 +46,8 @@ public class SettingsData
     public float ambientVolume = 1f;
 
     // Controls
+    public float xSensitivity = 1f;
+    public float ySensitivity = 1f;
     public KeyCode interactKey = KeyCode.Space;
     public KeyCode turnLeftKey = KeyCode.Q;
     public KeyCode turnRightKey = KeyCode.E;
@@ -79,6 +81,8 @@ public class SettingsManager
     public float FXVolume { get { return SettingsData.fxVolume; } private set { SettingsData.fxVolume = value; } }
     public float AmbientVolume { get { return SettingsData.ambientVolume; } private set { SettingsData.ambientVolume = value; } }
     // Controls settings
+    public float XSensitivity { get { return SettingsData.xSensitivity; } private set { SettingsData.xSensitivity = value; } }
+    public float YSensitivity { get { return SettingsData.ySensitivity; } private set { SettingsData.ySensitivity = value; } }
     public KeyCode InteractKey { get { return SettingsData.interactKey; } private set { SettingsData.interactKey = value; } }
     public KeyCode TurnLeftKey { get { return SettingsData.turnLeftKey; } private set { SettingsData.turnLeftKey = value; } }
     public KeyCode TurnRightKey { get { return SettingsData.turnRightKey; } private set { SettingsData.turnRightKey = value; } }
@@ -138,7 +142,8 @@ public class SettingsManager
         SettingsData.fxVolume = container.fxSlider.value;
         SettingsData.ambientVolume = container.ambientSlider.value;
         // Controls
-
+        SettingsData.xSensitivity = container.xSensitivitySlider.value;
+        SettingsData.ySensitivity = container.ySensitivitySlider.value;
     }
 
     public bool LoadSettings()

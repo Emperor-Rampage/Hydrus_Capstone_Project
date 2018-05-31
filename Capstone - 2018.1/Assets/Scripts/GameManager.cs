@@ -196,10 +196,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         Debug.Log("Applying player settings.");
         settingsManager.SetSettings(uiManager);
-        // TODO: Add gameplay settings.
+
+        // Gameplay
         ApplyAdjustedHealth();
         ApplyUseTimeLimit();
 
+        // Graphics
         Resolution targetRes;
         if (settingsManager.ResolutionIndex > 0 && settingsManager.ResolutionIndex < uiManager.resolutions.Length)
             targetRes = uiManager.resolutions[settingsManager.ResolutionIndex];
@@ -214,7 +216,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         QualitySettings.masterTextureLimit = settingsManager.TextureQualityIndex;
 
-        // TODO: Add Antialiasing settings.
         ApplyAntialiasingSettings();
 
         QualitySettings.vSyncCount = settingsManager.VSyncIndex;
@@ -245,7 +246,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             Application.targetFrameRate = 144;
         }
 
-        // TODO: Add sound settings.
+        // Sound
         Debug.Log("Master volume: " + settingsManager.MasterVolume);
         float masterDBValue = 20f * Mathf.Log10(settingsManager.MasterVolume);
         float systemDBValue = 20f * Mathf.Log10(settingsManager.SystemVolume);
@@ -258,7 +259,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         mixer.SetFloat("MusicVolume", musicDBValue);
         mixer.SetFloat("FXVolume", fxDBValue);
         mixer.SetFloat("AmbientVolume", ambientDBValue);
-        // TODO: Add controls settings.
+
+        // Controls
+        mouseLookManager.SensitivityX = settingsManager.XSensitivity;
+        mouseLookManager.SensitivityY = settingsManager.YSensitivity;
 
         settingsManager.SaveSettings();
     }
@@ -279,7 +283,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
     }
 
-    void ApplyUseTimeLimit() {
+    void ApplyUseTimeLimit()
+    {
         useTimeLimit = (settingsManager.TimeLimit != 0f);
     }
 
@@ -378,10 +383,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         if (inGame)
         {
-            if (useTimeLimit) {
+            if (useTimeLimit)
+            {
                 timeRemaining = Mathf.Clamp(timeRemaining - Time.deltaTime, 0f, settingsManager.TimeLimit);
                 // If the player is out of time. KILL THEM.
-                if (timeRemaining <= 0) {
+                if (timeRemaining <= 0)
+                {
                     if (level != null && level.Player != null)
                         PerformEntityDeathCheck(level.Player, false);
                 }
@@ -395,6 +402,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             }
             else
             {
+                if (mouseLookManager.enabled)
+                {
+                    Direction facingDirection = mouseLookManager.GetDirectionFacing();
+                    if (facingDirection != Direction.Null)
+                    {
+                        level.Player.Facing = facingDirection;
+                    }
+                }
                 // Get player input and do stuff.
                 HandlePlayerInput();
                 // Let the enemy's do stuff.
@@ -515,7 +530,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             ApplyUseTimeLimit();
             // If it's the hub, don't use a time limit.
-            if (scene.buildIndex == 1) {
+            if (scene.buildIndex == 1)
+            {
                 useTimeLimit = false;
             }
             timeRemaining = settingsManager.TimeLimit;
@@ -1275,6 +1291,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (ability == null)
             return;
 
+        mouseLookManager.RestrictDirection = entity.Facing;
+
         uiManager.UpdatePlayerCast(entity.CurrentCastTime);
         // Get the cells to highlight and display them.
         List<Cell> affected = level.GetAffectedCells_Highlight(entity, ability);
@@ -1289,6 +1307,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public void CancelPlayerAbility()
     {
         uiManager.CancelPlayerCast();
+        mouseLookManager.RestrictDirection = Direction.Null;
         SetPlayerAnimation("Interrupt", 1.0f);
     }
 
@@ -1324,6 +1343,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         if (entity.IsPlayer == true)
         {
+            mouseLookManager.RestrictDirection = Direction.Null;
             SetPlayerAnimation("CastActivate", 1.0f);
         }
 

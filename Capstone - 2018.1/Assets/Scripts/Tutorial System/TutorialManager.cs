@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Canvas))]
+[RequireComponent(typeof(Canvas), typeof(MouseLookManager))]
 public class TutorialManager : MonoBehaviour
 {
+    MouseLookManager mouseLookManager;
     public static UnityEvent SectionDone;
     // UIManager uiManager;
     [SerializeField] GameObject tutorialPanel;
@@ -28,6 +29,7 @@ public class TutorialManager : MonoBehaviour
     // 		 Should run upon beginning a new game and loading into the Hub.
     void Start()
     {
+        mouseLookManager = GetComponent<MouseLookManager>();
         if (SectionDone == null)
             SectionDone = new UnityEvent();
         SectionDone.AddListener(EndSection);
@@ -35,6 +37,7 @@ public class TutorialManager : MonoBehaviour
     void Run()
     {
         Time.timeScale = 0f;
+        mouseLookManager.enabled = false;
         tutorialPanel.SetActive(true);
         currentSection.gameObject.SetActive(true);
         currentSection.Reset();
@@ -44,6 +47,7 @@ public class TutorialManager : MonoBehaviour
     void EndSection()
     {
         Time.timeScale = 1f;
+        mouseLookManager.enabled = true;
         currentSection.Complete = true;
         currentSection.gameObject.SetActive(false);
         tutorialPanel.SetActive(false);

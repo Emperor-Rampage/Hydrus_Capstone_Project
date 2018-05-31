@@ -37,6 +37,10 @@ public class SettingsContainer : MonoBehaviour
     public TMP_Text ambientValueText;
 
     [Header("Controls")]
+    public Slider xSensitivitySlider;
+    public TMP_Text xSensitivityText;
+    public Slider ySensitivitySlider;
+    public TMP_Text ySensitivityText;
 
     [Header("Buttons")]
     public Button backButton;
