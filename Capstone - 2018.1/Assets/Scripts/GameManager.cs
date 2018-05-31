@@ -1448,6 +1448,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // Regenerate 20% of missing health on kill.
             player.Heal((player.MaxHealth - player.CurrentHealth) * 0.2f);
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
+            //Play Core collection VFX
+            particleManager.PlayCoreGather(entity);
             if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)
             {
                 tutorialManager.RunUpgradeTutorial();

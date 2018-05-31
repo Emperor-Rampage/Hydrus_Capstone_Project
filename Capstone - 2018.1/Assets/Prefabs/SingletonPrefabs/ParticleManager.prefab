@@ -52,5 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitSpark: {fileID: 198001430747635680, guid: b1870744a09fc3a45a664f69ef04b48a, type: 2}
-  hurtMat: {fileID: 2100000, guid: 1707ada7259619f4386e578fc21e1f8e, type: 2}
+  coreEffect: {fileID: 198366945742429748, guid: d7480667a4d371a4b973b292a557e271,
+    type: 2}
   colorDecayTime: 0.5

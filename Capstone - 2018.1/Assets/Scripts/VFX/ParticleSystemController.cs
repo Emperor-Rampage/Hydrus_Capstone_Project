@@ -19,7 +19,7 @@ namespace ParticleClasses
         [SerializeField]
         public ParticleSystem hitSpark;
         [SerializeField]
-        public Material hurtMat;
+        public ParticleSystem coreEffect;
 
         private LevelManager level;
 
@@ -34,6 +34,22 @@ namespace ParticleClasses
             Vector3 sparkVec = new Vector3(hurtTarget.Instance.transform.position.x, 0.5f, hurtTarget.Instance.transform.position.z);
             
             Instantiate(hitSpark, sparkVec, GameObject.FindGameObjectWithTag("Player").transform.localRotation);
+        }
+
+        //Instantiates a Core Effect Particle System when prompted.
+        public void PlayCoreGather(Entity spawnTarget)
+        {
+
+            Debug.Log("Generating Core Gather Effect for " + spawnTarget.Name + "at Cell " + spawnTarget.Cell.X + "," + spawnTarget.Cell.Z + " with " + spawnTarget.Cores + " Cores. Spawning " + (spawnTarget.Cores / 5) + " particles." );
+
+            Vector3 spawnVec = new Vector3(spawnTarget.Instance.transform.position.x, 0.5f, spawnTarget.Instance.transform.position.z);
+
+            coreEffect.emission.SetBurst( 0 ,
+                new ParticleSystem.Burst(0.0f,(spawnTarget.Cores / 5))
+                );
+
+            Instantiate(coreEffect, spawnVec, GameObject.FindGameObjectWithTag("Player").transform.localRotation);
+
         }
 
         public void PlayPlayerVFX(AbilityObject abil)
@@ -55,7 +71,7 @@ namespace ParticleClasses
         //Used to play the dissolve effect for enemy death. Shader effect.
         public void DestroyEnemy(Entity target)
         {
-
+            PlayCoreGather(target);
         }
 
         //Used to apply a visual effect to a target during an ability.
