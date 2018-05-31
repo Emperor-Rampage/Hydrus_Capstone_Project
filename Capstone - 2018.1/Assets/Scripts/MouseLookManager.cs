@@ -12,6 +12,7 @@ public class MouseLookManager : MonoBehaviour
     [SerializeField] float directionRange;
     [Range(0f, 90f)]
     [SerializeField] float restrictRange;
+    [SerializeField] float restrictStrength;
     [SerializeField] float minimumY;
     [SerializeField] float maximumY;
 
@@ -34,34 +35,43 @@ public class MouseLookManager : MonoBehaviour
     float rangeLowerDown;
     float rangeUpperLeft;
     float rangeLowerLeft;
+    float midpointUpRight;
+    float midpointDownRight;
+    float midpointDownLeft;
+    float midpointUpLeft;
 
     void Update()
     {
         if (camera == null || transform == null)
             return;
 
-        rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * SensitivityX;
-        // Debug.Log("Rotation X: " + rotationX);
+        Direction currentDirection = GetDirectionFacing();
+        float directionAngle = (int)currentDirection * 90f;
+        float angleDistance = Mathf.Abs(Mathf.DeltaAngle(rotationX, directionAngle));
+        float sensitivityXModifier = 0.25f + (angleDistance / 22.5f);
+
+        rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * (SensitivityX * sensitivityXModifier);
+
         if (RestrictDirection != Direction.Null)
         {
             float directionRotation = (int)RestrictDirection * 90f;
 
             float range = restrictRange / 2f;
-            Debug.Log("Restricting mouse movement between " + (directionRotation - range) + " and " + (directionRotation + range));
 
             // Special case for up, since it's the point at which 360 becomes 0.
             // For all other directions, can just use the clamp method.
-            if (RestrictDirection == Direction.Up)
-            {
-                float midPoint = (restrictLowerUp + restrictUpperUp) / 2f;
-                if (rotationX < restrictLowerUp && rotationX >= midPoint)
-                    rotationX = restrictLowerUp;
-                else if (rotationX > restrictUpperUp && rotationX < midPoint)
-                    rotationX = restrictUpperUp;
-            }
-            else
-            {
-                rotationX = Mathf.Clamp(rotationX, directionRotation - range, directionRotation + range);
+
+            float restrictLower = Mathf.Repeat(directionRotation - range, 360f);
+            float restrictUpper = Mathf.Repeat(directionRotation + range, 360f);
+            float distanceLower = Mathf.Abs(Mathf.DeltaAngle(rotationX, restrictLower));
+            float distanceUpper = Mathf.Abs(Mathf.DeltaAngle(rotationX, restrictUpper));
+
+            float speed = restrictStrength * Time.deltaTime;
+
+            if (distanceLower > restrictRange) {
+                rotationX = Mathf.MoveTowardsAngle(rotationX, restrictLower,  speed);
+            } else if (distanceUpper > restrictRange) {
+                rotationX = Mathf.MoveTowardsAngle(rotationX, restrictUpper, speed);
             }
         }
 

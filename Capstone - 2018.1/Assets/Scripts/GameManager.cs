@@ -107,6 +107,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     bool inGame;
     bool paused;
     bool useTimeLimit;
+    bool useMouse;
     float timeRemaining;
     Coroutine gradualEffectsCoroutine;
     Coroutine playerMovementCoroutine;
@@ -261,6 +262,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         mixer.SetFloat("AmbientVolume", ambientDBValue);
 
         // Controls
+        useMouse = (settingsManager.LookControls == ControlType.Mouse);
         mouseLookManager.SensitivityX = settingsManager.XSensitivity;
         mouseLookManager.SensitivityY = settingsManager.YSensitivity;
 
@@ -402,13 +404,18 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             }
             else
             {
-                if (mouseLookManager.enabled)
-                {
-                    Direction facingDirection = mouseLookManager.GetDirectionFacing();
-                    if (facingDirection != Direction.Null)
+                if (useMouse) {
+                    if (mouseLookManager.enabled)
                     {
-                        level.Player.Facing = facingDirection;
+                        Direction facingDirection = mouseLookManager.GetDirectionFacing();
+                        if (facingDirection != Direction.Null)
+                        {
+                            level.Player.Facing = facingDirection;
+                        }
                     }
+                } else if (!useMouse && mouseLookManager.gameObject.activeInHierarchy) {
+                    mouseLookManager.enabled = useMouse;
+                    mouseLookManager.gameObject.SetActive(useMouse);
                 }
                 // Get player input and do stuff.
                 HandlePlayerInput();
@@ -573,6 +580,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
 
             audioManager.FadeInMusic(level.music, 1f);
+
+            mouseLookManager.enabled = useMouse;
+            mouseLookManager.gameObject.SetActive(useMouse);
 
             inGame = true;
             if (gradualEffectsCoroutine != null)
@@ -987,20 +997,22 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 {
                     ExitLevel();
                 }
-                else if (inputDir != Direction.Null)
+
+                if (inputDir != Direction.Null)
                 {
                     MoveEntityLocation(player, inputDir);
                     //                MoveEntityInstance(player, inputDir);
                 }
-                else if (Input.GetKey(settingsManager.TurnLeftKey))
+                else if (Input.GetKey(settingsManager.TurnLeftKey) && settingsManager.LookControls == ControlType.Keyboard)
                 {
                     TurnEntityInstanceLeft(player);
                 }
-                else if (Input.GetKey(settingsManager.TurnRightKey))
+                else if (Input.GetKey(settingsManager.TurnRightKey) && settingsManager.LookControls == ControlType.Keyboard)
                 {
                     TurnEntityInstanceRight(player);
                 }
-                else if (Input.GetKey(settingsManager.Ability1Key))
+
+                if (Input.GetKey(settingsManager.Ability1Key))
                 {
                     CastPlayerAbility(player, 0);
                 }
