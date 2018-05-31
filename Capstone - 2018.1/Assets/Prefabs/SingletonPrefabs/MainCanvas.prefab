@@ -39935,9 +39935,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   directionRange: 90
-  restrictRange: 45
-  minimumY: -30
-  maximumY: 30
+  restrictRange: 90
+  minimumY: -20
+  maximumY: 20
 --- !u!114 &114674680442518042
 MonoBehaviour:
   m_ObjectHideFlags: 1
