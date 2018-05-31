@@ -10,7 +10,7 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 
 		_NormalTex("Normal Map", 2D) = "bump" {}
-		_NormalScale("Normal Map Scale", Float) = 1.0
+		_NormalScale("Normal Map Scale", Range(0,5)) = 1.0
 
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_GlossTex("Smoothness Map", 2D) = "white"{}
@@ -58,7 +58,28 @@
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
+		#include "UnityCG.cginc"
 
+		/*
+		half4 LightingWarpLambert(SurfaceOutput s, half3 lightDir, half atten)
+		{
+			half NdotL = dot(s.Normal, lightDir);
+			half diff = NdotL * 0.5 + 0.5;
+			half4 c;
+			c.rgb = s.Albedo * _LightColor0.rgb * (diff * atten*);
+			c.a = s.Alpha;
+			return c;
+		}
+		*/
+		inline half4 LightingCustom(SurfaceOutputStandard s, half3 lightDir, UnityGI gi)
+		{
+			return LightingStandard(s, lightDir, gi);
+		}
+
+		inline void LightingCustom_GI(SurfaceOutputStandard s, UnityGIInput data, inout UnityGI gi)
+		{
+			LightingStandard_GI(s, data, gi);
+		}
 		
 
 		sampler2D _MainTex;
@@ -84,7 +105,7 @@
 		half _GlowScale;
 		half _GlowIntensity;
 		half _GlowColShift;
-		float _NormalScale;
+		half _NormalScale;
 		fixed4 _EmissiveColor;
 		fixed4 _Glow;
 		fixed4 _GlowEnd;
@@ -113,8 +134,7 @@
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
-
-			o.Normal = UnpackNormal (tex2D(_NormalMap, IN.uv_NormalMap) * _NormalScale);
+			o.Normal = UnpackNormal (tex2D(_NormalMap, IN.uv_NormalMap));
 
 			//Convert dissolve progression to -1 to 1 scale.
 			half dBase = -2.0f * _DissolveScale + 1.0f;
@@ -166,16 +186,6 @@
 			//Project vector between current vertex and top of gradient onto dissolve direction.
 			//Scale coeficient by band (gradient) size.
 			o.dGeometry = dot(v.vertex - dPoint, dDir) * dBandFactor;
-		}
-		
-		inline half4 LightingCustom(SurfaceOutputStandard s, half3 lightDir, UnityGI gi)
-		{
-			return LightingStandard(s, lightDir, gi);
-		}
-
-		inline void LightingCustom_GI(SurfaceOutputStandard s, UnityGIInput data, inout UnityGI gi)
-		{
-			LightingStandard_GI(s, data, gi);
 		}
 
 		ENDCG
