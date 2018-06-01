@@ -98,6 +98,9 @@ public class UIManager : MonoBehaviour
     int currentHUDSettingsTab;
 
     [Header("Ability Tree Settings")]
+    [SerializeField] float minZoom = 0.1f;
+    [SerializeField] float maxZoom = 1.5f;
+    [SerializeField] float zoomSpeed = 0.2f;
     [SerializeField] TMP_Text treeCoresText;
     [SerializeField] AbilityInfoContainer abilityInfoContainer;
     [SerializeField] RectTransform abilityTreeContentPanel;
@@ -107,6 +110,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject abiltiyLinePrefab;
     AbilityTree abilityTree;
     List<TreeAbility> treeAbilities = new List<TreeAbility>();
+    float currentZoom = 1f;
 
     // Private fields.
     int currentMenu;
@@ -951,6 +955,15 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnTreeMouseScroll(PointerEventData data)
+    {
+        float dir = data.scrollDelta.y;
+        currentZoom = Mathf.Clamp(currentZoom + (dir * zoomSpeed), minZoom, maxZoom);
+        Debug.Log("Mouse scrolled in upgrade menu! Zoom is now " + currentZoom);
+
+        abilityTreeContentPanel.localScale = Vector3.one * currentZoom;
     }
 
     public void OnTreeAbilityHover(PointerEventData data)
