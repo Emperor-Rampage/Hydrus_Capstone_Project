@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pixelplacement;
 
 using EntityClasses;
 using AbilityClasses;
@@ -68,10 +69,10 @@ namespace ParticleClasses
            
         }
 
-        //Used to play the dissolve effect for enemy death. Shader effect.
-        public void DestroyEnemy(Entity target)
+        public void DissolveEnemy(Entity target, Level level)
         {
-            PlayCoreGather(target);
+            Material mat = target.Instance.GetComponentInChildren<MeshRenderer>().material;
+            Tween.ShaderFloat(mat, "_DissolveScale", 1.0f, 1.0f, 0.0f, completeCallback: () => GameObject.Destroy(target.Instance));
         }
 
         //Used to apply a visual effect to a target during an ability.

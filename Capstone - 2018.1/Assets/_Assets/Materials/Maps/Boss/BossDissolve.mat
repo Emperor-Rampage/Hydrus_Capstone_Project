@@ -6,11 +6,11 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: TestMat
+  m_Name: BossDissolve
   m_Shader: {fileID: 4800000, guid: 2facef46b7e0b1243aecc478b7369cf8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
+  m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -38,48 +38,28 @@ Material:
         m_Texture: {fileID: 2800000, guid: cd4fd7e3602334b6da032bcbb01e30a1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Emission:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionTex:
-        m_Texture: {fileID: 2800000, guid: 942b6669c669ed044978d6524991cffa, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissiveTex:
-        m_Texture: {fileID: 2800000, guid: 942b6669c669ed044978d6524991cffa, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _GlossTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 8fe55bf8edc5c4d668dfd7c86db37ba0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 763ea5f5bfe07f24ea80993fa7197956, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetalTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 3a0b5c5f13c05427b815399acd557628, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MetallicMap:
-        m_Texture: {fileID: 2800000, guid: cd45b4c132f62414e8bc41d044d4f9c8, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MetallicTex:
-        m_Texture: {fileID: 2800000, guid: cd45b4c132f62414e8bc41d044d4f9c8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3ba4a061f738c40208eace9507d65cba, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalTex:
-        m_Texture: {fileID: 2800000, guid: 7f23d7b453ed7ab40a811ce25ef6d087, type: 3}
+        m_Texture: {fileID: 2800000, guid: 24c82fac8afb348e4ab328155b2b91f6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -98,15 +78,13 @@ Material:
     - _DissolveScale: 0
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 1
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _GlowColShift: 0.701
-    - _GlowIntensity: 1
-    - _GlowScale: 3.87
-    - _HurtValue: 0
-    - _Metallic: 1
+    - _GlowIntensity: 1.29
+    - _GlowScale: 1.44
+    - _Metallic: 0
     - _Mode: 0
-    - _NormalScale: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
@@ -117,10 +95,8 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveEnd: {r: 0, g: -1, b: 0, a: 1}
-    - _DissolveStart: {r: 0, g: 3, b: 0, a: 1}
+    - _DissolveStart: {r: 0, g: 4, b: 0, a: 1}
     - _Emission: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissiveColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Glow: {r: 0, g: 0.9534545, b: 1, a: 1}
-    - _GlowEnd: {r: 1, g: 0.46264225, b: 0, a: 1}
-    - _Tint: {r: 1, g: 0, b: 0, a: 1}
+    - _Glow: {r: 1, g: 1, b: 1, a: 1}
+    - _GlowEnd: {r: 1, g: 0, b: 0, a: 1}

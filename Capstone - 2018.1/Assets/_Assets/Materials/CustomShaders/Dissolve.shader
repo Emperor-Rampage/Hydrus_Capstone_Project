@@ -1,26 +1,18 @@
-﻿Shader "Custom/MonsterShader" 
+﻿Shader "Custom/DissolveShader" 
 {
 	Properties 
 	{
-		//Unlit Properties
-		_Tint ("Tint Color", Color) = (1,0,0,1)
-		_HurtValue("Tint Opacity", Range(0.0, 1.0)) = 0.0
-
-		_Color ("Colorization", Color) = (1,1,1,1)
+		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-
-		_NormalTex("Normal Map", 2D) = "bump" {}
-		_NormalScale("Normal Map Scale", Range(0,5)) = 1.0
-
+		_Emission("Emission", Color) = (1, 1, 1, 1)
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_GlossTex("Smoothness Map", 2D) = "white"{}
-
 		_Metallic ("Metallic", Range(0,1)) = 0.0
-		_MetalTex("Metallic Map", 2D) = "white" {}
 
-		_EmissiveColor("Emission Color", Color) = (1, 1, 1, 1)
-		_EmissiveTex("Emmission Map", 2D) = "white" {}
+		_EmissionTex("Emission", 2D) = "white" {}
+		_NormalTex("Normal Map", 2D) = "bump" {}
+		_MetallicTex("Metallic", 2D) = "white" {}
 
+		//Dissolve Stuff
 		_DissolveScale("Dissolve Scale", Range(0,1)) = 0.0
 		_DissolveTex("Dissolve Texture", 2D) = "white"{}
 		_DissolveStart("Dissolve Start Point", Vector) = (1, 1, 1, 1)
@@ -34,85 +26,62 @@
 		_GlowColShift("Glow Colorshift", Range(0.0,2.0)) = 0.075
 
 	}
-	SubShader 
+		SubShader
 	{
-
 		Pass
 		{
 			ZWrite On
 			ColorMask 0
 		}
-		Tags 
-		{ 
+
+		Tags
+		{
 			"Queue" = "Transparent"
-			"RenderType" = "Fade" 
+			"RenderType" = "Fade"
 		}
 		LOD 200
+			
 
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
 		#pragma surface surf Standard fullforwardshadows alpha:fade vertex:vert
 
-		// Custom Unlit surface shader, allows up to blend in the tint color over the top of the rest of the materials
-		//#pragma surface surf Unlit fullforwardshadows 
-
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 4.6
-		#include "UnityCG.cginc"
-
-		/*
-		half4 LightingWarpLambert(SurfaceOutput s, half3 lightDir, half atten)
-		{
-			half NdotL = dot(s.Normal, lightDir);
-			half diff = NdotL * 0.5 + 0.5;
-			half4 c;
-			c.rgb = s.Albedo * _LightColor0.rgb * (diff * atten*);
-			c.a = s.Alpha;
-			return c;
-		}
-		
-		inline half4 LightingCustom(SurfaceOutputStandard s, half3 lightDir, UnityGI gi)
-		{
-			return LightingStandard(s, lightDir, gi);
-		}
-
-		inline void LightingCustom_GI(SurfaceOutputStandard s, UnityGIInput data, inout UnityGI gi)
-		{
-			LightingStandard_GI(s, data, gi);
-		}
-		*/
 
 		sampler2D _MainTex;
-		sampler2D _DissolveTex;
-		sampler2D _MetalTex;
-		sampler2D _GlossTex;
-		sampler2D _EmissiveTex;
-		sampler2D _NormalMap;
+		sampler2D _EmissionTex;
+		sampler2D _NormalTex;
+		sampler2D _MetallicTex;
 
-		struct Input {
+		sampler2D _DissolveTex;
+
+		struct Input 
+		{
 			float2 uv_MainTex;
-			float2 uv_MetalTex;
-			float2 uv_EmissiveTex;
-			float2 uv_DissolveTex;
-			float2 uv_GlossTex;
-			float2 uv_NormalMap;
+			float2 uv_EmissionTex;
+			float2 uv_NormalTex;
+			float2 uv_MetallicTex;
+
 			float3 dGeometry;
+			float2 uv_DissolveTex;
 		};
 
 		half _Glossiness;
 		half _Metallic;
+		fixed4 _Color;
+		fixed4 _Emission;
+
 		half _DissolveScale;
 		half _GlowScale;
 		half _GlowIntensity;
 		half _GlowColShift;
-		half _NormalScale;
-		fixed4 _EmissiveColor;
 		fixed4 _Glow;
 		fixed4 _GlowEnd;
-		fixed4 _Color;
 		float _DissolveBand;
 		float4 _DissolveStart;
 		float4 _DissolveEnd;
+
 
 		//Precompute dissolve direction
 		static float3 dDir = normalize(_DissolveEnd - _DissolveStart);
@@ -130,16 +99,17 @@
 			// put more per-instance properties here
 		UNITY_INSTANCING_BUFFER_END(Props)
 
-		void surf (Input IN, inout SurfaceOutputStandard o) {
+		void surf (Input IN, inout SurfaceOutputStandard o) 
+		{
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-
 			o.Albedo = c.rgb;
+			// Metallic and smoothness come from slider variables
+			fixed4 cSpec = tex2D(_MetallicTex, IN.uv_MetallicTex);
+			o.Metallic = cSpec.r;
+			o.Smoothness = cSpec.a * _Glossiness;
 
-			fixed4 metal = tex2D(_MetalTex, IN.uv_MetalTex);
-
-			o.Normal = UnpackNormal (tex2D(_NormalMap, IN.uv_NormalMap));
-
+			o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_EmissionTex));
 
 			//Convert dissolve progression to -1 to 1 scale.
 			half dBase = -2.0f * _DissolveScale + 1.0f;
@@ -151,16 +121,6 @@
 			half dFinal = dTexRead + IN.dGeometry;
 			//Set output alpha value
 			half alpha = clamp(dFinal, 0.0f, 1.0f);
-			o.Alpha = alpha;
-
-			
-			// Metallic and smoothness come from slider variables
-			//o.Metallic = metal;
-			//o.Smoothness = metal.rgb;
-
-			//Prep base Emissive tex for blending.
-			fixed4 eTex = tex2D(_EmissiveTex, IN.uv_EmissiveTex) * _EmissiveColor;
-
 
 			//Shift the computed raw alhpa value based on the scale factor of the glow.
 			//Scale the shifted value based on effect intensity.
@@ -172,14 +132,12 @@
 			fixed4 glowCol = dPredict * lerp(_Glow, _GlowEnd, clamp(dPredictCol, 0.0f, 1.0f));
 			glowCol = clamp(glowCol, 0.0f, 1.0f);
 
-			//Composite the glow color and emissive texture
-			fixed4 eFinal = eTex + glowCol;
+			fixed4 e = tex2D(_EmissionTex, IN.uv_EmissionTex) * _Emission;
 
-			o.Emission = eFinal;
-
+			o.Emission = e + glowCol;
+			o.Alpha = alpha;
 		}
-		
-		
+
 		void vert(inout appdata_full v, out Input o)
 		{
 			UNITY_INITIALIZE_OUTPUT(Input, o);
@@ -192,8 +150,9 @@
 			//Scale coeficient by band (gradient) size.
 			o.dGeometry = dot(v.vertex - dPoint, dDir) * dBandFactor;
 		}
-
 		ENDCG
+
 	}
+		
 	FallBack "VertexLit"
 }

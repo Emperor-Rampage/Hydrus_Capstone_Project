@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 using AudioClasses;
 using AbilityClasses;
+using ParticleClasses;
 
 namespace MapClasses
 {
@@ -400,10 +401,10 @@ namespace MapClasses
                     // Debug.Log("-- Entity is not idle, waiting a frame. Instead is " + entity.State);
                     yield return null;
                 }
-
+                
                 // Debug.Log("-- Entity is idle. Destroying everything.");
                 // If the entity is present in the enemy list, it will be removed.
-                GameObject.Destroy(entity.Instance);
+                //GameObject.Destroy(entity.Instance);
                 if (!entity.IsPlayer)
                 {
                     EnemyList.Remove((Enemy)entity);

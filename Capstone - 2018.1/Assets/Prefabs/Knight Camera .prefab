@@ -257,6 +257,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4295208913637750}
+  - component: {fileID: 65002576353875030}
   m_Layer: 0
   m_Name: 'CoreTrigger '
   m_TagString: Untagged
@@ -337,8 +338,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1455881250750202}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.822, y: 0.01, z: 1.153}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: -0.5, y: 0.01, z: 0.552}
+  m_LocalScale: {x: 1.2701938, y: 1.706356, z: 1.4098058}
   m_Children: []
   m_Father: {fileID: 4713715061194564}
   m_RootOrder: 3
@@ -746,7 +747,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -929,6 +930,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1836224032145716}
   m_Mesh: {fileID: 4300004, guid: e80021c173e97494c947918a083f5ce2, type: 3}
+--- !u!65 &65002576353875030
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1850773688615846}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 2.17}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!81 &81876621118743586
 AudioListener:
   m_ObjectHideFlags: 1

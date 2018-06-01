@@ -743,7 +743,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.17
+      value: 0.5
       mode: 0
       spread: 0
       speed:
@@ -972,7 +972,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 8
+        scalar: 4
         minScalar: 0
         maxCurve:
           serializedVersion: 2
@@ -1023,7 +1023,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
       cycleCount: 1
-      repeatInterval: 0.0001
+      repeatInterval: 0.01
   SizeModule:
     enabled: 0
     curve:
@@ -2076,34 +2076,34 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: -6.2153106
+          outSlope: -6.2153106
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.42639717
         - serializedVersion: 3
-          time: 0.2006185
-          value: -0.004184899
-          inSlope: 0
-          outSlope: -0.12067916
-          tangentMode: 1
+          time: 0.17873588
+          value: 0
+          inSlope: -7.0353875
+          outSlope: 0
+          tangentMode: 65
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.41854933
           outWeight: 0.35358572
         - serializedVersion: 3
-          time: 0.29804915
-          value: 0.0010412931
-          inSlope: -0.01358291
-          outSlope: 7.488111
-          tangentMode: 1
+          time: 0.5010252
+          value: 0
+          inSlope: -0
+          outSlope: 5.0801415
+          tangentMode: 5
           weightedMode: 0
           inWeight: 0.37359208
-          outWeight: 0.27964923
+          outWeight: 0.79633725
         - serializedVersion: 3
-          time: 0.40481806
-          value: 0.99395764
-          inSlope: 9.299677
+          time: 0.60639024
+          value: 1
+          inSlope: 9.490814
           outSlope: 7.1992264
           tangentMode: 69
           weightedMode: 0
@@ -3591,7 +3591,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 3
     type: 0
     collisionMode: 0
@@ -3777,7 +3777,7 @@ ParticleSystem:
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
-    enabled: 0
+    enabled: 1
     collisionShape0: {fileID: 0}
     collisionShape1: {fileID: 0}
     collisionShape2: {fileID: 0}
