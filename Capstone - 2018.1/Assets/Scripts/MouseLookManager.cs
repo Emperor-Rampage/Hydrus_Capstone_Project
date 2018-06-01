@@ -16,7 +16,6 @@ public class MouseLookManager : MonoBehaviour
     [SerializeField] float minimumY;
     [SerializeField] float maximumY;
 
-
     public Direction RestrictDirection { get; set; } = Direction.Null;
     public float SensitivityX { get; set; } = 2f;
     public float SensitivityY { get; set; } = 2f;
@@ -40,7 +39,9 @@ public class MouseLookManager : MonoBehaviour
     float midpointDownLeft;
     float midpointUpLeft;
 
-    void Update()
+    float velocity = 0f;
+
+    void LateUpdate()
     {
         if (camera == null || transform == null)
             return;
@@ -68,10 +69,13 @@ public class MouseLookManager : MonoBehaviour
 
             float speed = restrictStrength * Time.deltaTime;
 
-            if (distanceLower > restrictRange) {
-                rotationX = Mathf.MoveTowardsAngle(rotationX, restrictLower,  speed);
-            } else if (distanceUpper > restrictRange) {
+            if (distanceLower >= restrictRange)
+            {
                 rotationX = Mathf.MoveTowardsAngle(rotationX, restrictUpper, speed);
+            }
+            else if (distanceUpper >= restrictRange)
+            {
+                rotationX = Mathf.MoveTowardsAngle(rotationX, restrictLower, speed);
             }
         }
 

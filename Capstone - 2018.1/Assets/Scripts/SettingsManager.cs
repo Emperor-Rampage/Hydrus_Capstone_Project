@@ -10,11 +10,6 @@ using AbilityClasses;
 using EntityClasses;
 using System;
 
-public enum ControlType {
-    Mouse = 0,
-    Keyboard = 1
-}
-
 [System.Serializable]
 public class PlayerData
 {
@@ -51,7 +46,6 @@ public class SettingsData
     public float ambientVolume = 1f;
 
     // Controls
-    public ControlType lookControls = 0;
     public float xSensitivity = 1f;
     public float ySensitivity = 1f;
     public KeyCode interactKey = KeyCode.Space;
@@ -87,7 +81,6 @@ public class SettingsManager
     public float FXVolume { get { return SettingsData.fxVolume; } private set { SettingsData.fxVolume = value; } }
     public float AmbientVolume { get { return SettingsData.ambientVolume; } private set { SettingsData.ambientVolume = value; } }
     // Controls settings
-    public ControlType LookControls { get { return SettingsData.lookControls; } private set { SettingsData.lookControls = value; } }
     public float XSensitivity { get { return SettingsData.xSensitivity; } private set { SettingsData.xSensitivity = value; } }
     public float YSensitivity { get { return SettingsData.ySensitivity; } private set { SettingsData.ySensitivity = value; } }
     public KeyCode InteractKey { get { return SettingsData.interactKey; } private set { SettingsData.interactKey = value; } }
@@ -149,7 +142,6 @@ public class SettingsManager
         SettingsData.fxVolume = container.fxSlider.value;
         SettingsData.ambientVolume = container.ambientSlider.value;
         // Controls
-        SettingsData.lookControls = (ControlType)container.lookControlsDropdown.value;
         SettingsData.xSensitivity = container.xSensitivitySlider.value;
         SettingsData.ySensitivity = container.ySensitivitySlider.value;
     }

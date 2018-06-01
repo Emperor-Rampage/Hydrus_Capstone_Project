@@ -262,7 +262,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         mixer.SetFloat("AmbientVolume", ambientDBValue);
 
         // Controls
-        useMouse = (settingsManager.LookControls == ControlType.Mouse);
         mouseLookManager.SensitivityX = settingsManager.XSensitivity;
         mouseLookManager.SensitivityY = settingsManager.YSensitivity;
 
@@ -404,18 +403,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             }
             else
             {
-                if (useMouse) {
-                    if (mouseLookManager.enabled)
+                if (mouseLookManager.enabled)
+                {
+                    Direction facingDirection = mouseLookManager.GetDirectionFacing();
+                    if (facingDirection != Direction.Null)
                     {
-                        Direction facingDirection = mouseLookManager.GetDirectionFacing();
-                        if (facingDirection != Direction.Null)
-                        {
-                            level.Player.Facing = facingDirection;
-                        }
+                        level.Player.Facing = facingDirection;
                     }
-                } else if (!useMouse && mouseLookManager.gameObject.activeInHierarchy) {
-                    mouseLookManager.enabled = useMouse;
-                    mouseLookManager.gameObject.SetActive(useMouse);
                 }
                 // Get player input and do stuff.
                 HandlePlayerInput();
@@ -580,9 +574,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
 
             audioManager.FadeInMusic(level.music, 1f);
-
-            mouseLookManager.enabled = useMouse;
-            mouseLookManager.gameObject.SetActive(useMouse);
 
             inGame = true;
             if (gradualEffectsCoroutine != null)
@@ -1003,11 +994,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     MoveEntityLocation(player, inputDir);
                     //                MoveEntityInstance(player, inputDir);
                 }
-                else if (Input.GetKey(settingsManager.TurnLeftKey) && settingsManager.LookControls == ControlType.Keyboard)
+                else if (Input.GetKey(settingsManager.TurnLeftKey))
                 {
                     TurnEntityInstanceLeft(player);
                 }
-                else if (Input.GetKey(settingsManager.TurnRightKey) && settingsManager.LookControls == ControlType.Keyboard)
+                else if (Input.GetKey(settingsManager.TurnRightKey))
                 {
                     TurnEntityInstanceRight(player);
                 }
@@ -1483,6 +1474,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
             if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)
             {
+                if (player.Cores < 50) player.Cores = 50;
                 tutorialManager.RunUpgradeTutorial();
             }
             StartCoroutine(level.RemoveEntity(entity));

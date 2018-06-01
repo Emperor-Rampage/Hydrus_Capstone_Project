@@ -37,7 +37,6 @@ public class SettingsContainer : MonoBehaviour
     public TMP_Text ambientValueText;
 
     [Header("Controls")]
-    public TMP_Dropdown lookControlsDropdown;
     public Slider xSensitivitySlider;
     public TMP_Text xSensitivityText;
     public Slider ySensitivitySlider;
