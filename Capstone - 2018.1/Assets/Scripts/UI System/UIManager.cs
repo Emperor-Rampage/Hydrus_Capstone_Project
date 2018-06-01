@@ -17,11 +17,11 @@ using AudioClasses;
 // TODO: Use an enum to define ui sounds. Store them in a dictionary with the enum as the key and the SoundEffect as the value.
 // TODO: Pass the enum in each ui element's event trigger.
 
-[RequireComponent(typeof(Canvas), typeof(TutorialManager))]
+[RequireComponent(typeof(Canvas), typeof(TutorialManager), typeof(MouseLookManager))]
 public class UIManager : MonoBehaviour
 {
     GameManager manager;
-    TutorialManager tutorialManager;
+    MouseLookManager mouseLookManager;
 
     [Header("Main Settings")]
     // Serialized fields.
@@ -151,6 +151,7 @@ public class UIManager : MonoBehaviour
     public void Initialize()
     {
         manager = GameManager.Instance;
+        mouseLookManager = GetComponent<MouseLookManager>();
 
         // Connect settings buttons with GameManager methods.
         mainSettingsContainer.backButton.onClick.AddListener(manager.RevertSettings);
@@ -164,6 +165,8 @@ public class UIManager : MonoBehaviour
     }
     public void Initialize_Main()
     {
+        mouseLookManager.enabled = false;
+
         resolutions = Screen.resolutions;
 
         mainSettingsContainer.resolutionDropdown.ClearOptions();
@@ -191,6 +194,8 @@ public class UIManager : MonoBehaviour
 
     public void Initialize_Level(float interruptPercent = 0f)
     {
+        mouseLookManager.enabled = true;
+
         playerCastBackBar.fillAmount = interruptPercent;
         playerCastBackInterruptBar.fillAmount = 1f - interruptPercent;
         enemyCastBackBar.fillAmount = interruptPercent;
@@ -453,7 +458,8 @@ public class UIManager : MonoBehaviour
         confirmButton.interactable = active;
     }
 
-    public void SetTimeTextActive(bool active) {
+    public void SetTimeTextActive(bool active)
+    {
         timeLimitText.gameObject.SetActive(active);
     }
 
@@ -478,6 +484,7 @@ public class UIManager : MonoBehaviour
     public void TogglePause()
     {
         Paused = !Paused;
+        mouseLookManager.enabled = !Paused;
         ShowingTree = false;
         ShowingMap = false;
 
@@ -500,6 +507,7 @@ public class UIManager : MonoBehaviour
     public void ToggleTree()
     {
         ShowingTree = !ShowingTree;
+        mouseLookManager.enabled = !ShowingTree;
         ShowingMap = false;
         if (ShowingTree)
         {
@@ -516,6 +524,7 @@ public class UIManager : MonoBehaviour
     public void ToggleMap()
     {
         ShowingMap = !ShowingMap;
+        mouseLookManager.enabled = !ShowingMap;
         ShowingTree = false;
         if (ShowingMap)
         {
@@ -613,7 +622,7 @@ public class UIManager : MonoBehaviour
     public void SetSettingsElements(SettingsManager settings)
     {
         mainSettingsContainer.maxHealthSlider.value = settings.HealthPercent;
-        hudSettingsContainer.timeLimitToggle.isOn = (settings.TimeLimit != 0f);
+        mainSettingsContainer.timeLimitToggle.isOn = (settings.TimeLimit != 0f);
         mainSettingsContainer.timeLimitSlider.value = settings.TimeLimit;
 
         mainSettingsContainer.fullscreenToggle.isOn = settings.Fullscreen;
@@ -627,6 +636,9 @@ public class UIManager : MonoBehaviour
         mainSettingsContainer.musicSlider.value = settings.MusicVolume;
         mainSettingsContainer.fxSlider.value = settings.FXVolume;
         mainSettingsContainer.ambientSlider.value = settings.AmbientVolume;
+
+        mainSettingsContainer.xSensitivitySlider.value = settings.XSensitivity;
+        mainSettingsContainer.ySensitivitySlider.value = settings.YSensitivity;
 
         UpdateSettingsElements(settings);
     }
@@ -643,6 +655,9 @@ public class UIManager : MonoBehaviour
         mainSettingsContainer.musicValueText.text = mainSettingsContainer.musicSlider.value.ToString("0%");
         mainSettingsContainer.fxValueText.text = mainSettingsContainer.fxSlider.value.ToString("0%");
         mainSettingsContainer.ambientValueText.text = mainSettingsContainer.ambientSlider.value.ToString("0%");
+
+        mainSettingsContainer.xSensitivityText.text = mainSettingsContainer.xSensitivitySlider.value.ToString("0.0");
+        mainSettingsContainer.ySensitivityText.text = mainSettingsContainer.ySensitivitySlider.value.ToString("0.0");
     }
 
     public void ShowHUD(int index)
@@ -729,6 +744,9 @@ public class UIManager : MonoBehaviour
         hudSettingsContainer.fxSlider.value = settings.FXVolume;
         hudSettingsContainer.ambientSlider.value = settings.AmbientVolume;
 
+        hudSettingsContainer.xSensitivitySlider.value = settings.XSensitivity;
+        hudSettingsContainer.ySensitivitySlider.value = settings.YSensitivity;
+
         UpdateHUDSettingsElements(settings);
     }
 
@@ -739,6 +757,9 @@ public class UIManager : MonoBehaviour
         hudSettingsContainer.musicValueText.text = hudSettingsContainer.musicSlider.value.ToString("0%");
         hudSettingsContainer.fxValueText.text = hudSettingsContainer.fxSlider.value.ToString("0%");
         hudSettingsContainer.ambientValueText.text = hudSettingsContainer.ambientSlider.value.ToString("0%");
+
+        hudSettingsContainer.xSensitivityText.text = hudSettingsContainer.xSensitivitySlider.value.ToString("0.0");
+        hudSettingsContainer.ySensitivityText.text = hudSettingsContainer.ySensitivitySlider.value.ToString("0.0");
     }
 
     public void ToggleBorderHighlight()
@@ -1096,8 +1117,9 @@ public class UIManager : MonoBehaviour
         areaText.text = text;
     }
 
-    public void UpdateTimeText(float secondsRemaining) {
+    public void UpdateTimeText(float secondsRemaining)
+    {
         TimeSpan time = TimeSpan.FromSeconds(secondsRemaining);
-        timeLimitText.text = String.Format("<mspace=2.25em>{0:00}:{1:00}.{2:000}", (int)time.TotalMinutes, time.Seconds, time.Milliseconds);
+        timeLimitText.text = String.Format("<mspace=2.25em>{0:00}:{1:00}.{2:00}", (int)time.TotalMinutes, time.Seconds, time.Milliseconds);
     }
 }

@@ -5612,7 +5612,7 @@ MonoBehaviour:
         audioClip: {fileID: 8300000, guid: 81d653672f436ce4d832f67ac1e8212f, type: 3}
         volume: 0.75
         pitch: 1
-      exitList: 
+      exitList: 00000000
       spawnList:
       - x: 5
         z: 5
