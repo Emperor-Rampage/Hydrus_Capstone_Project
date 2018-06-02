@@ -16,6 +16,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: c1565278e009d9d499ac933584bdd1b9, type: 3}
   toolTip: 'Tier 1 Ability: Knight Ability 2'
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 8300000, guid: abd1f5c2f18dba547bffbf9812aa1a82, type: 3}
     volume: 0.5
@@ -25,8 +26,8 @@ MonoBehaviour:
   aoeSprite: {fileID: 0}
   range: 0
   cooldown: 3
-  castTime: 0.5
-  damage: 10
+  castTime: 0.75
+  damage: 15
   upgradeable: 1
   baseAbility: {fileID: 11400000}
   tier: 0

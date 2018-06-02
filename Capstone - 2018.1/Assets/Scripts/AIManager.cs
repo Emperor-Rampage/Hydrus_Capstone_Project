@@ -293,7 +293,7 @@ namespace AIClasses
             bool rooted = enemyEffectDictionary.GetEffectValue_Bool(AbilityStatusEff.Root);
             float slow = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.MoveSlow);
             float castSlow = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.CastTimeSlow);
-            float haste = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.Haste);
+            float castBuff = enemyEffectDictionary.GetEffectValue_Float(AbilityStatusEff.CastTimeBuff);
 
             // TODO: Implement calculation based on ability effects.
             if (action.AbilityIndex != -1)
@@ -332,7 +332,7 @@ namespace AIClasses
                     // Increase depending on how much health the player has.
                     // modifier += (1 / (player.CurrentHealth / (float)player.MaxHealth));
                     // Increase depending on amount hasted.
-                    modifier += (haste * 0.25f);
+                    modifier += (castBuff * 0.25f);
                     // Decrease depending on amount cast time slowed.
                     modifier -= (castSlow * 0.25f);
                     // Increase depending on amount move slowed.
@@ -349,7 +349,7 @@ namespace AIClasses
                             case (AbilityStatusEff.CastTimeSlow):
                             case (AbilityStatusEff.CooldownSlow):
                             case (AbilityStatusEff.DamReduct):
-                            case (AbilityStatusEff.Haste):
+                            case (AbilityStatusEff.CastTimeBuff):
                             case (AbilityStatusEff.MoveSlow):
                                 {
                                     effectsValue += (effect.Value * effect.Duration / 5f);

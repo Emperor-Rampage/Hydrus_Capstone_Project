@@ -22,16 +22,17 @@ namespace AbilityClasses
     public enum AbilityStatusEff
     {
         NoEffect = -1,
-        CastTimeSlow = 0,       // IMPLEMENTED.
-        CooldownSlow = 1,       // IMPLEMENTED.
-        Stun = 2,               // IMPLEMENTED.
-        MoveSlow = 3,           // IMPLEMENTED.
-        Root = 4,               // IMPLEMENTED.
-        Silence = 5,            // IMPLEMENTED.
-        Heal = 6,               // IMPLEMENTED.
-        Haste = 7,              // IMPLEMENTED.
-        DamReduct = 8,          // IMPLEMENTED.
-        DoT = 9                 // IMPLEMENTED.
+        CastTimeSlow = 0,
+        CastTimeBuff = 1,
+        CooldownSlow = 2,
+        Stun = 3,
+        MoveSlow = 4,
+        MoveBuff = 5,
+        Root = 6,
+        Silence = 7,
+        Heal = 8,
+        DamReduct = 10,
+        DoT = 11
     }
 
     [System.Serializable]
@@ -74,10 +75,11 @@ namespace AbilityClasses
         public float CooldownScale { get; private set; } = 1f;
         //        private float movementScale = 1.0f;
         public float MovementScale { get; private set; } = 1f;
+        public float MovementBuff { get; private set; } = 1f;
         //        private float castTimeScale = 1.0f;
         public float CastTimeScale { get; private set; } = 1f;
         //        private float hasteScale = 1.0f;
-        public float HasteScale { get; private set; } = 1f;
+        public float CastTimeBuff { get; private set; } = 1f;
         // private float damageScale = 1.0f;
         public float DamageScale { get; private set; } = 1f;
         // private float healRate = 0.0f;
@@ -185,6 +187,21 @@ namespace AbilityClasses
                             break;
                         }
 
+                    case AbilityStatusEff.CastTimeBuff:
+                        {
+                            CastTimeBuff = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    CastTimeBuff *= (1f + effect.Value);
+                                }
+                            }
+                            CastTimeBuff = Mathf.Clamp(CastTimeBuff, 1f, 2f);
+
+                            break;
+                        }
+
                     case AbilityStatusEff.CooldownSlow:
                         {
                             CooldownScale = 1f;
@@ -226,6 +243,21 @@ namespace AbilityClasses
                             break;
                         }
 
+                    case AbilityStatusEff.MoveBuff:
+                        {
+                            MovementBuff = 1f;
+                            if (typeList != null)
+                            {
+                                foreach (AbilityEffect effect in typeList)
+                                {
+                                    MovementBuff *= (1f + effect.Value);
+                                }
+                            }
+                            MovementBuff = Mathf.Clamp(MovementBuff, 1f, 2f);
+
+                            break;
+                        }
+
                     case AbilityStatusEff.Root:
                         {
                             Rooted = false;
@@ -259,21 +291,6 @@ namespace AbilityClasses
                                 }
                             }
                             HealRate = Mathf.Clamp(HealRate, 0f, 1f);
-
-                            break;
-                        }
-
-                    case AbilityStatusEff.Haste:
-                        {
-                            HasteScale = 1f;
-                            if (typeList != null)
-                            {
-                                foreach (AbilityEffect effect in typeList)
-                                {
-                                    HasteScale *= (1f + effect.Value);
-                                }
-                            }
-                            HasteScale = Mathf.Clamp(HasteScale, 1f, 2f);
 
                             break;
                         }
@@ -339,6 +356,11 @@ namespace AbilityClasses
                             return CastTimeScale;
                         }
 
+                    case AbilityStatusEff.CastTimeBuff:
+                        {
+                            return CastTimeBuff;
+                        }
+
                     case AbilityStatusEff.CooldownSlow:
                         {
                             return CooldownScale;
@@ -349,14 +371,14 @@ namespace AbilityClasses
                             return MovementScale;
                         }
 
+                    case AbilityStatusEff.MoveBuff:
+                        {
+                            return MovementBuff;
+                        }
+
                     case AbilityStatusEff.Heal:
                         {
                             return HealRate;
-                        }
-
-                    case AbilityStatusEff.Haste:
-                        {
-                            return CastTimeScale;
                         }
 
                     case AbilityStatusEff.DamReduct:
@@ -403,13 +425,16 @@ namespace AbilityClasses
             return false;
         }
 
-        public void ClearEffects() {
+        public void ClearEffects()
+        {
             EffectLibrary.Clear();
-            foreach (TweenBase tween in tweens) {
+            foreach (TweenBase tween in tweens)
+            {
                 tween.Cancel();
             }
             tweens.Clear();
-            foreach (AbilityStatusEff type in typeof(AbilityStatusEff).GetEnumValues()) {
+            foreach (AbilityStatusEff type in typeof(AbilityStatusEff).GetEnumValues())
+            {
                 CalcEffects(type);
             }
         }

@@ -18,12 +18,13 @@ MonoBehaviour:
 
 '
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 6
+  - effect: 8
     duration: 0.5
     value: 0.25
   type: 0
@@ -38,4 +39,4 @@ MonoBehaviour:
   previousTier:
   - {fileID: 11400000, guid: b48c8157ff5c8074cb59891ba4d9d1ca, type: 2}
   nextTier: []
-  cost: 250
+  cost: 150

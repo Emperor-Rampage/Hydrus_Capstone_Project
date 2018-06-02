@@ -16,19 +16,20 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: ee568b2dcdb155948a39a06ba49799fc, type: 3}
   toolTip: 'Tier 3 Ability: Marksman Ability 4'
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 2
+  - effect: 3
     duration: 0.5
     value: 0
   type: 1
   aoeSprite: {fileID: 0}
   range: 0
   cooldown: 10
-  castTime: 2
+  castTime: 1.5
   damage: 35
   upgradeable: 0
   baseAbility: {fileID: 11400000, guid: 8e341a7b1d488d5499734548cfdf700a, type: 2}
@@ -36,4 +37,4 @@ MonoBehaviour:
   previousTier:
   - {fileID: 11400000, guid: cc456cde6b913f3419cafb4055e3e183, type: 2}
   nextTier: []
-  cost: 250
+  cost: 150

@@ -266,7 +266,7 @@ namespace EntityClasses
 
         public float GetAdjustedCastTime(float castTime)
         {
-            float adjusted = castTime * (2f - StatusEffects.CastTimeScale) * (2f - StatusEffects.HasteScale);
+            float adjusted = castTime * (2f - StatusEffects.CastTimeBuff) * (2f - StatusEffects.CastTimeScale);
             // Debug.Log("Adjusted cast time calculated as " + adjusted + " with base " + castTime + ", cast slow " + StatusEffects.CastTimeScale + ", haste " + StatusEffects.HasteScale);
             return adjusted;
         }
@@ -278,7 +278,7 @@ namespace EntityClasses
 
         public float GetAdjustedMoveSpeed(float moveSpeed)
         {
-            return moveSpeed * (2f - StatusEffects.MovementScale);
+            return moveSpeed * (2f - StatusEffects.MovementBuff) * (2f - StatusEffects.MovementScale);
         }
 
         public float GetAdjustedDamageReduction(float damageReduction)

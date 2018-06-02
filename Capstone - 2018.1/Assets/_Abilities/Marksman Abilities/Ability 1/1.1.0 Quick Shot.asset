@@ -16,6 +16,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 4fde9cf516fa4fd4c95fbebc9d989764, type: 3}
   toolTip: 'Tier 2 Basic Ability: Favors Speed'
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
@@ -25,7 +26,7 @@ MonoBehaviour:
   aoeSprite: {fileID: 0}
   range: 2
   cooldown: 2
-  castTime: 0.5
+  castTime: 0.75
   damage: 15
   upgradeable: 1
   baseAbility: {fileID: 11400000, guid: 9c4a6f6d3fd63f944aa9ffd9a8a14526, type: 2}
@@ -35,4 +36,4 @@ MonoBehaviour:
   nextTier:
   - {fileID: 11400000, guid: 20ef51449fadbd040b2dd06e11fd8a7f, type: 2}
   - {fileID: 11400000, guid: e941a97f9bc84834ca3936037271c62c, type: 2}
-  cost: 50
+  cost: 75

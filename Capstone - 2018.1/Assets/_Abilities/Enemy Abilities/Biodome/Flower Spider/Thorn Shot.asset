@@ -16,12 +16,13 @@ MonoBehaviour:
   icon: {fileID: 0}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 3
+  - effect: 4
     duration: 0.25
     value: 0.5
   type: 2

@@ -16,14 +16,15 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: fa81896f925ef6b489fceba3458cf74f, type: 3}
   toolTip: 'Tier 3 Ability: Knight Ability 3'
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 8
+  - effect: 10
     duration: 1
-    value: 0.4
+    value: 0.8
   type: 0
   aoeSprite: {fileID: 0}
   range: 0
@@ -36,4 +37,4 @@ MonoBehaviour:
   previousTier:
   - {fileID: 11400000, guid: 6cd4bdd14d282fd40a600c67a81f1032, type: 2}
   nextTier: []
-  cost: 250
+  cost: 150

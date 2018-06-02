@@ -18,13 +18,14 @@ MonoBehaviour:
 
 '
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 6
-    duration: 1
+  - effect: 8
+    duration: 2
     value: 0.15
   type: 0
   aoeSprite: {fileID: 0}

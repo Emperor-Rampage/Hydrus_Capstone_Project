@@ -405,10 +405,18 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             {
                 if (mouseLookManager.enabled)
                 {
-                    Direction facingDirection = mouseLookManager.GetDirectionFacing();
-                    if (facingDirection != Direction.Null)
+                    if (mouseLookManager.RestrictDirection != Direction.Null)
                     {
-                        level.Player.Facing = facingDirection;
+                        if (level.Player.Facing != mouseLookManager.RestrictDirection)
+                            level.Player.Facing = mouseLookManager.RestrictDirection;
+                    }
+                    else
+                    {
+                        Direction facingDirection = mouseLookManager.GetDirectionFacing();
+                        if (facingDirection != Direction.Null)
+                        {
+                            level.Player.Facing = facingDirection;
+                        }
                     }
                 }
                 // Get player input and do stuff.
@@ -1386,10 +1394,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (target.IsPlayer)
         {
             uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
-            uiManager.FlashPlayerDamage();
-
             if (ability.Damage > 0)
+            {
+                uiManager.FlashPlayerDamage();
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
+            }
         }
         else if (ability.Type != AbilityType.Self && target.IsPlayer == false)
         {
@@ -1472,10 +1481,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // Regenerate 20% of missing health on kill.
             player.Heal((player.MaxHealth - player.CurrentHealth) * 0.2f);
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
- 
+
             if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)
             {
-                if (player.Cores < 50) player.Cores = 50;
+                if (player.Cores < 75) player.Cores = 75;
                 tutorialManager.RunUpgradeTutorial();
             }
             //Play Core collection VFX

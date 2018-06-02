@@ -16,12 +16,13 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 5e483a12dba30f44d9871eb8e1971b59, type: 3}
   toolTip: 'Tier 2 Ability: Marksman 2'
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 3
+  - effect: 4
     duration: 1.5
     value: 0.5
   - effect: 0
@@ -41,4 +42,4 @@ MonoBehaviour:
   nextTier:
   - {fileID: 11400000, guid: e278ca60be4993e4182a2f34aaa93424, type: 2}
   - {fileID: 11400000, guid: fca957c0f02fff34285327972d696086, type: 2}
-  cost: 50
+  cost: 75

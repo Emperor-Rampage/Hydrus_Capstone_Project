@@ -18,20 +18,21 @@ MonoBehaviour:
 
 '
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 3
+  - effect: 4
     duration: 1.5
     value: 0.3
-  type: 3
+  type: 4
   aoeSprite: {fileID: 2800000, guid: 669b4c1eb1fe41e48bc72776fc072745, type: 3}
   range: 0
-  cooldown: 4
-  castTime: 1
-  damage: 5
+  cooldown: 5
+  castTime: 1.25
+  damage: 0
   upgradeable: 1
   baseAbility: {fileID: 11400000}
   tier: 0

@@ -16,12 +16,13 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 194e0a5ceceee38459483e8e4dcafc4c, type: 3}
   toolTip: Tier 2 Ability
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0
     pitch: 0
   statusEffects:
-  - effect: 3
+  - effect: 4
     duration: 1.5
     value: 0.5
   type: 3
@@ -37,4 +38,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}
   nextTier:
   - {fileID: 11400000, guid: fca957c0f02fff34285327972d696086, type: 2}
-  cost: 50
+  cost: 75
