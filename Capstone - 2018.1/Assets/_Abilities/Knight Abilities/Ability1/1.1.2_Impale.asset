@@ -30,7 +30,7 @@ MonoBehaviour:
   range: 0
   cooldown: 2
   castTime: 1.25
-  damage: 40
+  damage: 35
   upgradeable: 0
   baseAbility: {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}
   tier: 2
