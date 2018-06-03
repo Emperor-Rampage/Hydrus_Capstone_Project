@@ -59,6 +59,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     [SerializeField] List<LevelPrefab> ceilingPrefabs;
     [SerializeField] List<LevelPrefab> cornerPrefabs;
     [SerializeField] List<LevelPrefab> doorPrefabs;
+    [SerializeField] List<LevelPrefab> lightPrefabs;
+    [SerializeField] float lightFrequency;
 
     [Space(10)]
     [Header("Game")]
@@ -615,6 +617,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             levelContainer = new GameObject("_LevelCells");
         }
         float cellScale = LevelManager.CellScale;
+        float lightChance = lightFrequency;
+        int numCells = 0;
+        int numLights = 0;
         foreach (Cell cell in level.cells)
         {
             // TODO: Switch to cell.Type == CellType.Procedural, instead of != CellType.Empty.
@@ -622,12 +627,29 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // and manually place the static areas.
             if (cell.Type != CellType.Empty && level.HasConnections(cell))
             {
+                numCells++;
                 Vector3 center = LevelManager.GetCellPosition(cell);
                 GameObject cellInstance = new GameObject("Cell_" + cell.Index);
                 cellInstance.transform.SetParent(levelContainer.transform);
                 cellInstance.transform.position = center;
                 GameObject.Instantiate(LevelManager.GetRandomPrefab(floorPrefabs), cellInstance.transform);
                 GameObject.Instantiate(LevelManager.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
+
+                float lightRNG = Random.value;
+                if (lightRNG <= lightChance)
+                {
+                    numLights++;
+                    GameObject.Instantiate(LevelManager.GetRandomPrefab(lightPrefabs), cellInstance.transform);
+                    // lightRNG /= 2f;
+                    lightRNG = lightFrequency;
+                }
+                else
+                {
+                    // lightRNG *= 2f;
+                    lightRNG *= 2f;
+                    // lightRNG += lightFrequency;
+                }
+
                 List<GameObject> wallInstances = new List<GameObject>();
                 for (int w = 0; w < 4; w++)
                 {
@@ -658,6 +680,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 }
             }
         }
+        Debug.Log("Number of cells: " + numCells + ". Number of lights: " + numLights + ". Light Frequency: " + lightFrequency + ". Actual light frequency: " + (float)numLights / numCells);
     }
 
     void BuildLevel_Procedural_Corners(GameObject levelContainer)
@@ -1226,6 +1249,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 SetPlayerAnimation("MoveBack", adjustedMovespeed);
             }
         }
+        else
+        {
+            entity.AddMovementCoroutine(movementCoroutine);
+        }
     }
 
     // Sets the destination cell to a locked state (to prevent any other entities to attempt to move to this cell)
@@ -1237,7 +1264,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         cell.Locked = true;
         yield return new WaitForSeconds(delay);
         level.SetEntityLocation(entity, cell);
-        // entity.RemoveMovementCoroutine();
+        entity.RemoveMovementCoroutine();
         cell.Locked = false;
     }
 
@@ -1352,7 +1379,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             audioManager.PlaySoundEffect(new SoundEffect(ability.SoundEffect, entity.Instance.transform.position));
         }
 
-        if (entity.IsPlayer == true)
+        if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
             SetPlayerAnimation("CastActivate", 1.0f);
@@ -1383,6 +1410,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void ApplyAbility(Entity target, AbilityObject ability, Entity caster)
     {
         // Debug.Log("-- Affecting " + target.Name + " .. Dealing " + ability.Damage + " damage.");
+
+        // if (!caster.IsPlayer && !target.IsPlayer && ability.Type != AbilityType.Self)
+        if (!(caster.IsPlayer ^ target.IsPlayer) && ability.Type != AbilityType.Self)
+            return;
 
         foreach (AbilityEffect effect in ability.StatusEffects)
         {
@@ -1445,9 +1476,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             {
                 Entity target = cell.Occupant;
 
-                if (target != null && target != caster)
+                if (target != null)
                 {
-                    ApplyZoneAbility(target, ability, caster);
+                    // if ((caster.IsPlayer && !target.IsPlayer) || (!caster.IsPlayer && target.IsPlayer))
+                    // First time I've used xor for realsies!
+                    if (caster.IsPlayer ^ target.IsPlayer)
+                    {
+                        ApplyZoneAbility(target, ability, caster);
+                    }
                 }
 
                 timer += tickRate;

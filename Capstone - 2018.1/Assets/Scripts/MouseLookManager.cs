@@ -115,6 +115,7 @@ public class MouseLookManager : MonoBehaviour
     public void SetTarget(GameObject target)
     {
         camera = target.GetComponentInChildren<Camera>();
+        RestrictDirection = Direction.Null;
         transform = target.transform;
     }
 

@@ -383,6 +383,7 @@ namespace MapClasses
                     //enemy.InitializeCooldownsList();
                     enemy.Index = enemyIndex++;
                     enemy.Target = Direction.Null;
+                    enemy.Facing = Direction.Down;
                     enemy.InCombat = false;
                     SetEntityLocation(enemy, spawn.X, spawn.Z);
                     EnemyList.Add(enemy);
@@ -401,7 +402,7 @@ namespace MapClasses
                     // Debug.Log("-- Entity is not idle, waiting a frame. Instead is " + entity.State);
                     yield return null;
                 }
-                
+
                 // Debug.Log("-- Entity is idle. Destroying everything.");
                 // If the entity is present in the enemy list, it will be removed.
                 //GameObject.Destroy(entity.Instance);

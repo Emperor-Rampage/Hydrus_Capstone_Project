@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class FPSDisplay : MonoBehaviour {
+public class FPSDisplay : MonoBehaviour
+{
 
     public TMP_Text highestFPSLabel, lowestFPSLabel, averageFPSLabel;
 
@@ -46,7 +47,8 @@ public class FPSDisplay : MonoBehaviour {
 
     void Display(TMP_Text label, int fps)
     {
-        label.text = stringsFrom00To99[Mathf.Clamp(fps, 0, 99)];
+        label.text = fps.ToString("00");
+        // label.text = stringsFrom00To99[Mathf.Clamp(fps, 0, 99)];
         for (int i = 0; i < coloring.Length; i++)
         {
             if (fps >= coloring[i].minimumFPS)

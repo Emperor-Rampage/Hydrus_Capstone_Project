@@ -782,8 +782,9 @@ public class UIManager : MonoBehaviour
     public void FlashPlayerDamage()
     {
         if (screenDamageTween != null)
-            screenDamageTween.Stop();
-        screenDamageTween = Tween.CanvasGroupAlpha(screenDamageGroup, 1f, 0.15f, 0f, Tween.EaseWobble);
+            screenDamageTween.Finish();
+        screenDamageTween = Tween.CanvasGroupAlpha(screenDamageGroup, 0f, 1f, 0.15f, 0f, Tween.EaseWobble);
+        // screenDamageTween = Tween.CanvasGroupAlpha(screenDamageGroup, 1f, 0.15f, 0f, Tween.EaseWobble);
     }
 
     public void UpdateEffectList(EffectDictionary effectDictionary)

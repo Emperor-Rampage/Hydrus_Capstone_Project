@@ -26,12 +26,12 @@ MonoBehaviour:
     duration: 5
     value: 0.6
   - effect: 11
-    duration: 5
-    value: 20
+    duration: 2
+    value: 10
   type: 4
-  aoeSprite: {fileID: 2800000, guid: 8dcc30f2ca829ca4ea0be5c8edaf77b2, type: 3}
+  aoeSprite: {fileID: 2800000, guid: fa8f6b5afe1a31649bfa274dd95b3f46, type: 3}
   range: 0
-  cooldown: 4
+  cooldown: 7
   castTime: 1.5
   damage: 0
   upgradeable: 0
