@@ -1503,6 +1503,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 StopCoroutine(playerMovementCoroutine);
 
             player.State = EntityState.Null;
+            player.StatusEffects.ClearEffects();
             player.Cores = 0;
             player.CurrentHealth = player.MaxHealth;
             if (gradualEffectsCoroutine != null)
@@ -1518,17 +1519,18 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             player.Heal((player.MaxHealth - player.CurrentHealth) * 0.2f);
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
 
-            if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)
-            {
-                if (player.Cores < 75) player.Cores = 75;
-                tutorialManager.RunUpgradeTutorial();
-            }
             //Play Core collection VFX
             //particleManager.PlayCoreGather(entity);
             //Play Dissolve Effect
             //particleManager.DissolveEnemy(entity);
             DestroyEnemy(entity);
             StartCoroutine(level.RemoveEntity(entity));
+
+            if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)
+            {
+                if (player.Cores < 75) player.Cores = 75;
+                tutorialManager.RunUpgradeTutorial();
+            }
 
         }
     }

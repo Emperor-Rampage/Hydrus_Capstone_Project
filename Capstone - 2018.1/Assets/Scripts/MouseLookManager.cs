@@ -88,6 +88,7 @@ public class MouseLookManager : MonoBehaviour
     void OnEnable()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         float restrict = restrictRange / 2f;
         restrictLowerUp = 360f - restrict;
@@ -110,6 +111,7 @@ public class MouseLookManager : MonoBehaviour
     void OnDisable()
     {
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void SetTarget(GameObject target)

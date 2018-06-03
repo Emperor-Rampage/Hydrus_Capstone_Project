@@ -2815,36 +2815,36 @@ Transform:
   - {fileID: 1762450918}
   - {fileID: 351287125}
   - {fileID: 1584009212}
-  - {fileID: 1422966958}
   - {fileID: 770662282}
   - {fileID: 1031863153}
   - {fileID: 688683922}
   - {fileID: 963199981}
   - {fileID: 1809802246}
   - {fileID: 129135966}
+  - {fileID: 1607365547}
   - {fileID: 480348811}
   - {fileID: 1192406749}
   - {fileID: 1258610879}
   - {fileID: 1365859368}
   - {fileID: 625984753}
-  - {fileID: 586383098}
+  - {fileID: 1290506103}
   - {fileID: 154183008}
+  - {fileID: 1948557203}
   - {fileID: 1496873446}
   - {fileID: 1252515489}
-  - {fileID: 1607365547}
-  - {fileID: 17977468}
-  - {fileID: 1948557203}
-  - {fileID: 654304163}
+  - {fileID: 1422966958}
+  - {fileID: 586383098}
   - {fileID: 2120071732}
+  - {fileID: 17977468}
   - {fileID: 2045612586}
   - {fileID: 1696189200}
   - {fileID: 1492799780}
   - {fileID: 846637112}
-  - {fileID: 1290506103}
   - {fileID: 385973561}
   - {fileID: 815906797}
-  - {fileID: 778600900}
   - {fileID: 1811535211}
+  - {fileID: 778600900}
+  - {fileID: 654304163}
   - {fileID: 913667500}
   - {fileID: 1566526228}
   - {fileID: 649530399}
@@ -4733,7 +4733,7 @@ MonoBehaviour:
   lightPrefabs:
   - prefab: {fileID: 1829280009665878, guid: 7932c58add5112c408742d58953a8b60, type: 2}
     weight: 1
-  lightFrequency: 0.1
+  lightFrequency: 0.075
   abilityTree:
     numTiers: 3
     uiPadding: 300
