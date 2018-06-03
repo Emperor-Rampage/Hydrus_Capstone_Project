@@ -2,6 +2,7 @@
 {
 	Properties 
 	{
+		//Base Rendering Stuff
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Emission("Emission", Color) = (1, 1, 1, 1)
@@ -25,6 +26,9 @@
 		_GlowEnd("Glow End Color", Color) = (1, 1, 1, 1)
 		_GlowColShift("Glow Colorshift", Range(0.0,2.0)) = 0.075
 
+		//Hurt Stuff
+		_HurtColor("HurtColor", Color) = (1, 0, 0, 0)
+		_HurtScale("Hurt Toggle", Range(0.0,1.0)) = 0.0
 	}
 		SubShader
 	{
@@ -82,6 +86,9 @@
 		float4 _DissolveStart;
 		float4 _DissolveEnd;
 
+		float4 _HurtColor;
+		half _HurtScale;
+
 
 		//Precompute dissolve direction
 		static float3 dDir = normalize(_DissolveEnd - _DissolveStart);
@@ -104,7 +111,7 @@
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
-			// Metallic and smoothness come from slider variables
+			//Metallic and Smoothness come from a texture (and one slider)
 			fixed4 cSpec = tex2D(_MetallicTex, IN.uv_MetallicTex);
 			o.Metallic = cSpec.r;
 			o.Smoothness = cSpec.a * _Glossiness;
@@ -125,7 +132,7 @@
 			//Shift the computed raw alhpa value based on the scale factor of the glow.
 			//Scale the shifted value based on effect intensity.
 			half dPredict = (_GlowScale - dFinal) * _GlowIntensity;
-			//Change color interpolation by adding in a nother factor controlling the gradient.
+			//Change color interpolation by adding in another factor controlling the gradient.
 			half dPredictCol = (_GlowScale * _GlowColShift - dFinal) * _GlowIntensity;
 
 			//Calculate and clamp glow color.
@@ -134,7 +141,11 @@
 
 			fixed4 e = tex2D(_EmissionTex, IN.uv_EmissionTex) * _Emission;
 
-			o.Emission = e + glowCol;
+			fixed4 hurtCol = _HurtScale * _HurtColor;
+			hurtCol = clamp(hurtCol, 0.0f, 1.0f);
+
+			o.Emission = e + glowCol + hurtCol;
+			
 			o.Alpha = alpha;
 		}
 

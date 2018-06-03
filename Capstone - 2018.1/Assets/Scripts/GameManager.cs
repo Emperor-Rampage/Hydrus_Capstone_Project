@@ -1434,6 +1434,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         else if (ability.Type != AbilityType.Self && target.IsPlayer == false)
         {
             particleManager.PlayHitSpark(target);
+            particleManager.HitColor(target);
         }
 
         PerformEntityDeathCheck(target, alive);

@@ -66,7 +66,9 @@ namespace ParticleClasses
         //Going to change this to reference a shader function. Possibly a coroutine (may be overkill)
         public void HitColor(Entity hurtTarget)
         {
-           
+            Material mat = hurtTarget.Instance.GetComponentInChildren<MeshRenderer>().material;
+            mat.SetFloat("_HurtScale", 1.0f);
+            Tween.ShaderFloat(mat, "_HurtScale", 0.0f, 0.5f, 0.0f);
         }
 
         public void DissolveEnemy(Entity target, Level level)

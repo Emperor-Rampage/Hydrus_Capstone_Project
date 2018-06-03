@@ -972,7 +972,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 10
+        scalar: 8
         minScalar: 0
         maxCurve:
           serializedVersion: 2
@@ -1023,7 +1023,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
       cycleCount: 1
-      repeatInterval: 0.01
+      repeatInterval: 0.0001
   SizeModule:
     enabled: 0
     curve:
