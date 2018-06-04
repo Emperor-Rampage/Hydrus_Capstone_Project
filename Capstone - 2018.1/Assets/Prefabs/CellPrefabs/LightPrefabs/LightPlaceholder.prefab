@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4524296812021560}
   - component: {fileID: 33031593143153742}
   - component: {fileID: 23254950490309404}
+  - component: {fileID: 205216659242656638}
   m_Layer: 0
   m_Name: LightPlaceholder
   m_TagString: Untagged
@@ -150,3 +151,20 @@ Light:
   m_UseColorTemperature: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!205 &205216659242656638
+LODGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1829280009665878}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: -0.049999997, z: 0}
+  m_Size: 0.2789485
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LODs:
+  - screenRelativeHeight: 0.15227138
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 23254950490309404}
+  m_Enabled: 1
