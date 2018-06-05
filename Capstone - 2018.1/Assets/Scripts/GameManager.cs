@@ -13,6 +13,7 @@ using AudioClasses;
 using AIClasses;
 using AbilityClasses;
 using ParticleClasses;
+using System;
 
 // The main game manager. Is a singleton, and contains the general settings as well as references to other systems.
 // Contains fields and properties for:
@@ -113,6 +114,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     float timeRemaining;
     Coroutine gradualEffectsCoroutine;
     Coroutine playerMovementCoroutine;
+
+    Dictionary<KeyCode, string> keyStrings;
 
     // Properties: Because why not do things all proper-like.
     public LevelManager LevelManager
@@ -319,6 +322,24 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
     }
 
+    public string[] GetAbilityKeyStrings() {
+        string[] keys = new string[settingsManager.AbilityKeys.Length];
+        for (int i = 0; i < keys.Length; i++) {
+            KeyCode key = settingsManager.AbilityKeys[i];
+            if (keyStrings.ContainsKey(key))
+                keys[i] = keyStrings[key];
+        }
+        return keys;
+    }
+
+    public string GetKeyString(KeyCode key) {
+        if (keyStrings.ContainsKey(key))
+            return keyStrings[key];
+
+        Debug.LogError("ERROR: Attempting to get string of invalid key " + key.ToString());
+        return "";
+    }
+
     // Called at the start of the game.
     // Iterates through the DoNotDestroyList List, instantiates each GameObject, it to DontDestroyOnLoad, and sets up any references necessary.
     void Awake()
@@ -361,6 +382,21 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     }
                 }
             }
+
+            keyStrings = new Dictionary<KeyCode, string>();
+            // Initialize a custom dictionary of key code strings.
+            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode))) {
+                if (!keyStrings.ContainsKey(key))
+                    keyStrings.Add(key, key.ToString());
+            }
+            for (int i = 0; i < 10; i++) {
+                keyStrings[(KeyCode)((int)KeyCode.Alpha0 + i)] = i.ToString();
+                keyStrings[(KeyCode)((int)KeyCode.Keypad0 + i)] = i.ToString();
+            }
+            for (int i = 0; i < 6; i++) {
+                keyStrings[(KeyCode)((int)KeyCode.Mouse0 + i)] = "MB" + (i + 1).ToString();
+            }
+
             uiManager.Initialize();
             SetUpClassMenu();
 
@@ -635,7 +671,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 GameObject.Instantiate(LevelManager.GetRandomPrefab(floorPrefabs), cellInstance.transform);
                 GameObject.Instantiate(LevelManager.GetRandomPrefab(ceilingPrefabs), cellInstance.transform);
 
-                float lightRNG = Random.value;
+                float lightRNG = UnityEngine.Random.value;
                 if (lightRNG <= lightChance)
                 {
                     numLights++;
@@ -893,7 +929,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     void UpdateUI()
     {
-        uiManager.UpdateSettingsElements(settingsManager);
+        uiManager.UpdateSettingsElements();
     }
 
     // General update HUD method.
@@ -906,7 +942,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         uiManager.UpdatePlayerCores(player.Cores);
         uiManager.UpdateEffectList(player.StatusEffects);
         //uiManager.UpdatePlayerAbilityHUD(player.Cooldowns.Values.ToList(), player.CooldownsRemaining.Values.ToList(), player.CurrentAbility, player.CastProgress);
-        uiManager.UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
+        uiManager.UpdatePlayerAbilityHUD(GetAbilityKeyStrings(), player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
 
         if (uiManager.Paused)
         {
@@ -934,7 +970,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             Enemy enemy = (Enemy)forwardCell.Occupant;
             if (enemy != null)
             {
-                uiManager.UpdateEnemyInfo(true, enemy.Name, enemy.CurrentHealth / enemy.MaxHealth, enemy.CastProgress, enemy.CurrentCastTime);
+                string castName = "";
+                if (enemy.CurrentAbility != -1) {
+                    AbilityObject ability = enemy.Abilities[enemy.CurrentAbility];
+                    castName = ability.Name;
+                }
+                uiManager.UpdateEnemyInfo(true, enemy.Name, enemy.CurrentHealth / enemy.MaxHealth, enemy.CastProgress, castName, enemy.CurrentCastTime);
             }
             else
             {
@@ -1020,10 +1061,16 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     ExitLevel();
                 }
 
+                for (int i = 0; i < settingsManager.AbilityKeys.Length; i++) {
+                    KeyCode abilityKey = settingsManager.AbilityKeys[i];
+                    if (Input.GetKey(abilityKey)) {
+                        CastPlayerAbility(player, i);
+                    }
+                }
+
                 if (inputDir != Direction.Null)
                 {
                     MoveEntityLocation(player, inputDir);
-                    //                MoveEntityInstance(player, inputDir);
                 }
                 else if (Input.GetKey(settingsManager.TurnLeftKey))
                 {
@@ -1033,23 +1080,22 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 {
                     TurnEntityInstanceRight(player);
                 }
-
-                if (Input.GetKey(settingsManager.Ability1Key))
-                {
-                    CastPlayerAbility(player, 0);
-                }
-                else if (Input.GetKey(settingsManager.Ability2Key))
-                {
-                    CastPlayerAbility(player, 1);
-                }
-                else if (Input.GetKey(settingsManager.Ability3Key))
-                {
-                    CastPlayerAbility(player, 2);
-                }
-                else if (Input.GetKey(settingsManager.Ability4Key))
-                {
-                    CastPlayerAbility(player, 3);
-                }
+                // if (Input.GetKey(settingsManager.Ability1Key))
+                // {
+                //     CastPlayerAbility(player, 0);
+                // }
+                // else if (Input.GetKey(settingsManager.Ability2Key))
+                // {
+                //     CastPlayerAbility(player, 1);
+                // }
+                // else if (Input.GetKey(settingsManager.Ability3Key))
+                // {
+                //     CastPlayerAbility(player, 2);
+                // }
+                // else if (Input.GetKey(settingsManager.Ability4Key))
+                // {
+                //     CastPlayerAbility(player, 3);
+                // }
                 else if (Input.GetKeyDown(KeyCode.Minus))
                 {
                     bool alive = player.Damage(25, (player.CastProgress >= interruptPercentage));

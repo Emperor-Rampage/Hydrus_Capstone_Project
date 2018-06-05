@@ -49,14 +49,11 @@ public class SettingsData
     public float xSensitivity = 1f;
     public float ySensitivity = 1f;
     public KeyCode interactKey = KeyCode.Space;
-    public KeyCode turnLeftKey = KeyCode.Q;
-    public KeyCode turnRightKey = KeyCode.E;
-    public KeyCode ability1Key = KeyCode.Alpha1;
-    public KeyCode ability2Key = KeyCode.Alpha2;
-    public KeyCode ability3Key = KeyCode.Alpha3;
-    public KeyCode ability4Key = KeyCode.Alpha4;
     public KeyCode mapMenuKey = KeyCode.F;
     public KeyCode treeMenuKey = KeyCode.G;
+    public KeyCode turnLeftKey = KeyCode.Q;
+    public KeyCode turnRightKey = KeyCode.E;
+    public KeyCode[] abilityKeys = new KeyCode[] { KeyCode.Mouse0, KeyCode.Mouse1, KeyCode.Alpha3, KeyCode.Alpha4 };
 }
 
 public class SettingsManager
@@ -84,14 +81,11 @@ public class SettingsManager
     public float XSensitivity { get { return SettingsData.xSensitivity; } private set { SettingsData.xSensitivity = value; } }
     public float YSensitivity { get { return SettingsData.ySensitivity; } private set { SettingsData.ySensitivity = value; } }
     public KeyCode InteractKey { get { return SettingsData.interactKey; } private set { SettingsData.interactKey = value; } }
-    public KeyCode TurnLeftKey { get { return SettingsData.turnLeftKey; } private set { SettingsData.turnLeftKey = value; } }
-    public KeyCode TurnRightKey { get { return SettingsData.turnRightKey; } private set { SettingsData.turnRightKey = value; } }
-    public KeyCode Ability1Key { get { return SettingsData.ability1Key; } private set { SettingsData.ability1Key = value; } }
-    public KeyCode Ability2Key { get { return SettingsData.ability2Key; } private set { SettingsData.ability2Key = value; } }
-    public KeyCode Ability3Key { get { return SettingsData.ability3Key; } private set { SettingsData.ability3Key = value; } }
-    public KeyCode Ability4Key { get { return SettingsData.ability4Key; } private set { SettingsData.ability4Key = value; } }
     public KeyCode MapMenuKey { get { return SettingsData.mapMenuKey; } private set { SettingsData.mapMenuKey = value; } }
     public KeyCode TreeMenuKey { get { return SettingsData.treeMenuKey; } private set { SettingsData.treeMenuKey = value; } }
+    public KeyCode TurnLeftKey { get { return SettingsData.turnLeftKey; } private set { SettingsData.turnLeftKey = value; } }
+    public KeyCode TurnRightKey { get { return SettingsData.turnRightKey; } private set { SettingsData.turnRightKey = value; } }
+    public KeyCode[] AbilityKeys { get { return SettingsData.abilityKeys; } private set { SettingsData.abilityKeys = value; } }
 
     public PlayerData LoadGame()
     {
@@ -144,6 +138,16 @@ public class SettingsManager
         // Controls
         SettingsData.xSensitivity = container.xSensitivitySlider.value;
         SettingsData.ySensitivity = container.ySensitivitySlider.value;
+
+        SettingsData.interactKey = container.interactButton.Value;
+        SettingsData.mapMenuKey = container.minimapButton.Value;
+        SettingsData.treeMenuKey = container.treeButton.Value;
+        SettingsData.turnLeftKey = container.turnLeftButton.Value;
+        SettingsData.turnRightKey = container.turnRightButton.Value;
+        for (int i = 0; i < SettingsData.abilityKeys.Length; i++) {
+            SettingsData.abilityKeys[i] = container.abilityButtons[i].Value;
+        }
+        // SettingsData.abilityKeys[0] = container.ability1Button.Value;
     }
 
     public bool LoadSettings()

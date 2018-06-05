@@ -90,6 +90,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image enemyCastBackBar;
     [SerializeField] Image enemyCastBackInterruptBar;
     [SerializeField] Image enemyCastBar;
+    [SerializeField] TMP_Text enemyCastNameText;
     [SerializeField] TMP_Text enemyCastText;
 
     // HUD Settings Menu
@@ -128,8 +129,10 @@ public class UIManager : MonoBehaviour
     int currentSettingsTab;
 
     // Private fields.
+    bool settingBinding;
+    KeyBindingHandler currentBindingButton;
+    [SerializeField] KeyCode[] invalidKeys;
     [HideInInspector] public Resolution[] resolutions;
-
 
     List<TMP_Text> effectTextList = new List<TMP_Text>();
 
@@ -218,6 +221,23 @@ public class UIManager : MonoBehaviour
         ShowHUD(0);
     }
 
+    void Update() {
+        if (settingBinding) {
+            if (Input.anyKeyDown) {
+                if (currentBindingButton != null) {
+                    foreach (KeyCode key in Enum.GetValues(typeof(KeyCode))) {
+                        if (Input.GetKeyDown(key))
+                            currentBindingButton.Value = key;
+                    }
+                    currentBindingButton.ButtonText.text = "Click to rebind.";
+                }
+
+                settingBinding = false;
+                currentBindingButton = null;
+            }
+        }
+    }
+
     void AllButtons(GameObject parent, bool interactable = false)
     {
         Button[] buttons = parent.transform.GetComponentsInChildren<Button>();
@@ -271,7 +291,7 @@ public class UIManager : MonoBehaviour
             // highlight.transform.SetAsFirstSibling();
             playerAbilityIcons.Add(abilityIconObject);
         }
-        UpdatePlayerAbilityHUD(player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
+        UpdatePlayerAbilityHUD(manager.GetAbilityKeyStrings(), player.GetCooldownsList(), player.GetCooldownRemainingList(), player.CurrentAbility, player.CastProgress);
     }
 
     public void SetUpAbilityTreeMenu(AbilityTree tree)
@@ -643,11 +663,21 @@ public class UIManager : MonoBehaviour
 
         mainSettingsContainer.xSensitivitySlider.value = settings.XSensitivity;
         mainSettingsContainer.ySensitivitySlider.value = settings.YSensitivity;
+        
+        mainSettingsContainer.interactButton.Value = settings.InteractKey;
+        mainSettingsContainer.minimapButton.Value = settings.MapMenuKey;
+        mainSettingsContainer.treeButton.Value = settings.TreeMenuKey;
+        mainSettingsContainer.turnLeftButton.Value = settings.TurnLeftKey;
+        mainSettingsContainer.turnRightButton.Value = settings.TurnRightKey;
+        for (int i = 0; i < settings.AbilityKeys.Length; i++) {
+            mainSettingsContainer.abilityButtons[i].Value = settings.AbilityKeys[i];
+        }
+        // mainSettingsContainer.ability1Button.Value = settings.AbilityKeys[0];
 
-        UpdateSettingsElements(settings);
+        UpdateSettingsElements();
     }
 
-    public void UpdateSettingsElements(SettingsManager settings)
+    public void UpdateSettingsElements()
     {
         mainSettingsContainer.maxHealthText.text = mainSettingsContainer.maxHealthSlider.value.ToString("0%");
         TimeSpan time = TimeSpan.FromSeconds(mainSettingsContainer.timeLimitSlider.value);
@@ -662,6 +692,22 @@ public class UIManager : MonoBehaviour
 
         mainSettingsContainer.xSensitivityText.text = mainSettingsContainer.xSensitivitySlider.value.ToString("0.0");
         mainSettingsContainer.ySensitivityText.text = mainSettingsContainer.ySensitivitySlider.value.ToString("0.0");
+
+        KeyBindingHandler interact = mainSettingsContainer.interactButton;
+        interact.DisplayText.text = "Interact - " + manager.GetKeyString(interact.Value);
+        KeyBindingHandler map = mainSettingsContainer.minimapButton;
+        map.DisplayText.text = "Map - " + manager.GetKeyString(map.Value);
+        KeyBindingHandler tree = mainSettingsContainer.treeButton;
+        tree.DisplayText.text = "Upgrade Tree - " + manager.GetKeyString(tree.Value);
+        KeyBindingHandler turnLeft = mainSettingsContainer.turnLeftButton;
+        turnLeft.DisplayText.text = "Turn Left - " + manager.GetKeyString(turnLeft.Value);
+        KeyBindingHandler turnRight = mainSettingsContainer.turnRightButton;
+        turnRight.DisplayText.text = "Turn Right - " + manager.GetKeyString(turnRight.Value);
+        for (int i = 0; i < mainSettingsContainer.abilityButtons.Length; i++) {
+            KeyBindingHandler keyHandler = mainSettingsContainer.abilityButtons[i];
+            keyHandler.DisplayText.text = "Ability " + (i + 1) + " - " + manager.GetKeyString(keyHandler.Value);
+        }
+        // mainSettingsContainer.ability1Text.text = "Ability 1 - " + manager.GetKeyString(mainSettingsContainer.ability1Button.Value);
     }
 
     public void ShowHUD(int index)
@@ -751,6 +797,15 @@ public class UIManager : MonoBehaviour
         hudSettingsContainer.xSensitivitySlider.value = settings.XSensitivity;
         hudSettingsContainer.ySensitivitySlider.value = settings.YSensitivity;
 
+        hudSettingsContainer.interactButton.Value = settings.InteractKey;
+        hudSettingsContainer.minimapButton.Value = settings.MapMenuKey;
+        hudSettingsContainer.treeButton.Value = settings.TreeMenuKey;
+        hudSettingsContainer.turnLeftButton.Value = settings.TurnLeftKey;
+        hudSettingsContainer.turnRightButton.Value = settings.TurnRightKey;
+        for (int i = 0; i < settings.AbilityKeys.Length; i++) {
+            hudSettingsContainer.abilityButtons[i].Value = settings.AbilityKeys[0];
+        }
+
         UpdateHUDSettingsElements(settings);
     }
 
@@ -764,6 +819,21 @@ public class UIManager : MonoBehaviour
 
         hudSettingsContainer.xSensitivityText.text = hudSettingsContainer.xSensitivitySlider.value.ToString("0.0");
         hudSettingsContainer.ySensitivityText.text = hudSettingsContainer.ySensitivitySlider.value.ToString("0.0");
+
+        KeyBindingHandler interact = hudSettingsContainer.interactButton;
+        interact.DisplayText.text = "Interact - " + manager.GetKeyString(interact.Value);
+        KeyBindingHandler map = hudSettingsContainer.minimapButton;
+        map.DisplayText.text = "Map - " + manager.GetKeyString(map.Value);
+        KeyBindingHandler tree = hudSettingsContainer.treeButton;
+        tree.DisplayText.text = "Upgrade Tree - " + manager.GetKeyString(tree.Value);
+        KeyBindingHandler turnLeft = hudSettingsContainer.turnLeftButton;
+        turnLeft.DisplayText.text = "Turn Left - " + manager.GetKeyString(turnLeft.Value);
+        KeyBindingHandler turnRight = hudSettingsContainer.turnRightButton;
+        turnRight.DisplayText.text = "Turn Right - " + manager.GetKeyString(turnRight.Value);
+        for (int i = 0; i < hudSettingsContainer.abilityButtons.Length; i++) {
+            KeyBindingHandler keyHandler = hudSettingsContainer.abilityButtons[i];
+            keyHandler.DisplayText.text = "Ability " + (i + 1) + " - " + manager.GetKeyString(keyHandler.Value);
+        }
     }
 
     public void ToggleBorderHighlight()
@@ -883,20 +953,21 @@ public class UIManager : MonoBehaviour
         playerCastBar.fillAmount = 0f;
     }
 
-    public void UpdatePlayerAbilityHUD(List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f)
+    public void UpdatePlayerAbilityHUD(string[] keys, List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f)
     {
         for (int i = 0; i < cooldowns.Count; i++)
         {
-            SetPlayerAbilityIcon(i, cooldowns[i], cooldownsRemaining[i], (currentCast == i), castProgress);
+            SetPlayerAbilityIcon(keys[i], i, cooldowns[i], cooldownsRemaining[i], (currentCast == i), castProgress);
         }
     }
 
-    void SetPlayerAbilityIcon(int index, float cooldown, float cooldownRemaining, bool casting = false, float castProgress = 0f)
+    void SetPlayerAbilityIcon(string key, int index, float cooldown, float cooldownRemaining, bool casting = false, float castProgress = 0f)
     {
         GameObject abilityIconObject = playerAbilityIcons[index];
         PlayerHUDAbility container = abilityIconObject.GetComponent<PlayerHUDAbility>();
         if (container != null)
         {
+            container.KeyText.text = key.ToString();
             container.CooldownTimer.fillAmount = cooldownRemaining / cooldown;
             if (cooldownRemaining == 0f)
                 container.CooldownTimer.fillAmount = 0f;
@@ -905,14 +976,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateEnemyInfo(bool adjacentEnemy = false, string name = "", float healthPercentage = 0f, float castProgress = 0f, float castTime = 0f)
+    public void UpdateEnemyInfo(bool adjacentEnemy = false, string name = "", float healthPercentage = 0f, float castProgress = 0f, string castName = "", float castTime = 0f)
     {
         if (adjacentEnemy)
         {
             enemyInfoPanel.SetActive(true);
             enemyNameText.text = name;
             UpdateEnemyHealth(healthPercentage);
-            UpdateEnemyCast(castProgress, castTime);
+            UpdateEnemyCast(castProgress, castName, castTime);
         }
         else
         {
@@ -927,9 +998,10 @@ public class UIManager : MonoBehaviour
         enemyHealthBar.fillAmount = healthPercentage;
     }
 
-    public void UpdateEnemyCast(float castProgress, float castTime)
+    public void UpdateEnemyCast(float castProgress, string castName, float castTime)
     {
         enemyCastBar.fillAmount = castProgress;
+        enemyCastNameText.text = castName;
         float castRemaining = (castTime * (1f - castProgress));
         if (castRemaining < Mathf.Epsilon)
             enemyCastText.text = "";
@@ -1083,6 +1155,19 @@ public class UIManager : MonoBehaviour
         if (uiSound == null)
             uiSound = defaultClickSound;
         manager.AudioManager.PlayUISound(uiSound);
+    }
+
+    public void OnKeyBindingButtonClick(PointerEventData data) {
+        // If not currently setting a binding, set it to true and disable all controls. 
+        if (!settingBinding) {
+            Debug.Log("Activating set binding button.");
+            settingBinding = true;
+            KeyBindingHandler handler = data.pointerPress.GetComponentInParent<KeyBindingHandler>();
+            handler.ButtonText.text = "Press any button to bind.";
+
+            currentBindingButton = handler;
+            // AllButtons(gameObject, false);
+        }
     }
 
     public void FadeOut(string text = "", float speed = defaultFadeTime)

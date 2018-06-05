@@ -29,7 +29,7 @@ MonoBehaviour:
     duration: 2
     value: 10
   type: 4
-  aoeSprite: {fileID: 2800000, guid: fa8f6b5afe1a31649bfa274dd95b3f46, type: 3}
+  aoeSprite: {fileID: 2800000, guid: 0b73bc0870c088347a95e79305e6597d, type: 3}
   range: 0
   cooldown: 7
   castTime: 1.5

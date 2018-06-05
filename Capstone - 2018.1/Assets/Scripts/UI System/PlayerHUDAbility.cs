@@ -16,4 +16,6 @@ public class PlayerHUDAbility : MonoBehaviour
     public TMP_Text CooldownText { get { return cooldownText; } }
     [SerializeField] Image castTimer;
     public Image CastTimer { get { return castTimer; } }
+    [SerializeField] TMP_Text keyText;
+    public TMP_Text KeyText { get { return keyText; } }
 }

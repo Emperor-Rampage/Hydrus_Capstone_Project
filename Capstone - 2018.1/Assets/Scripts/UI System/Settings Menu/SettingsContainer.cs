@@ -41,6 +41,14 @@ public class SettingsContainer : MonoBehaviour
     public TMP_Text xSensitivityText;
     public Slider ySensitivitySlider;
     public TMP_Text ySensitivityText;
+    // public TMP_Text ability1Text;
+    public KeyBindingHandler interactButton;
+    public KeyBindingHandler minimapButton;
+    public KeyBindingHandler treeButton;
+    public KeyBindingHandler turnLeftButton;
+    public KeyBindingHandler turnRightButton;
+    public KeyBindingHandler[] abilityButtons;
+    // public KeyBindingHandler ability1Button;
 
     [Header("Buttons")]
     public Button backButton;
