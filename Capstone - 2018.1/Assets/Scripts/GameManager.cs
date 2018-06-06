@@ -1038,17 +1038,17 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     void HandlePlayerInput()
     {
         Player player = level.Player;
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button7))
         {
             uiManager.TogglePause();
         }
         if (!uiManager.Paused)
         {
-            if (Input.GetKeyDown(settingsManager.MapMenuKey))
+            if (Input.GetKeyDown(settingsManager.MapMenuKey) || Input.GetKeyDown(KeyCode.Joystick1Button9))
             {
                 uiManager.ToggleMap();
             }
-            else if (Input.GetKeyDown(settingsManager.TreeMenuKey))
+            else if (Input.GetKeyDown(settingsManager.TreeMenuKey) || Input.GetKeyDown(KeyCode.Joystick1Button6))
             {
                 uiManager.ToggleTree();
             }
@@ -1056,7 +1056,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (!uiManager.ShowingTree && !uiManager.ShowingMap && player.State == EntityState.Idle && !player.StatusEffects.Stunned)
             {
                 Direction inputDir = GetInputDirection();
-                if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit)
+                if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit || Input.GetKeyDown(KeyCode.Joystick1Button0) && level.CanExit)
                 {
                     ExitLevel();
                 }
@@ -1072,30 +1072,30 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 {
                     MoveEntityLocation(player, inputDir);
                 }
-                else if (Input.GetKey(settingsManager.TurnLeftKey))
+                else if (Input.GetKey(settingsManager.TurnLeftKey) || Input.GetKeyDown(KeyCode.Joystick1Button4))
                 {
                     TurnEntityInstanceLeft(player);
                 }
-                else if (Input.GetKey(settingsManager.TurnRightKey))
+                else if (Input.GetKey(settingsManager.TurnRightKey) || Input.GetKeyDown(KeyCode.Joystick1Button5))
                 {
                     TurnEntityInstanceRight(player);
                 }
-                // if (Input.GetKey(settingsManager.Ability1Key))
-                // {
-                //     CastPlayerAbility(player, 0);
-                // }
-                // else if (Input.GetKey(settingsManager.Ability2Key))
-                // {
-                //     CastPlayerAbility(player, 1);
-                // }
-                // else if (Input.GetKey(settingsManager.Ability3Key))
-                // {
-                //     CastPlayerAbility(player, 2);
-                // }
-                // else if (Input.GetKey(settingsManager.Ability4Key))
-                // {
-                //     CastPlayerAbility(player, 3);
-                // }
+                if (Input.GetAxis("ShoulderL") > 0.9f)
+                {
+                    CastPlayerAbility(player, 0);
+                }
+                else if (Input.GetAxis("ShoulderR") < -0.9f)
+                {
+                    CastPlayerAbility(player, 1);
+                }
+                else if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+                {
+                    CastPlayerAbility(player, 2);
+                }
+                else if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+                {
+                    CastPlayerAbility(player, 3);
+                }
                 else if (Input.GetKeyDown(KeyCode.Minus))
                 {
                     bool alive = player.Damage(25, (player.CastProgress >= interruptPercentage));

@@ -35,7 +35,7 @@ namespace ParticleClasses
         //TODO: Get a point slightly closer to the player and make the effect happen there. Should help convey that the target was hit.
         public void PlayHitSpark(Entity hurtTarget)
         {
-            Debug.Log("Generating HitSpark for " + hurtTarget.Name + " at Cell: " + hurtTarget.Cell.X + "," + hurtTarget.Cell.Z);
+            //Debug.Log("Generating HitSpark for " + hurtTarget.Name + " at Cell: " + hurtTarget.Cell.X + "," + hurtTarget.Cell.Z);
             Vector3 sparkVec = new Vector3(hurtTarget.Instance.transform.position.x, 0.5f, hurtTarget.Instance.transform.position.z);
             
             Instantiate(hitSpark, sparkVec, GameObject.FindGameObjectWithTag("Player").transform.localRotation);
@@ -64,7 +64,7 @@ namespace ParticleClasses
 
         public void PlayEnemyVFX(AbilityObject abil, Entity caster)
         {
-            Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin);
+            Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin + " for enemy " + caster.Name);
         }
 
         //Causes the enemy to flash the HitColor specified in the material for the target.
