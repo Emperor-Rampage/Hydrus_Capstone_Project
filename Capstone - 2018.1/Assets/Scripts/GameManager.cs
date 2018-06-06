@@ -1385,7 +1385,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             AddIndicator(testIndicatorPlayer, cell, entity);
         }
         //Setting the cast time scale to the current cast time scale... Blegh
-        SetPlayerCastAnimation("Cast", level.Player.Abilities[index].CastTime);
+        SetPlayerCastAnimation("Cast " + (index + 1), level.Player.Abilities[index].CastTime);
     }
 
     public void CancelPlayerAbility()
@@ -1481,9 +1481,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             particleManager.PlayHitSpark(target);
             particleManager.HitColor(target);
+            particleManager.PlayHurtAnim(target);
         }
 
         PerformEntityDeathCheck(target, alive);
+
     }
 
     void ApplyZoneAbility(Entity target, AbilityObject ability, Entity caster)

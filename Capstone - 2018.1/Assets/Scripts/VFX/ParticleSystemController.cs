@@ -14,6 +14,8 @@ namespace ParticleClasses
     // -- Play player effects depending on a transform given.
     // -- Play enemy particle effects depending on more complex info given (Transform, cast time, activation, etc)
     // -- Handle Status effect particles to help the player know when something is affecting the target.
+    // -- Expose Enemy prefab components somewhere(probably in the Entity script) to make grabbing the pieces a lot faster and less taxing.
+    // -- Set the Level to properly track the player so I can grab it for effects and such. Gone on for FAR too long.
 
     public class ParticleSystemController : MonoBehaviour
     {
@@ -21,6 +23,8 @@ namespace ParticleClasses
         public ParticleSystem hitSpark;
         [SerializeField]
         public ParticleSystem coreEffect;
+        [SerializeField]
+        public AnimationCurve hurtCurve;
 
         private LevelManager level;
 
@@ -41,7 +45,7 @@ namespace ParticleClasses
         public void PlayCoreGather(Entity spawnTarget)
         {
 
-            Debug.Log("Generating Core Gather Effect for " + spawnTarget.Name + "at Cell " + spawnTarget.Cell.X + "," + spawnTarget.Cell.Z + " with " + spawnTarget.Cores + " Cores. Spawning " + (spawnTarget.Cores / 5) + " particles." );
+            //Debug.Log("Generating Core Gather Effect for " + spawnTarget.Name + "at Cell " + spawnTarget.Cell.X + "," + spawnTarget.Cell.Z + " with " + spawnTarget.Cores + " Cores. Spawning " + (spawnTarget.Cores / 5) + " particles." );
 
             Vector3 spawnVec = new Vector3(spawnTarget.Instance.transform.position.x, 0.5f, spawnTarget.Instance.transform.position.z);
 
@@ -60,20 +64,43 @@ namespace ParticleClasses
 
         public void PlayEnemyVFX(AbilityObject abil, Entity caster)
         {
-
+            Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin);
         }
 
-        //Going to change this to reference a shader function. Possibly a coroutine (may be overkill)
+        //Causes the enemy to flash the HitColor specified in the material for the target.
         public void HitColor(Entity hurtTarget)
         {
-            Material mat = hurtTarget.Instance.GetComponentInChildren<MeshRenderer>().material;
+
+            Material mat;
+            if (hurtTarget.Name == "Flower Spider")
+                mat = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
+            else
+                mat = hurtTarget.Instance.GetComponentInChildren<MeshRenderer>().material;
             mat.SetFloat("_HurtScale", 1.0f);
             Tween.ShaderFloat(mat, "_HurtScale", 0.0f, 0.5f, 0.0f);
         }
 
+        //Needed to set the layer weight using a tween... God, I hope nobody sees this.
+        private Animator CurrentHurtAnimator;
+
+        public void PlayHurtAnim(Entity hurtTarget)
+        {
+            CurrentHurtAnimator = hurtTarget.Instance.GetComponent<Animator>();
+            Tween.Value(1.0f, 0.0f,HandleHurtAnimChange, 0.5f,0.0f, hurtCurve);
+        }
+
+        void HandleHurtAnimChange(float value)
+        {
+            CurrentHurtAnimator.SetLayerWeight(1, value);
+        }
+
         public void DissolveEnemy(Entity target, Level level)
         {
-            Material mat = target.Instance.GetComponentInChildren<MeshRenderer>().material;
+            Material mat;
+            if (target.Name == "Flower Spider")
+                mat = target.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
+            else
+                mat = target.Instance.GetComponentInChildren<MeshRenderer>().material;
             Tween.ShaderFloat(mat, "_DissolveScale", 1.0f, 1.0f, 0.0f, completeCallback: () => GameObject.Destroy(target.Instance));
         }
 
