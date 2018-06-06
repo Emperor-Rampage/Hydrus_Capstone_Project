@@ -152,13 +152,14 @@ ModelImporter:
     4300006: midBig_legs
     4300008: midSmall_legs
     4300010: back_Legs
-    7400000: SpideyAnimRaw
+    7400000: SpideyIdleRaw
     7400002: SpideyWebShootRaw
     7400004: SpideyWalkRaw
     7400006: SpideyThornShootRaw
     7400008: SpideyBiteyBiteRaw
     7400010: SpideyTurnLeftRaw
     7400012: SpideyTurnRightRaw
+    7400014: SpideyFullRaw
     9500000: //RootNode
     13700000: back_Legs
     13700002: body
@@ -195,10 +196,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: SpideyAnimRaw
+      name: SpideyIdleRaw
       takeName: Take 001
-      firstFrame: 1
-      lastFrame: 1050
+      firstFrame: 901
+      lastFrame: 927
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -254,7 +255,7 @@ ModelImporter:
       name: SpideyWalkRaw
       takeName: Take 001
       firstFrame: 205
-      lastFrame: 341
+      lastFrame: 284
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -366,6 +367,34 @@ ModelImporter:
       name: SpideyTurnRightRaw
       takeName: Take 001
       firstFrame: 950
+      lastFrame: 1050
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: SpideyFullRaw
+      takeName: Take 001
+      firstFrame: 1
       lastFrame: 1050
       wrapMode: 0
       orientationOffsetY: 0
