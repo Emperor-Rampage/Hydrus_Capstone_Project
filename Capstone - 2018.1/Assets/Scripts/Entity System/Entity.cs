@@ -5,6 +5,7 @@ using MapClasses;
 using AbilityClasses;
 using Pixelplacement;
 using Pixelplacement.TweenSystem;
+using AudioClasses;
 
 namespace EntityClasses
 {
@@ -59,7 +60,14 @@ namespace EntityClasses
         public EffectDictionary StatusEffects = new EffectDictionary();
         [SerializeField] List<AbilityObject> abilities;
         public List<AbilityObject> Abilities { get { return abilities; } private set { abilities = value; } }
-
+        [SerializeField] SoundEffect walkingSound;
+        public SoundEffect WalkingSound { get { return walkingSound; } private set { walkingSound = value; } }
+        [SerializeField] SoundEffect hitSound;
+        public SoundEffect HitSound { get { return hitSound; } private set { hitSound = value; } }
+        [SerializeField] SoundEffect hurtSound;
+        public SoundEffect HurtSound { get { return hurtSound; } private set { hurtSound = value; } }
+        [SerializeField] SoundEffect deathSound;
+        public SoundEffect DeathSound { get { return deathSound; } private set { deathSound = value; } }
         public Dictionary<AbilityObject, float> Cooldowns { get; private set; } = new Dictionary<AbilityObject, float>();
         public Dictionary<AbilityObject, float> CooldownsRemaining { get; private set; } = new Dictionary<AbilityObject, float>();
         public List<Indicator> Indicators { get; set; } = new List<Indicator>();

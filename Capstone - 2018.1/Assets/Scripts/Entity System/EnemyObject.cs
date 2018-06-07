@@ -11,7 +11,7 @@ namespace EntityClasses
     [CreateAssetMenu(fileName = "New Enemy Spawn", menuName = "Game/Enemy Spawn")]
     public class EnemyObject : ScriptableObject
     {
-        [SerializeField] Entity enemy;
-        public Entity Enemy { get { return enemy; } private set { enemy = value; } }
+        [SerializeField] Enemy enemy;
+        public Enemy Enemy { get { return enemy; } private set { enemy = value; } }
     }
 }

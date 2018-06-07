@@ -4,13 +4,25 @@ using UnityEngine;
 
 using AbilityClasses;
 using MapClasses;
+using AudioClasses;
+using System;
 
 namespace EntityClasses {
+    [Serializable]
     public class Enemy : Entity
     {
         public bool InCombat { get; set; }
         public Direction Target { get; set; }
+        [SerializeField] float interval;
+        public float Interval { get { return interval; } }
+        [SerializeField] float variance;
+        public float Variance { get { return variance; } }
+        public float LastAmbientPlay { get; set; }
+        [SerializeField] SoundEffect ambientSound;
+        public SoundEffect AmbientSound { get { return ambientSound; } private set { ambientSound = value; } }
         public Enemy() : base() { }
-        public Enemy(Entity entity) : base(entity) { }
+        public Enemy(Enemy entity) : base(entity) {
+            ambientSound = entity.ambientSound;
+        }
     }
 }

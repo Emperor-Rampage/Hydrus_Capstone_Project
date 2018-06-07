@@ -464,14 +464,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     }
                 }
                 // Let the enemy's do stuff.
-                try
-                {
+                // try
+                // {
                     HandleEnemyAI();
-                }
-                catch
-                {
-                    Debug.LogError("ERROR: Enemy AI failed.");
-                }
+                // }
+                // catch
+                // {
+                //     Debug.LogError("ERROR: Enemy AI failed.");
+                // }
                 // Get player input and do stuff.
                 try
                 {
@@ -1162,6 +1162,15 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         foreach (Enemy enemy in level.EnemyList)
         {
             enemy.InCombat = (level.GetDistance(enemy.Cell, level.Player.Cell) <= enemyAggroDistance);
+            if (!enemy.InCombat) {
+                float timing = enemy.Interval + (UnityEngine.Random.Range(-enemy.Variance, enemy.Variance));
+                // float time = Time.time + (enemy.Variance * Time.deltaTime);
+                Debug.Log("Time.time % timing = " + (Time.time % timing));
+                if (Time.time % timing <= 1f) {
+                    audioManager.PlaySoundEffect(new SoundEffect(enemy.AmbientSound, enemy.Instance.transform.position));
+                }
+            }
+
             if (enemy.State == EntityState.Idle)
             {
                 var action = aiManager.ExecuteAIOnEnemy(enemy, level);
