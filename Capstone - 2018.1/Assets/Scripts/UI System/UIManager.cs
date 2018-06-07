@@ -826,7 +826,7 @@ public class UIManager : MonoBehaviour
         hudSettingsContainer.turnRightButton.Value = settings.TurnRightKey;
         for (int i = 0; i < settings.AbilityKeys.Length; i++)
         {
-            hudSettingsContainer.abilityButtons[i].Value = settings.AbilityKeys[0];
+            hudSettingsContainer.abilityButtons[i].Value = settings.AbilityKeys[i];
         }
 
         UpdateHUDSettingsElements(settings);
