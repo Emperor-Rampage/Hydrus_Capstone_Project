@@ -81,18 +81,21 @@ namespace ParticleClasses
         }
 
         //Needed to set the layer weight using a tween... God, I hope nobody sees this.
-        private Animator CurrentHurtAnimator;
+        //private Animator CurrentHurtAnimator;
 
         public void PlayHurtAnim(Entity hurtTarget)
         {
-            CurrentHurtAnimator = hurtTarget.Instance.GetComponent<Animator>();
-            Tween.Value(1.0f, 0.0f,HandleHurtAnimChange, 0.5f,0.0f, hurtCurve);
+            Animator anim = hurtTarget.Instance.GetComponent<Animator>();
+            anim.SetTrigger("Hurt");
+            //Tween.Value(1.0f, 0.0f,HandleHurtAnimChange, 0.5f,0.0f, hurtCurve);
         }
 
+        /*
         void HandleHurtAnimChange(float value)
         {
             CurrentHurtAnimator.SetLayerWeight(1, value);
         }
+        */
 
         public void DissolveEnemy(Entity target, Level level)
         {
