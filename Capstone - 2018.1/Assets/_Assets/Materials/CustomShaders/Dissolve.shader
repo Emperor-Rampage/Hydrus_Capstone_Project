@@ -116,7 +116,7 @@
 			o.Metallic = cSpec.r;
 			o.Smoothness = cSpec.a * _Glossiness;
 
-			o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_EmissionTex));
+			o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_NormalTex));
 
 			//Convert dissolve progression to -1 to 1 scale.
 			half dBase = -2.0f * _DissolveScale + 1.0f;

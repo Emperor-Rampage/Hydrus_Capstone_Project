@@ -502,7 +502,7 @@ InputManager:
     axis: 4
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Mouse X
+    m_Name: ShoulderL
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -510,15 +510,15 @@ InputManager:
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
-    dead: 0.2
+    dead: 0.8
     sensitivity: 1
-    snap: 0
+    snap: 1
     invert: 0
     type: 2
     axis: 2
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Mouse Y
+    m_Name: ShoulderR
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -526,9 +526,9 @@ InputManager:
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
-    dead: 0.2
+    dead: 0.8
     sensitivity: 1
-    snap: 0
+    snap: 1
     invert: 0
     type: 2
     axis: 2

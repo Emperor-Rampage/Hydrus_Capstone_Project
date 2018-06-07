@@ -55,6 +55,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4466322906034196}
+  - component: {fileID: 95924141658952728}
   m_Layer: 0
   m_Name: Boss_mesh
   m_TagString: Untagged
@@ -274,6 +275,24 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 0}
+--- !u!95 &95924141658952728
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1272064394801450}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114471000920017838
 MonoBehaviour:
   m_ObjectHideFlags: 1

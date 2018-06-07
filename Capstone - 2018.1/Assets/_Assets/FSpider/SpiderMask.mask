@@ -6,5 +6,147 @@ AvatarMask:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: SpiderMask
-  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-  m_Elements: []
+  m_Mask: 00000000000000000000000001000000010000000000000000000000000000000000000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: GEO
+    m_Weight: 1
+  - m_Path: GEO/back_Legs
+    m_Weight: 1
+  - m_Path: GEO/body
+    m_Weight: 1
+  - m_Path: GEO/front_legs
+    m_Weight: 1
+  - m_Path: GEO/midBig_legs
+    m_Weight: 1
+  - m_Path: GEO/midSmall_legs
+    m_Weight: 1
+  - m_Path: GEO/thorax
+    m_Weight: 1
+  - m_Path: superMover_CTRL
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_back_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_back_01/L_back_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_back_01/L_back_02/L_back_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_back_01/L_back_02/L_back_03/L_back_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_back_01/L_back_02/L_back_03/L_back_04/L_back_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_back_01/L_back_02/L_back_03/L_back_04/L_back_05/L_back_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_back_01/L_back_02/L_back_03/L_back_04/L_back_05/L_back_06/L_back_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_front_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_front_01/L_front_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_front_01/L_front_02/L_front_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_front_01/L_front_02/L_front_03/L_front_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_front_01/L_front_02/L_front_03/L_front_04/L_front_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_front_01/L_front_02/L_front_03/L_front_04/L_front_05/L_front_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_front_01/L_front_02/L_front_03/L_front_04/L_front_05/L_front_06/L_front_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midBig_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midBig_01/L_midBig_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midBig_01/L_midBig_02/L_midBig_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midBig_01/L_midBig_02/L_midBig_03/L_midBig_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midBig_01/L_midBig_02/L_midBig_03/L_midBig_04/L_midBig_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midBig_01/L_midBig_02/L_midBig_03/L_midBig_04/L_midBig_05/L_midBig_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midBig_01/L_midBig_02/L_midBig_03/L_midBig_04/L_midBig_05/L_midBig_06/L_midBig_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midSmall_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midSmall_01/L_midSmall_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midSmall_01/L_midSmall_02/L_midSmall_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midSmall_01/L_midSmall_02/L_midSmall_03/L_midSmall_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midSmall_01/L_midSmall_02/L_midSmall_03/L_midSmall_04/L_midSmall_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midSmall_01/L_midSmall_02/L_midSmall_03/L_midSmall_04/L_midSmall_05/L_midSmall_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/L_midSmall_01/L_midSmall_02/L_midSmall_03/L_midSmall_04/L_midSmall_05/L_midSmall_06/L_midSmall_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_back_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_back_01/R_back_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_back_01/R_back_02/R_back_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_back_01/R_back_02/R_back_03/R_back_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_back_01/R_back_02/R_back_03/R_back_04/R_back_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_back_01/R_back_02/R_back_03/R_back_04/R_back_05/R_back_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_back_01/R_back_02/R_back_03/R_back_04/R_back_05/R_back_06/R_back_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_front_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_front_01/R_front_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_front_01/R_front_02/R_front_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_front_01/R_front_02/R_front_03/R_front_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_front_01/R_front_02/R_front_03/R_front_04/R_front_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_front_01/R_front_02/R_front_03/R_front_04/R_front_05/R_front_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_front_01/R_front_02/R_front_03/R_front_04/R_front_05/R_front_06/R_front_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midBig_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midBig_01/R_midBig_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midBig_01/R_midBig_02/R_midBig_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midBig_01/R_midBig_02/R_midBig_03/R_midBig_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midBig_01/R_midBig_02/R_midBig_03/R_midBig_04/R_midBig_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midBig_01/R_midBig_02/R_midBig_03/R_midBig_04/R_midBig_05/R_midBig_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midBig_01/R_midBig_02/R_midBig_03/R_midBig_04/R_midBig_05/R_midBig_06/R_midBig_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midSmall_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midSmall_01/R_midSmall_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midSmall_01/R_midSmall_02/R_midSmall_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midSmall_01/R_midSmall_02/R_midSmall_03/R_midSmall_04
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midSmall_01/R_midSmall_02/R_midSmall_03/R_midSmall_04/R_midSmall_05
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midSmall_01/R_midSmall_02/R_midSmall_03/R_midSmall_04/R_midSmall_05/R_midSmall_06
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/R_midSmall_01/R_midSmall_02/R_midSmall_03/R_midSmall_04/R_midSmall_05/R_midSmall_06/R_midSmall_end
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/thorax_01
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/thorax_01/thorax_02
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/thorax_01/thorax_02/thorax_03
+    m_Weight: 1
+  - m_Path: superMover_CTRL/body_CTRL/root/thorax_01/thorax_02/thorax_03/thorax_end
+    m_Weight: 1
