@@ -1411,6 +1411,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
         //Setting the cast time scale to the current cast time scale... Blegh
         SetPlayerCastAnimation("Cast " + (index + 1), level.Player.Abilities[index].CastTime);
+        Animator anim = entity.Instance.GetComponent<Animator>();
+        particleManager.PlayPlayerAnimation(entity.GetAdjustedCastTime(entity.Abilities[index].CastTime), 0.0f, 0.4f, anim, "CastActivate");
+
     }
 
     public void CancelPlayerAbility()
@@ -1453,7 +1456,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
-            SetPlayerAnimation("CastActivate", 1.0f);
+            //SetPlayerAnimation("CastActivate", 1.0f);
         }
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
