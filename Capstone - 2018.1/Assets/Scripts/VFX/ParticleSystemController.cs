@@ -8,7 +8,7 @@ using AbilityClasses;
 using MapClasses;
 
 namespace ParticleClasses
-{ 
+{
     //TODO: Build this out to handle the particle effect creation and destruction for the whole game. Telling things where to spawn, how long, and handling the garbage of all of this
     // -- General hitspark method to display a hit spark when an enemy is hit.
     // -- Play player effects depending on a transform given.
@@ -37,20 +37,21 @@ namespace ParticleClasses
         {
             //Debug.Log("Generating HitSpark for " + hurtTarget.Name + " at Cell: " + hurtTarget.Cell.X + "," + hurtTarget.Cell.Z);
             Vector3 sparkVec = new Vector3(hurtTarget.Instance.transform.position.x, 0.5f, hurtTarget.Instance.transform.position.z);
-            
+
             Instantiate(hitSpark, sparkVec, GameObject.FindGameObjectWithTag("Player").transform.localRotation);
         }
 
         //Instantiates a Core Effect Particle System when prompted.
         public void PlayCoreGather(Entity spawnTarget)
         {
+            if (spawnTarget == null || spawnTarget.Instance == null)
+                return;
 
             //Debug.Log("Generating Core Gather Effect for " + spawnTarget.Name + "at Cell " + spawnTarget.Cell.X + "," + spawnTarget.Cell.Z + " with " + spawnTarget.Cores + " Cores. Spawning " + (spawnTarget.Cores / 5) + " particles." );
-
             Vector3 spawnVec = new Vector3(spawnTarget.Instance.transform.position.x, 0.5f, spawnTarget.Instance.transform.position.z);
 
-            coreEffect.emission.SetBurst( 0 ,
-                new ParticleSystem.Burst(0.0f,(spawnTarget.Cores / 5))
+            coreEffect.emission.SetBurst(0,
+                new ParticleSystem.Burst(0.0f, (spawnTarget.Cores / 5))
                 );
 
             Instantiate(coreEffect, spawnVec, GameObject.FindGameObjectWithTag("Player").transform.localRotation);
@@ -70,12 +71,18 @@ namespace ParticleClasses
         //Causes the enemy to flash the HitColor specified in the material for the target.
         public void HitColor(Entity hurtTarget)
         {
+            if (hurtTarget == null)
+                return;
 
             Material mat;
             if (hurtTarget.Name == "Flower Spider")
                 mat = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
             else
                 mat = hurtTarget.Instance.GetComponentInChildren<MeshRenderer>().material;
+
+            if (mat == null)
+                return;
+
             mat.SetFloat("_HurtScale", 1.0f);
             Tween.ShaderFloat(mat, "_HurtScale", 0.0f, 0.5f, 0.0f);
         }
@@ -86,6 +93,9 @@ namespace ParticleClasses
         public void PlayHurtAnim(Entity hurtTarget)
         {
             Animator anim = hurtTarget.Instance.GetComponent<Animator>();
+            if (anim == null)
+                return;
+
             anim.SetTrigger("Hurt");
             //Tween.Value(1.0f, 0.0f,HandleHurtAnimChange, 0.5f,0.0f, hurtCurve);
         }
@@ -99,11 +109,18 @@ namespace ParticleClasses
 
         public void DissolveEnemy(Entity target, Level level)
         {
+            if (target == null || target.Index == null || level == null)
+                return;
+
             Material mat;
             if (target.Name == "Flower Spider")
                 mat = target.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
             else
                 mat = target.Instance.GetComponentInChildren<MeshRenderer>().material;
+
+            if (mat == null)
+                return;
+
             Tween.ShaderFloat(mat, "_DissolveScale", 1.0f, 1.0f, 0.0f, completeCallback: () => GameObject.Destroy(target.Instance));
         }
 

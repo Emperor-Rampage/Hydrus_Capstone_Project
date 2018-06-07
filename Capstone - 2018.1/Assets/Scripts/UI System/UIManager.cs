@@ -13,6 +13,7 @@ using MapClasses;
 using AbilityClasses;
 using EntityClasses;
 using AudioClasses;
+using UnityEngine.UI.Extensions;
 
 // TODO: Use an enum to define ui sounds. Store them in a dictionary with the enum as the key and the SoundEffect as the value.
 // TODO: Pass the enum in each ui element's event trigger.
@@ -31,6 +32,9 @@ public class UIManager : MonoBehaviour
     AnimationCurve defaultFadeCurve = Tween.EaseInOutStrong;
     [SerializeField] TMP_Text fadeText;
     [SerializeField] ParticleSystem highlightUIPrefab;
+    [Header("Effect Icon Settings")]
+    [SerializeField]
+    EffectIconsDictionary effectIcons;
     // TODO: Add support for highlighting ui elements with highlight particle system.
 
     [Header("Sound Settings")]
@@ -159,6 +163,7 @@ public class UIManager : MonoBehaviour
     {
         manager = GameManager.Instance;
         mouseLookManager = GetComponent<MouseLookManager>();
+        effectIcons.Initialize();
 
         // Connect settings buttons with GameManager methods.
         mainSettingsContainer.backButton.onClick.AddListener(manager.RevertSettings);
@@ -309,6 +314,7 @@ public class UIManager : MonoBehaviour
         // TODO: Switch to a panel for each ability with a vertical layout group.
         //       Populate with panels with horizontal layout groups with each ability's tier.
         abilityTree = tree;
+        // List<Vector2> positions = new List<Vector2>();
 
         LayoutElement layoutElement = abilityTreeContentPanel.GetComponent<LayoutElement>();
         layoutElement.preferredWidth = tree.Width;
@@ -351,7 +357,6 @@ public class UIManager : MonoBehaviour
                     TreeAbility container = cell.GetComponent<TreeAbility>();
                     container.Tier = ability.Tier;
                     container.Index = ability.Index;
-                    // container.Index = abilityTree.GetTreeAbilityIndex(ability.Tier - 1, ability);
                     container.Icon.sprite = ability.Icon;
 
                     if (tree.IsCurrentAbility(ability) || tree.IsAvailable(ability))
@@ -380,25 +385,35 @@ public class UIManager : MonoBehaviour
                     clickEntry.callback.AddListener((data) => OnTreeAbilityClicked((PointerEventData)data));
                     trigger.triggers.Add(clickEntry);
 
-
-                    // cell.transform.GetChild(0).GetComponent<Image>().sprite = ability.Icon;
-
                     treeAbilities.Add(container);
-                    // tree.AddAbilityUI(t, i, cell);
-                    // tree.AddAbilityUI(t, tree.GetTreeAbilityIndex(t, ability), cell);
                 }
-
             }
         }
 
-        foreach (TreeAbility treeAbility in treeAbilities)
-        {
-            AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
-            foreach (AbilityObject nextAbility in ability.NextTier)
-            {
-                TreeAbility nextTreeAbility = treeAbilities.FirstOrDefault((tAbil) => tAbil.Index == nextAbility.Index && tAbil.Tier == nextAbility.Tier);
-            }
-        }
+        // foreach (TreeAbility treeAbility in treeAbilities)
+        // {
+        //     AbilityObject ability = abilityTree.GetTreeAbility(treeAbility.Tier, treeAbility.Index);
+        //     foreach (AbilityObject nextAbility in ability.NextTier)
+        //     {
+        //         TreeAbility nextTreeAbility = treeAbilities.FirstOrDefault((tAbil) => tAbil.Index == nextAbility.Index && tAbil.Tier == nextAbility.Tier);
+        //         Debug.Log("Next ability for " + ability.Name + " is " + nextTreeAbility.gameObject.name);
+        //         RectTransform rect1 = treeAbility.GetComponent<RectTransform>();
+        //         RectTransform rect2 = nextTreeAbility.GetComponent<RectTransform>();
+        //         rect1.ForceUpdateRectTransforms();
+        //         Debug.Log("rect1 position: " + rect1.position + ", localposition: " + rect1.localPosition + ", anchoredposition: " + rect1.anchoredPosition);
+        //         Debug.Log("rect2 position: " + rect2.position + ", localposition: " + rect2.localPosition + ", anchoredposition: " + rect2.anchoredPosition);
+        //         Debug.Log("rec2 localPosition to world position: " + rect2.TransformVector(rect2.localPosition));
+        //         Vector2 pos1 = Vector2.zero;
+        //         Vector2 pos2 = rect2.position - rect1.position;
+        //         // Vector2 pos2 = rect1.InverseTransformPoint(new Vector2(rect2.position.x - rect1.position.x, rect2.position.y - rect1.position.y));
+
+        //         UILineRenderer line = GameObject.Instantiate(abiltiyLinePrefab, treeAbility.transform).GetComponent<UILineRenderer>();
+        //         line.Points = new Vector2[] { pos1, pos2 };
+
+        //         // UILineConnector line = GameObject.Instantiate(abiltiyLinePrefab, treeAbility.transform).GetComponent<UILineConnector>();
+        //         // line.transforms = new RectTransform[] { treeAbility.GetComponent<RectTransform>(), nextTreeAbility.GetComponent<RectTransform>() };
+        //     }
+        // }
 
         // For each base ability.
         //  For each tier of the ability
@@ -908,6 +923,11 @@ public class UIManager : MonoBehaviour
 
     void DisplayEffectInList(EffectContainer effectContainer, AbilityEffect effect)
     {
+        if (effectIcons.IconsDictionary.ContainsKey(effect.Effect))
+            effectContainer.Icon.sprite = effectIcons.IconsDictionary[effect.Effect];
+        else
+            effectContainer.Icon.sprite = effectIcons.DefaultIcon;
+
         if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
         {
             effectContainer.EffectText.text = effect.Effect + " - " + effect.Remaining.ToString("0.0") + " sec";
@@ -1043,7 +1063,7 @@ public class UIManager : MonoBehaviour
     {
         float dir = data.scrollDelta.y;
         currentZoom = Mathf.Clamp(currentZoom + (dir * zoomSpeed), minZoom, maxZoom);
-        Debug.Log("Mouse scrolled in upgrade menu! Zoom is now " + currentZoom);
+        // Debug.Log("Mouse scrolled in upgrade menu! Zoom is now " + currentZoom);
 
         abilityTreeContentPanel.localScale = Vector3.one * currentZoom;
     }
@@ -1062,7 +1082,7 @@ public class UIManager : MonoBehaviour
 
         if (ability != null)
         {
-            Debug.Log("Hovered over " + ability.Name);
+            // Debug.Log("Hovered over " + ability.Name);
             abilityInfoContainer.NameText.text = ability.Name;
             abilityInfoContainer.TypeText.text = ability.Type.ToString();
             abilityInfoContainer.TooltipText.text = ability.ToolTip;
@@ -1135,6 +1155,11 @@ public class UIManager : MonoBehaviour
     void DisplayEffectInTree(EffectContainer effectContainer, AbilityEffect effect)
     {
         effectContainer.EffectText.enableWordWrapping = true;
+        if (effectIcons.IconsDictionary.ContainsKey(effect.Effect))
+            effectContainer.Icon.sprite = effectIcons.IconsDictionary[effect.Effect];
+        else
+            effectContainer.Icon.sprite = effectIcons.DefaultIcon;
+
         if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
         {
             effectContainer.EffectText.text = effect.Effect + " - " + effect.Duration.ToString("0.0") + " sec";
