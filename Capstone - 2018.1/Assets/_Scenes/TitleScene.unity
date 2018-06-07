@@ -4893,7 +4893,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   turnspeed: 0.3
   tickRate: 0.25
-  enemyAggroDistance: 4
+  enemyAggroDistance: 3
   interruptPercentage: 0.75
 --- !u!4 &2078068043
 Transform:

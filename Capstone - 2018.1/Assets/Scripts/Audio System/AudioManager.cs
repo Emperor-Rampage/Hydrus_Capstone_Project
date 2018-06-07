@@ -122,6 +122,10 @@ namespace AudioClasses
 
         public void PlaySoundEffect(SoundEffect soundEffect)
         {
+            if (soundEffect == null) {
+                Debug.LogError("ERROR: SoundEffect is null.");
+                return;
+            }
             if (soundEffect.Clip == null)
             {
                 Debug.LogWarning("WARNING: SoundEffect AudioClip is null.");

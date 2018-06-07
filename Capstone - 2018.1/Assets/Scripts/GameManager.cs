@@ -464,14 +464,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     }
                 }
                 // Let the enemy's do stuff.
-                try
-                {
+                // try
+                // {
                     HandleEnemyAI();
-                }
-                catch
-                {
-                    Debug.LogError("ERROR: Enemy AI failed.");
-                }
+                // }
+                // catch
+                // {
+                //     Debug.LogError("ERROR: Enemy AI failed.");
+                // }
                 // Get player input and do stuff.
                 try
                 {
@@ -1162,6 +1162,15 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         foreach (Enemy enemy in level.EnemyList)
         {
             enemy.InCombat = (level.GetDistance(enemy.Cell, level.Player.Cell) <= enemyAggroDistance);
+            if (!enemy.InCombat) {
+                float timing = enemy.Interval + (UnityEngine.Random.Range(-enemy.Variance, enemy.Variance));
+                // float time = Time.time + (enemy.Variance * Time.deltaTime);
+                Debug.Log("Time.time % timing = " + (Time.time % timing));
+                if (Time.time % timing <= 1f) {
+                    audioManager.PlaySoundEffect(new SoundEffect(enemy.AmbientSound, enemy.Instance.transform.position));
+                }
+            }
+
             if (enemy.State == EntityState.Idle)
             {
                 var action = aiManager.ExecuteAIOnEnemy(enemy, level);
@@ -1411,6 +1420,9 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
         //Setting the cast time scale to the current cast time scale... Blegh
         SetPlayerCastAnimation("Cast " + (index + 1), level.Player.Abilities[index].CastTime);
+        Animator anim = entity.Instance.GetComponent<Animator>();
+        particleManager.PlayPlayerAnimation(entity.GetAdjustedCastTime(entity.Abilities[index].CastTime), 0.0f, 0.4f, anim, "CastActivate");
+
     }
 
     public void CancelPlayerAbility()
@@ -1453,7 +1465,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
-            SetPlayerAnimation("CastActivate", 1.0f);
+            //SetPlayerAnimation("CastActivate", 1.0f);
         }
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);

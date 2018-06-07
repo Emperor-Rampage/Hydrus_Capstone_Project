@@ -17,6 +17,28 @@ MonoBehaviour:
     cores: 40
     maxHealth: 75
     abilities:
-    - {fileID: 11400000, guid: 88553ee344cff9948aab44e6c79173ca, type: 2}
     - {fileID: 11400000, guid: db6c27b91e6743d48a71fc76069a3d59, type: 2}
+    - {fileID: 11400000, guid: 88553ee344cff9948aab44e6c79173ca, type: 2}
     - {fileID: 11400000, guid: 37c79b95b04e4ba4f839985658104113, type: 2}
+    walkingSound:
+      audioClip: {fileID: 0}
+      volume: 0
+      pitch: 0
+    hitSound:
+      audioClip: {fileID: 0}
+      volume: 0
+      pitch: 0
+    hurtSound:
+      audioClip: {fileID: 0}
+      volume: 0
+      pitch: 0
+    deathSound:
+      audioClip: {fileID: 0}
+      volume: 0
+      pitch: 0
+    interval: 1
+    variance: 1
+    ambientSound:
+      audioClip: {fileID: 8300000, guid: 2f705938a48d6f64791bd6dc4ccdda56, type: 3}
+      volume: 1
+      pitch: 1

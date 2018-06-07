@@ -58,6 +58,17 @@ namespace ParticleClasses
 
         }
 
+        public void PlayPlayerAnimation(float castTime, float delay, float timing, Animator anim, string trigger)
+        {
+            Tween.Value(0, 1, (i) => {}, (castTime - timing), delay, completeCallback: () => anim.SetTrigger(trigger));
+        }
+
+        //Plays an enemy animation with a delay that makes the ability sync-up
+        public void PlayEnemyAnimation(AbilityObject abil, float delay, float castPercent, Animator anim)
+        {
+
+        }
+
         public void PlayPlayerVFX(AbilityObject abil)
         {
             Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin);
