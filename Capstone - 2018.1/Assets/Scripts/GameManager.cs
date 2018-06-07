@@ -463,10 +463,24 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                         }
                     }
                 }
-                // Get player input and do stuff.
-                HandlePlayerInput();
                 // Let the enemy's do stuff.
-                HandleEnemyAI();
+                try
+                {
+                    HandleEnemyAI();
+                }
+                catch
+                {
+                    Debug.LogError("ERROR: Enemy AI failed.");
+                }
+                // Get player input and do stuff.
+                try
+                {
+                    HandlePlayerInput();
+                }
+                catch
+                {
+                    Debug.LogError("ERROR: Player Input failed.");
+                }
             }
         }
         else
@@ -1066,6 +1080,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 if (Input.GetKeyDown(settingsManager.InteractKey) && level.CanExit || Input.GetKeyDown(KeyCode.Joystick1Button0) && level.CanExit)
                 {
                     ExitLevel();
+                    return;
                 }
 
                 for (int i = 0; i < settingsManager.AbilityKeys.Length; i++)
@@ -1074,6 +1089,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     if (Input.GetKey(abilityKey))
                     {
                         CastPlayerAbility(player, i);
+                        return;
                     }
                 }
 
