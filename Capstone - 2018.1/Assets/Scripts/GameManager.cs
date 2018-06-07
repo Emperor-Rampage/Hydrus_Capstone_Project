@@ -322,9 +322,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
     }
 
-    public string[] GetAbilityKeyStrings() {
+    public string[] GetAbilityKeyStrings()
+    {
         string[] keys = new string[settingsManager.AbilityKeys.Length];
-        for (int i = 0; i < keys.Length; i++) {
+        for (int i = 0; i < keys.Length; i++)
+        {
             KeyCode key = settingsManager.AbilityKeys[i];
             if (keyStrings.ContainsKey(key))
                 keys[i] = keyStrings[key];
@@ -332,7 +334,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         return keys;
     }
 
-    public string GetKeyString(KeyCode key) {
+    public string GetKeyString(KeyCode key)
+    {
         if (keyStrings.ContainsKey(key))
             return keyStrings[key];
 
@@ -385,15 +388,18 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             keyStrings = new Dictionary<KeyCode, string>();
             // Initialize a custom dictionary of key code strings.
-            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode))) {
+            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+            {
                 if (!keyStrings.ContainsKey(key))
                     keyStrings.Add(key, key.ToString());
             }
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++)
+            {
                 keyStrings[(KeyCode)((int)KeyCode.Alpha0 + i)] = i.ToString();
                 keyStrings[(KeyCode)((int)KeyCode.Keypad0 + i)] = i.ToString();
             }
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 6; i++)
+            {
                 keyStrings[(KeyCode)((int)KeyCode.Mouse0 + i)] = "MB" + (i + 1).ToString();
             }
 
@@ -971,7 +977,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             if (enemy != null)
             {
                 string castName = "";
-                if (enemy.CurrentAbility != -1) {
+                if (enemy.CurrentAbility != -1)
+                {
                     AbilityObject ability = enemy.Abilities[enemy.CurrentAbility];
                     castName = ability.Name;
                 }
@@ -1061,9 +1068,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     ExitLevel();
                 }
 
-                for (int i = 0; i < settingsManager.AbilityKeys.Length; i++) {
+                for (int i = 0; i < settingsManager.AbilityKeys.Length; i++)
+                {
                     KeyCode abilityKey = settingsManager.AbilityKeys[i];
-                    if (Input.GetKey(abilityKey)) {
+                    if (Input.GetKey(abilityKey))
+                    {
                         CastPlayerAbility(player, i);
                     }
                 }

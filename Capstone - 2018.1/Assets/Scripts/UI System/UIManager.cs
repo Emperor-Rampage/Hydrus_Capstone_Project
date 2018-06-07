@@ -70,7 +70,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text promptText;
 
     [SerializeField] TMP_Text coresText;
-    [SerializeField] TMP_Text effectTextPrefab;
+    [SerializeField] EffectContainer effectTextPrefab;
     [SerializeField] VerticalLayoutGroup effectGroup;
 
     [SerializeField] Image playerHealthBar;
@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] KeyCode[] invalidKeys;
     [HideInInspector] public Resolution[] resolutions;
 
-    List<TMP_Text> effectTextList = new List<TMP_Text>();
+    List<EffectContainer> effectTextList = new List<EffectContainer>();
 
     List<GameObject> playerAbilityIcons = new List<GameObject>();
 
@@ -221,11 +221,16 @@ public class UIManager : MonoBehaviour
         ShowHUD(0);
     }
 
-    void Update() {
-        if (settingBinding) {
-            if (Input.anyKeyDown) {
-                if (currentBindingButton != null) {
-                    foreach (KeyCode key in Enum.GetValues(typeof(KeyCode))) {
+    void Update()
+    {
+        if (settingBinding)
+        {
+            if (Input.anyKeyDown)
+            {
+                if (currentBindingButton != null)
+                {
+                    foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                    {
                         if (Input.GetKeyDown(key))
                             currentBindingButton.Value = key;
                     }
@@ -663,13 +668,14 @@ public class UIManager : MonoBehaviour
 
         mainSettingsContainer.xSensitivitySlider.value = settings.XSensitivity;
         mainSettingsContainer.ySensitivitySlider.value = settings.YSensitivity;
-        
+
         mainSettingsContainer.interactButton.Value = settings.InteractKey;
         mainSettingsContainer.minimapButton.Value = settings.MapMenuKey;
         mainSettingsContainer.treeButton.Value = settings.TreeMenuKey;
         mainSettingsContainer.turnLeftButton.Value = settings.TurnLeftKey;
         mainSettingsContainer.turnRightButton.Value = settings.TurnRightKey;
-        for (int i = 0; i < settings.AbilityKeys.Length; i++) {
+        for (int i = 0; i < settings.AbilityKeys.Length; i++)
+        {
             mainSettingsContainer.abilityButtons[i].Value = settings.AbilityKeys[i];
         }
         // mainSettingsContainer.ability1Button.Value = settings.AbilityKeys[0];
@@ -703,7 +709,8 @@ public class UIManager : MonoBehaviour
         turnLeft.DisplayText.text = "Turn Left - " + manager.GetKeyString(turnLeft.Value);
         KeyBindingHandler turnRight = mainSettingsContainer.turnRightButton;
         turnRight.DisplayText.text = "Turn Right - " + manager.GetKeyString(turnRight.Value);
-        for (int i = 0; i < mainSettingsContainer.abilityButtons.Length; i++) {
+        for (int i = 0; i < mainSettingsContainer.abilityButtons.Length; i++)
+        {
             KeyBindingHandler keyHandler = mainSettingsContainer.abilityButtons[i];
             keyHandler.DisplayText.text = "Ability " + (i + 1) + " - " + manager.GetKeyString(keyHandler.Value);
         }
@@ -802,7 +809,8 @@ public class UIManager : MonoBehaviour
         hudSettingsContainer.treeButton.Value = settings.TreeMenuKey;
         hudSettingsContainer.turnLeftButton.Value = settings.TurnLeftKey;
         hudSettingsContainer.turnRightButton.Value = settings.TurnRightKey;
-        for (int i = 0; i < settings.AbilityKeys.Length; i++) {
+        for (int i = 0; i < settings.AbilityKeys.Length; i++)
+        {
             hudSettingsContainer.abilityButtons[i].Value = settings.AbilityKeys[0];
         }
 
@@ -830,7 +838,8 @@ public class UIManager : MonoBehaviour
         turnLeft.DisplayText.text = "Turn Left - " + manager.GetKeyString(turnLeft.Value);
         KeyBindingHandler turnRight = hudSettingsContainer.turnRightButton;
         turnRight.DisplayText.text = "Turn Right - " + manager.GetKeyString(turnRight.Value);
-        for (int i = 0; i < hudSettingsContainer.abilityButtons.Length; i++) {
+        for (int i = 0; i < hudSettingsContainer.abilityButtons.Length; i++)
+        {
             KeyBindingHandler keyHandler = hudSettingsContainer.abilityButtons[i];
             keyHandler.DisplayText.text = "Ability " + (i + 1) + " - " + manager.GetKeyString(keyHandler.Value);
         }
@@ -876,12 +885,12 @@ public class UIManager : MonoBehaviour
             // Otherwise, create a new one, add it to the effectTextList, and set the text.
             if (i < effectTextList.Count)
             {
-                TMP_Text effectText = effectTextList[i];
+                EffectContainer effectText = effectTextList[i];
                 DisplayEffectInList(effectText, effect);
             }
             else
             {
-                TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectGroup.transform, false);
+                EffectContainer effectText = GameObject.Instantiate(effectTextPrefab, effectGroup.transform, false);
                 effectTextList.Add(effectText);
                 DisplayEffectInList(effectText, effect);
             }
@@ -891,29 +900,29 @@ public class UIManager : MonoBehaviour
         // Iterate through all excess ability texts, removing them.
         for (; i < effectTextList.Count; i++)
         {
-            TMP_Text effectText = effectTextList[i];
+            EffectContainer effectText = effectTextList[i];
             effectTextList.Remove(effectText);
-            Destroy(effectText);
+            Destroy(effectText.gameObject);
         }
     }
 
-    void DisplayEffectInList(TMP_Text effectText, AbilityEffect effect)
+    void DisplayEffectInList(EffectContainer effectContainer, AbilityEffect effect)
     {
         if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
         {
-            effectText.text = effect.Effect + " - " + effect.Remaining.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " - " + effect.Remaining.ToString("0.0") + " sec";
         }
         else if (effect.Effect == AbilityStatusEff.DoT)
         {
-            effectText.text = effect.Effect + " " + effect.Value + " / " + effect.Duration + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Remaining.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Remaining.ToString("0.0") + " sec";
         }
         else if (effect.Effect == AbilityStatusEff.Heal)
         {
-            effectText.text = effect.Effect + " " + (effect.Value * 100f / effect.Duration).ToString("0.0") + "%/sec - " + effect.Remaining.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " " + (effect.Value * 100f / effect.Duration).ToString("0.0") + "%/sec - " + effect.Remaining.ToString("0.0") + " sec";
         }
         else
         {
-            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Remaining.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Remaining.ToString("0.0") + " sec";
         }
     }
 
@@ -1087,14 +1096,14 @@ public class UIManager : MonoBehaviour
             // Display all of the effects.
             foreach (AbilityEffect effect in ability.StatusEffects)
             {
-                TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
+                EffectContainer effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
                 DisplayEffectInTree(effectText, effect);
             }
             // If the ability has no effects, display None.
             if (ability.StatusEffects.Count <= 0)
             {
-                TMP_Text effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
-                effectText.text = "None";
+                EffectContainer effectText = GameObject.Instantiate(effectTextPrefab, effectsObject.transform, false);
+                effectText.EffectText.text = "None";
             }
 
             abilityInfoContainer.CostText.text = "Cost: " + ability.Cost.ToString();
@@ -1123,23 +1132,24 @@ public class UIManager : MonoBehaviour
         OnButtonClick();
     }
 
-    void DisplayEffectInTree(TMP_Text effectText, AbilityEffect effect)
+    void DisplayEffectInTree(EffectContainer effectContainer, AbilityEffect effect)
     {
+        effectContainer.EffectText.enableWordWrapping = true;
         if (effect.Effect == AbilityStatusEff.Root || effect.Effect == AbilityStatusEff.Silence || effect.Effect == AbilityStatusEff.Stun)
         {
-            effectText.text = effect.Effect + " - " + effect.Duration.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " - " + effect.Duration.ToString("0.0") + " sec";
         }
         else if (effect.Effect == AbilityStatusEff.DoT)
         {
-            effectText.text = effect.Effect + " " + effect.Value + " / " + effect.Duration + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Duration.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " " + (effect.Value / effect.Duration).ToString("0.0") + "/sec - " + effect.Duration.ToString("0.0") + " sec";
         }
         else if (effect.Effect == AbilityStatusEff.Heal)
         {
-            effectText.text = effect.Effect + " " + (effect.Value * 100f / effect.Duration).ToString("0.0") + "%/sec - " + effect.Duration.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " " + (effect.Value * 100f / effect.Duration).ToString("0.0") + "%/sec - " + effect.Duration.ToString("0.0") + " sec";
         }
         else
         {
-            effectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Duration.ToString("0.0");
+            effectContainer.EffectText.text = effect.Effect + " " + (effect.Value * 100f).ToString("0.0") + "% - " + effect.Duration.ToString("0.0") + " sec";
         }
     }
 
@@ -1157,9 +1167,11 @@ public class UIManager : MonoBehaviour
         manager.AudioManager.PlayUISound(uiSound);
     }
 
-    public void OnKeyBindingButtonClick(PointerEventData data) {
+    public void OnKeyBindingButtonClick(PointerEventData data)
+    {
         // If not currently setting a binding, set it to true and disable all controls. 
-        if (!settingBinding) {
+        if (!settingBinding)
+        {
             Debug.Log("Activating set binding button.");
             settingBinding = true;
             KeyBindingHandler handler = data.pointerPress.GetComponentInParent<KeyBindingHandler>();
