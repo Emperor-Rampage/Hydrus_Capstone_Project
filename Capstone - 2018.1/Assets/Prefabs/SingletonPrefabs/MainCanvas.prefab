@@ -59963,6 +59963,22 @@ MonoBehaviour:
   fadeText: {fileID: 114781997597237048}
   highlightUIPrefab: {fileID: 198687347439502988, guid: 83631a41b9a47454cb499b4b7e4c4a09,
     type: 2}
+  effectIcons:
+    defaultIcon: {fileID: 21300000, guid: bbf69739beb0c96499ee1be7c3b2114a, type: 3}
+    effectsList: ffffffff0000000001000000020000000300000004000000050000000600000007000000080000000a0000000b000000
+    iconsList:
+    - {fileID: 21300000, guid: 953e703d0607f9342abe0b2744f13109, type: 3}
+    - {fileID: 21300000, guid: 789f29816f00ad144b190924287b5f6d, type: 3}
+    - {fileID: 21300000, guid: 0ab7debf9ab51094b9eee968c2e4591e, type: 3}
+    - {fileID: 21300000, guid: 4bced727aa36df0438d80d47b5111944, type: 3}
+    - {fileID: 21300000, guid: c8b7c56c3dcf2004da8d8d3a0a9dbf65, type: 3}
+    - {fileID: 21300000, guid: 65f7b1fa737b1db4996017283ce48aaa, type: 3}
+    - {fileID: 21300000, guid: d12e6f676d97e434595923a95c853542, type: 3}
+    - {fileID: 21300000, guid: 238f528e4dd93994b882ff095dd367b4, type: 3}
+    - {fileID: 21300000, guid: 41537fb63864b0748ad01f8f005f8957, type: 3}
+    - {fileID: 21300000, guid: 6ff8a8a1384ce6a4c9db305970eeb2db, type: 3}
+    - {fileID: 21300000, guid: 131eb7c18a203f64a9bd53957f8d9e0f, type: 3}
+    - {fileID: 21300000, guid: 2b7e2910a37307749b48b92ee8b5f93a, type: 3}
   defaultHoverSound: {fileID: 11400000, guid: 8a48770a578b8c348b70cebadd767d75, type: 2}
   defaultClickSound: {fileID: 11400000, guid: 21012a84bb87c5f4890a053ce87600c8, type: 2}
   menuPanel: {fileID: 1924599195921466}
