@@ -117,15 +117,15 @@ ModelImporter:
     400110: nurbsCircle4
     2100000: phong1
     4300000: lowmesh_mantid:Mantid1
-    7400000: All
-    7400002: Walking
-    7400004: Attack_1
-    7400006: Damaged
-    7400008: AOE
-    7400010: Turn
-    7400012: Stun
-    7400014: Bite
-    7400016: idle
+    7400000: Mantis_All_Raw
+    7400002: Mantis_Walking_Raw
+    7400004: Mantis_Attack_Raw
+    7400006: Mantis_Damaged_Raw
+    7400008: Mantis_AOE_Raw
+    7400010: Mantis_Turn_Raw
+    7400012: Mantis_Stun_Raw
+    7400014: Mantis_Bite_Raw
+    7400016: Mantis_Idle_Raw
     9500000: //RootNode
     13700000: lowmesh_mantid:Mantid1
   externalObjects:
@@ -162,7 +162,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: All
+      name: Mantis_All_Raw
       takeName: Take 001
       firstFrame: 0
       lastFrame: 230
@@ -190,10 +190,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walking
+      name: Mantis_Walking_Raw
       takeName: Take 001
-      firstFrame: 30
-      lastFrame: 30
+      firstFrame: 1
+      lastFrame: 29
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -218,7 +218,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Attack_1
+      name: Mantis_Attack_Raw
       takeName: Take 001
       firstFrame: 32
       lastFrame: 62
@@ -246,7 +246,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Damaged
+      name: Mantis_Damaged_Raw
       takeName: Take 001
       firstFrame: 64
       lastFrame: 92
@@ -274,7 +274,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: AOE
+      name: Mantis_AOE_Raw
       takeName: Take 001
       firstFrame: 92
       lastFrame: 120
@@ -302,7 +302,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Turn
+      name: Mantis_Turn_Raw
       takeName: Take 001
       firstFrame: 121
       lastFrame: 150
@@ -330,7 +330,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Stun
+      name: Mantis_Stun_Raw
       takeName: Take 001
       firstFrame: 151
       lastFrame: 180
@@ -358,7 +358,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Bite
+      name: Mantis_Bite_Raw
       takeName: Take 001
       firstFrame: 181
       lastFrame: 208
@@ -386,7 +386,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: idle
+      name: Mantis_Idle_Raw
       takeName: Take 001
       firstFrame: 210
       lastFrame: 230
@@ -419,10 +419,10 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 1
+    importVisibility: 0
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
