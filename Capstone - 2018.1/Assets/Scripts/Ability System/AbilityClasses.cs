@@ -511,9 +511,30 @@ namespace AbilityClasses
 
     public class Indicator
     {
+        const int maxPoolSize = 100;
+        static Stack<GameObject> enemyIndicatorInstancePool = new Stack<GameObject>();
+        static Stack<GameObject> playerIndicatorInstancePool = new Stack<GameObject>();
         public GameObject Instance { get; set; }
         public Entity Entity { get; set; }
         public Cell Cell { get; set; }
+
+        public static GameObject GetIndicatorFromEnemyPool()
+        {
+            GameObject poppedIndicator = (enemyIndicatorInstancePool.Count > 0) ? enemyIndicatorInstancePool.Pop() : null;
+            if (poppedIndicator != null)
+                poppedIndicator.SetActive(true);
+
+            return poppedIndicator;
+        }
+
+        public static GameObject GetIndicatorFromPlayerPool()
+        {
+            GameObject poppedIndicator = (playerIndicatorInstancePool.Count > 0) ? playerIndicatorInstancePool.Pop() : null;
+            if (poppedIndicator != null)
+                poppedIndicator.SetActive(true);
+
+            return poppedIndicator;
+        }
 
         public void AddIndicator()
         {
@@ -523,7 +544,31 @@ namespace AbilityClasses
 
         public void RemoveIndicator()
         {
-            GameObject.Destroy(Instance);
+            if (Entity.IsPlayer)
+            {
+                if (playerIndicatorInstancePool.Count < maxPoolSize)
+                {
+                    playerIndicatorInstancePool.Push(Instance);
+                    Instance.SetActive(false);
+                }
+                else
+                {
+                    GameObject.Destroy(Instance);
+                }
+            }
+            else
+            {
+                if (enemyIndicatorInstancePool.Count < maxPoolSize)
+                {
+                    enemyIndicatorInstancePool.Push(Instance);
+                    Instance.SetActive(false);
+                }
+                else
+                {
+                    GameObject.Destroy(Instance);
+                }
+            }
+            Instance = null;
             Entity.Indicators.Remove(this);
             Cell.Indicators.Remove(this);
         }

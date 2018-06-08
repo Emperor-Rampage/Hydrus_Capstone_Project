@@ -10,6 +10,7 @@ namespace AudioClasses
     {
         [Header("UI Sound Settings")]
         [SerializeField] int maxUISounds;
+        [SerializeField] AudioMixerGroup ambientAudioMixerGroup;
         [SerializeField] AudioMixerGroup uiAudioMixerGroup;
         Stack<AudioSource> uiSoundPool = new Stack<AudioSource>();
 
@@ -140,6 +141,7 @@ namespace AudioClasses
             GameObject sourceObject = Instantiate(backgroundMusicPrefab.gameObject);
             AudioSource source = sourceObject.GetComponent<AudioSource>();
             source.spatialBlend = 0f;
+            source.outputAudioMixerGroup = ambientAudioMixerGroup;
             source.clip = bgAmbience.Clip;
             source.pitch = bgAmbience.Pitch;
             source.loop = true;
