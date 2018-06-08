@@ -16,17 +16,17 @@ namespace AudioClasses
         [Header("Music Settings")]
 
         [SerializeField]
+        AudioSource backgroundMusicPrefab;
         const float defaultFadeTime = 0f;
 
         [Header("Sound Effect Settings")]
         [SerializeField]
         AudioSource soundEffectPrefab;
-        [SerializeField]
-        AudioSource backgroundMusicPrefab;
         [SerializeField] int maxPoolSize;
         Stack<GameObject> soundEffectPool = new Stack<GameObject>();
 
         AudioSource musicPlaying;
+        AudioSource ambiencePlaying;
 
         // FIXME: Odd bug. Sometimes if the player moves immediately after the cast of an ability is complete,
         //        the sound effect will glitch and only play for a single frame.
@@ -116,13 +116,53 @@ namespace AudioClasses
                 Debug.LogWarning("WARNING: Attempting to fade out music when no music is playing.");
                 return;
             }
+            if (ambiencePlaying != null)
+            {
+                FadeOutAmbience(fadeTime);
+            }
 
             Tween.Volume(musicPlaying, 0f, fadeTime, 0f, completeCallback: () => Destroy(musicPlaying.gameObject), obeyTimescale: false);
         }
 
+        public void FadeInAmbience(BackgroundMusic bgAmbience, float fadeTime = defaultFadeTime)
+        {
+            if (bgAmbience.Clip == null)
+            {
+                Debug.LogWarning("WARNING: BackgroundMusic AudioClip is null.");
+                return;
+            }
+
+            if (ambiencePlaying != null)
+            {
+                Debug.LogWarning("WARNING: Attempting to fade in ambience while ambience is already playing. Please fade out existing ambience first.");
+            }
+
+            GameObject sourceObject = Instantiate(backgroundMusicPrefab.gameObject);
+            AudioSource source = sourceObject.GetComponent<AudioSource>();
+            source.spatialBlend = 0f;
+            source.clip = bgAmbience.Clip;
+            source.pitch = bgAmbience.Pitch;
+            source.loop = true;
+
+            source.Play();
+            Tween.Volume(source, 0f, bgAmbience.Volume, fadeTime, 0f, completeCallback: () => ambiencePlaying = source, obeyTimescale: false);
+        }
+
+        public void FadeOutAmbience(float fadeTime = defaultFadeTime)
+        {
+            if (ambiencePlaying == null)
+            {
+                Debug.LogWarning("WARNING: Attempting to fade out ambience when no ambience is playing.");
+                return;
+            }
+
+            Tween.Volume(ambiencePlaying, 0f, fadeTime, 0f, completeCallback: () => Destroy(ambiencePlaying.gameObject), obeyTimescale: false);
+        }
+
         public void PlaySoundEffect(SoundEffect soundEffect)
         {
-            if (soundEffect == null) {
+            if (soundEffect == null)
+            {
                 Debug.LogError("ERROR: SoundEffect is null.");
                 return;
             }

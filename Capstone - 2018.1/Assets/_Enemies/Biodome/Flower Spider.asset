@@ -36,9 +36,9 @@ MonoBehaviour:
       audioClip: {fileID: 0}
       volume: 0
       pitch: 0
-    interval: 1
-    variance: 1
+    interval: 30
+    variance: 25
     ambientSound:
-      audioClip: {fileID: 8300000, guid: 2f705938a48d6f64791bd6dc4ccdda56, type: 3}
+      audioClip: {fileID: 8300000, guid: 5ff811e55a183ca49afb651405e88d03, type: 3}
       volume: 1
       pitch: 1

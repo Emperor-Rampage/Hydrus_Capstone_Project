@@ -39,6 +39,7 @@ namespace MapClasses
         // The bitmap for the level.
         [SerializeField] public Texture2D levelMap;
         [SerializeField] public BackgroundMusic music;
+        [SerializeField] public BackgroundMusic ambience;
 
         // A list of indexes for the levels to be loaded from each exit.
         [SerializeField] public List<int> exitList;

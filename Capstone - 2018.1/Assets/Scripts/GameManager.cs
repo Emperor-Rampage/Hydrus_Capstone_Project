@@ -67,6 +67,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     [Header("Game")]
     // TODO: Move MouseLookManager from its own singleton to the UIManager.
     //       This is to allow it to be enabled and disabled more easily on pause and other ui events.
+    [SerializeField] BackgroundMusic titleMusic;
     MouseLookManager mouseLookManager;
     SettingsManager settingsManager;
 
@@ -93,8 +94,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public AudioManager AudioManager { get { return audioManager; } }
     AIManager aiManager;
     public MiniMapCam MiniMapCam { get; private set; }
-
-    [SerializeField] BackgroundMusic titleMusic;
 
     // How long it takes an entity to move from one square to another.
     [SerializeField] float movespeed;
@@ -254,11 +253,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
         // Sound
         Debug.Log("Master volume: " + settingsManager.MasterVolume);
-        float masterDBValue = 20f * Mathf.Log10(settingsManager.MasterVolume);
-        float systemDBValue = 20f * Mathf.Log10(settingsManager.SystemVolume);
-        float musicDBValue = 20f * Mathf.Log10(settingsManager.MusicVolume);
-        float fxDBValue = 20f * Mathf.Log10(settingsManager.FXVolume);
-        float ambientDBValue = 20f * Mathf.Log10(settingsManager.AmbientVolume);
+        float masterDBValue = 20f * Mathf.Log10(settingsManager.MasterVolume + 0.001f);
+        float systemDBValue = 20f * Mathf.Log10(settingsManager.SystemVolume + 0.001f);
+        float musicDBValue = 20f * Mathf.Log10(settingsManager.MusicVolume + 0.001f);
+        float fxDBValue = 20f * Mathf.Log10(settingsManager.FXVolume + 0.001f);
+        float ambientDBValue = 20f * Mathf.Log10(settingsManager.AmbientVolume + 0.001f);
 
         mixer.SetFloat("MasterVolume", masterDBValue);
         mixer.SetFloat("SystemVolume", systemDBValue);
@@ -464,22 +463,22 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     }
                 }
                 // Let the enemy's do stuff.
-                // try
-                // {
+                try
+                {
                     HandleEnemyAI();
-                // }
-                // catch
-                // {
-                //     Debug.LogError("ERROR: Enemy AI failed.");
-                // }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("ERROR: Enemy AI - " + e.Message);
+                }
                 // Get player input and do stuff.
                 try
                 {
                     HandlePlayerInput();
                 }
-                catch
+                catch (Exception e)
                 {
-                    Debug.LogError("ERROR: Player Input failed.");
+                    Debug.LogError("ERROR: Player Input - " + e.Message);
                 }
             }
         }
@@ -640,6 +639,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             uiManager.UpdatePlayerHealth(player.CurrentHealth / player.MaxHealth);
 
             audioManager.FadeInMusic(level.music, 1f);
+            if (level.ambience != null)
+            {
+                audioManager.FadeInAmbience(level.ambience, 1f);
+            }
 
             inGame = true;
             if (gradualEffectsCoroutine != null)
@@ -1162,11 +1165,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         foreach (Enemy enemy in level.EnemyList)
         {
             enemy.InCombat = (level.GetDistance(enemy.Cell, level.Player.Cell) <= enemyAggroDistance);
-            if (!enemy.InCombat) {
-                float timing = enemy.Interval + (UnityEngine.Random.Range(-enemy.Variance, enemy.Variance));
-                // float time = Time.time + (enemy.Variance * Time.deltaTime);
-                Debug.Log("Time.time % timing = " + (Time.time % timing));
-                if (Time.time % timing <= 1f) {
+            if (!enemy.InCombat)
+            {
+                if (enemy.NextAmbientPlay <= 0f)
+                    enemy.NextAmbientPlay = Time.time + enemy.Interval + (UnityEngine.Random.Range(-enemy.Variance, enemy.Variance));
+                // Debug.Log("Time.time - last play = " + (Time.time - enemy.LastAmbientPlay) + ", next interval = " + enemy.NextAmbientPlayInterval);
+                if (Time.time >= enemy.NextAmbientPlay)
+                {
+                    enemy.NextAmbientPlay = 0f;
                     audioManager.PlaySoundEffect(new SoundEffect(enemy.AmbientSound, enemy.Instance.transform.position));
                 }
             }

@@ -4734,6 +4734,10 @@ MonoBehaviour:
   - prefab: {fileID: 1829280009665878, guid: 7932c58add5112c408742d58953a8b60, type: 2}
     weight: 1
   lightFrequency: 0.075
+  titleMusic:
+    audioClip: {fileID: 8300000, guid: 4f6739c34f0cec94eada020e5a1481c4, type: 3}
+    volume: 1
+    pitch: 1
   abilityTree:
     numTiers: 3
     uiPadding: 300
@@ -4753,7 +4757,11 @@ MonoBehaviour:
       levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: 3817c0ab736ae4c4f8f038cb927a673d, type: 3}
-        volume: 0.4
+        volume: 0.25
+        pitch: 1
+      ambience:
+        audioClip: {fileID: 0}
+        volume: 1
         pitch: 1
       exitList: 01000000
       spawnList: []
@@ -4762,7 +4770,11 @@ MonoBehaviour:
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: b22122212370b4346b807da8f09fd551, type: 3}
-        volume: 0.75
+        volume: 0.5
+        pitch: 1
+      ambience:
+        audioClip: {fileID: 0}
+        volume: 1
         pitch: 1
       exitList: 02000000
       spawnList:
@@ -4831,6 +4843,10 @@ MonoBehaviour:
       levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: 7e0926e0272e3d2408d4ddde7360131f, type: 3}
+        volume: 0.8
+        pitch: 1
+      ambience:
+        audioClip: {fileID: 0}
         volume: 1
         pitch: 1
       exitList: 00000000
@@ -4838,10 +4854,6 @@ MonoBehaviour:
       - x: 5
         z: 5
         enemy: {fileID: 11400000, guid: 17458b0414ce3314b9be1f5402143a19, type: 2}
-  titleMusic:
-    audioClip: {fileID: 8300000, guid: 4f6739c34f0cec94eada020e5a1481c4, type: 3}
-    volume: 1
-    pitch: 1
   movespeed: 0.6
   moveCurve:
     serializedVersion: 2
