@@ -35,6 +35,9 @@ namespace ParticleClasses
         //TODO: Get a point slightly closer to the player and make the effect happen there. Should help convey that the target was hit.
         public void PlayHitSpark(Entity hurtTarget)
         {
+            if (hurtTarget == null || hurtTarget.Instance == null)
+                return;
+
             //Debug.Log("Generating HitSpark for " + hurtTarget.Name + " at Cell: " + hurtTarget.Cell.X + "," + hurtTarget.Cell.Z);
             Vector3 sparkVec = new Vector3(hurtTarget.Instance.transform.position.x, 0.5f, hurtTarget.Instance.transform.position.z);
 
@@ -60,7 +63,10 @@ namespace ParticleClasses
 
         public void PlayPlayerAnimation(float castTime, float delay, float timing, Animator anim, string trigger)
         {
-            Tween.Value(0, 1, (i) => {}, (castTime - timing), delay, completeCallback: () => anim.SetTrigger(trigger));
+            if (anim == null)
+                return;
+
+            Tween.Value(0, 1, (i) => { }, (castTime - timing), delay, completeCallback: () => anim.SetTrigger(trigger));
         }
 
         //Plays an enemy animation with a delay that makes the ability sync-up
@@ -121,7 +127,7 @@ namespace ParticleClasses
 
         public void DissolveEnemy(Entity target, Level level)
         {
-            if (target == null || target.Index == null || level == null)
+            if (target == null || target.Instance == null || level == null)
                 return;
 
             Material mat;

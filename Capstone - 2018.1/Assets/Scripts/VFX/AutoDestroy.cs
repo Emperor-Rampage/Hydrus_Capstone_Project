@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoDestroy : MonoBehaviour 
+public class AutoDestroy : MonoBehaviour
 {
     //Ultra small script that auto destroys the particle system on completion, for one shot particle effects.
     private ParticleSystem ps;
@@ -11,6 +11,8 @@ public class AutoDestroy : MonoBehaviour
     public void Start()
     {
         ps = GetComponent<ParticleSystem>();
+        if (ps == null)
+            Destroy(gameObject);
     }
 
     public void Update()
@@ -21,6 +23,10 @@ public class AutoDestroy : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

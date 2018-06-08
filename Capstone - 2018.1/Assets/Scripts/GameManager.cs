@@ -463,14 +463,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                     }
                 }
                 // Let the enemy's do stuff.
-                try
-                {
-                    HandleEnemyAI();
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError("ERROR: Enemy AI - " + e.Message);
-                }
+                // try
+                // {
+                HandleEnemyAI();
+                // }
+                // catch (Exception e)
+                // {
+                //     Debug.LogError("ERROR: Enemy AI - " + e.Message);
+                // }
                 // Get player input and do stuff.
                 try
                 {
@@ -1635,8 +1635,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void AddIndicator(GameObject indicatorPrefab, Cell cell, Entity entity)
     {
-        GameObject indicatorInstance = GameObject.Instantiate(indicatorPrefab, LevelManager.GetCellPosition(cell), indicatorPrefab.transform.rotation);
-        indicatorInstance.transform.localScale *= LevelManager.CellScale;
+        GameObject indicatorInstance = (entity.IsPlayer) ? Indicator.GetIndicatorFromPlayerPool() : Indicator.GetIndicatorFromEnemyPool();
+        if (indicatorInstance == null)
+            indicatorInstance = GameObject.Instantiate(indicatorPrefab);
+
+        indicatorInstance.transform.position = LevelManager.GetCellPosition(cell);
+        // GameObject indicatorInstance = Indicator.GetIndicatorFromPool() ?? GameObject.Instantiate(indicatorPrefab, LevelManager.GetCellPosition(cell), indicatorPrefab.transform.rotation);
+        indicatorInstance.transform.localScale = indicatorPrefab.transform.localScale * LevelManager.CellScale;
         Indicator indicator = new Indicator { Instance = indicatorInstance, Cell = cell, Entity = entity };
         indicator.AddIndicator();
     }
