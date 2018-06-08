@@ -17,7 +17,11 @@ MonoBehaviour:
   toolTip: 'Tier 1 Ability: Marksman Ability 4
 
 '
+  animTrigger: Cast 4
+  animDelay: 0
+  animTiming: 0
   particleSystem: {fileID: 0}
+  particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}
     volume: 0

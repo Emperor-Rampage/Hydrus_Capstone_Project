@@ -21,16 +21,16 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 88553ee344cff9948aab44e6c79173ca, type: 2}
     - {fileID: 11400000, guid: 37c79b95b04e4ba4f839985658104113, type: 2}
     walkingSound:
-      audioClip: {fileID: 0}
-      volume: 0
+      audioClip: {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
+      volume: 0.5
       pitch: 0
     hitSound:
-      audioClip: {fileID: 0}
-      volume: 0
+      audioClip: {fileID: 8300000, guid: a798a3cfde7ae16489adab33e8fcd64f, type: 3}
+      volume: 1
       pitch: 0
     hurtSound:
-      audioClip: {fileID: 0}
-      volume: 0
+      audioClip: {fileID: 8300000, guid: ff3945bd554574e44bdafb867cf58534, type: 3}
+      volume: 1
       pitch: 0
     deathSound:
       audioClip: {fileID: 0}

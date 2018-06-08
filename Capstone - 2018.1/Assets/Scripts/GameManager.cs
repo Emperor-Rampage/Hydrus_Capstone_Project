@@ -1318,25 +1318,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             playerMovementCoroutine = movementCoroutine;
-            if (level.Player.Facing == direction)
-            {
-                SetPlayerAnimation("MoveForward", adjustedMovespeed);
-            }
-            else if (level.Player.GetRight() == direction)
-            {
-                SetPlayerAnimation("MoveRight", adjustedMovespeed);
-            }
-            else if (level.Player.GetLeft() == direction)
-            {
-                SetPlayerAnimation("MoveLeft", adjustedMovespeed);
-            }
-            else if (level.Player.GetBackward() == direction)
-            {
-                SetPlayerAnimation("MoveBack", adjustedMovespeed);
-            }
+            particleManager.PlayerMove(direction, adjustedMovespeed);
         }
         else
         {
+            particleManager.EnemyMove(entity, adjustedMovespeed);
             entity.AddMovementCoroutine(movementCoroutine);
         }
     }
@@ -1371,6 +1357,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     //      since the entity cannot take any other actions until the rotation is complete.
     void TurnEntityInstanceLeft(Entity entity)
     {
+        if (entity.IsPlayer == false)
+            particleManager.EnemyTurn(entity, false);
         entity.State = EntityState.Moving;
         Tween.Rotate(entity.Instance.transform, new Vector3(0f, -90f, 0f), Space.World, Turnspeed, 0f, turnCurve, completeCallback: (() => FinishTurning(entity)));
         entity.TurnLeft();
@@ -1385,6 +1373,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     //      since the entity cannot take any other actions until the rotation is complete.
     void TurnEntityInstanceRight(Entity entity)
     {
+        if (entity.IsPlayer == false)
+            particleManager.EnemyTurn(entity, true);
         entity.State = EntityState.Moving;
         Tween.Rotate(entity.Instance.transform, new Vector3(0f, 90f, 0f), Space.World, Turnspeed, 0f, turnCurve, completeCallback: (() => FinishTurning(entity)));
         entity.TurnRight();
@@ -1424,10 +1414,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             AddIndicator(testIndicatorPlayer, cell, entity);
         }
+
+        particleManager.SetPlayerCastAnimation(1.0f, entity.Abilities[index], entity.Abilities[index].AnimTrigger);
+
         //Setting the cast time scale to the current cast time scale... Blegh
-        SetPlayerCastAnimation("Cast " + (index + 1), level.Player.Abilities[index].CastTime);
-        Animator anim = entity.Instance.GetComponent<Animator>();
-        particleManager.PlayPlayerAnimation(entity.GetAdjustedCastTime(entity.Abilities[index].CastTime), 0.0f, 0.4f, anim, "CastActivate");
+        //SetPlayerCastAnimation("Cast " + (index + 1), level.Player.Abilities[index].CastTime);
+        //Animator anim = entity.Instance.GetComponent<Animator>();
+        //particleManager.PlaySyncedPlayerAnimation(entity.GetAdjustedCastTime(entity.Abilities[index].CastTime), 0.0f, 0.4f, anim, "CastActivate");
 
     }
 
@@ -1435,7 +1428,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         uiManager.CancelPlayerCast();
         mouseLookManager.RestrictDirection = Direction.Null;
-        SetPlayerAnimation("Interrupt", 1.0f);
+        //SetPlayerAnimation("Interrupt", 1.0f);
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -1645,31 +1638,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         Indicator indicator = new Indicator { Instance = indicatorInstance, Cell = cell, Entity = entity };
         indicator.AddIndicator();
     }
-
-    // Method for changing the animation of the player
-    public void SetPlayerAnimation(string setter, float scale)
-    {
-        Animator playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-        if (setter == "Cast")
-        {
-            playerAnim.SetFloat("CastTimeScale", scale);
-        }
-        else
-        {
-            playerAnim.SetFloat("MoveSpeedScale", scale);
-        }
-
-        playerAnim.SetTrigger(setter);
-    }
-
-    public void SetPlayerCastAnimation(string setter, float scale)
-    {
-        Animator playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-
-        playerAnim.SetFloat("CastTimeScale", scale);
-        playerAnim.SetTrigger(setter);
-    }
-
     // public AbilityObject GetPlayerAbility(int index)
     // {
     //     return playerAbilities.SingleOrDefault((abil) => abil.Index == index);

@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Heavy Weapon Bash
   icon: {fileID: 21300000, guid: 3bc5d9dbc831a134aa631acb179503d7, type: 3}
   toolTip: 'Tier 2 Ability: Marksman Ability 4'
+  animTrigger: Cast 4
+  animDelay: 0
+  animTiming: 0
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

@@ -147,14 +147,14 @@ ModelImporter:
     400140: Wrist_R
     2100000: phong1
     4300000: Trilobite_beetle
-    7400000: All
-    7400002: Walk
-    7400004: Tackle
-    7400006: Harden
-    7400008: Tail whip
-    7400010: Damaged
-    7400012: Turn
-    7400014: Idle
+    7400000: Trilo_All_Raw
+    7400002: Trilo_Walk_Raw
+    7400004: Trilo_Tackle_Raw
+    7400006: Trilo_Harden_Raw
+    7400008: Trilo_Tail_whip_Raw
+    7400010: Trilo_Damaged_Raw
+    7400012: Trilo_Turn_Raw
+    7400014: Trilo_Idle_Raw
     9500000: //RootNode
     13700000: Trilobite_beetle
   externalObjects:
@@ -191,10 +191,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: All
+      name: Trilo_All_Raw
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 240
+      lastFrame: 241
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -219,7 +219,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walk
+      name: Trilo_Walk_Raw
       takeName: Take 001
       firstFrame: 1
       lastFrame: 30
@@ -247,7 +247,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Tackle
+      name: Trilo_Tackle_Raw
       takeName: Take 001
       firstFrame: 36
       lastFrame: 66
@@ -275,7 +275,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Harden
+      name: Trilo_Harden_Raw
       takeName: Take 001
       firstFrame: 68
       lastFrame: 98
@@ -303,7 +303,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Tail whip
+      name: Trilo_Tail_whip_Raw
       takeName: Take 001
       firstFrame: 100
       lastFrame: 130
@@ -331,7 +331,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Damaged
+      name: Trilo_Damaged_Raw
       takeName: Take 001
       firstFrame: 135
       lastFrame: 165
@@ -359,7 +359,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Turn
+      name: Trilo_Turn_Raw
       takeName: Take 001
       firstFrame: 170
       lastFrame: 205
@@ -387,7 +387,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Idle
+      name: Trilo_Idle_Raw
       takeName: Take 001
       firstFrame: 205
       lastFrame: 235
@@ -420,10 +420,10 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 1
+    importVisibility: 0
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1

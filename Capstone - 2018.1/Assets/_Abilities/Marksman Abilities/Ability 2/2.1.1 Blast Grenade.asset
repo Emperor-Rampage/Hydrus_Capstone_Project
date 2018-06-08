@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Blast Grenade
   icon: {fileID: 21300000, guid: 5524840675e85454da438a52da934e53, type: 3}
   toolTip: 'Tier 3 Ability: Marksman Ability 2'
+  animTrigger: Cast 2
+  animDelay: 0
+  animTiming: 0.33
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

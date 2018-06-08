@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Scatter Shot
   icon: {fileID: 21300000, guid: b7571fcfaf69fe740bf91cd296dde195, type: 3}
   toolTip: 'Tier 3 Ability: Marksman Ability 1'
+  animTrigger: Cast 1
+  animDelay: 0
+  animTiming: 0.33
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

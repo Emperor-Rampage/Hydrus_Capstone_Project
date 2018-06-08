@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Pixelplacement;
+using Pixelplacement.TweenSystem;
 
 using EntityClasses;
 using AbilityClasses;
@@ -19,6 +21,9 @@ namespace ParticleClasses
 
     public class ParticleSystemController : MonoBehaviour
     {
+
+        private GameManager gameManager;
+        private Player player;
         [SerializeField]
         public ParticleSystem hitSpark;
         [SerializeField]
@@ -26,22 +31,41 @@ namespace ParticleClasses
         [SerializeField]
         public AnimationCurve hurtCurve;
 
-        private LevelManager level;
-
         [SerializeField]
         public float colorDecayTime = 0.5f;
+
+        private void Start()
+        {
+            gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            Debug.Log("Scene Loaded");
+
+            player = gameManager.LevelManager.CurrentLevel.Player;
+            player.Anim = player.Instance.GetComponent<Animator>();
+
+            if (player == null)
+                Debug.LogError("Player Not Found On Scene Load");
+            else
+                Debug.Log("Scene Loaded and found " + player.Name);
+
+            if (player.Anim != null)
+                Debug.Log(player.Name + " has an animator");
+            else
+                Debug.LogError("Cannot Find Animator on " + player.Name);
+        }
 
         //Used to display the hitspark effect
         //TODO: Get a point slightly closer to the player and make the effect happen there. Should help convey that the target was hit.
         public void PlayHitSpark(Entity hurtTarget)
         {
-            if (hurtTarget == null || hurtTarget.Instance == null)
-                return;
-
             //Debug.Log("Generating HitSpark for " + hurtTarget.Name + " at Cell: " + hurtTarget.Cell.X + "," + hurtTarget.Cell.Z);
             Vector3 sparkVec = new Vector3(hurtTarget.Instance.transform.position.x, 0.5f, hurtTarget.Instance.transform.position.z);
 
-            Instantiate(hitSpark, sparkVec, GameObject.FindGameObjectWithTag("Player").transform.localRotation);
+            Instantiate(hitSpark, sparkVec, player.Instance.transform.localRotation);
         }
 
         //Instantiates a Core Effect Particle System when prompted.
@@ -57,32 +81,104 @@ namespace ParticleClasses
                 new ParticleSystem.Burst(0.0f, (spawnTarget.Cores / 5))
                 );
 
-            Instantiate(coreEffect, spawnVec, GameObject.FindGameObjectWithTag("Player").transform.localRotation);
+            Instantiate(coreEffect, spawnVec, player.Instance.transform.localRotation);
 
         }
 
-        public void PlayPlayerAnimation(float castTime, float delay, float timing, Animator anim, string trigger)
+        public void SetPlayerCastAnimation(float CTScale, AbilityObject abil, string trigger)
         {
-            if (anim == null)
+            Animator playerAnim = player.Anim;
+
+            if (playerAnim == null)
                 return;
 
+            playerAnim.ResetTrigger(trigger);
+            playerAnim.ResetTrigger("CastActivate");
+            
+            playerAnim.SetFloat("CastTimeScale", CTScale);
+            playerAnim.SetTrigger(trigger);
+            PlaySyncedPlayerAnimation(player.GetAdjustedCastTime(abil.CastTime), abil.AnimDelay, abil.AnimTiming, player.Anim, abil.AnimTrigger);
+        }
+
+        public void PlayerMove(Direction direction, float adjustedMovespeed)
+        {
+            
+            if (player.Facing == direction)
+            {
+                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                player.Anim.SetTrigger("MoveForward");
+            }
+            else if (player.GetRight() == direction)
+            {
+                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                player.Anim.SetTrigger("MoveRight");
+            }
+            else if (player.GetLeft() == direction)
+            {
+                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                player.Anim.SetTrigger("MoveLeft");
+            }
+            else if (player.GetBackward() == direction)
+            {
+                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                player.Anim.SetTrigger("MoveBack");
+            }
+        }
+
+        public void EnemyMove(Entity enemy, float adjustedMovespeed)
+        {
+            if (enemy.Anim == null)
+                return;
+
+            enemy.Anim.ResetTrigger("Walk");
+            enemy.Anim.SetTrigger("Walk");
+        }
+
+        public void EnemyTurn(Entity enemy, bool direction)
+        {
+            if (enemy.Anim == null)
+                return;
+
+            enemy.Anim.ResetTrigger("TurnR");
+            enemy.Anim.ResetTrigger("TurnL");
+
+            if (direction)
+                enemy.Anim.SetTrigger("TurnR");
+            else
+                enemy.Anim.SetTrigger("TurnL");
+        }
+
+        public void PlayerInterrupt()
+        {
+            player.Anim.SetTrigger("Interrupt");
+        }
+
+        //Starts a tween that activates the Animation Trigger at the proper time to sync animations.
+        public void PlaySyncedPlayerAnimation(float castTime, float delay, float timing, Animator anim, string trigger)
+        {
             Tween.Value(0, 1, (i) => { }, (castTime - timing), delay, completeCallback: () => anim.SetTrigger(trigger));
         }
 
         //Plays an enemy animation with a delay that makes the ability sync-up
-        public void PlayEnemyAnimation(float castTime, float delay, float castPercent, Animator anim, string trigger)
+        public void PlaySyncedEnemyAnimation(float castTime, float delay, float castPercent, Animator anim, string trigger)
         {
             Tween.Value(0, 1, (i) => { }, castTime, delay, completeCallback: () => anim.SetTrigger(trigger));
         }
 
         public void PlayPlayerVFX(AbilityObject abil)
         {
+            if (abil.ParticleOrigin == null || abil.ParticleSystem == null)
+                return;
+
             Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin);
             Instantiate(abil.ParticleSystem, abil.ParticleOrigin);
         }
 
         public void PlayEnemyVFX(AbilityObject abil, Entity caster)
         {
+            if (abil.ParticleOrigin == null || abil.ParticleSystem == null || caster == null)
+                return;
+
             Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin + " for enemy " + caster.Name);
         }
 
@@ -92,11 +188,8 @@ namespace ParticleClasses
             if (hurtTarget == null)
                 return;
 
-            Material mat;
-            if (hurtTarget.Name == "Flower Spider")
-                mat = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
-            else
-                mat = hurtTarget.Instance.GetComponentInChildren<MeshRenderer>().material;
+            //Material mat = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
+            Material mat = hurtTarget.Rend.material;
 
             if (mat == null)
                 return;
@@ -105,12 +198,10 @@ namespace ParticleClasses
             Tween.ShaderFloat(mat, "_HurtScale", 0.0f, 0.5f, 0.0f);
         }
 
-        //Needed to set the layer weight using a tween... God, I hope nobody sees this.
-        //private Animator CurrentHurtAnimator;
-
+        //Changed to use the animator of the the Entity, which is now found on instantiation.
         public void PlayHurtAnim(Entity hurtTarget)
         {
-            Animator anim = hurtTarget.Instance.GetComponent<Animator>();
+            Animator anim = hurtTarget.Anim;
             if (anim == null)
                 return;
 
@@ -127,15 +218,11 @@ namespace ParticleClasses
 
         public void DissolveEnemy(Entity target, Level level)
         {
-            if (target == null || target.Instance == null || level == null)
+            if (target == null || level == null)
                 return;
-
-            Material mat;
-            if (target.Name == "Flower Spider")
-                mat = target.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
-            else
-                mat = target.Instance.GetComponentInChildren<MeshRenderer>().material;
-
+          
+            Material mat = target.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
+           
             if (mat == null)
                 return;
 

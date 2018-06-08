@@ -460,6 +460,18 @@ namespace AbilityClasses
         string toolTip = ": This is the Default Ability tooltip. Please change me.";                         //Tooltip that explaines what the ability does.
         public string ToolTip { get { return toolTip; } }
 
+        [SerializeField]
+        string animTrigger = "DefaultTrigger";
+        public string AnimTrigger { get { return animTrigger; } }                                            //Container for Animation Trigger string to activate the ability.
+
+        [SerializeField]
+        float animDelay = 0.0f;                                                                              //Container (in seconds) for how long to delay the animation trigger for a cast.
+        public float AnimDelay { get { return animDelay; } }
+
+        [SerializeField]
+        float animTiming = 0.0f;                                                                             //Container (in seconds) for when to time the animation.
+        public float AnimTiming { get { return animTiming; } }
+
         [SerializeField] ParticleSystem particleSystem;                                                      //Container for the Particle Effect System of the Ability.
         public ParticleSystem ParticleSystem { get { return particleSystem; } }
 

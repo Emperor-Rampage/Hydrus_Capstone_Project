@@ -17,6 +17,9 @@ MonoBehaviour:
   toolTip: 'Tier 3 Basic Ability: Favors Single Target Damage
 
 '
+  animTrigger: Cast 1
+  animDelay: 0
+  animTiming: 0.33
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

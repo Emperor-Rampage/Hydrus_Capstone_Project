@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Piercing Shot
   icon: {fileID: 21300000, guid: 81e3474b632487241869a6fc4deb8cc1, type: 3}
   toolTip: 'Tier 2 Basic Ability: AoE Variant'
+  animTrigger: Cast 1
+  animDelay: 0
+  animTiming: 0.33
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Barrage Shot
   icon: {fileID: 21300000, guid: 9fa9f079be5ed994b947a322cfd3b1fc, type: 3}
   toolTip: 'Tier 3 Basic Ability: Favors speed.'
+  animTrigger: Cast 1
+  animDelay: 0
+  animTiming: 0.33
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

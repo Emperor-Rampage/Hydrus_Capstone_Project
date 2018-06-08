@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Regenerate
   icon: {fileID: 0}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
+  animTrigger: Attack3
+  animDelay: 0
+  animTiming: 0
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

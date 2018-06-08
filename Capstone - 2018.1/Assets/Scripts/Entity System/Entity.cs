@@ -57,6 +57,10 @@ namespace EntityClasses
 
         public EntityState State { get; set; }
 
+        public Animator Anim { get; set; }
+
+        public SkinnedMeshRenderer Rend { get; set; }
+
         public EffectDictionary StatusEffects = new EffectDictionary();
         [SerializeField] List<AbilityObject> abilities;
         public List<AbilityObject> Abilities { get { return abilities; } private set { abilities = value; } }
@@ -88,6 +92,8 @@ namespace EntityClasses
             Facing = Direction.Up;
             State = EntityState.Idle;
             Abilities = new List<AbilityObject>(entity.Abilities);
+            Anim = entity.Instance.GetComponent<Animator>();
+            Rend = entity.Instance.GetComponentInChildren<SkinnedMeshRenderer>();
         }
 
         public AbilityObject CastAbility(int index)

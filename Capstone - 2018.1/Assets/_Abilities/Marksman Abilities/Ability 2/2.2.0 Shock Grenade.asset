@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Shock Grenade
   icon: {fileID: 21300000, guid: 5e483a12dba30f44d9871eb8e1971b59, type: 3}
   toolTip: 'Tier 2 Ability: Marksman 2'
+  animTrigger: Cast 2
+  animDelay: 0
+  animTiming: 0.33
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:
