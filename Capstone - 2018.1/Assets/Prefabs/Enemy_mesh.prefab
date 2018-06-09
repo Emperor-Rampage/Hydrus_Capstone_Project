@@ -956,6 +956,7 @@ GameObject:
   - component: {fileID: 4813833600194132}
   - component: {fileID: 95614525400907478}
   - component: {fileID: 205841920910989532}
+  - component: {fileID: 114617846414398026}
   m_Layer: 0
   m_Name: Enemy_mesh
   m_TagString: Untagged
@@ -2395,6 +2396,19 @@ MonoBehaviour:
   m_selectedFaces: 
   m_SelectedEdges: []
   m_selectedTriangles: 
+--- !u!114 &114617846414398026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1762791434266384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32d013c004685342878e32f07750e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 95614525400907478}
+  renderer: {fileID: 137153964539742786}
 --- !u!137 &137153964539742786
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

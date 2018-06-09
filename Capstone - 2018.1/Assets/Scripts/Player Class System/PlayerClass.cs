@@ -25,8 +25,8 @@ public class PlayerClass : ScriptableObject
     public List<AbilityObject> BaseAbilities { get { return baseAbilities; } }
 
     //Adding in the link to the player prefab that will contain the Camera, Arms, and Animator/tions to run the player. -Conner
-    [SerializeField] GameObject classCamera;
-    public GameObject ClassCamera { get { return classCamera; } }
+    [SerializeField] EntityContainer classCamera;
+    public EntityContainer ClassCamera { get { return classCamera; } }
 }
 
 

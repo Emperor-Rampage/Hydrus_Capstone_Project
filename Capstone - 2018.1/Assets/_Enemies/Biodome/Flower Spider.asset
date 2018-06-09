@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: Flower Spider
   m_EditorClassIdentifier: 
   enemy:
-    instance: {fileID: 1520558863252124, guid: fe55edd5d2780e748a51af351ca5eedb, type: 2}
+    instance: {fileID: 114372603349033976, guid: fe55edd5d2780e748a51af351ca5eedb,
+      type: 2}
     name: Flower Spider
     cores: 20
     maxHealth: 60
@@ -23,19 +24,19 @@ MonoBehaviour:
     walkingSound:
       audioClip: {fileID: 8300000, guid: 9efad40a66af9c94e9f5f1e68d57f3fc, type: 3}
       volume: 1
-      pitch: 0
+      pitch: 1
     hitSound:
       audioClip: {fileID: 0}
       volume: 0
-      pitch: 0
+      pitch: 1
     hurtSound:
-      audioClip: {fileID: 8300000, guid: e27beb4569b82fb4cb4d3f700e3a8990, type: 3}
-      volume: 0
-      pitch: 0
+      audioClip: {fileID: 8300000, guid: e034679df29f5de4a9e57d984cb21a5e, type: 3}
+      volume: 1
+      pitch: 1
     deathSound:
       audioClip: {fileID: 8300000, guid: 5ff811e55a183ca49afb651405e88d03, type: 3}
       volume: 1
-      pitch: 0
+      pitch: 1
     interval: 30
     variance: 25
     ambientSound:

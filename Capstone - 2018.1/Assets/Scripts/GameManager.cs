@@ -614,15 +614,15 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             BuildLevel_Procedural_Corners(levelContainer);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
-            player.Instance = GameObject.Instantiate(player.Class.ClassCamera);
-            mouseLookManager.SetTarget(player.Instance);
+            player.Instance = Instantiate(player.Class.ClassCamera);
+            mouseLookManager.SetTarget(player.Instance.gameObject);
             // Manually set the position.
             SetEntityInstanceLocation(player);
             // Loop through all of the enemies and spawn their instances.
             foreach (var enemy in level.EnemyList)
             {
                 // Instantiate the prefab to an instance.
-                enemy.Instance = GameObject.Instantiate(enemy.Instance);
+                enemy.Instance = Instantiate(enemy.Instance);
                 // Set the enemy instance's position.
                 SetEntityInstanceLocation(enemy);
             }
@@ -1513,11 +1513,13 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
             }
         }
-        else if (ability.Type != AbilityType.Self && target.IsPlayer == false)
+        else if (ability.Type != AbilityType.Self && !target.IsPlayer)
         {
             particleManager.PlayHitSpark(target);
             particleManager.HitColor(target);
             particleManager.PlayHurtAnim(target);
+            if (alive)
+                audioManager.PlaySoundEffect(new SoundEffect(target.HurtSound, target.Instance.transform.position));
         }
 
         PerformEntityDeathCheck(target, alive);
@@ -1609,6 +1611,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             //Play Dissolve Effect
             //particleManager.DissolveEnemy(entity);
             DestroyEnemy(entity);
+            audioManager.PlaySoundEffect(new SoundEffect(entity.DeathSound, entity.Instance.transform.position));
             StartCoroutine(level.RemoveEntity(entity));
 
             if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)

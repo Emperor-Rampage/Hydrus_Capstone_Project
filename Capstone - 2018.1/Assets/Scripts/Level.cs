@@ -406,10 +406,11 @@ namespace MapClasses
 
                 // Debug.Log("-- Entity is idle. Destroying everything.");
                 // If the entity is present in the enemy list, it will be removed.
-                //GameObject.Destroy(entity.Instance);
+                // GameObject.Destroy(entity.Instance);
                 if (!entity.IsPlayer)
                 {
                     EnemyList.Remove((Enemy)entity);
+                    // GameObject.Destroy(entity.Instance.gameObject);
                 }
 
                 if (entity.Cell != null)
