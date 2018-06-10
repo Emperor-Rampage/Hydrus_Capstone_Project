@@ -76,6 +76,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text coresText;
     [SerializeField] EffectContainer effectTextPrefab;
     [SerializeField] VerticalLayoutGroup effectGroup;
+    [SerializeField] RectTransform notifPanel;
+    [SerializeField] TMP_Text notifTextPrefab;
 
     [SerializeField] Image playerHealthBar;
     [SerializeField] Image playerHealthMissing;
@@ -984,6 +986,7 @@ public class UIManager : MonoBehaviour
         Color targetColor = new Color(1f, 0f, 0f, 1f);
         Tween.Color(playerCastInterruptImage, targetColor, 0.5f, 0f, Tween.EaseWobble);
         playerCastBar.fillAmount = 0f;
+        AddNotif("Interrupted!");
     }
 
     public void UpdatePlayerAbilityHUD(string[] keys, List<float> cooldowns, List<float> cooldownsRemaining, int currentCast = -1, float castProgress = 0f)
@@ -1249,6 +1252,11 @@ public class UIManager : MonoBehaviour
         promptText.text = text;
         yield return new WaitForSeconds(duration);
         promptText.text = "";
+    }
+
+    public void AddNotif(string text)
+    {
+        Instantiate(notifTextPrefab, notifPanel).text = text;
     }
 
     public void DisplayAreaText(string text)
