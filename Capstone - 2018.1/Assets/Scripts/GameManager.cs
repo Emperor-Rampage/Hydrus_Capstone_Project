@@ -1542,7 +1542,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             target.StatusEffects.AddEffect(effectInstance);
 
             if (effect.Effect == AbilityStatusEff.Stun)
+            {
+                // uiManager.AddNotif("Stunned!");
                 interrupt = true;
+            }
         }
         bool alive = target.Damage(ability.Damage, interrupt);
 
