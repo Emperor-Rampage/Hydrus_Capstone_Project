@@ -26,8 +26,8 @@ MonoBehaviour:
       volume: 1
       pitch: 1
     hitSound:
-      audioClip: {fileID: 0}
-      volume: 0
+      audioClip: {fileID: 8300000, guid: e27beb4569b82fb4cb4d3f700e3a8990, type: 3}
+      volume: 1
       pitch: 1
     hurtSound:
       audioClip: {fileID: 8300000, guid: 93c1005a2224d7d498d743465fcece76, type: 3}
