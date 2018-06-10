@@ -21,9 +21,9 @@ MonoBehaviour:
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: df93ecd63106d9641b68845e2cd3f854, type: 3}
+    volume: 0.5
+    pitch: 1
   statusEffects:
   - effect: 11
     duration: 6

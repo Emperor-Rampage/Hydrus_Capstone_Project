@@ -68,6 +68,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // TODO: Move MouseLookManager from its own singleton to the UIManager.
     //       This is to allow it to be enabled and disabled more easily on pause and other ui events.
     [SerializeField] BackgroundMusic titleMusic;
+    [SerializeField] UISound playerInterruptSound;
+    [SerializeField] UISound enemyInterruptSound;
     MouseLookManager mouseLookManager;
     SettingsManager settingsManager;
 
@@ -614,15 +616,15 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             BuildLevel_Procedural_Corners(levelContainer);
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
-            player.Instance = GameObject.Instantiate(player.Class.ClassCamera);
-            mouseLookManager.SetTarget(player.Instance);
+            player.Instance = Instantiate(player.Class.ClassCamera);
+            mouseLookManager.SetTarget(player.Instance.gameObject);
             // Manually set the position.
             SetEntityInstanceLocation(player);
             // Loop through all of the enemies and spawn their instances.
             foreach (var enemy in level.EnemyList)
             {
                 // Instantiate the prefab to an instance.
-                enemy.Instance = GameObject.Instantiate(enemy.Instance);
+                enemy.Instance = Instantiate(enemy.Instance);
                 // Set the enemy instance's position.
                 SetEntityInstanceLocation(enemy);
             }
@@ -1427,6 +1429,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public void CancelPlayerAbility()
     {
         uiManager.CancelPlayerCast();
+        // audioManager.PlayUISound(playerInterruptSound);
         mouseLookManager.RestrictDirection = Direction.Null;
         particleManager.PlayerInterrupt();
     }
@@ -1448,6 +1451,22 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
 
         particleManager.PlaySyncedPlayerAnimation(entity.GetAdjustedCastTime(ability.CastTime), ability.AnimDelay, ability.AnimTiming, entity.Instance.GetComponent<Animator>(), ability.AnimTrigger);
+    }
+
+    public void CancelAbility(Entity entity)
+    {
+        if (entity.IsPlayer)
+        {
+            uiManager.CancelPlayerCast();
+            audioManager.PlayUISound(playerInterruptSound);
+            // audioManager.PlaySoundEffect(new SoundEffect(playerInterruptSound, entity.Instance.transform.position));
+            mouseLookManager.RestrictDirection = Direction.Null;
+        }
+        else
+        {
+            audioManager.PlayUISound(enemyInterruptSound);
+            // audioManager.PlaySoundEffect(new SoundEffect(enemyInterruptSound, entity.Instance.transform.position));
+        }
     }
 
     public void PerformAbility(Entity entity, AbilityObject ability)
@@ -1515,17 +1534,23 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             {
                 uiManager.FlashPlayerDamage();
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
+                if (alive)
+                    audioManager.PlaySoundEffect(new SoundEffect(target.HurtSound, target.Instance.transform.position));
             }
         }
-        else if (ability.Type != AbilityType.Self && target.IsPlayer == false)
+        else
         {
-            particleManager.PlayHitSpark(target);
-            particleManager.HitColor(target);
-            particleManager.PlayHurtAnim(target);
+            if (ability.Damage > 0)
+            {
+                particleManager.PlayHitSpark(target);
+                particleManager.HitColor(target);
+                particleManager.PlayHurtAnim(target);
+                if (alive)
+                    audioManager.PlaySoundEffect(new SoundEffect(target.HurtSound, target.Instance.transform.position));
+            }
         }
 
         PerformEntityDeathCheck(target, alive);
-
     }
 
     void ApplyZoneAbility(Entity target, AbilityObject ability, Entity caster)
@@ -1595,6 +1620,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             player.StatusEffects.ClearEffects();
             player.Cores = 0;
             player.CurrentHealth = player.MaxHealth;
+            audioManager.PlaySoundEffect(new SoundEffect(entity.DeathSound, entity.Instance.transform.position));
             if (gradualEffectsCoroutine != null)
                 StopCoroutine(gradualEffectsCoroutine);
             audioManager.FadeOutMusic(1f);
@@ -1613,6 +1639,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             //Play Dissolve Effect
             //particleManager.DissolveEnemy(entity);
             DestroyEnemy(entity);
+            audioManager.PlaySoundEffect(new SoundEffect(entity.DeathSound, entity.Instance.transform.position));
             StartCoroutine(level.RemoveEntity(entity));
 
             if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)

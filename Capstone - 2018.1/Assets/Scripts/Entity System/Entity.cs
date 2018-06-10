@@ -21,7 +21,7 @@ namespace EntityClasses
 
     public interface IEntity
     {
-        GameObject Instance { get; set; }
+        EntityContainer Instance { get; set; }
         string Name { get; set; }
         Cell Cell { get; set; }
     }
@@ -33,8 +33,8 @@ namespace EntityClasses
 
         public bool IsPlayer { get; set; } = false;
 
-        [SerializeField] GameObject instance;
-        public GameObject Instance { get { return instance; } set { instance = value; } }
+        [SerializeField] EntityContainer instance;
+        public EntityContainer Instance { get { return instance; } set { instance = value; } }
 
         [SerializeField] string name;
         public string Name { get { return name; } set { name = value; } }
@@ -57,21 +57,21 @@ namespace EntityClasses
 
         public EntityState State { get; set; }
 
-        public Animator Anim { get; set; }
+        public Animator Animator { get { return Instance.Animator; } }
 
-        public SkinnedMeshRenderer Rend { get; set; }
+        public SkinnedMeshRenderer Renderer { get { return Instance.Renderer; } }
 
         public EffectDictionary StatusEffects = new EffectDictionary();
         [SerializeField] List<AbilityObject> abilities;
-        public List<AbilityObject> Abilities { get { return abilities; } private set { abilities = value; } }
+        public List<AbilityObject> Abilities { get { return abilities; } set { abilities = value; } }
         [SerializeField] SoundEffect walkingSound;
-        public SoundEffect WalkingSound { get { return walkingSound; } private set { walkingSound = value; } }
+        public SoundEffect WalkingSound { get { return walkingSound; } set { walkingSound = value; } }
         [SerializeField] SoundEffect hitSound;
-        public SoundEffect HitSound { get { return hitSound; } private set { hitSound = value; } }
+        public SoundEffect HitSound { get { return hitSound; } set { hitSound = value; } }
         [SerializeField] SoundEffect hurtSound;
-        public SoundEffect HurtSound { get { return hurtSound; } private set { hurtSound = value; } }
+        public SoundEffect HurtSound { get { return hurtSound; } set { hurtSound = value; } }
         [SerializeField] SoundEffect deathSound;
-        public SoundEffect DeathSound { get { return deathSound; } private set { deathSound = value; } }
+        public SoundEffect DeathSound { get { return deathSound; } set { deathSound = value; } }
         public Dictionary<AbilityObject, float> Cooldowns { get; private set; } = new Dictionary<AbilityObject, float>();
         public Dictionary<AbilityObject, float> CooldownsRemaining { get; private set; } = new Dictionary<AbilityObject, float>();
         public List<Indicator> Indicators { get; set; } = new List<Indicator>();
@@ -92,8 +92,12 @@ namespace EntityClasses
             Facing = Direction.Up;
             State = EntityState.Idle;
             Abilities = new List<AbilityObject>(entity.Abilities);
-            Anim = entity.Instance.GetComponent<Animator>();
-            Rend = entity.Instance.GetComponentInChildren<SkinnedMeshRenderer>();
+            WalkingSound = entity.WalkingSound;
+            HitSound = entity.HitSound;
+            HurtSound = entity.HurtSound;
+            DeathSound = entity.DeathSound;
+            // Anim = entity.Instance.GetComponent<Animator>();
+            // Rend = entity.Instance.GetComponentInChildren<SkinnedMeshRenderer>();
         }
 
         public AbilityObject CastAbility(int index)
@@ -332,10 +336,12 @@ namespace EntityClasses
                     coroutines.Remove(currentAbilityCoroutine);
                 }
 
-                if (IsPlayer)
-                {
-                    GameManager.Instance.CancelPlayerAbility();
-                }
+                GameManager.Instance.CancelAbility(this);
+
+                // if (IsPlayer)
+                // {
+                //     GameManager.Instance.CancelPlayerAbility();
+                // }
 
                 StartCooldown(abilities[CurrentAbility]);
             }
@@ -398,7 +404,7 @@ namespace EntityClasses
 
     public class Item : IEntity
     {
-        public GameObject Instance { get; set; }
+        public EntityContainer Instance { get; set; }
         public string Name { get; set; }
         public Cell Cell { get; set; }
     }

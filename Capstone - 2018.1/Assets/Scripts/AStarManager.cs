@@ -59,7 +59,7 @@ namespace AStar
         {
             if (iter < 0 || pathList.Count <= 0)
             {
-                Debug.LogError("ERROR: Attempting to get next node while path is empty.");
+                // Debug.LogError("ERROR: Attempting to get next node while path is empty.");
                 return null;
             }
 

@@ -35,6 +35,10 @@ namespace AudioClasses
 
         public void PlayUISound(UISound soundEffect)
         {
+            if (soundEffect == null)
+            {
+                Debug.LogError("ERROR: SoundEffect is null.");
+            }
             if (soundEffect.Clip == null)
             {
                 Debug.LogWarning("WARNING: SoundEffect AudioClip is null.");
@@ -49,18 +53,15 @@ namespace AudioClasses
             if (uiSoundPool.Count > 0)
             {
                 source = uiSoundPool.Pop();
-                source.clip = soundEffect.Clip;
-                source.volume = soundEffect.Volume;
-                source.pitch = soundEffect.Pitch;
             }
             else
             {
                 source = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
-                source.outputAudioMixerGroup = uiAudioMixerGroup;
-                source.clip = soundEffect.Clip;
-                source.volume = soundEffect.Volume;
-                source.pitch = soundEffect.Pitch;
             }
+            source.outputAudioMixerGroup = uiAudioMixerGroup;
+            source.clip = soundEffect.Clip;
+            source.volume = soundEffect.Volume;
+            source.pitch = soundEffect.Pitch;
 
             source.Play();
             StartCoroutine(AddToUIPool(source, source.clip.length));
@@ -186,9 +187,6 @@ namespace AudioClasses
                 sourceObject = soundEffectPool.Pop();
                 sourceObject.transform.position = soundEffect.Position;
                 source = sourceObject.GetComponent<AudioSource>();
-                source.clip = soundEffect.Clip;
-                source.volume = soundEffect.Volume;
-                source.pitch = soundEffect.Pitch;
                 sourceObject.SetActive(true);
             }
             else
@@ -196,10 +194,10 @@ namespace AudioClasses
                 // Debug.Log("Pool is empty, creating new source.");
                 sourceObject = Instantiate(soundEffectPrefab.gameObject, soundEffect.Position, Quaternion.identity, this.transform);
                 source = sourceObject.GetComponent<AudioSource>();
-                source.clip = soundEffect.Clip;
-                source.volume = soundEffect.Volume;
-                source.pitch = soundEffect.Pitch;
             }
+            source.clip = soundEffect.Clip;
+            source.volume = soundEffect.Volume;
+            source.pitch = soundEffect.Pitch + Random.Range(-0.2f, 0.2f);
 
             source.Play();
             StartCoroutine(AddToPool(sourceObject, source.clip.length));

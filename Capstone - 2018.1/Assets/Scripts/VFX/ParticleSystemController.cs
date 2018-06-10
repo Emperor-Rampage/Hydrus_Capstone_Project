@@ -69,17 +69,20 @@ namespace ParticleClasses
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            if (gameManager == null || gameManager.LevelManager == null || gameManager.LevelManager.CurrentLevel == null || gameManager.LevelManager.CurrentLevel.Player == null)
+                return;
+
             Debug.Log("Scene Loaded");
 
             player = gameManager.LevelManager.CurrentLevel.Player;
-            player.Anim = player.Instance.GetComponent<Animator>();
+            // player.Anim = player.Instance.GetComponent<Animator>();
 
             if (player == null)
                 Debug.LogError("Player Not Found On Scene Load");
             else
                 Debug.Log("Scene Loaded and found " + player.Name);
 
-            if (player.Anim != null)
+            if (player.Animator != null)
                 Debug.Log(player.Name + " has an animator");
             else
                 Debug.LogError("Cannot Find Animator on " + player.Name);
@@ -90,7 +93,8 @@ namespace ParticleClasses
         public void PlayHitSpark(Entity hurtTarget)
         {
             //Debug.Log("Generating HitSpark for " + hurtTarget.Name + " at Cell: " + hurtTarget.Cell.X + "," + hurtTarget.Cell.Z);
-            Vector3 sparkVec = new Vector3(hurtTarget.Instance.transform.position.x, 0.5f, hurtTarget.Instance.transform.position.z);
+            Transform targetTransform = hurtTarget.Instance.transform;
+            Vector3 sparkVec = new Vector3(targetTransform.position.x, 0.5f, targetTransform.position.z);
 
             Instantiate(hitSpark, sparkVec, player.Instance.transform.localRotation);
         }
@@ -101,8 +105,9 @@ namespace ParticleClasses
             if (spawnTarget == null || spawnTarget.Instance == null)
                 return;
 
+            Transform targetTransform = spawnTarget.Instance.transform;
             //Debug.Log("Generating Core Gather Effect for " + spawnTarget.Name + "at Cell " + spawnTarget.Cell.X + "," + spawnTarget.Cell.Z + " with " + spawnTarget.Cores + " Cores. Spawning " + (spawnTarget.Cores / 5) + " particles." );
-            Vector3 spawnVec = new Vector3(spawnTarget.Instance.transform.position.x, 0.5f, spawnTarget.Instance.transform.position.z);
+            Vector3 spawnVec = new Vector3(targetTransform.position.x, 0.5f, targetTransform.position.z);
 
             coreEffect.emission.SetBurst(0,
                 new ParticleSystem.Burst(0.0f, (spawnTarget.Cores / 5))
@@ -114,7 +119,7 @@ namespace ParticleClasses
 
         public void SetPlayerCastAnimation(float CTScale, AbilityObject abil, string trigger)
         {
-            Animator playerAnim = player.Anim;
+            Animator playerAnim = player.Animator;
 
             if (playerAnim == null)
                 return;
@@ -125,44 +130,47 @@ namespace ParticleClasses
                     playerAnim.ResetTrigger(i);
             }
 
-
+            playerAnim.ResetTrigger(trigger);
+            playerAnim.ResetTrigger("CastActivate");
             playerAnim.SetFloat("CastTimeScale", CTScale);
             playerAnim.SetTrigger(trigger);
-            PlaySyncedPlayerAnimation(player.GetAdjustedCastTime(abil.CastTime), abil.AnimDelay, abil.AnimTiming, player.Anim, "CastActivate");
+            PlaySyncedPlayerAnimation(player.GetAdjustedCastTime(abil.CastTime), abil.AnimDelay, abil.AnimTiming, playerAnim, abil.AnimTrigger);
         }
 
         public void PlayerMove(Direction direction, float adjustedMovespeed)
         {
-            
+            Animator playerAnim = player.Animator;
+            playerAnim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+
             if (player.Facing == direction)
             {
-                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
-                player.Anim.SetTrigger("MoveForward");
+                // player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                playerAnim.SetTrigger("MoveForward");
             }
             else if (player.GetRight() == direction)
             {
-                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
-                player.Anim.SetTrigger("MoveRight");
+                // player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                playerAnim.SetTrigger("MoveRight");
             }
             else if (player.GetLeft() == direction)
             {
-                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
-                player.Anim.SetTrigger("MoveLeft");
+                // player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                playerAnim.SetTrigger("MoveLeft");
             }
             else if (player.GetBackward() == direction)
             {
-                player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
-                player.Anim.SetTrigger("MoveBack");
+                // player.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
+                playerAnim.SetTrigger("MoveBack");
             }
         }
 
         public void EnemyMove(Entity enemy, float adjustedMovespeed)
         {
-            if (enemy.Anim == null)
+            Animator enemyAnim = enemy.Animator;
+            if (enemyAnim == null)
                 return;
-            enemy.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
-            enemy.Anim.ResetTrigger("Walk");
-            enemy.Anim.SetTrigger("Walk");
+            enemyAnim.SetTrigger("Walk");
+            enemyAnim.ResetTrigger("Walk");
         }
 
         public void InterruptEnemy(Entity enemy)
@@ -172,23 +180,22 @@ namespace ParticleClasses
 
         public void EnemyTurn(Entity enemy, bool direction)
         {
-            enemy.Anim = enemy.Instance.GetComponent<Animator>();
-
-            if (enemy.Anim == null)
+            Animator enemyAnim = enemy.Animator;
+            if (enemyAnim == null)
                 return;
 
-            enemy.Anim.ResetTrigger("TurnR");
-            enemy.Anim.ResetTrigger("TurnL");
+            enemyAnim.ResetTrigger("TurnR");
+            enemyAnim.ResetTrigger("TurnL");
 
             if (direction)
-                enemy.Anim.SetTrigger("TurnR");
+                enemyAnim.SetTrigger("TurnR");
             else
-                enemy.Anim.SetTrigger("TurnL");
+                enemyAnim.SetTrigger("TurnL");
         }
 
         public void PlayerInterrupt()
         {
-            player.Anim.SetTrigger("Interrupt");
+            player.Animator.SetTrigger("Interrupt");
         }
 
         //Starts a tween that activates the Animation Trigger at the proper time to sync animations.
@@ -233,7 +240,8 @@ namespace ParticleClasses
             hurtTarget.Rend = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>();
 
             //Material mat = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
-            Material mat = hurtTarget.Rend.material;
+            // Material mat = hurtTarget.Rend.material;
+            Material mat = hurtTarget.Renderer.material;
 
             if (mat == null)
                 return;
@@ -245,7 +253,7 @@ namespace ParticleClasses
         //Changed to use the animator of the the Entity, which is now found on instantiation.
         public void PlayHurtAnim(Entity hurtTarget)
         {
-            Animator anim = hurtTarget.Anim;
+            Animator anim = hurtTarget.Animator;
             if (anim == null)
                 return;
 
@@ -264,13 +272,14 @@ namespace ParticleClasses
         {
             if (target == null || level == null)
                 return;
-          
-            Material mat = target.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
-           
+
+            // Material mat = target.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
+            Material mat = target.Renderer.material;
+
             if (mat == null)
                 return;
 
-            Tween.ShaderFloat(mat, "_DissolveScale", 1.0f, 1.0f, 0.0f, completeCallback: () => GameObject.Destroy(target.Instance));
+            Tween.ShaderFloat(mat, "_DissolveScale", 1.0f, 1.0f, 0.0f, completeCallback: () => GameObject.Destroy(target.Instance.gameObject));
         }
 
         //Used to apply a visual effect to a target during an ability.

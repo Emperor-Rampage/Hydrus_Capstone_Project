@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: Phammaxia
   m_EditorClassIdentifier: 
   enemy:
-    instance: {fileID: 1272064394801450, guid: 6f68cd1a16f232f4e9d31991d3676050, type: 2}
+    instance: {fileID: 114083236275943368, guid: 6f68cd1a16f232f4e9d31991d3676050,
+      type: 2}
     name: Phammaxia
     cores: 300
     maxHealth: 300
@@ -26,7 +27,7 @@ MonoBehaviour:
     walkingSound:
       audioClip: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
       volume: 0.495
-      pitch: 0
+      pitch: 1
     hitSound:
       audioClip: {fileID: 0}
       volume: 0
@@ -34,11 +35,11 @@ MonoBehaviour:
     hurtSound:
       audioClip: {fileID: 8300000, guid: bebb5e06125d2c442a747a3b893bed32, type: 3}
       volume: 1
-      pitch: 0
+      pitch: 2
     deathSound:
       audioClip: {fileID: 8300000, guid: 498fb8fd98599594d8361723e611e0c9, type: 3}
       volume: 1
-      pitch: 0
+      pitch: 2
     interval: 15
     variance: 5
     ambientSound:

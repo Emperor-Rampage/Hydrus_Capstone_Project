@@ -20,5 +20,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}
   - {fileID: 11400000, guid: 668432af727c32745b9e7382f0cef636, type: 2}
   - {fileID: 11400000, guid: 8e341a7b1d488d5499734548cfdf700a, type: 2}
-  classCamera: {fileID: 1790381132296086, guid: b1bbff27dbcb1f843a5d3bc6afcbe158,
+  classCamera: {fileID: 114857823622655340, guid: b1bbff27dbcb1f843a5d3bc6afcbe158,
     type: 2}
+  walkingSound:
+    audioClip: {fileID: 0}
+    volume: 1
+    pitch: 1
+  hitSound:
+    audioClip: {fileID: 0}
+    volume: 1
+    pitch: 1
+  hurtSound:
+    audioClip: {fileID: 8300000, guid: 9c60538960a7038499f457cb79cde126, type: 3}
+    volume: 0.75
+    pitch: 1
+  deathSound:
+    audioClip: {fileID: 8300000, guid: 8674dea71c508c9438cd74f6e421896e, type: 3}
+    volume: 0.75
+    pitch: 1

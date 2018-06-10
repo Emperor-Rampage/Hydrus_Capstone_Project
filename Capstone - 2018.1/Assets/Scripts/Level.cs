@@ -342,6 +342,10 @@ namespace MapClasses
                     Player.Name = selectedClass.Name;
                     Player.MaxHealth = selectedClass.Health;
                     Player.CurrentHealth = selectedClass.Health;
+                    Player.WalkingSound = selectedClass.WalkingSound;
+                    Player.HitSound = selectedClass.HitSound;
+                    Player.HurtSound = selectedClass.HurtSound;
+                    Player.DeathSound = selectedClass.DeathSound;
                 }
                 // If loading a player. Set the cores and the current abilities.
                 if (playerData != null)
@@ -406,10 +410,11 @@ namespace MapClasses
 
                 // Debug.Log("-- Entity is idle. Destroying everything.");
                 // If the entity is present in the enemy list, it will be removed.
-                //GameObject.Destroy(entity.Instance);
+                // GameObject.Destroy(entity.Instance);
                 if (!entity.IsPlayer)
                 {
                     EnemyList.Remove((Enemy)entity);
+                    // GameObject.Destroy(entity.Instance.gameObject);
                 }
 
                 if (entity.Cell != null)

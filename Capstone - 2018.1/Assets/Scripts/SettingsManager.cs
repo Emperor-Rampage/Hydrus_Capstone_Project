@@ -53,7 +53,7 @@ public class SettingsData
     public KeyCode treeMenuKey = KeyCode.G;
     public KeyCode turnLeftKey = KeyCode.Q;
     public KeyCode turnRightKey = KeyCode.E;
-    public KeyCode[] abilityKeys = new KeyCode[] { KeyCode.Mouse0, KeyCode.Mouse1, KeyCode.Alpha3, KeyCode.Alpha4 };
+    public KeyCode[] abilityKeys = new KeyCode[] { KeyCode.Alpha1, KeyCode.Alpha1, KeyCode.Alpha3, KeyCode.Alpha4 };
 }
 
 public class SettingsManager
@@ -144,7 +144,8 @@ public class SettingsManager
         SettingsData.treeMenuKey = container.treeButton.Value;
         SettingsData.turnLeftKey = container.turnLeftButton.Value;
         SettingsData.turnRightKey = container.turnRightButton.Value;
-        for (int i = 0; i < SettingsData.abilityKeys.Length; i++) {
+        for (int i = 0; i < SettingsData.abilityKeys.Length; i++)
+        {
             SettingsData.abilityKeys[i] = container.abilityButtons[i].Value;
         }
         // SettingsData.abilityKeys[0] = container.ability1Button.Value;
