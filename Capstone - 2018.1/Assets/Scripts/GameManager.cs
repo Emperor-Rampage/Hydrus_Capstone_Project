@@ -987,37 +987,43 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             // uiManager.UnHighlightBorder();
         }
 
-        //        Direction playerDirection = level.Player.ToAbsoluteDirection(Direction.Up);
-        bool forwardConnection = level.HasConnection(player.Cell, player.Facing);
-        Cell forwardCell = level.GetNeighbor(player.Cell, player.Facing);
-        if (forwardConnection && forwardCell != null)
+        // If it's a boss, always display its info.
+        Entity enemy = null;
+        if (level.bossRoom)
         {
-            Enemy enemy = (Enemy)forwardCell.Occupant;
-            if (enemy != null)
+            if (level.EnemyList.Count > 0)
+                enemy = level.EnemyList.Single<Entity>();
+        }
+        else
+        {
+            // Get closest enemy. Prefer enemy directly in front of the player.
+            bool forwardConnection = level.HasConnection(player.Cell, player.Facing);
+            Cell forwardCell = level.GetNeighbor(player.Cell, player.Facing);
+            if (forwardConnection && forwardCell != null)
             {
-                string castName = "";
-                if (enemy.CurrentAbility != -1)
-                {
-                    AbilityObject ability = enemy.Abilities[enemy.CurrentAbility];
-                    castName = ability.Name;
-                }
-                uiManager.UpdateEnemyInfo(true, enemy.Name, enemy.CurrentHealth / enemy.MaxHealth, enemy.CastProgress, castName, enemy.CurrentCastTime);
+                enemy = forwardCell.Occupant;
             }
-            else
+
+            if (enemy == null)
             {
-                uiManager.UpdateEnemyInfo(false);
+                enemy = level.GetClosestEnemy(player, 5);
             }
         }
-        // If standing on an item, give option to collect item.
-        /*        if (level.CanExit)
-                {
-                    ExitPrompt(true);
-                }
-                else if (ItemCheck())
-                {
-                    ItemPrompt();
-                }
-                */
+
+        if (enemy != null)
+        {
+            string castName = "";
+            if (enemy.CurrentAbility != -1)
+            {
+                AbilityObject ability = enemy.Abilities[enemy.CurrentAbility];
+                castName = ability.Name;
+            }
+            uiManager.UpdateEnemyInfo(true, enemy.Name, enemy.CurrentHealth / enemy.MaxHealth, enemy.CastProgress, castName, enemy.CurrentCastTime);
+        }
+        else
+        {
+            uiManager.UpdateEnemyInfo(false);
+        }
     }
 
     // If true, displays the text with the option to exit the level.
@@ -1310,13 +1316,14 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             return;
 
         entity.State = EntityState.Moving;
+        entity.Destination = neighbor;
 
         // float adjustedMovespeed = Movespeed / entity.StatusEffects.MovementScale;
         float adjustedMovespeed = entity.GetAdjustedMoveSpeed(Movespeed);
 
         //Probably going to make a separate method to handle all this.
         Tween.Position(entity.Instance.transform, LevelManager.GetCellPosition(neighbor), adjustedMovespeed, 0f, moveCurve, completeCallback: () => entity.State = EntityState.Idle);
-        Coroutine movementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, neighbor, adjustedMovespeed * 0.75f));
+        Coroutine movementCoroutine = StartCoroutine(MoveEntityLocation_Coroutine(entity, adjustedMovespeed * 0.75f));
         if (entity.IsPlayer)
         {
             playerMovementCoroutine = movementCoroutine;
@@ -1333,13 +1340,23 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // Waits for (delay) seconds,
     // Then sets the entity's location by calling the SetEntityLocation method in the level object and passing in the entity and cell.
     // Finally, sets the cell to an unlucky state. (Entities will still be prevented from moving there, since an entity is already there)
-    public IEnumerator MoveEntityLocation_Coroutine(Entity entity, Cell cell, float delay)
+    public IEnumerator MoveEntityLocation_Coroutine(Entity entity, float delay)
     {
-        cell.Locked = true;
-        yield return new WaitForSeconds(delay);
-        level.SetEntityLocation(entity, cell);
-        entity.RemoveMovementCoroutine();
-        cell.Locked = false;
+        Cell cell = entity.Destination;
+        if (cell == null)
+        {
+            Debug.LogError("Error: Attempting to move entity without giving a destination.");
+            yield return null;
+        }
+        else
+        {
+            cell.Locked = true;
+            yield return new WaitForSeconds(delay);
+            level.SetEntityLocation(entity, cell);
+            entity.RemoveMovementCoroutine();
+            cell.Locked = false;
+            entity.Destination = null;
+        }
     }
 
     // NOTE: NOT USING.
@@ -1426,14 +1443,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     }
 
-    public void CancelPlayerAbility()
-    {
-        uiManager.CancelPlayerCast();
-        // audioManager.PlayUISound(playerInterruptSound);
-        mouseLookManager.RestrictDirection = Direction.Null;
-        particleManager.PlayerInterrupt();
-    }
-
     void CastEnemyAbility(Entity entity, int index)
     {
         if (entity.StatusEffects.Stunned || entity.StatusEffects.Silenced)
@@ -1488,7 +1497,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             //particleManager.PlayPlayerVFX(ability);
         }
         //else
-            //particleManager.PlayEnemyVFX(ability, entity);
+        //particleManager.PlayEnemyVFX(ability, entity);
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
         // Debug.Log(entity.Name + " casting " + ability.SoundEffect);
@@ -1520,12 +1529,16 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (!(caster.IsPlayer ^ target.IsPlayer) && ability.Type != AbilityType.Self)
             return;
 
+        bool interrupt = (target.CastProgress >= interruptPercentage);
         foreach (AbilityEffect effect in ability.StatusEffects)
         {
             AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, effect.Duration, effect.Value);
             target.StatusEffects.AddEffect(effectInstance);
+
+            if (effect.Effect == AbilityStatusEff.Stun)
+                interrupt = true;
         }
-        bool alive = target.Damage(ability.Damage, (target.CastProgress >= interruptPercentage));
+        bool alive = target.Damage(ability.Damage, interrupt);
 
         if (target.IsPlayer)
         {
@@ -1568,14 +1581,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             }
             target.StatusEffects.AddEffect(effectInstance);
         }
-        // bool alive = target.Damage(0);
-        // // if (target.GetType() == typeof(Player))
-        // if (target.IsPlayer)
-        // {
-        //     uiManager.UpdatePlayerHealth(target.CurrentHealth / target.MaxHealth);
-        // }
-
-        // PerformEntityDeathCheck(target, alive);
     }
 
     IEnumerator ApplyZoneAbility_Coroutine(Cell cell, AbilityObject ability, Entity caster)
@@ -1638,9 +1643,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             //particleManager.PlayCoreGather(entity);
             //Play Dissolve Effect
             //particleManager.DissolveEnemy(entity);
-            DestroyEnemy(entity);
             audioManager.PlaySoundEffect(new SoundEffect(entity.DeathSound, entity.Instance.transform.position));
-            StartCoroutine(level.RemoveEntity(entity));
+            DestroyEnemy(entity);
+            // StartCoroutine(level.RemoveEntity(entity));
+            level.RemoveEntity(entity);
 
             if (tutorialManager.RunTutorial && !tutorialManager.Upgrade.Complete)
             {
@@ -1669,8 +1675,4 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         Indicator indicator = new Indicator { Instance = indicatorInstance, Cell = cell, Entity = entity };
         indicator.AddIndicator();
     }
-    // public AbilityObject GetPlayerAbility(int index)
-    // {
-    //     return playerAbilities.SingleOrDefault((abil) => abil.Index == index);
-    // }
 }

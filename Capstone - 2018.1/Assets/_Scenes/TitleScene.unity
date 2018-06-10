@@ -6735,6 +6735,7 @@ MonoBehaviour:
     levels:
     - sceneIndex: 1
       name: Hub
+      bossRoom: 0
       levelMap: {fileID: 2800000, guid: 6247bac4ccabdef4ebaaae23b7390432, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: 3817c0ab736ae4c4f8f038cb927a673d, type: 3}
@@ -6748,6 +6749,7 @@ MonoBehaviour:
       spawnList: []
     - sceneIndex: 3
       name: Biodome
+      bossRoom: 0
       levelMap: {fileID: 2800000, guid: f8aafb2ca6ac4da48887b69e06a51d45, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: b22122212370b4346b807da8f09fd551, type: 3}
@@ -6821,6 +6823,7 @@ MonoBehaviour:
         enemy: {fileID: 11400000, guid: 5455bf9d6aa10e74fa08769920cd8bf0, type: 2}
     - sceneIndex: 3
       name: Boss!
+      bossRoom: 1
       levelMap: {fileID: 2800000, guid: cbd9f5f48ece45246991078351512bf3, type: 3}
       music:
         audioClip: {fileID: 8300000, guid: 7e0926e0272e3d2408d4ddde7360131f, type: 3}

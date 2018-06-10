@@ -108,7 +108,7 @@ namespace AStar
 
                 // Remove the current node from the open set and add it to the closed set.
                 openSet.Remove(currNode);
-                closedSet.Add(closedSet.Count, currNode);
+                closedSet.Add(currNode.Index, currNode);
 
                 // If it's the destination, exit the loop.
                 if (currNode.Index == destination.Index)
@@ -130,8 +130,8 @@ namespace AStar
                 {
                     if (!Level.HasConnection(currCell, neighbor) ||
                         neighbor.Locked ||
-                        (neighbor.Occupant != null && !neighbor.Occupant.IsPlayer) ||
-                        closedSet.ContainsValue(neighbor))
+                        (neighbor.Occupant != null && !neighbor.Occupant.IsPlayer) || closedSet.ContainsKey(neighbor.Index))
+                        // closedSet.ContainsValue(neighbor))
                         continue;
 
                     // If neighbor is in the open set and the new path is shorter, update it.

@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2228e16466a6a464aaf31f21c214406b, type: 3}
   m_Name: PlayerInterrupt
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 4096c25e709087c41adf3a41c5ee3f12, type: 3}
-  volume: 1
+  audioClip: {fileID: 8300000, guid: 62f3ba671f07e1f43be0ebb1be43c8e1, type: 3}
+  volume: 0.5
   pitch: 1

@@ -35,6 +35,7 @@ namespace MapClasses
 
         // The name of the level.
         [SerializeField] public string name;
+        [SerializeField] public bool bossRoom;
 
         // The bitmap for the level.
         [SerializeField] public Texture2D levelMap;
@@ -396,17 +397,17 @@ namespace MapClasses
             }
         }
 
-        public IEnumerator RemoveEntity(Entity entity)
+        public void RemoveEntity(Entity entity)
         {
             // Debug.Log("Removing entity..");
             if (entity != null)
             {
                 // Debug.Log("-- Entity is not null.");
-                while (entity.State != EntityState.Idle)
-                {
-                    // Debug.Log("-- Entity is not idle, waiting a frame. Instead is " + entity.State);
-                    yield return null;
-                }
+                // while (entity.State != EntityState.Idle)
+                // {
+                //     // Debug.Log("-- Entity is not idle, waiting a frame. Instead is " + entity.State);
+                //     yield return null;
+                // }
 
                 // Debug.Log("-- Entity is idle. Destroying everything.");
                 // If the entity is present in the enemy list, it will be removed.
@@ -420,6 +421,15 @@ namespace MapClasses
                 if (entity.Cell != null)
                 {
                     entity.Cell.Occupant = null;
+                }
+
+                Cell destination = entity.Destination;
+                if (destination != null)
+                {
+                    if (destination.Locked)
+                    {
+                        destination.Locked = false;
+                    }
                 }
             }
         }
@@ -976,18 +986,30 @@ namespace MapClasses
             return (Direction)newDir;
         }
 
-        public List<Cell> GetPath(Cell cell1, Cell cell2)
+        public Enemy GetClosestEnemy(Entity entity, int maxDistance = 1000)
         {
-            List<Cell> shortestPath = new List<Cell>();
-            Cell current = cell1;
-            while (true)
+            Cell entityCell = entity.Cell;
+            if (entityCell == null)
+                return null;
+
+            Enemy closest = null;
+            int closestDistance = maxDistance;
+
+            foreach (Enemy enemy in EnemyList)
             {
-
-                foreach (Direction direction in typeof(Direction).GetEnumValues())
+                Cell enemyCell = enemy.Cell;
+                if (enemyCell != null)
                 {
-
+                    int distance = GetDistance(entityCell, enemyCell);
+                    if (distance <= closestDistance)
+                    {
+                        closest = enemy;
+                        closestDistance = distance;
+                    }
                 }
             }
+
+            return closest;
         }
 
         public int GetDistance(int x1, int z1, int x2, int z2)

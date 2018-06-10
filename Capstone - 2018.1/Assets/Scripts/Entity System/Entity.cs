@@ -52,6 +52,7 @@ namespace EntityClasses
         public float CurrentCastTime { get; set; }
 
         public Cell Cell { get; set; }
+        public Cell Destination { get; set; }
 
         public Direction Facing { get; set; }
 
@@ -323,27 +324,7 @@ namespace EntityClasses
             // Cancel any current casting.
             if (CurrentAbility != -1 && interrupt && damage > 0)
             {
-                // Debug.Log("Player damaged: Current ability is " + CurrentAbility + ", interrupt is " + interrupt);
-                if (currentAbilityTween != null)
-                {
-                    // Debug.Log("-- Tween is not null.");
-                    currentAbilityTween.Cancel();
-                }
-                if (currentAbilityCoroutine != null)
-                {
-                    // Debug.Log("-- Coroutine is not null.");
-                    GameManager.Instance.StopCoroutine(currentAbilityCoroutine);
-                    coroutines.Remove(currentAbilityCoroutine);
-                }
-
-                GameManager.Instance.CancelAbility(this);
-
-                // if (IsPlayer)
-                // {
-                //     GameManager.Instance.CancelPlayerAbility();
-                // }
-
-                StartCooldown(abilities[CurrentAbility]);
+                CancelCast();
             }
 
             float adjustedDamage = damage * StatusEffects.DamageScale;
@@ -359,6 +340,25 @@ namespace EntityClasses
                 Kill();
                 return false;
             }
+        }
+
+        public void CancelCast()
+        {
+            if (currentAbilityTween != null)
+            {
+                // Debug.Log("-- Tween is not null.");
+                currentAbilityTween.Cancel();
+            }
+            if (currentAbilityCoroutine != null)
+            {
+                // Debug.Log("-- Coroutine is not null.");
+                GameManager.Instance.StopCoroutine(currentAbilityCoroutine);
+                coroutines.Remove(currentAbilityCoroutine);
+            }
+
+            GameManager.Instance.CancelAbility(this);
+
+            StartCooldown(abilities[CurrentAbility]);
         }
 
         public void Kill()

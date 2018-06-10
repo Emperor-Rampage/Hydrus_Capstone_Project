@@ -863,7 +863,9 @@ public class UIManager : MonoBehaviour
     public void ToggleBorderHighlight()
     {
         if (screenHighlightTween != null)
-            screenHighlightTween.Stop();
+        {
+            screenHighlightTween.Finish();
+        }
 
         if (Highlighted)
             screenHighlightTween = Tween.CanvasGroupAlpha(screenHighlightGroup, 0f, 0.15f, 0f);
@@ -876,8 +878,10 @@ public class UIManager : MonoBehaviour
     public void FlashPlayerDamage()
     {
         if (screenDamageTween != null)
+        {
             screenDamageTween.Finish();
-        screenDamageTween = Tween.CanvasGroupAlpha(screenDamageGroup, 0f, 1f, 0.15f, 0f, Tween.EaseWobble);
+        }
+        screenDamageTween = Tween.CanvasGroupAlpha(screenDamageGroup, 0f, 1f, 0.15f, 0f, Tween.EaseWobble, completeCallback: () => screenDamageGroup.alpha = 0f);
         // screenDamageTween = Tween.CanvasGroupAlpha(screenDamageGroup, 1f, 0.15f, 0f, Tween.EaseWobble);
     }
 

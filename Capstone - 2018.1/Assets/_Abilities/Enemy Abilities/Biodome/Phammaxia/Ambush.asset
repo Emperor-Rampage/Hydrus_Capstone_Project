@@ -23,7 +23,7 @@ MonoBehaviour:
   soundEffect:
     audioClip: {fileID: 8300000, guid: b1125475fb4ac7a4eb47c0928ff65a63, type: 3}
     volume: 1
-    pitch: 1
+    pitch: 2
   statusEffects:
   - effect: 7
     duration: 1
