@@ -6741,8 +6741,8 @@ MonoBehaviour:
         volume: 0.25
         pitch: 1
       ambience:
-        audioClip: {fileID: 0}
-        volume: 1
+        audioClip: {fileID: 8300000, guid: 3f5ea88ab258daf488059c066dcabc2e, type: 3}
+        volume: 0.5
         pitch: 1
       exitList: 01000000
       spawnList: []
