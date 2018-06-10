@@ -32,7 +32,7 @@ MonoBehaviour:
     hurtSound:
       audioClip: {fileID: 8300000, guid: ff3945bd554574e44bdafb867cf58534, type: 3}
       volume: 1
-      pitch: 1
+      pitch: 1.5
     deathSound:
       audioClip: {fileID: 8300000, guid: 154ee1309bdd9d24dae8e4c5b5f3d42f, type: 3}
       volume: 1

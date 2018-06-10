@@ -59979,7 +59979,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 6ff8a8a1384ce6a4c9db305970eeb2db, type: 3}
     - {fileID: 21300000, guid: 131eb7c18a203f64a9bd53957f8d9e0f, type: 3}
     - {fileID: 21300000, guid: 2b7e2910a37307749b48b92ee8b5f93a, type: 3}
-  defaultHoverSound: {fileID: 11400000, guid: 8a48770a578b8c348b70cebadd767d75, type: 2}
+  defaultHoverSound: {fileID: 11400000, guid: beca85f2c9656ad48825a86e4a557355, type: 2}
   defaultClickSound: {fileID: 11400000, guid: 21012a84bb87c5f4890a053ce87600c8, type: 2}
   menuPanel: {fileID: 1924599195921466}
   menuList:

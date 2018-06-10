@@ -14,7 +14,7 @@ MonoBehaviour:
   className: Knight
   description: The Knight class excels at getting up close and personal with targets,
     and being able to soak damage as well.
-  health: 120
+  health: 110
   baseAbilities:
   - {fileID: 11400000, guid: 807f77c5cb273224ca46786f00046407, type: 2}
   - {fileID: 11400000, guid: a2a5285717737ff4f9f86059527a83da, type: 2}
@@ -22,3 +22,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cf76a02ac1bef074f8b752ec6550be6e, type: 2}
   classCamera: {fileID: 114816535662904746, guid: f490db42a3df48b4786da13ac16ed9ff,
     type: 2}
+  walkingSound:
+    audioClip: {fileID: 0}
+    volume: 1
+    pitch: 1
+  hitSound:
+    audioClip: {fileID: 0}
+    volume: 1
+    pitch: 1
+  hurtSound:
+    audioClip: {fileID: 8300000, guid: 9c60538960a7038499f457cb79cde126, type: 3}
+    volume: 0.75
+    pitch: 1
+  deathSound:
+    audioClip: {fileID: 8300000, guid: 8674dea71c508c9438cd74f6e421896e, type: 3}
+    volume: 0.75
+    pitch: 1

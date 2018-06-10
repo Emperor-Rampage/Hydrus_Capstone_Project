@@ -42,6 +42,9 @@ namespace ParticleClasses
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            if (gameManager == null || gameManager.LevelManager == null || gameManager.LevelManager.CurrentLevel == null || gameManager.LevelManager.CurrentLevel.Player == null)
+                return;
+
             Debug.Log("Scene Loaded");
 
             player = gameManager.LevelManager.CurrentLevel.Player;

@@ -73,14 +73,16 @@ public class ShowLevel : MonoBehaviour
             {
                 Gizmos.color = new Color(1, 0, 0, 0.1f);
                 Vector3 center = new Vector3(spawn.X * levelManager.CellScale, 0f, spawn.Z * levelManager.CellScale);
-                foreach (MeshFilter filter in spawn.EnemyObject.Enemy.Instance.GetComponentsInChildren<MeshFilter>())
-                {
-                    Transform pieceTransform = filter.transform;
-                    if (pieceTransform != null && filter.sharedMesh != null)
-                    {
-                        Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.localPosition, pieceTransform.localRotation, filter.transform.localScale * levelManager.CellScale);
-                    }
-                }
+                SkinnedMeshRenderer rend = spawn.EnemyObject.Enemy.Renderer;
+                Gizmos.DrawWireMesh(rend.sharedMesh, center + (rend.transform.localPosition * levelManager.CellScale), Quaternion.identity, spawn.EnemyObject.Enemy.Instance.transform.localScale * levelManager.CellScale);
+                // foreach (MeshFilter filter in spawn.EnemyObject.Enemy.Instance.GetComponentsInChildren<MeshFilter>())
+                // {
+                //     Transform pieceTransform = filter.transform;
+                //     if (pieceTransform != null && filter.sharedMesh != null)
+                //     {
+                //         Gizmos.DrawWireMesh(filter.sharedMesh, center + pieceTransform.localPosition, pieceTransform.localRotation, filter.transform.localScale * levelManager.CellScale);
+                //     }
+                // }
             }
         }
     }

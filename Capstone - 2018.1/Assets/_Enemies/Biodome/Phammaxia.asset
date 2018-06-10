@@ -35,11 +35,11 @@ MonoBehaviour:
     hurtSound:
       audioClip: {fileID: 8300000, guid: bebb5e06125d2c442a747a3b893bed32, type: 3}
       volume: 1
-      pitch: 1.5
+      pitch: 2
     deathSound:
       audioClip: {fileID: 8300000, guid: 498fb8fd98599594d8361723e611e0c9, type: 3}
       volume: 1
-      pitch: 1.5
+      pitch: 2
     interval: 15
     variance: 5
     ambientSound:

@@ -35,6 +35,10 @@ namespace AudioClasses
 
         public void PlayUISound(UISound soundEffect)
         {
+            if (soundEffect == null)
+            {
+                Debug.LogError("ERROR: SoundEffect is null.");
+            }
             if (soundEffect.Clip == null)
             {
                 Debug.LogWarning("WARNING: SoundEffect AudioClip is null.");
@@ -193,7 +197,7 @@ namespace AudioClasses
             }
             source.clip = soundEffect.Clip;
             source.volume = soundEffect.Volume;
-            source.pitch = soundEffect.Pitch + Random.Range(-0.1f, 0.1f);
+            source.pitch = soundEffect.Pitch + Random.Range(-0.2f, 0.2f);
 
             source.Play();
             StartCoroutine(AddToPool(sourceObject, source.clip.length));

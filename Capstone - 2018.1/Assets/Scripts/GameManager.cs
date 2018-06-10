@@ -68,6 +68,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // TODO: Move MouseLookManager from its own singleton to the UIManager.
     //       This is to allow it to be enabled and disabled more easily on pause and other ui events.
     [SerializeField] BackgroundMusic titleMusic;
+    [SerializeField] UISound playerInterruptSound;
+    [SerializeField] UISound enemyInterruptSound;
     MouseLookManager mouseLookManager;
     SettingsManager settingsManager;
 
@@ -1427,6 +1429,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     public void CancelPlayerAbility()
     {
         uiManager.CancelPlayerCast();
+        // audioManager.PlayUISound(playerInterruptSound);
         mouseLookManager.RestrictDirection = Direction.Null;
         //SetPlayerAnimation("Interrupt", 1.0f);
     }
@@ -1445,6 +1448,22 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         foreach (Cell cell in affected)
         {
             AddIndicator(testIndicatorEnemy, cell, entity);
+        }
+    }
+
+    public void CancelAbility(Entity entity)
+    {
+        if (entity.IsPlayer)
+        {
+            uiManager.CancelPlayerCast();
+            audioManager.PlayUISound(playerInterruptSound);
+            // audioManager.PlaySoundEffect(new SoundEffect(playerInterruptSound, entity.Instance.transform.position));
+            mouseLookManager.RestrictDirection = Direction.Null;
+        }
+        else
+        {
+            audioManager.PlayUISound(enemyInterruptSound);
+            // audioManager.PlaySoundEffect(new SoundEffect(enemyInterruptSound, entity.Instance.transform.position));
         }
     }
 
@@ -1511,19 +1530,23 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             {
                 uiManager.FlashPlayerDamage();
                 target.Instance.GetComponentInChildren<ShakeTransform>().AddShakeEvent(testShakeEvent);
+                if (alive)
+                    audioManager.PlaySoundEffect(new SoundEffect(target.HurtSound, target.Instance.transform.position));
             }
         }
-        else if (ability.Type != AbilityType.Self && !target.IsPlayer)
+        else
         {
-            particleManager.PlayHitSpark(target);
-            particleManager.HitColor(target);
-            particleManager.PlayHurtAnim(target);
-            if (alive)
-                audioManager.PlaySoundEffect(new SoundEffect(target.HurtSound, target.Instance.transform.position));
+            if (ability.Damage > 0)
+            {
+                particleManager.PlayHitSpark(target);
+                particleManager.HitColor(target);
+                particleManager.PlayHurtAnim(target);
+                if (alive)
+                    audioManager.PlaySoundEffect(new SoundEffect(target.HurtSound, target.Instance.transform.position));
+            }
         }
 
         PerformEntityDeathCheck(target, alive);
-
     }
 
     void ApplyZoneAbility(Entity target, AbilityObject ability, Entity caster)
@@ -1593,6 +1616,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             player.StatusEffects.ClearEffects();
             player.Cores = 0;
             player.CurrentHealth = player.MaxHealth;
+            audioManager.PlaySoundEffect(new SoundEffect(entity.DeathSound, entity.Instance.transform.position));
             if (gradualEffectsCoroutine != null)
                 StopCoroutine(gradualEffectsCoroutine);
             audioManager.FadeOutMusic(1f);

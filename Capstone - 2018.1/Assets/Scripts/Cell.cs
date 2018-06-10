@@ -181,7 +181,7 @@ namespace MapClasses
         {
             if (cell2 == null)
             {
-                Debug.LogError("ERROR: Passed null cell2 into Cell.GetNeighborDirection.");
+                // Debug.LogError("ERROR: Passed null cell2 into Cell.GetNeighborDirection.");
                 return Direction.Null;
             }
             int x2 = cell2.X;
