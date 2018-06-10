@@ -38,6 +38,7 @@ namespace AudioClasses
             if (soundEffect == null)
             {
                 Debug.LogError("ERROR: SoundEffect is null.");
+                return;
             }
             if (soundEffect.Clip == null)
             {

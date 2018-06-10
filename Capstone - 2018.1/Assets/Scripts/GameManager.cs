@@ -1485,10 +1485,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
-            particleManager.PlayPlayerVFX(ability);
+            //particleManager.PlayPlayerVFX(ability);
         }
-        else
-            particleManager.PlayEnemyVFX(ability, entity);
+        //else
+            //particleManager.PlayEnemyVFX(ability, entity);
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
         // Debug.Log(entity.Name + " casting " + ability.SoundEffect);

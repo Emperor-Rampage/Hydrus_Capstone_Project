@@ -134,7 +134,7 @@ namespace ParticleClasses
             playerAnim.ResetTrigger("CastActivate");
             playerAnim.SetFloat("CastTimeScale", CTScale);
             playerAnim.SetTrigger(trigger);
-            PlaySyncedPlayerAnimation(player.GetAdjustedCastTime(abil.CastTime), abil.AnimDelay, abil.AnimTiming, playerAnim, abil.AnimTrigger);
+            PlaySyncedPlayerAnimation(player.GetAdjustedCastTime(abil.CastTime), abil.AnimDelay, abil.AnimTiming, playerAnim, "CastActivate");
         }
 
         public void PlayerMove(Direction direction, float adjustedMovespeed)
@@ -166,16 +166,18 @@ namespace ParticleClasses
 
         public void EnemyMove(Entity enemy, float adjustedMovespeed)
         {
-            Animator enemyAnim = enemy.Animator;
-            if (enemyAnim == null)
+            if (enemy.Animator == null)
                 return;
-            enemyAnim.SetTrigger("Walk");
-            enemyAnim.ResetTrigger("Walk");
+            enemy.Animator.SetFloat("MoveSpeedScale", adjustedMovespeed);
+            enemy.Animator.ResetTrigger("Walk");
+            enemy.Animator.SetTrigger("Walk");
         }
 
         public void InterruptEnemy(Entity enemy)
         {
-            enemy.Anim.SetTrigger("Interrupt");
+            if(enemy.Animator == null)
+                return;
+            enemy.Animator.SetTrigger("Interrupt");
         }
 
         public void EnemyTurn(Entity enemy, bool direction)
@@ -187,7 +189,7 @@ namespace ParticleClasses
             enemyAnim.ResetTrigger("TurnR");
             enemyAnim.ResetTrigger("TurnL");
 
-            if (direction)
+            if (direction == true)
                 enemyAnim.SetTrigger("TurnR");
             else
                 enemyAnim.SetTrigger("TurnL");
@@ -237,10 +239,7 @@ namespace ParticleClasses
         {
             if (hurtTarget == null)
                 return;
-            hurtTarget.Rend = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>();
 
-            //Material mat = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
-            // Material mat = hurtTarget.Rend.material;
             Material mat = hurtTarget.Renderer.material;
 
             if (mat == null)
