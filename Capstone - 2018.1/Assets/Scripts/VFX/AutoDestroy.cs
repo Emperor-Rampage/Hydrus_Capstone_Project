@@ -7,12 +7,18 @@ public class AutoDestroy : MonoBehaviour
     //Ultra small script that auto destroys the particle system on completion, for one shot particle effects.
     private ParticleSystem ps;
 
+    public bool Interrupt = false;
+
+    public void DestroyThis()
+    {
+        Destroy(gameObject);
+    }
 
     public void Start()
     {
         ps = GetComponent<ParticleSystem>();
         if (ps == null)
-            Destroy(gameObject);
+            DestroyThis();
     }
 
     public void Update()
@@ -21,12 +27,16 @@ public class AutoDestroy : MonoBehaviour
         {
             if (!ps.IsAlive())
             {
-                Destroy(gameObject);
+                DestroyThis();
             }
+        }
+        else if(Interrupt)
+        {
+            DestroyThis();
         }
         else
         {
-            Destroy(gameObject);
+            DestroyThis();
         }
     }
 }

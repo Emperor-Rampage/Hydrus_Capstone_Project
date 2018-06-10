@@ -12,12 +12,12 @@ using MapClasses;
 namespace ParticleClasses
 {
     //TODO: Build this out to handle the particle effect creation and destruction for the whole game. Telling things where to spawn, how long, and handling the garbage of all of this
-    // -- General hitspark method to display a hit spark when an enemy is hit.
+    // -- (DONE) General hitspark method to display a hit spark when an enemy is hit.
     // -- Play player effects depending on a transform given.
     // -- Play enemy particle effects depending on more complex info given (Transform, cast time, activation, etc)
     // -- Handle Status effect particles to help the player know when something is affecting the target.
-    // -- Expose Enemy prefab components somewhere(probably in the Entity script) to make grabbing the pieces a lot faster and less taxing.
-    // -- Set the Level to properly track the player so I can grab it for effects and such. Gone on for FAR too long.
+    // -- (DONE) Expose Enemy prefab components somewhere(probably in the Entity script) to make grabbing the pieces a lot faster and less taxing.
+    // -- (DONE) Set the Level to properly track the player so I can grab it for effects and such. Gone on for FAR too long.
 
     public class ParticleSystemController : MonoBehaviour
     {
@@ -33,8 +33,11 @@ namespace ParticleClasses
 
         [SerializeField]
         public AnimationCurve hurtCurve;
-        /*
-        //Setup for possible status effect activation.
+
+        [SerializeField]
+        public float colorDecayTime = 0.5f;
+
+        [Space(10)]
         [Header("Status Effect Indicators")]
 
         [SerializeField]
@@ -56,10 +59,11 @@ namespace ParticleClasses
         public ParticleSystem Nani;
 
         [SerializeField]
-        */
+        public ParticleSystem Haste;
 
         [SerializeField]
-        public float colorDecayTime = 0.5f;
+        public ParticleSystem Heal;
+        
 
         private void Start()
         {
@@ -215,15 +219,21 @@ namespace ParticleClasses
         public void PlayPlayerVFX(AbilityObject abil)
         {
             Debug.Log("Attmpting to play particle effect...");
-            if (abil.ParticleOrigin == null || abil.ParticleSystem == null)
+            if (abil.ParticleSystem == null)
             {
                 Debug.LogError("Attempt Failed!");
                 return;
             }
 
+            if (abil.PerCellInstantiation == false)
+            {
+                Debug.Log("Playing " + abil.Name + " at Origin Point " + player.Name);
+                Instantiate(abil.ParticleSystem, player.Instance.transform, true);
+            }
+            Instantiate(abil.ParticleSystem, player.Instance.transform);
+            //else
+            //Play each particle effect at the 0,0,0 point of every affected cell.
 
-            Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin.name);
-            Instantiate(abil.ParticleSystem, abil.ParticleOrigin);
         }
 
         public void PlayEnemyVFX(AbilityObject abil, Entity caster)
@@ -260,13 +270,6 @@ namespace ParticleClasses
             //Tween.Value(1.0f, 0.0f,HandleHurtAnimChange, 0.5f,0.0f, hurtCurve);
         }
 
-        /*
-        void HandleHurtAnimChange(float value)
-        {
-            CurrentHurtAnimator.SetLayerWeight(1, value);
-        }
-        */
-
         public void DissolveEnemy(Entity target, Level level)
         {
             if (target == null || level == null)
@@ -289,7 +292,7 @@ namespace ParticleClasses
 
         //Blanket method that is called to display an effect for each ability effect currently affecting the player.
         //Will hookup to effect dictionary of the entity and play the particles/change the material to display that things are happening.
-        public void StatusEffectVFX(Entity target)
+        public void ToggleStatusEffectVFX(Entity target, string effect)
         {
 
         }

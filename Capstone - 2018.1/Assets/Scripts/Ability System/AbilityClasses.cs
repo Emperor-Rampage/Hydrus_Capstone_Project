@@ -460,6 +460,8 @@ namespace AbilityClasses
         string toolTip = ": This is the Default Ability tooltip. Please change me.";                         //Tooltip that explaines what the ability does.
         public string ToolTip { get { return toolTip; } }
 
+        [Space(10)]
+        [Header("Animation")]
         [SerializeField]
         string animTrigger = "DefaultTrigger";
         public string AnimTrigger { get { return animTrigger; } }                                            //Container for Animation Trigger string to activate the ability.
@@ -472,8 +474,13 @@ namespace AbilityClasses
         float animTiming = 0.0f;                                                                             //Container (in seconds) for when to time the animation.
         public float AnimTiming { get { return animTiming; } }
 
+        [Space(10)]
+        [Header("VFX/SFX")]
         [SerializeField] ParticleSystem particleSystem;                                                      //Container for the Particle Effect System of the Ability.
         public ParticleSystem ParticleSystem { get { return particleSystem; } }
+
+        [SerializeField] bool perCell;                                                                       //Boolean that determines if the particle is to be spawned per affected cell or just once.
+        public bool PerCellInstantiation { get { return perCell; } }
 
         [SerializeField] Transform particleOrigin;                                                           //Container for the origin point of Particle Effect for Ability.
         public Transform ParticleOrigin { get { return particleOrigin; } }
@@ -481,6 +488,7 @@ namespace AbilityClasses
         [SerializeField] SoundEffect soundEffect;                                                            //Sound Effect to play on activation.
         public SoundEffect SoundEffect { get { return soundEffect; } }
 
+        [Space(10)]
         [SerializeField] List<AbilityEffect> statusEffects;                                                  //List of status effects, if any. Denoted by an Enumerable ID value that informs the ability what to affect the target entity with.
         public List<AbilityEffect> StatusEffects { get { return statusEffects; } }
 

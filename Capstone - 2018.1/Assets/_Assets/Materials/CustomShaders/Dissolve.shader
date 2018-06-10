@@ -29,6 +29,10 @@
 		//Hurt Stuff
 		_HurtColor("HurtColor", Color) = (1, 0, 0, 0)
 		_HurtScale("Hurt Toggle", Range(0.0,1.0)) = 0.0
+
+		//Interrupt Stuff
+		_InterruptColor("Interrupt Color", Color) = (1,1,1,0)
+		_InterruptScale("Interrupt Toggle", Range(0.0, 1.0)) = 0.0
 	}
 		SubShader
 	{
@@ -89,6 +93,9 @@
 		float4 _HurtColor;
 		half _HurtScale;
 
+		float4 _InterruptColor;
+		half _InterruptScale;
+
 
 		//Precompute dissolve direction
 		static float3 dDir = normalize(_DissolveEnd - _DissolveStart);
@@ -142,9 +149,12 @@
 			fixed4 e = tex2D(_EmissionTex, IN.uv_EmissionTex) * _Emission;
 
 			fixed4 hurtCol = _HurtScale * _HurtColor;
-			hurtCol = clamp(hurtCol, 0.0f, 1.0f);
+			fixed4 interrCol = _InterruptColor * _InterruptScale;
 
-			o.Emission = e + glowCol + hurtCol;
+			hurtCol = clamp(hurtCol, 0.0f, 1.0f);
+			interrCol = clamp(interrCol, 0.0f, 1.0f);
+
+			o.Emission = e + glowCol + hurtCol + interrCol;
 			
 			o.Alpha = alpha;
 		}

@@ -110,11 +110,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1540748609437368}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de512f517e26b734590e54977a28621a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Interrupt: 0
 --- !u!198 &198691555687570826
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -9265,7 +9266,7 @@ ParticleSystem:
   lengthInSec: 0.2
   simulationSpeed: 1
   stopAction: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0

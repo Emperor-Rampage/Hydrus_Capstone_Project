@@ -19,6 +19,7 @@ MonoBehaviour:
   animDelay: 0
   animTiming: 0.33
   particleSystem: {fileID: 0}
+  perCell: 1
   particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 0}

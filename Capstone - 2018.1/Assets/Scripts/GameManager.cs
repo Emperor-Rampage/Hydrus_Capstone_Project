@@ -1470,11 +1470,17 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             audioManager.PlayUISound(playerInterruptSound);
             // audioManager.PlaySoundEffect(new SoundEffect(playerInterruptSound, entity.Instance.transform.position));
             mouseLookManager.RestrictDirection = Direction.Null;
+
+            //if( entity.CurrentParticle != null)
+            //  entity.CurrentParticle.DestroyThis(); // Call to destroy the currently playing particle, if there is one.
         }
         else
         {
             audioManager.PlayUISound(enemyInterruptSound);
             // audioManager.PlaySoundEffect(new SoundEffect(enemyInterruptSound, entity.Instance.transform.position));
+
+            //if( entity.CurrentParticle != null)
+            //  entity.CurrentParticle.DestroyThis(); // Call to destroy the currently playing particle, if there is one.
         }
     }
 
@@ -1494,7 +1500,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
-            //particleManager.PlayPlayerVFX(ability);
+            particleManager.PlayPlayerVFX(ability);
         }
         //else
         //particleManager.PlayEnemyVFX(ability, entity);

@@ -83,6 +83,8 @@ Material:
     - _GlowColShift: 0.701
     - _GlowIntensity: 1.29
     - _GlowScale: 1.44
+    - _HurtScale: 0
+    - _InterruptScale: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -100,3 +102,5 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Glow: {r: 1, g: 0.48650533, b: 0, a: 1}
     - _GlowEnd: {r: 1, g: 0, b: 0, a: 1}
+    - _HurtColor: {r: 1, g: 0, b: 0, a: 0}
+    - _InterruptColor: {r: 1, g: 1, b: 1, a: 0}
