@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Crippling Strike
   icon: {fileID: 21300000, guid: 1420eadf1bdcced4da0bc9e753a73712, type: 3}
   toolTip: 'Tier 3 Ability: Knight Ability 2'
+  animTrigger: Cast
+  animDelay: 0
+  animTiming: 0
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

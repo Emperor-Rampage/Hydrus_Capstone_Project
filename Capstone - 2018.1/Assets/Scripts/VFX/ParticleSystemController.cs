@@ -24,12 +24,39 @@ namespace ParticleClasses
 
         private GameManager gameManager;
         private Player player;
+
         [SerializeField]
         public ParticleSystem hitSpark;
+
         [SerializeField]
         public ParticleSystem coreEffect;
+
         [SerializeField]
         public AnimationCurve hurtCurve;
+        /*
+        //Setup for possible status effect activation.
+        [Header("Status Effect Indicators")]
+
+        [SerializeField]
+        public ParticleSystem Bleed;
+
+        [SerializeField]
+        public ParticleSystem MoveSlow;
+
+        [SerializeField]
+        public ParticleSystem Stun;
+
+        [SerializeField]
+        public ParticleSystem Silence;
+
+        [SerializeField]
+        public ParticleSystem Root;
+
+        [SerializeField]
+        public ParticleSystem Nani;
+
+        [SerializeField]
+        */
 
         [SerializeField]
         public float colorDecayTime = 0.5f;
@@ -91,13 +118,17 @@ namespace ParticleClasses
 
             if (playerAnim == null)
                 return;
-
-            playerAnim.ResetTrigger(trigger);
-            playerAnim.ResetTrigger("CastActivate");
             
+            for(int i = 0; i < playerAnim.parameterCount - 1; i++)
+            {
+                //if(playerAnim.parameters[i] == )
+                    playerAnim.ResetTrigger(i);
+            }
+
+
             playerAnim.SetFloat("CastTimeScale", CTScale);
             playerAnim.SetTrigger(trigger);
-            PlaySyncedPlayerAnimation(player.GetAdjustedCastTime(abil.CastTime), abil.AnimDelay, abil.AnimTiming, player.Anim, abil.AnimTrigger);
+            PlaySyncedPlayerAnimation(player.GetAdjustedCastTime(abil.CastTime), abil.AnimDelay, abil.AnimTiming, player.Anim, "CastActivate");
         }
 
         public void PlayerMove(Direction direction, float adjustedMovespeed)
@@ -129,13 +160,20 @@ namespace ParticleClasses
         {
             if (enemy.Anim == null)
                 return;
-
+            enemy.Anim.SetFloat("MoveSpeedScale", adjustedMovespeed);
             enemy.Anim.ResetTrigger("Walk");
             enemy.Anim.SetTrigger("Walk");
         }
 
+        public void InterruptEnemy(Entity enemy)
+        {
+            enemy.Anim.SetTrigger("Interrupt");
+        }
+
         public void EnemyTurn(Entity enemy, bool direction)
         {
+            enemy.Anim = enemy.Instance.GetComponent<Animator>();
+
             if (enemy.Anim == null)
                 return;
 
@@ -167,10 +205,15 @@ namespace ParticleClasses
 
         public void PlayPlayerVFX(AbilityObject abil)
         {
+            Debug.Log("Attmpting to play particle effect...");
             if (abil.ParticleOrigin == null || abil.ParticleSystem == null)
+            {
+                Debug.LogError("Attempt Failed!");
                 return;
+            }
 
-            Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin);
+
+            Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin.name);
             Instantiate(abil.ParticleSystem, abil.ParticleOrigin);
         }
 
@@ -187,6 +230,7 @@ namespace ParticleClasses
         {
             if (hurtTarget == null)
                 return;
+            hurtTarget.Rend = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>();
 
             //Material mat = hurtTarget.Instance.GetComponentInChildren<SkinnedMeshRenderer>().material;
             Material mat = hurtTarget.Rend.material;

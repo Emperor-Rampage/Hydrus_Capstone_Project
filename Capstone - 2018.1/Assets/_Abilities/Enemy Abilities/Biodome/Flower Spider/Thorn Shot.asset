@@ -15,6 +15,9 @@ MonoBehaviour:
   abilityName: Thorn Shot
   icon: {fileID: 0}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
+  animTrigger: ThornAttack
+  animDelay: 0
+  animTiming: 1.2
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

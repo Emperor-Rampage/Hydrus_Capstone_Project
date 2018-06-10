@@ -1428,7 +1428,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         uiManager.CancelPlayerCast();
         mouseLookManager.RestrictDirection = Direction.Null;
-        //SetPlayerAnimation("Interrupt", 1.0f);
+        particleManager.PlayerInterrupt();
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -1446,6 +1446,8 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             AddIndicator(testIndicatorEnemy, cell, entity);
         }
+
+        particleManager.PlaySyncedPlayerAnimation(entity.GetAdjustedCastTime(ability.CastTime), ability.AnimDelay, ability.AnimTiming, entity.Instance.GetComponent<Animator>(), ability.AnimTrigger);
     }
 
     public void PerformAbility(Entity entity, AbilityObject ability)
@@ -1464,8 +1466,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
-            //SetPlayerAnimation("CastActivate", 1.0f);
+            particleManager.PlayPlayerVFX(ability);
         }
+        else
+            particleManager.PlayEnemyVFX(ability, entity);
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
         // Debug.Log(entity.Name + " casting " + ability.SoundEffect);
