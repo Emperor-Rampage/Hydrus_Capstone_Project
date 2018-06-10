@@ -15,9 +15,9 @@ MonoBehaviour:
   abilityName: Ambush
   icon: {fileID: 0}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
-  animTrigger: Attack1
+  animTrigger: MeleeAttack
   animDelay: 0
-  animTiming: 0
+  animTiming: 0.5
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:

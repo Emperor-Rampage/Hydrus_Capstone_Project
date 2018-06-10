@@ -15,9 +15,9 @@ MonoBehaviour:
   abilityName: Stun
   icon: {fileID: 21300000, guid: 89b6deff8b03109448ca2d11fec7d4c9, type: 3}
   toolTip: ': This is the Default Ability tooltip. Please change me.'
-  animTrigger: Attack4
+  animTrigger: StunAttack
   animDelay: 0
-  animTiming: 0
+  animTiming: 0.5
   particleSystem: {fileID: 0}
   particleOrigin: {fileID: 0}
   soundEffect:
