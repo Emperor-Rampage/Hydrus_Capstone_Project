@@ -111,15 +111,15 @@ namespace ParticleClasses
             if (spawnTarget == null || spawnTarget.Instance == null)
                 return;
 
-            Transform targetTransform = spawnTarget.Instance.transform;
+            Debug.Log("CoreFiring!");
             //Debug.Log("Generating Core Gather Effect for " + spawnTarget.Name + "at Cell " + spawnTarget.Cell.X + "," + spawnTarget.Cell.Z + " with " + spawnTarget.Cores + " Cores. Spawning " + (spawnTarget.Cores / 5) + " particles." );
-            Vector3 spawnVec = new Vector3(targetTransform.position.x, 0.5f, targetTransform.position.z);
+            Vector3 spawnVec = new Vector3(spawnTarget.Instance.transform.position.x, 0.5f, spawnTarget.Instance.transform.position.z);
 
             coreEffect.emission.SetBurst(0,
                 new ParticleSystem.Burst(0.0f, (spawnTarget.Cores / 5))
                 );
 
-            Instantiate(coreEffect, spawnVec, player.Instance.transform.localRotation);
+            Instantiate(coreEffect, spawnVec, player.Instance.transform.localRotation,  player.Instance.transform);
 
         }
 
