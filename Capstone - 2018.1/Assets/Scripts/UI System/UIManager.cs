@@ -1162,6 +1162,7 @@ public class UIManager : MonoBehaviour
     void DisplayEffectInTree(EffectContainer effectContainer, AbilityEffect effect)
     {
         effectContainer.EffectText.enableWordWrapping = true;
+        effectContainer.EffectText.enableAutoSizing = true;
         if (effectIcons.IconsDictionary.ContainsKey(effect.Effect))
             effectContainer.Icon.sprite = effectIcons.IconsDictionary[effect.Effect];
         else

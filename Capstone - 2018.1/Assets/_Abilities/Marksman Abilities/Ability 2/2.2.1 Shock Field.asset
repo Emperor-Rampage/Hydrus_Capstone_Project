@@ -18,25 +18,23 @@ MonoBehaviour:
   animTrigger: Cast 2
   animDelay: 0
   animTiming: 0.33
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198137884838364044, guid: 694fc2b7d502a724990bffa3a285da03,
+    type: 2}
   perCell: 1
   particleOrigin: {fileID: 0}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: 3df9a0e143e21f34ab8347938e3c8452, type: 3}
+    volume: 0.4
+    pitch: 0.8
   statusEffects:
   - effect: 4
-    duration: 1.5
+    duration: 3
     value: 0.5
   - effect: 0
-    duration: 1.5
-    value: 0
-  - effect: 2
-    duration: 1.5
-    value: 30
-  - effect: 9
-    duration: 1.5
+    duration: 3
+    value: 0.3
+  - effect: 11
+    duration: 3
     value: 25
   type: 4
   aoeSprite: {fileID: 2800000, guid: 669b4c1eb1fe41e48bc72776fc072745, type: 3}

@@ -397,9 +397,10 @@ namespace MapClasses
             }
         }
 
-        public void RemoveEntity(Entity entity)
+        public IEnumerator RemoveEntity(Entity entity)
         {
             // Debug.Log("Removing entity..");
+            yield return new WaitForEndOfFrame();
             if (entity != null)
             {
                 // Debug.Log("-- Entity is not null.");
