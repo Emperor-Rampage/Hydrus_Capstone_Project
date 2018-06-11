@@ -15,11 +15,13 @@ MonoBehaviour:
   abilityName: Shield
   icon: {fileID: 21300000, guid: f286f85212d1ae94fb8013abc36bd6a7, type: 3}
   toolTip: 'Tier 1 Ability: Knight Ability 3'
-  animTrigger: Cast
+  animTrigger: Cast 3
   animDelay: 0
   animTiming: 0
   particleSystem: {fileID: 0}
+  perCell: 0
   particleOrigin: {fileID: 0}
+  particleTiming: 0
   soundEffect:
     audioClip: {fileID: 8300000, guid: af1965a8bf7ca8c408c6c44e086498b7, type: 3}
     volume: 0.5

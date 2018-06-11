@@ -64,7 +64,7 @@ namespace ParticleClasses
 
         [SerializeField]
         public ParticleSystem Heal;
-        
+
 
         private void Start()
         {
@@ -77,11 +77,11 @@ namespace ParticleClasses
             if (gameManager == null || gameManager.LevelManager == null || gameManager.LevelManager.CurrentLevel == null || gameManager.LevelManager.CurrentLevel.Player == null)
                 return;
 
-            Debug.Log("Scene Loaded");
+            //Debug.Log("Scene Loaded");
 
             player = gameManager.LevelManager.CurrentLevel.Player;
             // player.Anim = player.Instance.GetComponent<Animator>();
-
+            /*
             if (player == null)
                 Debug.LogError("Player Not Found On Scene Load");
             else
@@ -91,6 +91,7 @@ namespace ParticleClasses
                 Debug.Log(player.Name + " has an animator");
             else
                 Debug.LogError("Cannot Find Animator on " + player.Name);
+            */
         }
 
         //Used to display the hitspark effect
@@ -125,15 +126,8 @@ namespace ParticleClasses
         public void SetPlayerCastAnimation(float CTScale, AbilityObject abil, string trigger)
         {
             Animator playerAnim = player.Animator;
-
-            if (playerAnim == null)
+            if (playerAnim == null || trigger == "DefaultTrigger")
                 return;
-            
-            for(int i = 0; i < playerAnim.parameterCount - 1; i++)
-            {
-                //if(playerAnim.parameters[i] == )
-                    playerAnim.ResetTrigger(i);
-            }
 
             playerAnim.ResetTrigger(trigger);
             playerAnim.ResetTrigger("CastActivate");
@@ -180,9 +174,10 @@ namespace ParticleClasses
 
         public void InterruptEnemy(Entity enemy)
         {
-            if(enemy.Animator == null)
+            if (enemy.Animator == null)
                 return;
             enemy.Animator.SetTrigger("Interrupt");
+            enemy.Animator.SetBool("Interrupted", true);
         }
 
         public void EnemyTurn(Entity enemy, bool direction)
@@ -220,7 +215,7 @@ namespace ParticleClasses
 
         public void CompleteSynchedAnimation(Animator anim, string trigger)
         {
-            if(anim.GetBool("Interrupted") == true)
+            if (anim.GetBool("Interrupted") == true)
             {
                 anim.SetBool("Interrupted", false);
                 return;
@@ -231,38 +226,34 @@ namespace ParticleClasses
             }
         }
 
-        public void PlaySynchedVFX(float castTime, float timing, AbilityObject abil)
-        {
 
+        public void PlaySynchedVFX(float castTime, float timing, AbilityObject abil, Entity caster)
+        {
+            Debug.Log("Starting Synched VFX tween on " + caster.Name + " with ability " + abil.Name + " with timing " + timing + " and a cast time of " + castTime);
+            Tween.Value(0, 1, (i) => { }, (castTime - timing), 0, completeCallback: () => PlayVFX(abil, caster));
         }
 
-        public void PlayPlayerVFX(AbilityObject abil)
+
+        //Callback method for the PlaySynchedVFX that actually handles the instantiation of the effect.
+        public void PlayVFX(AbilityObject abil, Entity caster)
         {
-            Debug.Log("Attmpting to play particle effect...");
-            if (abil.ParticleSystem == null)
+            Debug.Log("Attempting to play VFX");
+            if (abil.ParticleSystem == null || caster == null || caster.Animator.GetBool("Interrupted") == true)
             {
-                Debug.LogError("Attempt Failed!");
+                Debug.LogError("Failed on Caster: " + caster.Name + " ability " + abil.Name + ". Particle is null?:" + abil.ParticleSystem + " Interrupted?: " + caster.Animator.GetBool("Interrupted"));
                 return;
             }
-
-            Debug.Log("Playing " + abil.Name + " at Origin Point " + player.Name);
-            Instantiate(abil.ParticleSystem, player.Instance.transform);
+            Debug.Log("Sucess");
+            //Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin + " for enemy " + caster.Name);
+            Instantiate(abil.ParticleSystem, caster.Instance.transform);
         }
 
-        public void PlayEnemyVFX(AbilityObject abil, Entity caster)
+        //Same as the PlayVFX method, but for AOE abilities.
+        public void PlayAOEVFX(AbilityObject abil, Cell cell, Entity caster)
         {
-            if (abil.ParticleSystem == null || caster == null)
+            if (abil == null || cell == null || caster.Animator.GetBool("Interrupted") == true || caster.Cell == cell)
                 return;
-
-            Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin + " for enemy " + caster.Name);
-            Instantiate(abil.ParticleSystem, caster.Instance.transform.position, caster.Instance.transform.localRotation);
-        }
-
-        public void PlayAOEVFX(AbilityObject abil, Cell cell)
-        {
-            if (abil == null)
-                return;
-            Instantiate(abil.ParticleSystem, gameManager.LevelManager.GetCellPosition(cell), player.Instance.transform.localRotation);
+            Instantiate(abil.ParticleSystem, gameManager.LevelManager.GetCellPosition(cell), caster.Instance.transform.localRotation, caster.Instance.transform);
         }
 
         //Causes the enemy to flash the HitColor specified in the material for the target.

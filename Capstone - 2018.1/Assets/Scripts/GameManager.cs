@@ -1437,14 +1437,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             AddIndicator(testIndicatorPlayer, cell, entity);
         }
-
+        entity.Animator.SetBool("Interrupted", false);
+        //Set the animation for the player.
         particleManager.SetPlayerCastAnimation(1.0f, entity.Abilities[index], entity.Abilities[index].AnimTrigger);
-
-        //Setting the cast time scale to the current cast time scale... Blegh
-        //SetPlayerCastAnimation("Cast " + (index + 1), level.Player.Abilities[index].CastTime);
-        //Animator anim = entity.Instance.GetComponent<Animator>();
-        //particleManager.PlaySyncedPlayerAnimation(entity.GetAdjustedCastTime(entity.Abilities[index].CastTime), 0.0f, 0.4f, anim, "CastActivate");
-
+        if (ability.PerCellInstantiation == false)
+            particleManager.PlaySynchedVFX(entity.GetAdjustedCastTime(ability.CastTime), ability.ParticleTiming, ability, entity);
     }
 
     void CastEnemyAbility(Entity entity, int index)
@@ -1463,7 +1460,10 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             AddIndicator(testIndicatorEnemy, cell, entity);
         }
 
+        entity.Animator.SetBool("Interrupted", false);
         particleManager.PlaySyncedPlayerAnimation(entity.GetAdjustedCastTime(ability.CastTime), ability.AnimDelay, ability.AnimTiming, entity.Instance.GetComponent<Animator>(), ability.AnimTrigger);
+        if (ability.PerCellInstantiation == false)
+            particleManager.PlaySynchedVFX(entity.GetAdjustedCastTime(ability.CastTime), ability.ParticleTiming, ability, entity);
     }
 
     public void CancelAbility(Entity entity)
@@ -1504,12 +1504,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
-
-            if(ability.PerCellInstantiation == false)
-                particleManager.PlayPlayerVFX(ability);
         }
-        //else if(ability.PerCellInstantiaion == false)
-            particleManager.PlayEnemyVFX(ability, entity);
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
         // Debug.Log(entity.Name + " casting " + ability.SoundEffect);
@@ -1518,7 +1513,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         {
             //Play the ability in each affected cell.
             if (ability.PerCellInstantiation == true)
-                particleManager.PlayAOEVFX(ability, cell);
+                particleManager.PlayAOEVFX(ability, cell, entity);
             //            Debug.Log("Performing " + ability.abilityName + " at " + cell.X + ", " + cell.Z);
             if (ability.Type != AbilityType.Zone)
             {
@@ -1679,6 +1674,11 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         particleManager.PlayCoreGather(target);
         particleManager.DissolveEnemy(target, level);
+    }
+
+    public void ToggleStatusEffect(Entity target, string key)
+    {
+        particleManager.ToggleStatusEffectVFX(target, key);
     }
 
     public void AddIndicator(GameObject indicatorPrefab, Cell cell, Entity entity)

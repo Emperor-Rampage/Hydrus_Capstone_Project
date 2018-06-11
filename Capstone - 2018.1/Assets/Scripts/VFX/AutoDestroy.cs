@@ -15,6 +15,7 @@ public class AutoDestroy : MonoBehaviour
     {
         ps.Stop();
         Destroy(gameObject);
+       
     }
 
     public void Start()
@@ -26,6 +27,8 @@ public class AutoDestroy : MonoBehaviour
         anim = GetComponentInParent<Animator>();
         if (anim == null)
             DestroyThis();
+
+        gameObject.transform.parent = null;
     }
 
     public void Update()
@@ -36,15 +39,18 @@ public class AutoDestroy : MonoBehaviour
         {
             if (!ps.IsAlive())
             {
+                //Debug.Log("DESTROYED IS ALIVE CHECK" + gameObject.name);
                 DestroyThis();
             }
         }
-        else if (Interrupt == false)
+        else if (Interrupt == true)
         {
+            //Debug.Log("DESTROYED INTERRUPT CHECK" + gameObject.name);
             DestroyThis();
         }
         else
         {
+            //Debug.Log("DESTROYED OTHER" + gameObject.name);
             DestroyThis();
         }
     }
