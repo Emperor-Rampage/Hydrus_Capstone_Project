@@ -621,6 +621,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             // Create the player. Set the instance to a new instantiated playerPrefab.
             player.Instance = Instantiate(player.Class.ClassCamera);
+            player.StatusEffects.owner = player;
             mouseLookManager.SetTarget(player.Instance.gameObject);
             // Manually set the position.
             SetEntityInstanceLocation(player);
@@ -629,6 +630,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             {
                 // Instantiate the prefab to an instance.
                 enemy.Instance = Instantiate(enemy.Instance);
+                enemy.StatusEffects.owner = enemy;
                 // Set the enemy instance's position.
                 SetEntityInstanceLocation(enemy);
             }
@@ -1674,11 +1676,6 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     {
         particleManager.PlayCoreGather(target);
         particleManager.DissolveEnemy(target, level);
-    }
-
-    public void ToggleStatusEffect(Entity target, string key)
-    {
-        particleManager.ToggleStatusEffectVFX(target, key);
     }
 
     public void AddIndicator(GameObject indicatorPrefab, Cell cell, Entity entity)

@@ -69,6 +69,7 @@ namespace AbilityClasses
     [System.Serializable]
     public class EffectDictionary
     {
+        public Entity owner;
 
         //To Do: RemoveEffect method, Tween/timer method
         //        private float cooldownScale = 1.0f;
@@ -113,6 +114,7 @@ namespace AbilityClasses
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
                 StartTween(AbilEffect);
                 CalcEffects(AbilEffect.Effect);
+                owner.ToggleOnStatusEffectVFX(AbilEffect.Effect);
             }
             else if (AbilEffect.Effect == AbilityStatusEff.NoEffect) //Error handling for no value
             {
@@ -120,10 +122,12 @@ namespace AbilityClasses
             }
             else
             {
+
                 EffectLibrary.Add(AbilEffect.Effect, new List<AbilityEffect>());
                 EffectLibrary[AbilEffect.Effect].Add(AbilEffect);
                 StartTween(AbilEffect);
                 CalcEffects(AbilEffect.Effect);
+                owner.ToggleOnStatusEffectVFX(AbilEffect.Effect);
             }
         }
 
@@ -141,8 +145,14 @@ namespace AbilityClasses
             //Validating that the list exists and it isn't empty. Because finding an item via Value is slow as heck.
             if (GetEffectList(AbilEffect.Effect) != null)
             {
+
                 EffectLibrary[AbilEffect.Effect].Remove(AbilEffect);
                 CalcEffects(AbilEffect.Effect);
+
+                if (EffectLibrary[AbilEffect.Effect].Count <= 0 || EffectLibrary.ContainsKey(AbilEffect.Effect) == false )
+                    owner.ToggleOffStatusEffectVFX(AbilEffect.Effect);
+                else if (owner == null || AbilEffect.Effect == AbilityStatusEff.NoEffect)
+                    return;
             }
             else
             {
@@ -183,7 +193,6 @@ namespace AbilityClasses
                                 }
                             }
                             CastTimeScale = Mathf.Clamp(CastTimeScale, 0f, 1f);
-
                             break;
                         }
 

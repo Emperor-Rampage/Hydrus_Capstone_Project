@@ -33,24 +33,22 @@ public class AutoDestroy : MonoBehaviour
 
     public void Update()
     {
-        Interrupt = anim.GetBool("Interrupted");
+        if(anim != null)
+            Interrupt = anim.GetBool("Interrupted");
 
         if (ps)
         {
             if (!ps.IsAlive())
             {
-                //Debug.Log("DESTROYED IS ALIVE CHECK" + gameObject.name);
                 DestroyThis();
             }
         }
         else if (Interrupt == true)
         {
-            //Debug.Log("DESTROYED INTERRUPT CHECK" + gameObject.name);
             DestroyThis();
         }
         else
         {
-            //Debug.Log("DESTROYED OTHER" + gameObject.name);
             DestroyThis();
         }
     }

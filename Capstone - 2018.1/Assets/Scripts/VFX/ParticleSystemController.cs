@@ -237,13 +237,13 @@ namespace ParticleClasses
         //Callback method for the PlaySynchedVFX that actually handles the instantiation of the effect.
         public void PlayVFX(AbilityObject abil, Entity caster)
         {
-            Debug.Log("Attempting to play VFX");
+            //Debug.Log("Attempting to play VFX");
             if (abil.ParticleSystem == null || caster == null || caster.Animator.GetBool("Interrupted") == true)
             {
-                Debug.LogError("Failed on Caster: " + caster.Name + " ability " + abil.Name + ". Particle is null?:" + abil.ParticleSystem + " Interrupted?: " + caster.Animator.GetBool("Interrupted"));
+                //Debug.LogError("Failed on Caster: " + caster.Name + " ability " + abil.Name + ". Particle is null?:" + abil.ParticleSystem + " Interrupted?: " + caster.Animator.GetBool("Interrupted"));
                 return;
             }
-            Debug.Log("Sucess");
+            //Debug.Log("Sucess");
             //Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin + " for enemy " + caster.Name);
             Instantiate(abil.ParticleSystem, caster.Instance.transform);
         }
@@ -301,12 +301,6 @@ namespace ParticleClasses
         {
 
         }
-
-        //Blanket method that is called to display an effect for each ability effect currently affecting the player.
-        //Will hookup to effect dictionary of the entity and play the particles/change the material to display that things are happening.
-        public void ToggleStatusEffectVFX(Entity target, string effect)
-        {
-
-        }
+        
     }
 }

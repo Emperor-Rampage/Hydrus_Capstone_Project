@@ -118,8 +118,8 @@ namespace EntityClasses
             HitSound = entity.HitSound;
             HurtSound = entity.HurtSound;
             DeathSound = entity.DeathSound;
-            // Anim = entity.Instance.GetComponent<Animator>();
-            // Rend = entity.Instance.GetComponentInChildren<SkinnedMeshRenderer>();
+            StatusEffects.owner = entity;
+
         }
 
         public AbilityObject CastAbility(int index)
@@ -398,6 +398,243 @@ namespace EntityClasses
                 Indicators[0].RemoveIndicator();
             }
         }
+
+        /*
+        public void StatusChecker()
+        {
+            public List<string> result;
+
+            if(.GetEffectList(AbilityStatusEff ) != null)
+            {
+
+            }
+        }
+        */
+
+        //Blanket method that is called to display an effect for each ability effect currently affecting the player.
+        //Will hookup to effect dictionary of the entity and play the particles/change the material to display that things are happening.
+        public void ToggleOffStatusEffectVFX(AbilityStatusEff effect)
+        {
+            switch (effect)
+            {
+                case AbilityStatusEff.Heal:
+                    {
+                        if (Heals == null)
+                            return;
+
+                        if (Heals.isPlaying)
+                            Heals.Stop(true);
+                        return;
+                    }
+                case AbilityStatusEff.Stun:
+                    {
+                        if (Stun == null)
+                            return;
+
+                        if (Stun.isPlaying)
+                            Stun.Stop(true);
+                        return;
+                    }
+
+                case AbilityStatusEff.Silence:
+                    {
+                        if (Silence == null)
+                            return;
+
+                        if (Silence.isPlaying)
+                            Silence.Stop(true);
+                        return;
+                    }
+
+                case AbilityStatusEff.MoveSlow:
+                    {
+                        if (MSlow == null)
+                            return;
+
+                        if (MSlow.isPlaying)
+                            MSlow.Stop(true);
+                        Debug.Log("Turning off Slow :" + MSlow.isEmitting);
+                        return;
+                    }
+
+                case AbilityStatusEff.CastTimeSlow:
+                    {
+                        if (CSlow == null)
+                            return;
+
+                        if (CSlow.isPlaying)
+                            CSlow.Stop(true);
+                        return;
+                    }
+
+                case AbilityStatusEff.MoveBuff:
+                    {
+                        if (MHaste == null)
+                            return;
+
+                        if (MHaste.isPlaying)
+                            MHaste.Stop(true);
+                        return;
+                    }
+
+                case AbilityStatusEff.CastTimeBuff:
+                    {
+                        if (CHaste == null)
+                            return;
+
+                        if (CHaste.isPlaying)
+                            CHaste.Stop(true);
+                        return;
+                    }
+
+                case AbilityStatusEff.DamReduct:
+                    {
+                        if (Nani == null)
+                            return;
+
+                        if (Nani.isPlaying)
+                            Nani.Stop(true);
+                        return;
+                    }
+
+                case AbilityStatusEff.DoT:
+                    {
+                        if (DOT == null)
+                            return;
+
+                        if (DOT.isPlaying)
+                            DOT.Stop(true);
+                        return;
+                    }
+
+                case AbilityStatusEff.Root:
+                    {
+                        if (Root == null)
+                            return;
+
+                        if (Root.isPlaying)
+                            Root.Stop(true);
+                        return;
+                    }
+                default:
+                    {
+                        return;
+                    }
+
+            }
+        }
+
+            public void ToggleOnStatusEffectVFX(AbilityStatusEff effect)
+            {
+                switch (effect)
+                {
+                    case AbilityStatusEff.Heal:
+                        {
+                            if (Heals == null)
+                                return;
+
+                            if (!Heals.isPlaying)
+                                Heals.Play(true);
+                            return;
+                        }
+                    case AbilityStatusEff.Stun:
+                        {
+                            if (Stun == null)
+                                return;
+
+                            if (!Stun.isPlaying)
+                                Stun.Play(true);
+                            return;
+                        }
+
+                    case AbilityStatusEff.Silence:
+                        {
+                            if (Silence == null)
+                                return;
+
+                            if (!Silence.isPlaying)
+                                 Silence.Play(true);
+                            return;
+                        }
+
+                    case AbilityStatusEff.MoveSlow:
+                        {
+                            if (MSlow == null)
+                                return;
+
+                            if (!MSlow.isPlaying)
+                                MSlow.Play(true);
+
+                            Debug.Log("Turning ON slow: " + MSlow.isEmitting);
+                            return;
+                        }
+
+                    case AbilityStatusEff.CastTimeSlow:
+                        {
+                            if (CSlow == null)
+                                return;
+
+                            if (!CSlow.isPlaying)
+                                CSlow.Play(true);
+                            return;
+                        }
+
+                    case AbilityStatusEff.MoveBuff:
+                        {
+                            if (MHaste == null)
+                                return;
+
+                            if (!MHaste.isPlaying)
+                                MHaste.Play(true);
+                            return;
+                        }
+
+                    case AbilityStatusEff.CastTimeBuff:
+                        {
+                            if (CHaste == null)
+                                return;
+
+                            if (!CHaste.isPlaying)
+                                CHaste.Play(true);
+                            return;
+                        }
+
+                    case AbilityStatusEff.DamReduct:
+                        {
+                            if (Nani == null)
+                                return;
+
+                            if (!Nani.isPlaying)
+                                Nani.Play(true);
+                            return;
+                        }
+
+                    case AbilityStatusEff.DoT:
+                        {
+                            if (DOT == null)
+                                return;
+
+                            if (!DOT.isPlaying)
+                                DOT.Play(true);
+                            return;
+                        }
+
+                    case AbilityStatusEff.Root:
+                        {
+                            if (Root == null)
+                                return;
+
+                            if (!Root.isPlaying)
+                                Root.Play(true);
+                            return;
+                        }
+                    default:
+                        {
+                            return;
+                        }
+
+                }
+            }
     }
 
     public class Player : Entity
@@ -429,4 +666,5 @@ namespace EntityClasses
         public string Name { get; set; }
         public Cell Cell { get; set; }
     }
+
 }
