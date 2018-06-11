@@ -18,7 +18,8 @@ MonoBehaviour:
   animTrigger: Cast 2
   animDelay: 0
   animTiming: 0.33
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198924923376678956, guid: 6549a242d70c94945b2d66381ef4d354,
+    type: 2}
   perCell: 0
   particleOrigin: {fileID: 0}
   particleTiming: 0.1
