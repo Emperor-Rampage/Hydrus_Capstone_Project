@@ -6,6 +6,7 @@ using AbilityClasses;
 using Pixelplacement;
 using Pixelplacement.TweenSystem;
 using AudioClasses;
+using ParticleClasses;
 
 namespace EntityClasses
 {
@@ -61,6 +62,26 @@ namespace EntityClasses
         public Animator Animator { get { return Instance.Animator; } }
 
         public SkinnedMeshRenderer Renderer { get { return Instance.Renderer; } }
+ 
+        public ParticleSystem Stun { get { return Instance.Stun; } }
+
+        public ParticleSystem MSlow { get { return Instance.MSlow; } }
+
+        public ParticleSystem CSlow { get { return Instance.CSlow; } }
+
+        public ParticleSystem CHaste { get { return Instance.CHaste; } }
+
+        public ParticleSystem MHaste { get { return Instance.MHaste; } }
+
+        public ParticleSystem Silence { get { return Instance.Silence; } }
+
+        public ParticleSystem Nani { get { return Instance.Nani; } }
+
+        public ParticleSystem DOT { get { return Instance.DOT; } }
+
+        public ParticleSystem Root { get { return Instance.Root; } }
+
+        public ParticleSystem Heals { get { return Instance.Heal; } }
 
         public EffectDictionary StatusEffects = new EffectDictionary();
         [SerializeField] List<AbilityObject> abilities;

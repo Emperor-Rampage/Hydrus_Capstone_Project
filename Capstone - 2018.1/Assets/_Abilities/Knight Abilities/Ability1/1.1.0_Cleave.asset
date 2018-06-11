@@ -15,11 +15,14 @@ MonoBehaviour:
   abilityName: Cleave
   icon: {fileID: 21300000, guid: 24003c3fc7e21ea42ba56774031f6c0d, type: 3}
   toolTip: 'Tier 2 Ability: Knight Ability 1'
-  animTrigger: Cast
+  animTrigger: Cast 1
   animDelay: 0
-  animTiming: 0
-  particleSystem: {fileID: 0}
+  animTiming: 0.33
+  particleSystem: {fileID: 198839417828159848, guid: ada4fec5164af3741a8d543c647adb56,
+    type: 2}
+  perCell: 0
   particleOrigin: {fileID: 0}
+  particleTiming: 0
   soundEffect:
     audioClip: {fileID: 8300000, guid: df93ecd63106d9641b68845e2cd3f854, type: 3}
     volume: 0.5

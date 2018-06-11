@@ -485,6 +485,10 @@ namespace AbilityClasses
         [SerializeField] Transform particleOrigin;                                                           //Container for the origin point of Particle Effect for Ability.
         public Transform ParticleOrigin { get { return particleOrigin; } }
 
+        [SerializeField]
+        float particleTiming = 0.0f;                                                                         //Container (in seconds) for when to time the vfx.
+        public float ParticleTiming { get { return particleTiming; } }
+
         [SerializeField] SoundEffect soundEffect;                                                            //Sound Effect to play on activation.
         public SoundEffect SoundEffect { get { return soundEffect; } }
 
