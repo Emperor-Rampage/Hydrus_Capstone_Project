@@ -19,7 +19,9 @@ MonoBehaviour:
   animDelay: 0
   animTiming: 0.5
   particleSystem: {fileID: 0}
+  perCell: 0
   particleOrigin: {fileID: 0}
+  particleTiming: 0
   soundEffect:
     audioClip: {fileID: 8300000, guid: 0f32174b69469d34fb8dbbfc1b4f212d, type: 3}
     volume: 1
@@ -34,6 +36,9 @@ MonoBehaviour:
   - effect: 1
     duration: 6
     value: 0.25
+  - effect: 10
+    duration: 6
+    value: 0
   type: 0
   aoeSprite: {fileID: 0}
   range: 0

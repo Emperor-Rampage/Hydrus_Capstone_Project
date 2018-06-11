@@ -18,10 +18,11 @@ MonoBehaviour:
   animTrigger: AOEAttack
   animDelay: 0
   animTiming: 0.5
-  particleSystem: {fileID: 198137884838364044, guid: 694fc2b7d502a724990bffa3a285da03,
+  particleSystem: {fileID: 198160162852512890, guid: 81ef5bbee92e88a4690fdf7794f9c429,
     type: 2}
   perCell: 1
   particleOrigin: {fileID: 0}
+  particleTiming: 0
   soundEffect:
     audioClip: {fileID: 8300000, guid: 72d46a5ebcb4a9043b8982d87a98d97e, type: 3}
     volume: 1

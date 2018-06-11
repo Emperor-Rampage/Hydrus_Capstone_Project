@@ -19,7 +19,10 @@ MonoBehaviour:
   animDelay: 0
   animTiming: 0.5
   particleSystem: {fileID: 0}
-  particleOrigin: {fileID: 0}
+  perCell: 0
+  particleOrigin: {fileID: 4957420307407418, guid: 4a6b8c06da6143d4fb70b265218c617f,
+    type: 2}
+  particleTiming: 0.1
   soundEffect:
     audioClip: {fileID: 8300000, guid: b1125475fb4ac7a4eb47c0928ff65a63, type: 3}
     volume: 1
