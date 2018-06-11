@@ -11,6 +11,7 @@ public class AutoDestroy : MonoBehaviour
 
     public void DestroyThis()
     {
+        ps.Stop();
         Destroy(gameObject);
     }
 

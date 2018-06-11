@@ -228,9 +228,9 @@ namespace ParticleClasses
             if (abil.PerCellInstantiation == false)
             {
                 Debug.Log("Playing " + abil.Name + " at Origin Point " + player.Name);
-                Instantiate(abil.ParticleSystem, player.Instance.transform, true);
+                Instantiate(abil.ParticleSystem, player.Instance.transform);
             }
-            Instantiate(abil.ParticleSystem, player.Instance.transform);
+            Instantiate(abil.ParticleSystem, player.Instance.transform.position, player.Instance.transform.localRotation);
             //else
             //Play each particle effect at the 0,0,0 point of every affected cell.
 
@@ -238,12 +238,19 @@ namespace ParticleClasses
 
         public void PlayEnemyVFX(AbilityObject abil, Entity caster)
         {
-            if (abil.ParticleOrigin == null || abil.ParticleSystem == null || caster == null)
+            if (abil.ParticleSystem == null || caster == null)
                 return;
 
             Debug.Log("Playing " + abil.Name + " at Origin Point " + abil.ParticleOrigin + " for enemy " + caster.Name);
+            Instantiate(abil.ParticleSystem, caster.Instance.transform.position, caster.Instance.transform.localRotation);
         }
 
+        public void PlayAOEVFX(AbilityObject abil, Cell cell)
+        {
+            if (abil == null)
+                return;
+            Instantiate(abil.ParticleSystem, gameManager.LevelManager.GetCellPosition(cell), player.Instance.transform.localRotation);
+        }
         //Causes the enemy to flash the HitColor specified in the material for the target.
         public void HitColor(Entity hurtTarget)
         {

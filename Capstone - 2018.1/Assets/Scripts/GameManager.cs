@@ -82,11 +82,15 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
     // A reference to the Map object, which handles the general level management.
     [SerializeField] LevelManager levelManager;
     // A reference to the current level, because caching is more efficient.
+
     Level level;
+    public Level CurrentLevel { get { return level; } }
+
     PlayerData playerData;
 
     //A reference to the particle effect manager that handles all particle system work
     ParticleSystemController particleManager;
+    public ParticleSystemController ParticleManager { get { return particleManager; } }
 
     // A reference to the UIManager instance, which is created at runtime, and handles all user interface actions.
     UIManager uiManager;
@@ -1500,16 +1504,21 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (entity.IsPlayer)
         {
             mouseLookManager.RestrictDirection = Direction.Null;
-            particleManager.PlayPlayerVFX(ability);
+
+            if(ability.PerCellInstantiation == false)
+                particleManager.PlayPlayerVFX(ability);
         }
-        //else
-        //particleManager.PlayEnemyVFX(ability, entity);
+        //else if(ability.PerCellInstantiaion == false)
+            particleManager.PlayEnemyVFX(ability, entity);
 
         List<Cell> affected = level.GetAffectedCells(entity, ability);
         // Debug.Log(entity.Name + " casting " + ability.SoundEffect);
 
         foreach (Cell cell in affected)
         {
+            //Play the ability in each affected cell.
+            if (ability.PerCellInstantiation == true)
+                particleManager.PlayAOEVFX(ability, cell);
             //            Debug.Log("Performing " + ability.abilityName + " at " + cell.X + ", " + cell.Z);
             if (ability.Type != AbilityType.Zone)
             {

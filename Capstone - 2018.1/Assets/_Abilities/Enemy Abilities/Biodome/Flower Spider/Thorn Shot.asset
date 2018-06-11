@@ -18,7 +18,9 @@ MonoBehaviour:
   animTrigger: ThornAttack
   animDelay: 0
   animTiming: 1.2
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198434484607583242, guid: b5f916d1ca38fd349b26f16aa0b765d0,
+    type: 2}
+  perCell: 0
   particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 8300000, guid: 718086871820ba9498e375258fc48a2c, type: 3}
