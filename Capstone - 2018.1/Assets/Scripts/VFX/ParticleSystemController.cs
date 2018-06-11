@@ -24,6 +24,7 @@ namespace ParticleClasses
 
         private GameManager gameManager;
         private Player player;
+        private List<TweenBase> tweens;
 
         [SerializeField]
         public ParticleSystem hitSpark;
@@ -202,18 +203,37 @@ namespace ParticleClasses
         public void PlayerInterrupt()
         {
             player.Animator.SetTrigger("Interrupt");
+            player.Animator.SetBool("Interrupted", true);
         }
 
         //Starts a tween that activates the Animation Trigger at the proper time to sync animations.
         public void PlaySyncedPlayerAnimation(float castTime, float delay, float timing, Animator anim, string trigger)
         {
-            Tween.Value(0, 1, (i) => { }, (castTime - timing), delay, completeCallback: () => anim.SetTrigger(trigger));
+            Tween.Value(0, 1, (i) => { }, (castTime - timing), delay, completeCallback: () => CompleteSynchedAnimation(anim, trigger));
         }
 
         //Plays an enemy animation with a delay that makes the ability sync-up
         public void PlaySyncedEnemyAnimation(float castTime, float delay, float castPercent, Animator anim, string trigger)
         {
-            Tween.Value(0, 1, (i) => { }, castTime, delay, completeCallback: () => anim.SetTrigger(trigger));
+            Tween.Value(0, 1, (i) => { }, castTime, delay, completeCallback: () => CompleteSynchedAnimation(anim, trigger));
+        }
+
+        public void CompleteSynchedAnimation(Animator anim, string trigger)
+        {
+            if(anim.GetBool("Interrupted") == true)
+            {
+                anim.SetBool("Interrupted", false);
+                return;
+            }
+            else
+            {
+                anim.SetTrigger(trigger);
+            }
+        }
+
+        public void PlaySynchedVFX(float castTime, float timing, AbilityObject abil)
+        {
+
         }
 
         public void PlayPlayerVFX(AbilityObject abil)
@@ -225,15 +245,8 @@ namespace ParticleClasses
                 return;
             }
 
-            if (abil.PerCellInstantiation == false)
-            {
-                Debug.Log("Playing " + abil.Name + " at Origin Point " + player.Name);
-                Instantiate(abil.ParticleSystem, player.Instance.transform);
-            }
-            Instantiate(abil.ParticleSystem, player.Instance.transform.position, player.Instance.transform.localRotation);
-            //else
-            //Play each particle effect at the 0,0,0 point of every affected cell.
-
+            Debug.Log("Playing " + abil.Name + " at Origin Point " + player.Name);
+            Instantiate(abil.ParticleSystem, player.Instance.transform);
         }
 
         public void PlayEnemyVFX(AbilityObject abil, Entity caster)
@@ -251,6 +264,7 @@ namespace ParticleClasses
                 return;
             Instantiate(abil.ParticleSystem, gameManager.LevelManager.GetCellPosition(cell), player.Instance.transform.localRotation);
         }
+
         //Causes the enemy to flash the HitColor specified in the material for the target.
         public void HitColor(Entity hurtTarget)
         {

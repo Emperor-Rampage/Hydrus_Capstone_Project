@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4675870098066874}
   - component: {fileID: 198172501831843376}
   - component: {fileID: 199280278796810552}
+  - component: {fileID: 114284624916951614}
   m_Layer: 0
   m_Name: KNSlashAttack
   m_TagString: Untagged
@@ -64,14 +65,26 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1061389967343232}
-  m_LocalRotation: {x: 0.59001905, y: -0.18408835, z: -0.37164935, w: 0.6927235}
+  m_LocalRotation: {x: 0.6147296, y: -0.06417646, z: -0.5009025, w: 0.605876}
   m_LocalPosition: {x: 0, y: 0.68, z: 1.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4249486578070312}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 42.891003, y: -71.211006, z: -87.84801}
+  m_LocalEulerAnglesHint: {x: 42.891003, y: -71.211006, z: -110.58501}
+--- !u!114 &114284624916951614
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1061389967343232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de512f517e26b734590e54977a28621a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Interrupt: 0
 --- !u!198 &198172501831843376
 ParticleSystem:
   m_ObjectHideFlags: 1

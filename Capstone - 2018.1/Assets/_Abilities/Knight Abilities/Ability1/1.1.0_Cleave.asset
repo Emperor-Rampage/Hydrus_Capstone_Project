@@ -17,8 +17,10 @@ MonoBehaviour:
   toolTip: 'Tier 2 Ability: Knight Ability 1'
   animTrigger: Cast
   animDelay: 0
-  animTiming: 0
-  particleSystem: {fileID: 0}
+  animTiming: 0.33
+  particleSystem: {fileID: 198839417828159848, guid: ada4fec5164af3741a8d543c647adb56,
+    type: 2}
+  perCell: 0
   particleOrigin: {fileID: 0}
   soundEffect:
     audioClip: {fileID: 8300000, guid: df93ecd63106d9641b68845e2cd3f854, type: 3}
