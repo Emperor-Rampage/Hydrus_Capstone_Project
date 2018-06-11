@@ -18,8 +18,11 @@ MonoBehaviour:
   animTrigger: Tackle
   animDelay: 0
   animTiming: 0.6
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198936619502886748, guid: fa2a2e2171a5b3142a8139d68dde7173,
+    type: 2}
+  perCell: 0
   particleOrigin: {fileID: 0}
+  particleTiming: 0.1
   soundEffect:
     audioClip: {fileID: 8300000, guid: 19d4da9301b81f447afd061e6b8e8550, type: 3}
     volume: 0.75

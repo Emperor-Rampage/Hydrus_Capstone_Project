@@ -453,7 +453,7 @@ namespace EntityClasses
 
                         if (MSlow.isPlaying)
                             MSlow.Stop(true);
-                        Debug.Log("Turning off Slow :" + MSlow.isEmitting);
+                        //Debug.Log("Turning off Slow :" + MSlow.isEmitting);
                         return;
                     }
 
@@ -565,7 +565,7 @@ namespace EntityClasses
                             if (!MSlow.isPlaying)
                                 MSlow.Play(true);
 
-                            Debug.Log("Turning ON slow: " + MSlow.isEmitting);
+                            //Debug.Log("Turning ON slow: " + MSlow.isEmitting);
                             return;
                         }
 

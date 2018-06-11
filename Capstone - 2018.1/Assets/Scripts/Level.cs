@@ -86,7 +86,7 @@ namespace MapClasses
             if (levelMap == null)
                 return;
 
-            Debug.Log("Level initialization started..");
+            //Debug.Log("Level initialization started..");
             LevelManager levelManager = GameManager.Instance.LevelManager;
             levelManager.MaxWidth = levelMap.width;
             levelManager.MaxDepth = levelMap.height;
@@ -101,7 +101,7 @@ namespace MapClasses
             InitializeProcedural();
             InitializeEntities(player, playerData, selectedClass);
 
-            Debug.Log("Level initialization finished.");
+            //Debug.Log("Level initialization finished.");
         }
 
         // Creates the list of ExitCells and connectionCells, then gets the data from the levelMap bitmap.

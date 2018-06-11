@@ -178,6 +178,7 @@ namespace ParticleClasses
                 return;
             enemy.Animator.SetTrigger("Interrupt");
             enemy.Animator.SetBool("Interrupted", true);
+            InterruptColor(enemy);
         }
 
         public void EnemyTurn(Entity enemy, bool direction)
@@ -229,7 +230,7 @@ namespace ParticleClasses
 
         public void PlaySynchedVFX(float castTime, float timing, AbilityObject abil, Entity caster)
         {
-            Debug.Log("Starting Synched VFX tween on " + caster.Name + " with ability " + abil.Name + " with timing " + timing + " and a cast time of " + castTime);
+            //Debug.Log("Starting Synched VFX tween on " + caster.Name + " with ability " + abil.Name + " with timing " + timing + " and a cast time of " + castTime);
             Tween.Value(0, 1, (i) => { }, (castTime - timing), 0, completeCallback: () => PlayVFX(abil, caster));
         }
 
@@ -269,6 +270,19 @@ namespace ParticleClasses
 
             mat.SetFloat("_HurtScale", 1.0f);
             Tween.ShaderFloat(mat, "_HurtScale", 0.0f, 0.5f, 0.0f);
+        }
+
+        public void InterruptColor(Entity hurtTarget)
+        {
+            if (hurtTarget == null)
+                return;
+
+            Material mat = hurtTarget.Renderer.material;
+
+            if (mat == null)
+                return;
+
+            Tween.ShaderFloat(mat, "_InterruptScale",0.0f, 0.5f, 0.5f, 0.0f, loop: Tween.LoopType.PingPong);
         }
 
         //Changed to use the animator of the the Entity, which is now found on instantiation.

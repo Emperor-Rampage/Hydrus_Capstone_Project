@@ -18,8 +18,11 @@ MonoBehaviour:
   animTrigger: Web Attack
   animDelay: 0
   animTiming: 0.5
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198703606941981998, guid: ca1768176dd3bc44386ae2a19b13bebd,
+    type: 2}
+  perCell: 1
   particleOrigin: {fileID: 0}
+  particleTiming: 0
   soundEffect:
     audioClip: {fileID: 8300000, guid: 6dadfaaf6cbca7143950a83a0e951740, type: 3}
     volume: 1

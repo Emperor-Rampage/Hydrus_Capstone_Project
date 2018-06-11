@@ -205,7 +205,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
     public void ApplySettings()
     {
-        Debug.Log("Applying player settings.");
+        //Debug.Log("Applying player settings.");
         settingsManager.SetSettings(uiManager);
 
         // Gameplay
@@ -258,7 +258,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
 
         // Sound
-        Debug.Log("Master volume: " + settingsManager.MasterVolume);
+        //Debug.Log("Master volume: " + settingsManager.MasterVolume);
         float masterDBValue = 20f * Mathf.Log10(settingsManager.MasterVolume + 0.001f);
         float systemDBValue = 20f * Mathf.Log10(settingsManager.SystemVolume + 0.001f);
         float musicDBValue = 20f * Mathf.Log10(settingsManager.MusicVolume + 0.001f);
@@ -358,12 +358,12 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         }
         else
         {
-            Debug.Log("GameManager Awake function executing..");
+            //Debug.Log("GameManager Awake function executing..");
             foreach (var gm in doNotDestroyList)
             {
                 if (gm != null)
                 {
-                    Debug.Log("Instantiating " + gm.name + " and setting to do not destroy.");
+                    //Debug.Log("Instantiating " + gm.name + " and setting to do not destroy.");
                     var gmInstance = Instantiate(gm);
                     DontDestroyOnLoad(gmInstance);
                     if (gmInstance.GetComponent<UIManager>() != null && uiManager == null)
@@ -747,7 +747,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
                 }
             }
         }
-        Debug.Log("Number of cells: " + numCells + ". Number of lights: " + numLights + ". Light Frequency: " + lightFrequency + ". Actual light frequency: " + (float)numLights / numCells);
+        //Debug.Log("Number of cells: " + numCells + ". Number of lights: " + numLights + ". Light Frequency: " + lightFrequency + ". Actual light frequency: " + (float)numLights / numCells);
     }
 
     void BuildLevel_Procedural_Corners(GameObject levelContainer)
@@ -1486,6 +1486,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         else
         {
             audioManager.PlayUISound(enemyInterruptSound);
+            particleManager.InterruptEnemy(entity);
             // audioManager.PlaySoundEffect(new SoundEffect(enemyInterruptSound, entity.Instance.transform.position));
 
             //if( entity.CurrentParticle != null)

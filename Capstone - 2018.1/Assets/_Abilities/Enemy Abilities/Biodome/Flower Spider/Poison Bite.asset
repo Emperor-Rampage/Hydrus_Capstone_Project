@@ -18,9 +18,11 @@ MonoBehaviour:
   animTrigger: BiteAttack
   animDelay: 0
   animTiming: 0.75
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198478763518868084, guid: cc20b5b70eaf37c4daa9486c2b703d34,
+    type: 2}
   perCell: 0
   particleOrigin: {fileID: 0}
+  particleTiming: 0.1
   soundEffect:
     audioClip: {fileID: 8300000, guid: 45bfeb4596f1d3a459e217bea5e8c176, type: 3}
     volume: 1

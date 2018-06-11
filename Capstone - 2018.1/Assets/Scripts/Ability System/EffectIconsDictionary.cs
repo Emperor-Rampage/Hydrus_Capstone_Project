@@ -33,7 +33,7 @@ namespace AbilityClasses
                 if (!IconsDictionary.ContainsKey(effect))
                     IconsDictionary.Add(effect, icon);
             }
-            Debug.Log("Effect Icons Dictionary Initialized! Dictonary count " + IconsDictionary.Count);
+            //Debug.Log("Effect Icons Dictionary Initialized! Dictonary count " + IconsDictionary.Count);
         }
     }
 }
