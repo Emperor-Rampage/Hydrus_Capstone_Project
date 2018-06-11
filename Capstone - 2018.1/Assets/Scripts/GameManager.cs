@@ -1010,7 +1010,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
 
             if (enemy == null)
             {
-                enemy = level.GetClosestEnemy(player, 5);
+                enemy = level.GetClosestEnemy(player, enemyAggroDistance);
             }
         }
 
