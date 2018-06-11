@@ -20,11 +20,13 @@ MonoBehaviour:
   animTiming: 0.33
   particleSystem: {fileID: 198295460141925150, guid: c4507d21446039845993af235dbb6ab4,
     type: 2}
-  particleOrigin: {fileID: 0}
+  perCell: 0
+  particleOrigin: {fileID: 4687696193166538, guid: b1bbff27dbcb1f843a5d3bc6afcbe158,
+    type: 2}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: 67601b9537519714db7c8c9eb4fbc689, type: 3}
+    volume: 0.6
+    pitch: 1.5
   statusEffects:
   - effect: 7
     duration: 2

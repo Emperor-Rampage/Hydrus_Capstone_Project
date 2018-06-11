@@ -19,11 +19,12 @@ MonoBehaviour:
   animDelay: 0
   animTiming: 0
   particleSystem: {fileID: 0}
+  perCell: 0
   particleOrigin: {fileID: 0}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: 5db4ccd1903a9ec4cad9cac804d4be77, type: 3}
+    volume: 0.35
+    pitch: 1.25
   statusEffects:
   - effect: 7
     duration: 1.5

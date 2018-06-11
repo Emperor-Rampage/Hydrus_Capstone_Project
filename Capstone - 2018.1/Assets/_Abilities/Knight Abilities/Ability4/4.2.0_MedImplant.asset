@@ -15,12 +15,16 @@ MonoBehaviour:
   abilityName: Med Implant
   icon: {fileID: 21300000, guid: 78121a3a0436d0f4f815feef92427b59, type: 3}
   toolTip: 'Tier 2 Ability: Knight Ability 4'
+  animTrigger: DefaultTrigger
+  animDelay: 0
+  animTiming: 0
   particleSystem: {fileID: 0}
+  perCell: 0
   particleOrigin: {fileID: 0}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: 071b3de4c68c03b46bb467837691901b, type: 3}
+    volume: 0.5
+    pitch: 1
   statusEffects:
   - effect: 8
     duration: 15

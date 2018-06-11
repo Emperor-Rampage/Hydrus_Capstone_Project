@@ -18,12 +18,14 @@ MonoBehaviour:
   animTrigger: Cast 2
   animDelay: 0
   animTiming: 0.33
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198067680401012854, guid: 8b6b107acb835d04bb82cf52fbc802b6,
+    type: 2}
+  perCell: 1
   particleOrigin: {fileID: 0}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: 6c9fba5d02e11704bb0b0bf720736773, type: 3}
+    volume: 0.35
+    pitch: 1
   statusEffects:
   - effect: 3
     duration: 1.5
@@ -32,7 +34,7 @@ MonoBehaviour:
   aoeSprite: {fileID: 2800000, guid: 669b4c1eb1fe41e48bc72776fc072745, type: 3}
   range: 0
   cooldown: 8
-  castTime: 1.25
+  castTime: 1.5
   damage: 50
   upgradeable: 0
   baseAbility: {fileID: 11400000, guid: 5883cdc796183cf4f9290997004b6f86, type: 2}

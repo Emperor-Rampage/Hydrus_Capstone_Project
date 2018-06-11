@@ -18,12 +18,14 @@ MonoBehaviour:
   animTrigger: Cast 2
   animDelay: 0
   animTiming: 0.33
-  particleSystem: {fileID: 0}
+  particleSystem: {fileID: 198981056331027306, guid: 2570c4d023adb064da2f384866450c3f,
+    type: 2}
+  perCell: 1
   particleOrigin: {fileID: 0}
   soundEffect:
-    audioClip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    audioClip: {fileID: 8300000, guid: b52c9360dee7fe244be2196833c1df52, type: 3}
+    volume: 0.35
+    pitch: 1
   statusEffects:
   - effect: 4
     duration: 1.5
