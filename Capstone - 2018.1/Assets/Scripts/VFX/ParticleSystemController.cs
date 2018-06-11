@@ -123,6 +123,11 @@ namespace ParticleClasses
 
         }
 
+        public void SetShieldUP(AbilityObject abil)
+        {
+
+        }
+
         public void SetPlayerCastAnimation(float CTScale, AbilityObject abil, string trigger)
         {
             Animator playerAnim = player.Animator;

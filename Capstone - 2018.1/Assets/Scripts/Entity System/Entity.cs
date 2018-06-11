@@ -491,6 +491,11 @@ namespace EntityClasses
                     {
                         if (Nani == null)
                             return;
+                        else if (IsPlayer == true)
+                        { 
+                            Instance.Animator.SetBool("ShieldUp", false);
+                            return;
+                        }
 
                         if (Nani.isPlaying)
                             Nani.Stop(true);
@@ -600,14 +605,19 @@ namespace EntityClasses
                         }
 
                     case AbilityStatusEff.DamReduct:
-                        {
-                            if (Nani == null)
-                                return;
+                    {
+                        if (Nani == null)
+                            return;
+                        else if (IsPlayer == true)
+                        { 
+                            Instance.Animator.SetBool("ShieldUp", true);
+                            return;
+                        }
 
                             if (!Nani.isPlaying)
                                 Nani.Play(true);
                             return;
-                        }
+                    }
 
                     case AbilityStatusEff.DoT:
                         {
