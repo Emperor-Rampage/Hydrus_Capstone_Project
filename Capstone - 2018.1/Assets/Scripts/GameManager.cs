@@ -1551,7 +1551,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             AbilityEffect effectInstance = new AbilityEffect(caster.Index, effect.Effect, effect.Duration, effect.Value);
             target.StatusEffects.AddEffect(effectInstance);
 
-            if (effect.Effect == AbilityStatusEff.Stun)
+            if (effect.Effect == AbilityStatusEff.Stun || effect.Effect == AbilityStatusEff.Silence)
             {
                 // uiManager.AddNotif("Stunned!");
                 interrupt = true;
