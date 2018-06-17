@@ -149,7 +149,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
             abilityIndexes = indexes,
             cores = 0
         };
-        tutorialManager.RunTutorial = true;
+        tutorialManager.ResetAll();
         LevelManager.SetCurrentLevel(0);
         LoadLevel(1f);
     }

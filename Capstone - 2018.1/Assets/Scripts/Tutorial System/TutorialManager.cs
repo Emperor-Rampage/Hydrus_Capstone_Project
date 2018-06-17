@@ -34,6 +34,7 @@ public class TutorialManager : MonoBehaviour
             SectionDone = new UnityEvent();
         SectionDone.AddListener(EndSection);
     }
+
     void Run()
     {
         Time.timeScale = 0f;
@@ -52,6 +53,17 @@ public class TutorialManager : MonoBehaviour
         currentSection.gameObject.SetActive(false);
         tutorialPanel.SetActive(false);
         InTutorial = false;
+    }
+
+    public void ResetAll()
+    {
+        RunTutorial = true;
+        InTutorial = false;
+        Introduction.Complete = false;
+        Movement.Complete = false;
+        Combat.Complete = false;
+        Upgrade.Complete = false;
+        currentSection = null;
     }
 
     public void RunIntroduction()
