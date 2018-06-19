@@ -1039,7 +1039,7 @@ public class GameManager : Pixelplacement.Singleton<GameManager>
         if (check)
         {
             // If standing at an exit, display a text prompt.
-            uiManager.DisplayText("Press Space to exit the level");
+            uiManager.DisplayText("Press Space to enter");
         }
         else
         {
